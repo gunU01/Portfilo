@@ -1,16 +1,32 @@
-# React + Vite
+# PM 포트폴리오
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+프론트엔드 출신 PM 포트폴리오 사이트. React 19 + Vite, 외부 의존성 없음(폰트·CDN 미사용), 해시 라우팅.
 
-Currently, two official plugins are available:
+```bash
+npm install
+npm run dev      # 개발 서버
+npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도 동작)
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 내용 수정
 
-## React Compiler
+화면 코드는 건드리지 않고 `src/data/` 만 고치면 됩니다.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| 파일 | 내용 |
+| --- | --- |
+| `profile.js` | 이름, 히어로 문구, 핵심 역량 3개, 소개·타임라인, 연락처(빈 값은 자동 숨김) |
+| `eolma.js` · `verde.js` · `valueChain.js` | 케이스 스터디 본문. `sections[].blocks[]` 의 타입(`p`, `list`, `table`, `decisions`, `stats` …)을 조합 |
+| `ideas.js` | 탐색한 기획 |
+| `skills.js` | 기술·도구 (어디에 어떻게 썼는지) |
+| `awards.js` | 수상 이력. 항목을 넣으면 ‘수상’ 섹션이 나타남 |
+| `cases.js` | 프로젝트 노출 순서 |
 
-## Expanding the ESLint configuration
+## 작성 원칙
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 수치는 출처가 확인된 것만 싣고, 팀원이 한 일은 ‘팀’으로 표기합니다.
+- 근거(문서로 확인된 사실)와 해석(본인 해석)을 구분합니다.
+- 성과 지표가 아직 없는 항목은 비워 두지 않고 ‘집계 전’이라고 적습니다.
+
+## PDF로 제출하기
+
+브라우저 인쇄(Ctrl/Cmd+P) → PDF 저장. 인쇄용 스타일이 있어 메뉴가 숨겨지고 접힌 항목이 펼쳐집니다.
