@@ -19,6 +19,11 @@ function Hero() {
         <div className="hero__meta">
           <span className="chip chip--accent">{profile.roleLine}</span>
           <span className="chip">{profile.school}</span>
+          {hero.facts.map((f) => (
+            <span className="chip" key={f}>
+              {f}
+            </span>
+          ))}
         </div>
       </div>
     </section>
@@ -165,6 +170,7 @@ function Contact() {
   const links = [
     ['GitHub', contact.github],
     ['이메일', contact.email && `mailto:${contact.email}`],
+    ['블로그', contact.blog],
     ['LinkedIn', contact.linkedin],
     ['Notion', contact.notion],
   ].filter(([, href]) => href)

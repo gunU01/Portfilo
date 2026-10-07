@@ -13,6 +13,7 @@ export const skillGroups = [
     title: '운영·검증',
     items: [
       { name: '스프린트 · MVP', used: '1차 스프린트 MVP를 설정하고 스프린트 일정과 역할 분담을 정리' },
+      { name: '일정 관리', used: 'WBS, 간트차트, CPM/PERT를 프로젝트 운영과 일정 관리에 사용 (소프트웨어 공학 수업)' },
       { name: '베타 테스트', used: '베타 체크리스트·참여 설문, 스토어 등록 정보 작성' },
     ],
   },
@@ -21,11 +22,13 @@ export const skillGroups = [
     items: [
       { name: 'Notion', used: '문서 허브와 일정 스프린트 보드(보드·캘린더)를 운영' },
       { name: 'Figma', used: '화면 정의 검토와 포트폴리오 작업 지원' },
+      { name: 'Jira · GitHub · Vercel', used: 'Git·GitHub로 협업하고 Vercel로 웹 서비스를 배포(GrowMoney), Jira 사용 경험' },
     ],
   },
   {
     title: '프론트엔드',
     items: [
+      { name: 'React', used: 'GrowMoney에서 컴포넌트를 나눠 관리자 페이지·상점·통계 페이지를 만들고, React Query로 서버 상태를 관리' },
       { name: 'React Native · Expo', used: '얼마 앱의 프론트엔드 스택(상태 관리 Zustand, 서버 상태 TanStack Query, 폼 React Hook Form + Zod)' },
     ],
   },
