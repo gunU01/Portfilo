@@ -1,7 +1,18 @@
 import { useRef, useState } from 'react'
 
+const DEFAULT_LABELS = {
+  tablist: '밸류체인 레일',
+  situation: '무슨 일이 일어나나',
+  players: '누가 맡고 있나',
+  choice: '선택',
+  screen: '화면에서는',
+  behind: '뒤에서는',
+}
+
 // 밸류체인 탐색기. 레일(탭)을 고르면 그 레일의 근거·선택·화면/뒤 구조·해석을 보여 줍니다.
-export default function ValueChain({ stages }) {
+// 문구는 labels로 바꿀 수 있습니다(예: 분석 대상이 다른 서비스일 때).
+export default function ValueChain({ stages, labels }) {
+  const L = { ...DEFAULT_LABELS, ...labels }
   const [index, setIndex] = useState(0)
   const nodes = useRef([])
   const stage = stages[index]
@@ -39,7 +50,7 @@ export default function ValueChain({ stages }) {
         </span>
       </p>
 
-      <div className="rail" role="tablist" aria-label="그룹 정산의 다섯 레일" onKeyDown={onKeyDown}>
+      <div className="rail" role="tablist" aria-label={L.tablist} onKeyDown={onKeyDown}>
         {stages.map((s, i) => (
           <button
             key={s.id}
@@ -77,7 +88,7 @@ export default function ValueChain({ stages }) {
 
         <div className="vc__cols">
           <div className="vc__col">
-            <h4>무슨 일이 일어나나</h4>
+            <h4>{L.situation}</h4>
             <ul>
               {stage.situation.map((t) => (
                 <li key={t}>{t}</li>
@@ -91,7 +102,7 @@ export default function ValueChain({ stages }) {
           </div>
 
           <div className="vc__col">
-            <h4>누가 맡고 있나</h4>
+            <h4>{L.players}</h4>
             <ul>
               {stage.players.map((p) => (
                 <li key={p.name}>
@@ -103,18 +114,18 @@ export default function ValueChain({ stages }) {
           </div>
 
           <div className="vc__col">
-            <h4>얼마의 선택</h4>
+            <h4>{L.choice}</h4>
             <p>{stage.choice}</p>
           </div>
         </div>
 
         <div className="vc__lens">
           <div>
-            <h4>화면에서는</h4>
+            <h4>{L.screen}</h4>
             <p>{stage.screen}</p>
           </div>
           <div>
-            <h4>뒤에서는</h4>
+            <h4>{L.behind}</h4>
             <p>{stage.behind}</p>
           </div>
         </div>

@@ -198,7 +198,7 @@ function Block({ block }) {
       )
 
     case 'valueChain':
-      return <ValueChain stages={block.stages} />
+      return <ValueChain stages={block.stages} labels={block.labels} />
 
     default:
       return null
