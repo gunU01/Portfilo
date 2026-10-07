@@ -2,7 +2,6 @@ import Head from '../components/Head.jsx'
 import { profile } from '../data/profile.js'
 import { skillGroups } from '../data/skills.js'
 import { awards } from '../data/awards.js'
-import { ideas, ideasIntro } from '../data/ideas.js'
 import { cases } from '../data/cases.js'
 
 function Hero() {
@@ -75,47 +74,6 @@ function Work() {
               </div>
             </a>
           ))}
-        </div>
-
-        <div style={{ marginTop: 56 }}>
-          <h3 style={{ fontSize: 20, marginBottom: 8 }}>탐색한 기획</h3>
-          <p style={{ color: 'var(--muted)', maxWidth: 640, marginBottom: 20 }}>{ideasIntro}</p>
-          <div className="ideas">
-            {ideas.map((idea) => (
-              <details className="idea" key={idea.title}>
-                <summary>
-                  <h3>{idea.title}</h3>
-                  <span>{idea.tag}</span>
-                </summary>
-                <dl className="idea__body">
-                  <div>
-                    <dt>문제</dt>
-                    <dd>{idea.problem}</dd>
-                  </div>
-                  <div>
-                    <dt>접근</dt>
-                    <dd>{idea.approach}</dd>
-                  </div>
-                  <div>
-                    <dt>핵심</dt>
-                    <dd>{idea.insight}</dd>
-                  </div>
-                  {idea.structure.length > 0 && (
-                    <div>
-                      <dt>리포트 구성</dt>
-                      <dd>
-                        <ul>
-                          {idea.structure.map((s) => (
-                            <li key={s}>{s}</li>
-                          ))}
-                        </ul>
-                      </dd>
-                    </div>
-                  )}
-                </dl>
-              </details>
-            ))}
-          </div>
         </div>
       </div>
     </section>

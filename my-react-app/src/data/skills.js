@@ -12,8 +12,8 @@ export const skillGroups = [
   {
     title: '운영·검증',
     items: [
-      { name: '스프린트 · KPI', used: '디자인·KPI 5일 → 개발·중간 검증 12~14일 → 최종 검증 → 회고 순의 스프린트를 설계' },
-      { name: '수요조사 · 베타 테스트', used: 'LinkedIn 수요조사 글과 랜딩 페이지, 베타 체크리스트·참여 설문, 스토어 등록 정보 작성' },
+      { name: '스프린트 · MVP', used: '1차 스프린트 MVP를 설정하고 스프린트 일정과 역할 분담을 정리' },
+      { name: '베타 테스트', used: '베타 체크리스트·참여 설문, 스토어 등록 정보 작성' },
     ],
   },
   {
@@ -21,13 +21,11 @@ export const skillGroups = [
     items: [
       { name: 'Notion', used: '문서 허브와 일정 스프린트 보드(보드·캘린더)를 운영' },
       { name: 'Figma', used: '화면 정의 검토와 포트폴리오 작업 지원' },
-      { name: 'GitHub · Vercel', used: '저장소 연결과 CI/CD, 배포 환경 설정(VerDe)' },
     ],
   },
   {
     title: '프론트엔드',
     items: [
-      { name: 'React · TypeScript · Vite', used: '팀 프로젝트의 웹 프론트엔드 스택(VerDe 리뉴얼 기준)' },
       { name: 'React Native · Expo', used: '얼마 앱의 프론트엔드 스택(상태 관리 Zustand, 서버 상태 TanStack Query, 폼 React Hook Form + Zod)' },
     ],
   },
