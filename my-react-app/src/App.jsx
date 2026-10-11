@@ -1,10 +1,13 @@
-import { useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import Nav from './components/Nav.jsx'
 import Home from './pages/Home.jsx'
 import Case from './pages/Case.jsx'
 import { cases } from './data/cases.js'
 import { profile } from './data/profile.js'
 import { useHashRoute } from './lib/useHashRoute.js'
+
+// 3D는 월드를 열 때만 내려받습니다(three 포함).
+const World = lazy(() => import('./pages/World.jsx'))
 
 export default function App() {
   const { path, section } = useHashRoute()
@@ -14,8 +17,8 @@ export default function App() {
 
   useEffect(() => {
     const base = `${profile.name} · PM 포트폴리오`
-    document.title = current ? `${current.title} — ${base}` : base
-  }, [current])
+    document.title = current ? `${current.title} — ${base}` : path === '/world' ? `3D 월드 — ${base}` : base
+  }, [current, path])
 
   // 라우트가 바뀌면 맨 위로, 섹션 앵커(?s=)가 있으면 그 섹션으로
   useEffect(() => {
@@ -42,6 +45,10 @@ export default function App() {
             total={cases.length}
             next={cases[(index + 1) % cases.length]}
           />
+        ) : path === '/world' ? (
+          <Suspense fallback={<p className="wrap world-loading">월드를 불러오는 중입니다…</p>}>
+            <World />
+          </Suspense>
         ) : (
           <Home />
         )}

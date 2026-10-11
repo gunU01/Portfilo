@@ -25,6 +25,12 @@ function Hero() {
             </span>
           ))}
         </div>
+        <p className="hero__world">
+          <a className="btn" href="#/world">
+            3D 월드로 둘러보기 →
+          </a>
+          <span>같은 내용을 캐릭터로 탐험하는 또 다른 입구입니다. 이 화면이 읽기 모드입니다.</span>
+        </p>
       </div>
     </section>
   )
