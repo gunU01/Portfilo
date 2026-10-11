@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Blocks from '../components/Blocks.jsx'
+import CaseCover from '../components/CaseCover.jsx'
 
 export default function Case({ data, index, total, next }) {
   const [active, setActive] = useState(data.sections[0].id)
@@ -47,6 +48,12 @@ export default function Case({ data, index, total, next }) {
           ))}
           <span className="chip">{data.status}</span>
         </div>
+
+        {data.cover && (
+          <div className="case__cover">
+            <CaseCover cover={data.cover} size="banner" />
+          </div>
+        )}
 
         <dl className="meta">
           {data.meta.map(([k, v]) => (

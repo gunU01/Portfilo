@@ -1,4 +1,12 @@
 // 프로젝트 1 — 얼마. 근거는 하단 sources 와 팀 Notion 문서입니다.
+// 화면 이미지는 Figma 화면 정의에서 가져왔고, 개인 식별 정보가 보이는 부분은 흐림 처리하거나 제외했습니다.
+import scan from '../assets/eolma/scan.webp'
+import confirm from '../assets/eolma/confirm.webp'
+import list from '../assets/eolma/list.webp'
+import assistant from '../assets/eolma/assistant.webp'
+import ocr from '../assets/eolma/ocr.webp'
+import architecture from '../assets/eolma/architecture.webp'
+
 export const eolma = {
   slug: 'eolma',
   title: '얼마',
@@ -8,6 +16,15 @@ export const eolma = {
   tags: ['PM', 'FE', '팀장'],
   period: '2026.05 –',
   status: '비공개 베타 준비·운영',
+
+  cover: {
+    kind: 'screens',
+    images: [
+      { src: list, alt: '얼마 앱의 받을 정산 목록 화면' },
+      { src: confirm, alt: '스캔된 영수증 정보를 확인하는 화면' },
+      { src: assistant, alt: '얼마 앱의 AI 비서 대화 화면' },
+    ],
+  },
 
   meta: [
     ['유형', '팀 프로젝트 (7인: FE 4 · BE 3, 디자인·PM·AI 겸임 포함)'],
@@ -182,6 +199,15 @@ export const eolma = {
           type: 'p',
           text: '결정 기준은 하나였습니다. 돈이 오가는 서비스에서는 **쉬워야 하고, 믿을 수 있어야** 합니다. 그래서 플로우는 줄이고, 납부 확인은 사용자의 말이 아니라 실제 거래를 기준으로 바꿨습니다.',
         },
+        {
+          type: 'gallery',
+          items: [
+            { src: scan, alt: '영수증을 카메라로 스캔하는 화면', title: '영수증 스캔', caption: '화면 속 영수증은 개인 식별 정보를 흐림 처리했습니다.' },
+            { src: confirm, alt: '스캔 결과를 확인하고 고치는 화면', title: '확인하고 고치기', caption: '인식 결과는 저장 전에 사용자가 확인·수정합니다.' },
+            { src: list, alt: '받을 정산 목록 화면', title: '정산 현황', caption: '받을 정산과 낼 정산을 나눠 진행 상태를 봅니다.' },
+            { src: assistant, alt: 'AI 비서가 남은 정산을 알려 주는 화면', title: 'AI 비서', caption: '남은 정산을 대화로 묻고 상세로 이동합니다.' },
+          ],
+        },
       ],
     },
 
@@ -278,6 +304,20 @@ export const eolma = {
             { value: '10% 이하 → 92.5%', label: '영수증 인식 정확도', note: '67장 중 62장 성공' },
             { value: '1분 45초 → 14.7초', label: '평균 처리 시간', note: '67장 평균, 약 7.14배' },
           ],
+        },
+        {
+          type: 'figure',
+          dark: true,
+          src: ocr,
+          alt: '영수증 OCR 파이프라인 재설계: 비전 모델과 OCR을 병렬로 실행해 비교·보정하는 구조와, 성공률 10% 미만에서 92.5%, 처리 시간 105초에서 14.7초로 개선된 결과',
+          caption: '팀 발표 자료 — 영수증 OCR 파이프라인 재설계 (AI·BE 팀원 구현)',
+        },
+        {
+          type: 'figure',
+          dark: true,
+          src: architecture,
+          alt: '전체 아키텍처: GitHub에서 Docker Hub로 배포하고, AWS의 API 서버(Spring Boot, PostgreSQL, Redis)와 OCR 서버(FastAPI, Qwen)가 REST API로 React Native 앱과 연결되는 구조',
+          caption: '팀 발표 자료 — 전체 아키텍처',
         },
         {
           type: 'p',

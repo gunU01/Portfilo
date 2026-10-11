@@ -9,8 +9,8 @@ const NEAR = 2.6
 const BOUND = 24
 const SPEED = 6.5
 
-const css = (name, fallback) =>
-  new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback)
+const css = (el, name, fallback) =>
+  new THREE.Color(getComputedStyle(el).getPropertyValue(name).trim() || fallback)
 
 const mat = (color) => new THREE.MeshLambertMaterial({ color, flatShading: true })
 
@@ -135,12 +135,12 @@ function buildCharacter(accent) {
 
 export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   const palette = {
-    bg: css('--bg', '#fbfaf7'),
-    sunken: css('--sunken', '#f3f1ea'),
-    line: css('--line', '#e4e1d8'),
-    accent: css('--accent', '#2447f5'),
-    accentSoft: css('--accent-soft', '#e9edff'),
-    warnSoft: css('--warn-soft', '#fff4dc'),
+    bg: css(container, '--bg', '#fbfaf7'),
+    sunken: css(container, '--sunken', '#f3f1ea'),
+    line: css(container, '--line', '#e4e1d8'),
+    accent: css(container, '--accent', '#2447f5'),
+    accentSoft: css(container, '--accent-soft', '#e9edff'),
+    warnSoft: css(container, '--warn-soft', '#fff4dc'),
   }
   const zoneTint = [palette.accent, new THREE.Color('#e8a33d'), new THREE.Color('#3fb68b')]
   const zoneGround = [palette.accentSoft, palette.warnSoft, palette.sunken]

@@ -25,6 +25,9 @@ export default function Nav() {
             </button>
           ))}
         </div>
+        <a className="nav__3d" href="#/world">
+          3D로 감상하기
+        </a>
       </div>
     </nav>
   )

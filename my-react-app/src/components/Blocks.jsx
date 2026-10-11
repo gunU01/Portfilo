@@ -200,13 +200,38 @@ function Block({ block }) {
     case 'valueChain':
       return <ValueChain stages={block.stages} labels={block.labels} />
 
+    case 'figure':
+      return (
+        <figure className={`fig${block.dark ? ' fig--dark' : ''}`}>
+          <img src={block.src} alt={block.alt} loading="lazy" decoding="async" />
+          {block.caption && <figcaption>{block.caption}</figcaption>}
+        </figure>
+      )
+
+    case 'gallery':
+      return (
+        <div className="gallery">
+          {block.items.map((it) => (
+            <figure className="gallery__item" key={it.src}>
+              <span className="phone phone--flat">
+                <img src={it.src} alt={it.alt} loading="lazy" decoding="async" />
+              </span>
+              <figcaption>
+                <b>{it.title}</b>
+                {it.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )
+
     default:
       return null
   }
 }
 
 export default function Blocks({ blocks }) {
-  const wide = blocks.some((b) => b.type === 'valueChain' || b.type === 'table' || b.type === 'stats')
+  const wide = blocks.some((b) => ['valueChain', 'table', 'stats', 'figure', 'gallery'].includes(b.type))
   return (
     <div className={wide ? 'blocks blocks--wide' : 'blocks'}>
       {blocks.map((block, i) => (

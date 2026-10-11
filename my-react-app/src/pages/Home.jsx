@@ -3,34 +3,59 @@ import { profile } from '../data/profile.js'
 import { skillGroups } from '../data/skills.js'
 import { awards } from '../data/awards.js'
 import { cases } from '../data/cases.js'
+import CaseCover from '../components/CaseCover.jsx'
 
 function Hero() {
   const { hero } = profile
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <div className="wrap">
-        <p className="eyebrow">{hero.eyebrow}</p>
-        <h1 id="hero-title">
-          {hero.title.map((line) => (
-            <span key={line}>{line}</span>
-          ))}
-        </h1>
-        <p className="hero__lead">{hero.lead}</p>
-        <div className="hero__meta">
-          <span className="chip chip--accent">{profile.roleLine}</span>
-          <span className="chip">{profile.school}</span>
-          {hero.facts.map((f) => (
-            <span className="chip" key={f}>
-              {f}
-            </span>
-          ))}
+      <div className="wrap hero__grid">
+        <div>
+          <p className="eyebrow">{hero.eyebrow}</p>
+          <h1 id="hero-title">
+            {hero.title.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
+          </h1>
+          <p className="hero__lead">{hero.lead}</p>
+          <div className="hero__cta">
+            <a className="btn btn--solid" href="#work">
+              프로젝트 보기
+            </a>
+            <a className="btn btn--3d" href="#/world">
+              3D로 감상하기
+            </a>
+          </div>
+          <p className="hero__note">3D는 같은 내용을 캐릭터로 둘러보는 부가 콘텐츠입니다. 이 화면이 기본입니다.</p>
         </div>
-        <p className="hero__world">
-          <a className="btn" href="#/world">
-            3D 월드로 둘러보기 →
-          </a>
-          <span>같은 내용을 캐릭터로 탐험하는 또 다른 입구입니다. 이 화면이 읽기 모드입니다.</span>
-        </p>
+
+        <aside className="spec" aria-label="한눈에 보기">
+          <p className="spec__t">At a glance</p>
+          <dl>
+            <div>
+              <dt>이름</dt>
+              <dd>{profile.name}</dd>
+            </div>
+            <div>
+              <dt>역할</dt>
+              <dd>{profile.roleLine}</dd>
+            </div>
+            <div>
+              <dt>소속</dt>
+              <dd>{profile.school}</dd>
+            </div>
+            {hero.facts.map((f) => (
+              <div key={f}>
+                <dt>기록</dt>
+                <dd>{f}</dd>
+              </div>
+            ))}
+            <div>
+              <dt>업데이트</dt>
+              <dd className="tnum">{profile.updated}</dd>
+            </div>
+          </dl>
+        </aside>
       </div>
     </section>
   )
@@ -65,22 +90,25 @@ function Work() {
         <div className="work">
           {cases.map((c, i) => (
             <a className="work__item" key={c.slug} href={`#/work/${c.slug}`}>
-              <span className="work__no tnum">0{i + 1}</span>
-              <div>
+              <div className="work__media">
+                <CaseCover cover={c.cover} size="card" />
+              </div>
+              <div className="work__text">
+                <span className="work__no tnum">Case 0{i + 1}</span>
                 <h3 className="work__title">{c.title}</h3>
                 <p className="work__sub">{c.subtitle}</p>
                 <p className="work__sum">{c.summary}</p>
                 <div className="work__tags">
-                  {c.tags.map((t) => (
-                    <span className="chip" key={t}>
-                      {t}
+                  {c.tags.map((tag) => (
+                    <span className="chip" key={tag}>
+                      {tag}
                     </span>
                   ))}
                 </div>
-              </div>
-              <div className="work__side">
-                <span className="tnum">{c.period}</span>
-                <span>{c.status}</span>
+                <p className="work__meta">
+                  <span className="tnum">{c.period}</span>
+                  <span>{c.status}</span>
+                </p>
                 <span className="work__open">케이스 보기 →</span>
               </div>
             </a>
