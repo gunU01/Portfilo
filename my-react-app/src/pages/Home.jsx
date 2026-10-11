@@ -30,8 +30,8 @@ function Hero() {
             </div>
           </div>
 
-          <aside className="spec" aria-label="한눈에 보기">
-            <p className="spec__t">한눈에 보기</p>
+          <aside className="spec" aria-label="About me">
+            <p className="spec__t">About me</p>
             <dl>
               <div>
                 <dt>이름</dt>

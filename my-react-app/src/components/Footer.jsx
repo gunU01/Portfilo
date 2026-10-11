@@ -30,12 +30,6 @@ export default function Footer() {
             ))}
           </ul>
         </div>
-        <nav className="footer__nav" aria-label="페이지 이동">
-          <a href="#/">Home</a>
-          <a href="#/project">Project</a>
-          <a href="#/about">About</a>
-          <a href="#/world">3D로 감상하기</a>
-        </nav>
       </div>
       <div className="wrap footer__bar">
         <span>© 2026 {profile.name}</span>

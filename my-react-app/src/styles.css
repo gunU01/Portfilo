@@ -2207,8 +2207,7 @@ h4 {
 }
 .footer__in {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 40px;
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
 }
 .footer__t {
@@ -2231,19 +2230,6 @@ h4 {
 }
 .footer__links a {
   font-weight: 700;
-  color: var(--accent-ink);
-}
-.footer__nav {
-  display: grid;
-  gap: 8px;
-  justify-items: end;
-  font-weight: 600;
-}
-.footer__nav a {
-  text-decoration: none;
-  color: var(--muted);
-}
-.footer__nav a:hover {
   color: var(--accent-ink);
 }
 .footer__bar {
@@ -2289,13 +2275,7 @@ h4 {
   .footer__in {
     grid-template-columns: minmax(0, 1fr);
   }
-  .footer__nav {
-    justify-items: start;
-    grid-auto-flow: column;
-    justify-content: start;
-    gap: 18px;
   }
-}
 @media print {
   .theme,
   .nav__3d {
