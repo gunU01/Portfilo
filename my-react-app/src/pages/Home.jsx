@@ -1,83 +1,104 @@
-import { useMemo } from 'react'
-import Head from '../components/Head.jsx'
 import { profile } from '../data/profile.js'
-import { skillGroups } from '../data/skills.js'
-import { awards } from '../data/awards.js'
 import { cases } from '../data/cases.js'
-import CaseCover from '../components/CaseCover.jsx'
-import { useScrollSpy } from '../lib/useScrollSpy.js'
+import { awards } from '../data/awards.js'
 import { useReveal } from '../lib/useReveal.js'
 
 const githubId = (url) => url?.replace(/\/+$/, '').split('/').pop()
-const SECTIONS = [
-  ['work', '프로젝트'],
-  ['about', '소개'],
-  ['skills', '기술'],
-  ['awards', '수상'],
-  ['contact', '연락'],
-]
 
 function Hero() {
   const { hero } = profile
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <div className="wrap hero__grid">
-        <div>
-          <p className="eyebrow">{hero.eyebrow}</p>
-          <h1 id="hero-title">
-            {hero.title.map((line) => (
-              <span key={line}>{line}</span>
-            ))}
-          </h1>
-          <p className="hero__lead">{hero.lead}</p>
-          <div className="hero__cta">
-            <a className="btn btn--solid" href="#work">
-              프로젝트 보기
-            </a>
-            <a className="btn btn--3d" href="#/world">
-              3D로 감상하기
-            </a>
-          </div>
-          <p className="hero__note">3D는 같은 내용을 캐릭터로 둘러보는 부가 콘텐츠입니다. 이 화면이 기본입니다.</p>
-        </div>
+      <div className="wrap">
+        <p className="eyebrow">{hero.eyebrow}</p>
 
-        <aside className="spec" aria-label="한눈에 보기">
-          <p className="spec__t">At a glance</p>
-          <dl>
-            <div>
-              <dt>이름</dt>
-              <dd>{profile.name}</dd>
+        <p className="kw" aria-hidden="true">
+          {hero.keywords.map((k) => (
+            <span key={k}>{k}</span>
+          ))}
+        </p>
+
+        <div className="hero__grid">
+          <div>
+            <h1 id="hero-title">{hero.title.join(' ')}</h1>
+            <p className="hero__lead">{hero.lead}</p>
+            <div className="hero__cta">
+              <a className="btn btn--solid" href="#/project">
+                프로젝트 보기
+              </a>
+              <a className="btn btn--3d" href="#/world">
+                3D로 감상하기
+              </a>
             </div>
-            <div>
-              <dt>역할</dt>
-              <dd>{profile.roleLine}</dd>
-            </div>
-            <div>
-              <dt>소속</dt>
-              <dd>{profile.school}</dd>
-            </div>
-            {hero.facts.map((f) => (
-              <div key={f}>
-                <dt>기록</dt>
-                <dd>{f}</dd>
-              </div>
-            ))}
-            {profile.contact.github && (
+            <p className="hero__note">3D는 같은 내용을 캐릭터로 둘러보는 부가 콘텐츠입니다. 이 화면이 기본입니다.</p>
+          </div>
+
+          <aside className="spec" aria-label="한눈에 보기">
+            <p className="spec__t">At a glance</p>
+            <dl>
               <div>
-                <dt>GitHub</dt>
-                <dd>
-                  <a href={profile.contact.github} target="_blank" rel="noreferrer">
-                    @{githubId(profile.contact.github)}
-                  </a>
-                </dd>
+                <dt>이름</dt>
+                <dd>{profile.name}</dd>
               </div>
-            )}
-            <div>
-              <dt>업데이트</dt>
-              <dd className="tnum">{profile.updated}</dd>
-            </div>
-          </dl>
-        </aside>
+              <div>
+                <dt>역할</dt>
+                <dd>{profile.roleLine}</dd>
+              </div>
+              <div>
+                <dt>소속</dt>
+                <dd>{profile.school}</dd>
+              </div>
+              {hero.facts.map((f) => (
+                <div key={f}>
+                  <dt>기록</dt>
+                  <dd>{f}</dd>
+                </div>
+              ))}
+              {profile.contact.github && (
+                <div>
+                  <dt>GitHub</dt>
+                  <dd>
+                    <a href={profile.contact.github} target="_blank" rel="noreferrer">
+                      @{githubId(profile.contact.github)}
+                    </a>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Overview() {
+  return (
+    <section className="ov" aria-labelledby="ov-title">
+      <div className="wrap">
+        <h2 className="ov__t" id="ov-title">
+          OVERVIEW
+        </h2>
+        <p className="ov__p">{profile.overview}</p>
+        <div className="ov__cards">
+          <a className="ov__card reveal" href="#/project">
+            <span className="ov__n tnum">01</span>
+            <h3>Project</h3>
+            <p>
+              {cases.map((c) => c.title).join(' · ')} — 목표·방식·결과로 읽는 케이스 {cases.length}개
+            </p>
+            <span className="ov__go">프로젝트 보기 →</span>
+          </a>
+          <a className="ov__card reveal" href="#/about">
+            <span className="ov__n tnum">02</span>
+            <h3>About</h3>
+            <p>
+              경험과 생각, 기술
+              {awards.length ? `, 수상 ${awards.length}건` : ''}
+            </p>
+            <span className="ov__go">소개 보기 →</span>
+          </a>
+        </div>
       </div>
     </section>
   )
@@ -85,7 +106,7 @@ function Hero() {
 
 function Capabilities() {
   return (
-    <section className="wrap" aria-label="핵심 역량" style={{ paddingBottom: 72 }}>
+    <section className="wrap caps-wrap" aria-label="핵심 역량">
       <div className="caps">
         {profile.capabilities.map((c, i) => (
           <a className="cap reveal" key={c.title} href={`#/work/${c.to.slug}?s=${c.to.section}`}>
@@ -100,185 +121,13 @@ function Capabilities() {
   )
 }
 
-function Work() {
-  return (
-    <section className="section" id="work">
-      <div className="wrap">
-        <Head
-          kicker="Work"
-          title="프로젝트"
-          lead="프로젝트는 목표·방식·결과 순으로, 내 역할은 역할·책임·결과 순으로 읽도록 정리했습니다."
-        />
-        <div className="work">
-          {cases.map((c, i) => (
-            <a className="work__item reveal" key={c.slug} href={`#/work/${c.slug}`}>
-              <div className="work__media">
-                <CaseCover cover={c.cover} size="card" />
-              </div>
-              <div className="work__text">
-                <span className="work__no tnum">Case 0{i + 1}</span>
-                <h3 className="work__title">{c.title}</h3>
-                <p className="work__sub">{c.subtitle}</p>
-                <p className="work__sum">{c.summary}</p>
-                <div className="work__tags">
-                  {c.tags.map((tag) => (
-                    <span className="chip" key={tag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <p className="work__meta">
-                  <span className="tnum">{c.period}</span>
-                  <span>{c.status}</span>
-                </p>
-                <span className="work__open">케이스 보기 →</span>
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function About() {
-  const { about } = profile
-  return (
-    <section className="section" id="about">
-      <div className="wrap">
-        <Head kicker="About" title="소개" />
-        <div className="about">
-          <div className="about__text">
-            {about.paragraphs.map((p) => (
-              <p key={p}>{p}</p>
-            ))}
-          </div>
-          <ol className="tl">
-            {about.timeline.map((t) => (
-              <li className="tl__item" key={t.when}>
-                <span className="tl__when tnum">{t.when}</span>
-                <p className="tl__text">{t.text}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Skills() {
-  return (
-    <section className="section" id="skills">
-      <div className="wrap">
-        <Head
-          kicker="Skills"
-          title="기술과 도구"
-          lead="무엇을 아는지가 아니라, 어디에 어떻게 썼는지로 적었습니다."
-        />
-        <div className="skills">
-          {skillGroups.map((g) => (
-            <div className="skillgroup" key={g.title}>
-              <h3>{g.title}</h3>
-              <ul>
-                {g.items.map((s) => (
-                  <li key={s.name}>
-                    <b>{s.name}</b>
-                    <span>{s.used}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Awards() {
-  if (!awards.length) return null
-  return (
-    <section className="section" id="awards">
-      <div className="wrap">
-        <Head kicker="Awards" title="수상" />
-        <ul className="awards">
-          {awards.map((a) => (
-            <li key={`${a.year}-${a.title}`}>
-              <span className="tnum" style={{ color: 'var(--faint)' }}>
-                {a.year}
-              </span>
-              <div>
-                <b>{a.title}</b>
-                <small>{[a.org, a.note].filter(Boolean).join(' · ')}</small>
-              </div>
-              <span className="awards__res">{a.result}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  )
-}
-
-function Contact() {
-  const { contact } = profile
-  const links = [
-    [`GitHub · @${githubId(contact.github)}`, contact.github],
-    ['이메일', contact.email && `mailto:${contact.email}`],
-    ['LinkedIn', contact.linkedin],
-    ['Notion', contact.notion],
-  ].filter(([, href]) => href)
-
-  return (
-    <section className="section" id="contact">
-      <div className="wrap">
-        <Head kicker="Contact" title="연락" lead="프로젝트의 근거 자료나 더 자세한 이야기가 궁금하시면 편하게 연락 주세요." />
-        <div className="contact">
-          {links.map(([label, href]) => (
-            <a className="btn" key={label} href={href} target="_blank" rel="noreferrer">
-              {label} ↗
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function SectionIndex({ items }) {
-  const ids = useMemo(() => items.map(([id]) => id), [items])
-  const active = useScrollSpy(ids)
-  return (
-    <nav className="sidx" aria-label="섹션 이동">
-      {items.map(([id, label], i) => (
-        <button
-          key={id}
-          type="button"
-          aria-current={active === id}
-          onClick={() => document.getElementById(id)?.scrollIntoView()}
-        >
-          <span className="tnum">{String(i + 1).padStart(2, '0')}</span>
-          {label}
-        </button>
-      ))}
-    </nav>
-  )
-}
-
 export default function Home() {
   useReveal()
-  const items = useMemo(() => (awards.length ? SECTIONS : SECTIONS.filter(([id]) => id !== 'awards')), [])
   return (
     <>
-      <SectionIndex items={items} />
       <Hero />
       <Capabilities />
-      <Work />
-      <About />
-      <Skills />
-      <Awards />
-      <Contact />
+      <Overview />
     </>
   )
 }

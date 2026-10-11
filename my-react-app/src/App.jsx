@@ -1,6 +1,9 @@
 import { Suspense, lazy, useEffect } from 'react'
 import Nav from './components/Nav.jsx'
 import Home from './pages/Home.jsx'
+import Project from './pages/Project.jsx'
+import About from './pages/About.jsx'
+import Footer from './components/Footer.jsx'
 import Case from './pages/Case.jsx'
 import { cases } from './data/cases.js'
 import { profile } from './data/profile.js'
@@ -8,6 +11,8 @@ import { useHashRoute } from './lib/useHashRoute.js'
 
 // 3D는 월드를 열 때만 내려받습니다(three 포함).
 const World = lazy(() => import('./pages/World.jsx'))
+
+const TITLES = { '/world': '3D 월드', '/project': 'Project', '/about': 'About' }
 
 export default function App() {
   const { path, section } = useHashRoute()
@@ -17,7 +22,7 @@ export default function App() {
 
   useEffect(() => {
     const base = `${profile.name} · PM 포트폴리오`
-    document.title = current ? `${current.title} — ${base}` : path === '/world' ? `3D 월드 — ${base}` : base
+    document.title = current ? `${current.title} — ${base}` : TITLES[path] ? `${TITLES[path]} — ${base}` : base
   }, [current, path])
 
   // 라우트가 바뀌면 맨 위로, 섹션 앵커(?s=)가 있으면 그 섹션으로
@@ -35,7 +40,7 @@ export default function App() {
       <a className="skip" href="#main">
         본문으로 건너뛰기
       </a>
-      <Nav />
+      <Nav path={path} />
       <main id="main">
         {current ? (
           <Case
@@ -49,18 +54,15 @@ export default function App() {
           <Suspense fallback={<p className="wrap world-loading">월드를 불러오는 중입니다…</p>}>
             <World />
           </Suspense>
+        ) : path === '/project' ? (
+          <Project />
+        ) : path === '/about' ? (
+          <About />
         ) : (
           <Home />
         )}
       </main>
-      <footer className="footer">
-        <div className="wrap">
-          <span>
-            © 2026 {profile.name}. 프로젝트 근거는 팀 문서에서 확인된 내용만 담았습니다.
-          </span>
-          <span>마지막 업데이트 {profile.updated}</span>
-        </div>
-      </footer>
+      {path !== '/world' && <Footer />}
     </>
   )
 }

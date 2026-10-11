@@ -55,7 +55,7 @@ export const zones = [
       id: `award-${a.year}-${a.result}`,
       title: `${a.result} · ${a.title}`,
       sub: [a.year, a.org, a.note].filter(Boolean).join(' · '),
-      href: '#/?s=awards',
+      href: '#/about?s=awards',
       shape: 'trophy',
       ...MEDAL[a.result],
     })),

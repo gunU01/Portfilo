@@ -31,7 +31,7 @@ export default function Case({ data, index, total, next }) {
   return (
     <article>
       <header className="wrap case__head">
-        <a className="back" href="#/?s=work">
+        <a className="back" href="#/project">
           ← 프로젝트 목록
         </a>
         <p className="eyebrow">

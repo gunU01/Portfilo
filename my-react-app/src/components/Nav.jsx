@@ -1,15 +1,14 @@
 import { profile } from '../data/profile.js'
-import { awards } from '../data/awards.js'
-import { goHomeSection } from '../lib/goSection.js'
+import ThemeToggle from './ThemeToggle.jsx'
 
-export default function Nav() {
-  const items = [
-    ['work', '프로젝트'],
-    ['about', '소개'],
-    ['skills', '기술'],
-    ...(awards.length ? [['awards', '수상']] : []),
-    ['contact', '연락'],
-  ]
+const LINKS = [
+  ['/', 'Home'],
+  ['/project', 'Project'],
+  ['/about', 'About'],
+]
+
+export default function Nav({ path }) {
+  const current = path.startsWith('/work/') ? '/project' : path
 
   return (
     <nav className="nav" aria-label="주 메뉴">
@@ -19,14 +18,15 @@ export default function Nav() {
           <small>{profile.roleLine}</small>
         </a>
         <div className="nav__links">
-          {items.map(([id, label]) => (
-            <button key={id} type="button" onClick={() => goHomeSection(id)}>
+          {LINKS.map(([to, label]) => (
+            <a key={to} href={`#${to}`} aria-current={current === to ? 'page' : undefined}>
               {label}
-            </button>
+            </a>
           ))}
         </div>
+        <ThemeToggle />
         <a className="nav__3d" href="#/world">
-          3D로 감상하기
+          3D<span className="nav__3d-long">로 감상하기</span>
         </a>
       </div>
     </nav>

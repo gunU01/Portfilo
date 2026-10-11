@@ -13,6 +13,8 @@ export const eolma = {
   subtitle: '가장 쉽고 빠른 그룹 정산',
   summary:
     '한 사람이 결제한 뒤 시작되는 계산·요청·확인을 한 흐름으로 줄인 그룹 정산 앱. 1차 평가 피드백을 계기로 범위를 ‘그룹 정산’ 하나로 되돌렸습니다.',
+  group: 'TEAM',
+  en: 'EOLMA',
   tags: ['PM', 'FE', '팀장'],
   period: '2026.05 –',
   status: '비공개 베타 준비·운영',

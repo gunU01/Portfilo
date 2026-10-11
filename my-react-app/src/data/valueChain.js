@@ -6,6 +6,8 @@ export const valueChain = {
   subtitle: '사업보고서로 읽은 무료 송금과 수익 구조',
   summary:
     '송금을 평생 무료로 두고도 토스는 어디서 돈을 버는가. 사업보고서의 서술과 수치를 다섯 레일로 나눠 읽고, 얼마의 무료 정산 모델에 주는 시사점을 가설로 정리했습니다.',
+  group: 'ANALYSIS',
+  en: 'TOSS TEARDOWN',
   tags: ['역기획', '토스', 'PM'],
   period: '2026.10',
   status: 'Draft v1',
