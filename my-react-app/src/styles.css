@@ -15,7 +15,7 @@
   --shadow: 0 1px 2px rgb(16 24 40 / 0.05), 0 12px 30px rgb(31 107 255 / 0.1);
   --font: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
     'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
-  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --mono: var(--font); /* 라벨도 같은 Pretendard로 */
   --wrap: 1120px;
   --read: 720px;
   color-scheme: light;
