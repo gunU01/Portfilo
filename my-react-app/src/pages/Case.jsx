@@ -43,7 +43,7 @@ export default function Case({ data }) {
               {t}
             </span>
           ))}
-          <span className="chip">{data.status}</span>
+          {data.status && <span className="chip">{data.status}</span>}
         </div>
 
         {data.cover && (

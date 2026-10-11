@@ -474,6 +474,7 @@ button {
   color: var(--accent-ink);
 }
 .case__sum {
+  white-space: pre-line;
   margin-top: 18px;
   max-width: 660px;
   color: var(--muted);
@@ -2195,6 +2196,7 @@ h4 {
   font-weight: 600;
 }
 .pcard__sum {
+  white-space: pre-line;
   margin-top: 10px;
   color: var(--muted);
   font-size: 15.5px;

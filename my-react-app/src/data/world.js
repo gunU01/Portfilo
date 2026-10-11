@@ -7,7 +7,7 @@ import { haemi } from './haemi.js'
 
 const meta = (c, key) => c.meta.find(([k]) => k === key)?.[1] ?? ''
 
-// 건물 모양: 얼마=동전과 영수증, 해미=집, 토스 역기획=오르는 막대(레일). 새 케이스는 기본 집 모양.
+// 건물 모양: 얼마=동전과 영수증, 해미=집, 토스 BM 분석=오르는 막대(레일). 새 케이스는 기본 집 모양.
 const SHAPE_BY_CASE = { eolma: 'coins', haemi: 'house', 'value-chain': 'bars' }
 
 // 수상 트로피 색: 결과 이름으로 메달 색을 정합니다. 모르는 결과는 기본색.
@@ -40,7 +40,7 @@ export const zones = [
       { id: 'doc-haemi', title: '해미 기획 문서', sub: meta(haemi, '산출물'), href: '#/work/haemi?s=role', shape: 'board' },
       {
         id: 'doc-toss',
-        title: '토스 역기획',
+        title: '토스 BM 분석',
         sub: '사업보고서(2025.12)로 읽은 무료 송금과 수익 구조',
         href: '#/work/value-chain?s=chain',
         shape: 'book',

@@ -6,7 +6,7 @@ import { useReveal } from '../lib/useReveal.js'
 const GROUPS = [
   ['ALL', '전체'],
   ['TEAM', '팀 프로젝트'],
-  ['ANALYSIS', '역기획'],
+  ['ANALYSIS', '분석'],
 ]
 
 export default function Project() {
@@ -52,7 +52,7 @@ export default function Project() {
                 </div>
                 <p className="pcard__meta">
                   <span className="tnum">{c.period}</span>
-                  <span>{c.status}</span>
+                  {c.status && <span>{c.status}</span>}
                 </p>
               </div>
             </a>
