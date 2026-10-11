@@ -44,7 +44,7 @@ export const haemi = {
   sections: [
     {
       id: 'summary',
-      title: '한눈에',
+      title: '요약',
       blocks: [
         {
           type: 'list',

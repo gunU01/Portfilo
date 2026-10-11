@@ -37,7 +37,7 @@ export const eolma = {
   sections: [
     {
       id: 'summary',
-      title: '한눈에',
+      title: '요약',
       blocks: [
         {
           type: 'list',
@@ -83,7 +83,7 @@ export const eolma = {
         {
           type: 'callout',
           tone: 'key',
-          title: '읽어 낸 것',
+          title: '결론',
           text: '사용자는 이미 더치페이에 익숙합니다. 어려운 부분은 **정산하는 과정**입니다. 한 사람이 먼저 결제한 뒤 참여자를 확인하고, 금액을 계산해 요청하고, 입금까지 확인하는 단계가 이어지기 때문입니다.',
         },
         {
