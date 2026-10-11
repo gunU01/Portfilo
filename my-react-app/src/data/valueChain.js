@@ -37,7 +37,7 @@ export const valueChain = {
   sections: [
     {
       id: 'frame',
-      title: '무료로 풀면, 어디서 버는가',
+      title: '질문과 결론',
       blocks: [
         {
           type: 'p',
@@ -64,7 +64,7 @@ export const valueChain = {
 
     {
       id: 'entry',
-      title: '1. 송금은 매출이 아니라 입구입니다',
+      title: '송금은 입구',
       blocks: [
         {
           type: 'p',
@@ -83,7 +83,7 @@ export const valueChain = {
 
     {
       id: 'payer',
-      title: '2. 돈은 사용자와 거래하는 쪽에서 납니다',
+      title: '돈 내는 쪽',
       blocks: [
         {
           type: 'table',
@@ -113,7 +113,7 @@ export const valueChain = {
 
     {
       id: 'growth',
-      title: '3. 2025년 성장은 증권이 끌었습니다',
+      title: '증권의 성장',
       blocks: [
         {
           type: 'table',
@@ -139,7 +139,7 @@ export const valueChain = {
 
     {
       id: 'point',
-      title: '그래서 말하고 싶은 것',
+      title: '의미와 한계',
       blocks: [
         {
           type: 'callout',
