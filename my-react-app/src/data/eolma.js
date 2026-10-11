@@ -242,14 +242,8 @@ export const eolma = {
 
     {
       id: 'team-outcome',
-      title: '팀이 만든 결과: 영수증 인식',
+      title: '영수증 인식을 바꾼 구조와 결과',
       blocks: [
-        {
-          type: 'callout',
-          tone: 'note',
-          title: '담당 표시',
-          text: '이 구현은 AI·BE 팀원이 맡았습니다. 성과는 팀의 것으로 표기합니다.',
-        },
         {
           type: 'stats',
           items: [
