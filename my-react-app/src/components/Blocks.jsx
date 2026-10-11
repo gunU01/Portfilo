@@ -210,7 +210,7 @@ function Block({ block }) {
 
     case 'gallery':
       return (
-        <div className="gallery">
+        <div className="gallery" style={{ '--cols': block.cols ?? 4 }}>
           {block.items.map((it) => (
             <figure className="gallery__item" key={it.src}>
               <span className="phone phone--flat">

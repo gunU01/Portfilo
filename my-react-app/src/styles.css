@@ -1814,6 +1814,13 @@ h4 {
   box-shadow: var(--shadow);
 }
 
+.cover--screens.cover--warm {
+  background: radial-gradient(120% 90% at 50% 0%, #ffe6d8 0%, #ffb596 55%, #ff7a45 100%);
+}
+.cover--warm .phone {
+  box-shadow: 0 18px 40px rgb(120 40 10 / 0.35);
+}
+
 /* 막대: 실제 공시 수치 */
 .cover--bars {
   display: flex;
@@ -1932,7 +1939,7 @@ h4 {
 }
 .gallery {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
   gap: 22px;
   margin: 8px 0;
 }
@@ -1985,6 +1992,99 @@ h4 {
   }
   .work__item {
     padding: 14px;
+  }
+}
+
+/* ---------- 구성: 큰 섹션 제목 · 우측 목차 · 등장 효과 ---------- */
+.hero {
+  background:
+    radial-gradient(55% 70% at 88% 8%, rgb(255 122 69 / 0.16), transparent 62%),
+    radial-gradient(40% 45% at 0% 55%, rgb(244 196 120 / 0.2), transparent 70%);
+}
+@media (prefers-color-scheme: dark) {
+  .hero {
+    background:
+      radial-gradient(55% 70% at 88% 8%, rgb(255 122 69 / 0.12), transparent 62%),
+      radial-gradient(40% 45% at 0% 55%, rgb(180 120 40 / 0.1), transparent 70%);
+  }
+}
+.spec dd a {
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.section {
+  border-top: 1px solid var(--ink);
+}
+.section__title {
+  font-size: clamp(2.1rem, 4.8vw, 3.4rem);
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+}
+.section__kicker {
+  padding-top: 14px;
+}
+
+/* 우측 섹션 목차 */
+.sidx {
+  position: fixed;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+.sidx button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--faint);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.sidx button .tnum {
+  font-family: var(--mono);
+  font-size: 11px;
+}
+.sidx button:hover {
+  color: var(--ink);
+}
+.sidx button[aria-current='true'] {
+  color: var(--accent-ink);
+  font-weight: 700;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+@media (min-width: 1360px) {
+  .sidx {
+    display: flex;
+  }
+}
+
+/* 등장 효과: 자바스크립트가 켜져 있을 때만 숨김 상태로 시작 */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media print {
+  .sidx {
+    display: none;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
   }
 }
 

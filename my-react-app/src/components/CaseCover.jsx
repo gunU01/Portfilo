@@ -5,7 +5,7 @@ export default function CaseCover({ cover, size = 'card' }) {
 
   if (cover.kind === 'screens') {
     return (
-      <div className={`cover cover--screens cover--${size}`} aria-hidden={cover.decorative ? 'true' : undefined}>
+      <div className={`cover cover--screens cover--${size}${cover.tone ? ` cover--${cover.tone}` : ''}`} aria-hidden={cover.decorative ? 'true' : undefined}>
         {cover.images.map((img, i) => (
           <figure className={`phone phone--${i + 1}`} key={img.src}>
             <img src={img.src} alt={img.alt} loading="lazy" decoding="async" />

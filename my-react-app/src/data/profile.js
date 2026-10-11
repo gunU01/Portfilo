@@ -38,7 +38,6 @@ export const profile = {
       '그 뒤로는 문제 정의서와 요구사항·기능 명세, 경쟁 서비스·BM 분석, 스프린트와 베타 테스트 운영을 맡아 왔습니다. 구현 쪽 사정을 알기 때문에, 명세는 개발자가 되묻지 않도록 쓰려고 합니다.',
     ],
     timeline: [
-      { when: '2025.07 – 12', text: 'GrowMoney(경제 지식 학습 플랫폼) 팀장·기획·프론트엔드. 관리자 페이지와 상점·통계 페이지 개발' },
       { when: '2026.01 – 03', text: 'GilDam(여행 기록 서비스) PM·기획, 여행 기록 프론트엔드' },
       { when: '2026.05 – 08', text: '해미(치매 돌봄) 기획 전담. 피드백 7건을 기획 보완서로 정리, 글로벌 피우다 프로젝트 동북권 우수상' },
       { when: '2026.05 –', text: '지출 관리·그룹 정산 서비스(얼마) 기획 착수. 경쟁 분석, 비전·BM 설계, 기능 명세 작성' },
@@ -50,7 +49,7 @@ export const profile = {
   contact: {
     github: 'https://github.com/gunU01',
     email: '',
-    blog: 'https://velog.io/@gunu01',
+    blog: '',
     linkedin: '',
     notion: '',
   },

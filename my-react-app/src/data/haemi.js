@@ -1,4 +1,11 @@
 // 프로젝트 2 — 해미. 근거는 피우다 프로젝트 노션(신청서·기획 보완서 v2.1·질의응답지·기능명세서 v3.0)입니다.
+import elderHome from '../assets/haemi/elder-home.webp'
+import elderSend from '../assets/haemi/elder-send.webp'
+import elderFeeling from '../assets/haemi/elder-feeling.webp'
+import report from '../assets/haemi/report.webp'
+import reportDetail from '../assets/haemi/report-detail.webp'
+import album from '../assets/haemi/album.webp'
+
 export const haemi = {
   slug: 'haemi',
   title: '해미',
@@ -10,11 +17,13 @@ export const haemi = {
   status: '2026 글로벌 피우다 프로젝트 동북권 우수상',
 
   cover: {
-    kind: 'shift',
-    caption: '목표를 다시 쓰다',
-    from: '기억 회복',
-    to: '관계 지속',
-    alt: '해미의 핵심 전환: 목표를 기억 회복에서 관계 지속으로 다시 정의',
+    kind: 'screens',
+    tone: 'warm',
+    images: [
+      { src: elderHome, alt: '해미 어르신용 홈 화면: 오늘의 인지 활동과 가족이 보낸 새 추억' },
+      { src: report, alt: '해미 보호자용 리포트 화면: 어르신별 주간 요약과 출석·참여' },
+      { src: elderFeeling, alt: '해미 어르신용 마음 고르기 화면' },
+    ],
   },
 
   meta: [
@@ -244,6 +253,32 @@ export const haemi = {
         {
           type: 'p',
           text: '“기능이 많다”는 지적은 기능 수가 아니라 **한 기능의 출력이 다른 기능의 입력임이 명시되지 않은 것**이 문제라고 읽었습니다. 그래서 생산 기능·산출 데이터·소비 기능·주기·미충족 시 동작을 적은 데이터 계약표 12건을 만들었습니다.',
+        },
+        {
+          type: 'p',
+          text: '**어르신용 화면** — 선택지를 줄이고 큰 버튼으로, 하는 일은 한 화면에 하나.',
+        },
+        {
+          type: 'gallery',
+          cols: 3,
+          items: [
+            { src: elderHome, alt: '어르신용 홈 화면', title: '홈', caption: '오늘의 인지 활동과 가족이 보낸 새 추억, 하루 한마디를 한곳에.' },
+            { src: elderSend, alt: '어르신이 이야기를 전하는 방법을 고르는 화면', title: '이야기 전하기', caption: '말하기, 마음 전하기, 사진 고르기 중 마음에 드는 방법을 고릅니다.' },
+            { src: elderFeeling, alt: '어르신이 마음을 고르는 화면', title: '마음 고르기', caption: '말이 어려울 때는 마음을 고르는 것으로 답합니다(최대 2개).' },
+          ],
+        },
+        {
+          type: 'p',
+          text: '**보호자용 화면** — 가족은 추억을 남기고, 어르신의 반응을 요약으로 받습니다.',
+        },
+        {
+          type: 'gallery',
+          cols: 3,
+          items: [
+            { src: album, alt: '보호자용 추억 앨범 화면', title: '추억 앨범', caption: '어르신별 앨범에서 보낸 추억의 대기·답변 상태를 봅니다.' },
+            { src: report, alt: '보호자용 리포트 화면', title: '주간 리포트', caption: '출석·참여와 영역별 태그로 이번 주를 요약합니다.' },
+            { src: reportDetail, alt: '보호자용 이번 주 하이라이트와 서포트 가이드 화면', title: '하이라이트와 서포트 가이드', caption: '좋은 반응과 어려움, 가족이 해볼 수 있는 일을 안내합니다.' },
+          ],
         },
       ],
     },

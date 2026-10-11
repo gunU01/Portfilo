@@ -1,9 +1,21 @@
+import { useMemo } from 'react'
 import Head from '../components/Head.jsx'
 import { profile } from '../data/profile.js'
 import { skillGroups } from '../data/skills.js'
 import { awards } from '../data/awards.js'
 import { cases } from '../data/cases.js'
 import CaseCover from '../components/CaseCover.jsx'
+import { useScrollSpy } from '../lib/useScrollSpy.js'
+import { useReveal } from '../lib/useReveal.js'
+
+const githubId = (url) => url?.replace(/\/+$/, '').split('/').pop()
+const SECTIONS = [
+  ['work', '프로젝트'],
+  ['about', '소개'],
+  ['skills', '기술'],
+  ['awards', '수상'],
+  ['contact', '연락'],
+]
 
 function Hero() {
   const { hero } = profile
@@ -50,6 +62,16 @@ function Hero() {
                 <dd>{f}</dd>
               </div>
             ))}
+            {profile.contact.github && (
+              <div>
+                <dt>GitHub</dt>
+                <dd>
+                  <a href={profile.contact.github} target="_blank" rel="noreferrer">
+                    @{githubId(profile.contact.github)}
+                  </a>
+                </dd>
+              </div>
+            )}
             <div>
               <dt>업데이트</dt>
               <dd className="tnum">{profile.updated}</dd>
@@ -66,7 +88,7 @@ function Capabilities() {
     <section className="wrap" aria-label="핵심 역량" style={{ paddingBottom: 72 }}>
       <div className="caps">
         {profile.capabilities.map((c, i) => (
-          <a className="cap" key={c.title} href={`#/work/${c.to.slug}?s=${c.to.section}`}>
+          <a className="cap reveal" key={c.title} href={`#/work/${c.to.slug}?s=${c.to.section}`}>
             <span className="cap__n tnum">0{i + 1}</span>
             <h3>{c.title}</h3>
             <p>{c.body}</p>
@@ -89,7 +111,7 @@ function Work() {
         />
         <div className="work">
           {cases.map((c, i) => (
-            <a className="work__item" key={c.slug} href={`#/work/${c.slug}`}>
+            <a className="work__item reveal" key={c.slug} href={`#/work/${c.slug}`}>
               <div className="work__media">
                 <CaseCover cover={c.cover} size="card" />
               </div>
@@ -202,9 +224,8 @@ function Awards() {
 function Contact() {
   const { contact } = profile
   const links = [
-    ['GitHub', contact.github],
+    [`GitHub · @${githubId(contact.github)}`, contact.github],
     ['이메일', contact.email && `mailto:${contact.email}`],
-    ['블로그', contact.blog],
     ['LinkedIn', contact.linkedin],
     ['Notion', contact.notion],
   ].filter(([, href]) => href)
@@ -225,9 +246,32 @@ function Contact() {
   )
 }
 
+function SectionIndex({ items }) {
+  const ids = useMemo(() => items.map(([id]) => id), [items])
+  const active = useScrollSpy(ids)
+  return (
+    <nav className="sidx" aria-label="섹션 이동">
+      {items.map(([id, label], i) => (
+        <button
+          key={id}
+          type="button"
+          aria-current={active === id}
+          onClick={() => document.getElementById(id)?.scrollIntoView()}
+        >
+          <span className="tnum">{String(i + 1).padStart(2, '0')}</span>
+          {label}
+        </button>
+      ))}
+    </nav>
+  )
+}
+
 export default function Home() {
+  useReveal()
+  const items = useMemo(() => (awards.length ? SECTIONS : SECTIONS.filter(([id]) => id !== 'awards')), [])
   return (
     <>
+      <SectionIndex items={items} />
       <Hero />
       <Capabilities />
       <Work />
