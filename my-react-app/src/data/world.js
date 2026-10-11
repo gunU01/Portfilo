@@ -8,7 +8,7 @@ import { haemi } from './haemi.js'
 const meta = (c, key) => c.meta.find(([k]) => k === key)?.[1] ?? ''
 
 // 건물 모양: 얼마=동전과 영수증, 해미=집, 토스 BM 분석=오르는 막대(레일). 새 케이스는 기본 집 모양.
-const SHAPE_BY_CASE = { eolma: 'coins', haemi: 'house', 'value-chain': 'bars' }
+const SHAPE_BY_CASE = { howmuch: 'coins', haemi: 'house', 'value-chain': 'bars' }
 
 // 수상 트로피 색: 결과 이름으로 메달 색을 정합니다. 모르는 결과는 기본색.
 const MEDAL = {
@@ -36,7 +36,7 @@ export const zones = [
     name: '기획 작업물',
     blurb: '명세·분석처럼 팀이 바로 쓰는 문서',
     items: [
-      { id: 'doc-eolma', title: '얼마 기획 문서', sub: meta(eolma, '산출물'), href: '#/work/eolma?s=role', shape: 'sheets' },
+      { id: 'doc-eolma', title: '얼마 기획 문서', sub: meta(eolma, '산출물'), href: '#/work/howmuch?s=role', shape: 'sheets' },
       { id: 'doc-haemi', title: '해미 기획 문서', sub: meta(haemi, '산출물'), href: '#/work/haemi?s=role', shape: 'board' },
       {
         id: 'doc-toss',
