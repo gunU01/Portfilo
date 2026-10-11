@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { profile } from '../data/profile.js'
 import { skillGroups } from '../data/skills.js'
 import { awards } from '../data/awards.js'
+import { cases } from '../data/cases.js'
 import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { useReveal } from '../lib/useReveal.js'
 
@@ -38,13 +39,58 @@ export default function About() {
       <SectionIndex items={items} />
 
       <section className="wrap ab__intro" id="intro" aria-labelledby="ab-title">
-        <h1 className="sr" id="ab-title">
-          소개
-        </h1>
-        <div className="ab__text">
-          {about.paragraphs.map((p) => (
-            <p key={p}>{p}</p>
-          ))}
+        <div className="ab__introgrid">
+          <div>
+            <h1 className="ab__h" id="ab-title">
+              소개
+            </h1>
+            <div className="ab__text">
+              {about.paragraphs.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </div>
+          </div>
+          <div className="ab__side">
+            <aside className="spec" aria-label="About me">
+              <p className="spec__t">About me</p>
+              <dl>
+                <div>
+                  <dt>이름</dt>
+                  <dd>{profile.name}</dd>
+                </div>
+                <div>
+                  <dt>직무</dt>
+                  <dd>{profile.roleLine}</dd>
+                </div>
+                <div>
+                  <dt>소속</dt>
+                  <dd>{profile.school}</dd>
+                </div>
+                {profile.contact.github && (
+                  <div>
+                    <dt>GitHub</dt>
+                    <dd>
+                      <a href={profile.contact.github} target="_blank" rel="noreferrer">
+                        @{profile.contact.github.replace(/\/+$/, '').split('/').pop()}
+                      </a>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            </aside>
+            <div className="ab__nums">
+              <a href="#/project">
+                <b className="tnum">{cases.length}</b>
+                <span>프로젝트</span>
+              </a>
+              {awards.length > 0 && (
+                <button type="button" onClick={() => document.getElementById('awards')?.scrollIntoView()}>
+                  <b className="tnum">{awards.length}</b>
+                  <span>수상</span>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
