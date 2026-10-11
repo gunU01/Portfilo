@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { profile } from '../data/profile.js'
 import { skillGroups } from '../data/skills.js'
 import { awards } from '../data/awards.js'
-import { cases } from '../data/cases.js'
 import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { useReveal } from '../lib/useReveal.js'
 
@@ -78,18 +77,6 @@ export default function About() {
                 )}
               </dl>
             </aside>
-            <div className="ab__nums">
-              <a href="#/project">
-                <b className="tnum">{cases.length}</b>
-                <span>프로젝트</span>
-              </a>
-              {awards.length > 0 && (
-                <button type="button" onClick={() => document.getElementById('awards')?.scrollIntoView()}>
-                  <b className="tnum">{awards.length}</b>
-                  <span>수상</span>
-                </button>
-              )}
-            </div>
           </div>
         </div>
       </section>

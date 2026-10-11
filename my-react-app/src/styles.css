@@ -2281,42 +2281,6 @@ h4 {
   display: grid;
   gap: 12px;
 }
-.ab__nums {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.ab__nums a,
-.ab__nums button {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 16px 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--ink);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  text-decoration: none;
-  transition: border-color 0.15s ease;
-}
-.ab__nums a:hover,
-.ab__nums button:hover {
-  border-color: var(--accent);
-}
-.ab__nums b {
-  font-size: 1.9rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: var(--accent-ink);
-}
-.ab__nums span {
-  font-size: 14px;
-  font-weight: 600;
-}
 .ab__sec {
   padding-top: 56px;
   padding-bottom: 8px;
