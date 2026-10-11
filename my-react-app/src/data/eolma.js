@@ -256,14 +256,14 @@ export const eolma = {
           dark: true,
           src: ocr,
           alt: '영수증 OCR 파이프라인 재설계: 비전 모델과 OCR을 병렬로 실행해 비교 및 보정하는 구조와, 성공률 10% 미만에서 92.5%, 처리 시간 105초에서 14.7초로 개선된 결과',
-          caption: '팀 발표 자료: 영수증 OCR 파이프라인 재설계 (AI·BE 팀원 구현)',
+          caption: '팀 포트폴리오 자료: 영수증 OCR 파이프라인 재설계 (AI·BE 팀원 구현)',
         },
         {
           type: 'figure',
           dark: true,
           src: architecture,
           alt: '전체 아키텍처: GitHub에서 Docker Hub로 배포하고, AWS의 API 서버(Spring Boot, PostgreSQL, Redis)와 OCR 서버(FastAPI, Qwen)가 REST API로 React Native 앱과 연결되는 구조',
-          caption: '팀 발표 자료: 전체 아키텍처',
+          caption: '팀 포트폴리오 자료: 전체 아키텍처',
         },
         {
           type: 'p',
