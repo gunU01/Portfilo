@@ -28,7 +28,7 @@ export const skillGroups = [
   {
     title: '프론트엔드',
     items: [
-      { name: 'React', used: '컴포넌트를 나눠 화면을 구성하고, React Query로 서버 상태를 관리할 수 있습니다.' },
+      { name: 'React', used: '컴포넌트를 나눠 화면을 구성하고, TanStack Query로 서버 상태를 관리할 수 있습니다.' },
       { name: 'React Native · Expo', used: 'Zustand, TanStack Query, React Hook Form, Zod' },
     ],
   },
