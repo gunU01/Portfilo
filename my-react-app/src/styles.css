@@ -18,8 +18,6 @@
   --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   --wrap: 1120px;
   --read: 720px;
-  --hero-a: rgb(120 170 255 / 0.28);
-  --hero-b: rgb(120 220 255 / 0.2);
   color-scheme: light;
 }
 
@@ -37,8 +35,6 @@
     --accent-soft: #14284d;
     --warn-soft: #33290f;
     --shadow: none;
-    --hero-a: rgb(60 110 220 / 0.3);
-    --hero-b: rgb(30 150 200 / 0.18);
     color-scheme: dark;
   }
 }
@@ -55,8 +51,6 @@
   --accent-soft: #14284d;
   --warn-soft: #33290f;
   --shadow: none;
-  --hero-a: rgb(60 110 220 / 0.3);
-  --hero-b: rgb(30 150 200 / 0.18);
   color-scheme: dark;
 }
 
@@ -209,9 +203,7 @@ button {
 /* ---------- Hero ---------- */
 .hero {
   padding: 56px 0 56px;
-  background:
-    radial-gradient(60% 80% at 8% 0%, var(--hero-a), transparent 65%),
-    radial-gradient(50% 70% at 95% 30%, var(--hero-b), transparent 65%);
+  background: var(--surface);
 }
 .eyebrow {
   display: inline-flex;
@@ -273,11 +265,6 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-}
-.hero__note {
-  margin-top: 14px;
-  font-size: 13.5px;
-  color: var(--faint);
 }
 .spec {
   border: 1px solid var(--line);
@@ -636,7 +623,7 @@ button {
 }
 .blocks strong {
   font-weight: 700;
-  background: linear-gradient(transparent 62%, var(--accent-soft) 62%);
+  box-shadow: inset 0 -0.38em 0 var(--accent-soft);
 }
 
 .list li {
@@ -1570,11 +1557,7 @@ button {
   .world__frame,
   .nav__3d,
   .hero__cta,
-  .hero__note {
-    display: none;
-  }
-}
-
+  
 /* ---------- Visual system: 버튼 · 라벨 · 커버 · 화면 프레임 ---------- */
 .section__kicker,
 .csec__kicker,
@@ -1664,7 +1647,7 @@ h4 {
   align-items: flex-end;
   gap: 4%;
   padding: 0 6%;
-  background: radial-gradient(120% 90% at 50% 0%, #cfe7ff 0%, #8cc7ff 55%, #3b9bff 100%);
+  background: #a9d2ff;
 }
 .phone {
   margin: 0;
@@ -1716,7 +1699,7 @@ h4 {
 }
 
 .cover--screens.cover--warm {
-  background: radial-gradient(120% 90% at 50% 0%, #ffe6d8 0%, #ffb596 55%, #ff7a45 100%);
+  background: #ffc4a8;
 }
 .cover--warm .phone {
   box-shadow: 0 18px 40px rgb(120 40 10 / 0.35);
@@ -2397,5 +2380,5 @@ h4 {
 }
 .world__stage {
   border-color: var(--line);
-  background: radial-gradient(90% 70% at 50% 0%, #1a2030 0%, #0d0f14 70%);
+  background: #11151f;
 }

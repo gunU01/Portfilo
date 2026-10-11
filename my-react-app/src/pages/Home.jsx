@@ -30,7 +30,6 @@ function Hero() {
                 3D로 감상하기
               </a>
             </div>
-            <p className="hero__note">3D는 같은 내용을 캐릭터로 둘러보는 부가 콘텐츠입니다. 이 화면이 기본입니다.</p>
           </div>
 
           <aside className="spec" aria-label="한눈에 보기">

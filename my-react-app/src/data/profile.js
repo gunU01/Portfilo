@@ -1,7 +1,7 @@
 // 사이트 전체에서 쓰는 개인 정보. 값이 비어 있는 항목은 화면에서 자동으로 숨겨집니다.
 export const profile = {
   name: '문채원',
-  roleLine: 'PM · 프론트엔드 출신',
+  roleLine: 'PM / FE',
   school: '소프트웨어 마이스터고등학교 재학',
   updated: '2026.10',
 
