@@ -121,7 +121,7 @@ export default function World() {
         >
           <div className="world__hud">
             <span className="world__where">{zoneName ? `현재 구역 · ${zoneName}` : '길을 따라 구역으로 이동하세요'}</span>
-            <span className="world__hint">방향키·WASD 이동 · Enter 열기</span>
+            <span className="world__hint">방향키 또는 WASD로 이동, Enter로 열기</span>
           </div>
 
           {near && (

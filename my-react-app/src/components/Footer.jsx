@@ -18,8 +18,6 @@ export default function Footer() {
     <footer className="footer">
       <div className="wrap footer__in">
         <div>
-          <p className="footer__t">연락</p>
-          <p className="footer__lead">프로젝트의 근거 자료나 더 자세한 이야기가 궁금하시면 편하게 연락 주세요.</p>
           <ul className="footer__links">
             {links.map(([label, href]) => (
               <li key={label}>
@@ -33,7 +31,7 @@ export default function Footer() {
       </div>
       <div className="wrap footer__bar">
         <span>© 2026 {profile.name}</span>
-        <span>마지막 업데이트 {profile.updated}</span>
+        <span>Last updated {profile.updated}</span>
       </div>
     </footer>
   )

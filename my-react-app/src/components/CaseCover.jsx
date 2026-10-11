@@ -16,22 +16,31 @@ export default function CaseCover({ cover, size = 'card' }) {
   }
 
   if (cover.kind === 'bars') {
-    const max = Math.max(...cover.items.map((b) => b.value))
+    const max = cover.max ?? Math.max(...cover.items.map((b) => b.value))
     return (
       <div className={`cover cover--bars cover--${size}`} role="img" aria-label={cover.alt}>
-        <p className="cover__cap">{cover.caption}</p>
+        <div className="bars__head">
+          <p className="cover__cap">{cover.caption}</p>
+          {cover.unit && <span className="bars__unit">{cover.unit}</span>}
+        </div>
         <div className="bars">
           {cover.items.map((b, i) => (
-            <div className="bars__col" key={b.label}>
+            <div className="bars__row" key={b.label}>
+              <span className="bars__l">
+                {b.label}
+                {b.note && <small>{b.note}</small>}
+              </span>
+              <span className="bars__track">
+                <span
+                  className={i === cover.items.length - 1 ? 'bars__bar is-last' : 'bars__bar'}
+                  style={{ width: `${(b.value / max) * 100}%` }}
+                />
+              </span>
               <span className="bars__v tnum">{b.display}</span>
-              <span
-                className={i === cover.items.length - 1 ? 'bars__bar is-last' : 'bars__bar'}
-                style={{ height: `${Math.round((b.value / max) * 100)}%` }}
-              />
-              <span className="bars__l">{b.label}</span>
             </div>
           ))}
         </div>
+        {cover.source && <p className="bars__src">{cover.source}</p>}
       </div>
     )
   }

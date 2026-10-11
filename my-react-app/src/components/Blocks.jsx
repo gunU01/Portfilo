@@ -105,7 +105,7 @@ function Block({ block }) {
 
     case 'stats':
       return (
-        <div className="stats">
+        <div className={block.columns === 2 ? 'stats stats--2' : 'stats'}>
           {block.items.map((s) => (
             <div className="stat" key={s.label}>
               <span className="stat__v">{s.value}</span>

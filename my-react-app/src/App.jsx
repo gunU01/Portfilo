@@ -46,7 +46,6 @@ export default function App() {
           <Case
             key={current.slug}
             data={current}
-            next={cases[(index + 1) % cases.length]}
           />
         ) : path === '/world' ? (
           <Suspense fallback={<p className="wrap world-loading">월드를 불러오는 중입니다…</p>}>

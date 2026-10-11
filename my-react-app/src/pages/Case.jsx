@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Blocks from '../components/Blocks.jsx'
 import CaseCover from '../components/CaseCover.jsx'
 
-export default function Case({ data, next }) {
+export default function Case({ data }) {
   const [active, setActive] = useState(data.sections[0].id)
 
   // 읽는 위치에 따라 목차 강조
@@ -100,11 +100,6 @@ export default function Case({ data, next }) {
             </ul>
           </footer>
 
-          <a className="next" href={`#/work/${next.slug}`}>
-            <small>다음 케이스</small>
-            <b>{next.title}</b>
-            <span>{next.subtitle}</span>
-          </a>
         </div>
       </div>
     </article>

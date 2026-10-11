@@ -4,8 +4,8 @@
   --surface: #f6f8fd;
   --sunken: #edf1fa;
   --ink: #101828;
-  --muted: #475467;
-  --faint: #7a869a;
+  --muted: #1d2a44;
+  --faint: #0f4fd1;
   --line: #dbe3f0;
   --accent: #1f6bff;
   --accent-ink: #0f4fd1;
@@ -27,8 +27,8 @@
     --surface: #121c30;
     --sunken: #182440;
     --ink: #eef3ff;
-    --muted: #aab6cf;
-    --faint: #7b88a6;
+    --muted: #dbe4fa;
+    --faint: #8fbfff;
     --line: #25324d;
     --accent: #5aa2ff;
     --accent-ink: #8fbfff;
@@ -43,8 +43,8 @@
   --surface: #121c30;
   --sunken: #182440;
   --ink: #eef3ff;
-  --muted: #aab6cf;
-  --faint: #7b88a6;
+  --muted: #dbe4fa;
+  --faint: #8fbfff;
   --line: #25324d;
   --accent: #5aa2ff;
   --accent-ink: #8fbfff;
@@ -653,6 +653,9 @@ button {
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 12px;
 }
+.stats--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
 .stat {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -857,7 +860,7 @@ button {
   font-size: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--faint);
+  color: var(--accent-ink);
   margin-bottom: 10px;
 }
 .roles__role {
@@ -883,33 +886,6 @@ button {
   padding: 3px 0;
 }
 
-.next {
-  display: block;
-  margin-top: 8px;
-  padding: 28px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  text-decoration: none;
-  transition: border-color 0.15s;
-}
-.next:hover {
-  border-color: var(--accent);
-}
-.next small {
-  font-size: 13px;
-  color: var(--faint);
-}
-.next b {
-  display: block;
-  margin-top: 4px;
-  font-size: 22px;
-  letter-spacing: -0.02em;
-}
-.next span {
-  color: var(--muted);
-  font-size: 15px;
-}
 
 /* ---------- Value chain ---------- */
 .vc {
@@ -1111,6 +1087,12 @@ button {
 }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 560px) {
+  .stats--2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   .section__head {
     grid-template-columns: 1fr;
@@ -1272,11 +1254,7 @@ button {
   .nav,
   .toc,
   .skip,
-  .next,
-  .back {
-    display: none !important;
-  }
-  body {
+    body {
     background: #fff;
     color: #000;
     font-size: 11pt;
@@ -1659,59 +1637,84 @@ h4 {
   box-shadow: 0 18px 40px rgb(120 40 10 / 0.35);
 }
 
-/* 막대: 실제 공시 수치 */
+/* 막대: 실제 공시 수치. 가로 막대로 라벨, 막대, 값을 한 줄에 둡니다. */
 .cover--bars {
   display: flex;
   flex-direction: column;
-  padding: 22px 26px 20px;
-  background: #181714;
-  color: #f1ede3;
+  padding: 22px 28px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.bars__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 .cover--bars .cover__cap {
-  color: #ffa27a;
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+.bars__unit {
+  font-size: 12px;
+  color: var(--accent-ink);
 }
 .bars {
   flex: 1;
   display: flex;
-  align-items: stretch;
-  justify-content: space-around;
-  gap: 18px;
-  margin-top: 16px;
-}
-.bars__col {
-  flex: 1;
-  display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+.bars__row {
+  display: grid;
+  grid-template-columns: 5.5em minmax(0, 1fr) 3.6em;
   align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  min-height: 0;
-  max-width: 120px;
-}
-.bars__v {
-  font-family: var(--mono);
-  font-size: 15px;
-  font-weight: 700;
-}
-.bars__bar {
-  width: 100%;
-  min-height: 6px;
-  border-radius: 4px 4px 0 0;
-  background: #5d5a52;
-}
-.bars__bar.is-last {
-  background: #ff7a45;
+  gap: 14px;
 }
 .bars__l {
-  font-size: 12px;
-  color: #b3ada0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
   white-space: nowrap;
 }
-.cover--bars .bars__col {
-  height: 100%;
+.bars__l small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--accent-ink);
 }
-.cover--bars .bars__bar {
-  flex: none;
+.bars__track {
+  height: 22px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  overflow: hidden;
+}
+.bars__bar {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--accent-ink);
+  opacity: 0.45;
+}
+.bars__bar.is-last {
+  background: var(--accent);
+  opacity: 1;
+}
+.bars__v {
+  font-size: 15px;
+  font-weight: 700;
+  text-align: right;
+  color: var(--ink);
+}
+.bars__src {
+  margin: 0;
+  font-size: 11px;
+  color: var(--accent-ink);
 }
 
 /* 전환: 해미의 목표 재정의 */
@@ -1766,7 +1769,7 @@ h4 {
   border: 1px solid var(--line);
 }
 .fig--dark img {
-  border-color: #2a2926;
+  border-color: #1e2a44;
 }
 .fig figcaption,
 .gallery figcaption {
@@ -2249,17 +2252,6 @@ h4 {
   margin-bottom: 14px;
 }
 
-/* 어두운 배경 위의 커버 요소는 테마와 무관하게 고정 색 */
-.cover--bars {
-  background: #0c1424;
-}
-.cover--bars .cover__cap {
-  color: #8fbfff;
-}
-.cover--bars .bars__bar.is-last {
-  background: #4d94ff;
-}
-
 @media (max-width: 900px) {
   .hero__grid {
     grid-template-columns: minmax(0, 1fr);
@@ -2289,8 +2281,8 @@ h4 {
   --surface: #161922;
   --sunken: #1b1f2a;
   --ink: #eef0f6;
-  --muted: #aab0c0;
-  --faint: #7d8496;
+  --muted: #e2e8f8;
+  --faint: #9cc8ff;
   --line: #2a2f3d;
   --accent: #5aa2ff;
   --accent-ink: #9cc8ff;
