@@ -795,22 +795,26 @@ button {
 
 .decisions {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 .dec {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 4px 22px;
+  transition: border-color 0.18s ease;
+}
+.dec:hover,
+.dec[open] {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
 }
 .dec summary {
   list-style: none;
   cursor: pointer;
   display: grid;
-  grid-template-columns: 34px 1fr 20px;
-  gap: 10px;
-  align-items: start;
-  padding: 18px 0;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 22px;
   font-weight: 700;
   font-size: 17px;
   line-height: 1.45;
@@ -819,34 +823,59 @@ button {
   display: none;
 }
 .dec summary::after {
-  content: '+';
-  color: var(--accent);
-  font-weight: 700;
-  text-align: right;
+  content: '';
+  width: 9px;
+  height: 9px;
+  margin-right: 4px;
+  border-right: 2px solid var(--accent-ink);
+  border-bottom: 2px solid var(--accent-ink);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.2s ease;
 }
 .dec[open] summary::after {
-  content: '−';
+  transform: rotate(-135deg) translateY(-2px);
 }
 .dec__n {
-  font-size: 13px;
-  color: var(--accent);
-  padding-top: 3px;
-}
-.dec__body {
-  display: grid;
-  gap: 16px;
-  padding: 0 0 22px 44px;
-  font-size: 15.5px;
-}
-.dec__body dt {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--faint);
+  letter-spacing: 0.04em;
+}
+.dec__body {
+  margin: 0 22px 20px;
+  font-size: 15px;
+  line-height: 1.7;
+  border-top: 1px solid var(--line);
+}
+.dec__body > div {
+  display: grid;
+  grid-template-columns: 4.5em minmax(0, 1fr);
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.dec__body > div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.dec__body dt {
+  padding-top: 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-ink);
 }
 .dec__body dd {
-  margin: 3px 0 0;
+  margin: 0;
+}
+.dec__body > div:nth-child(2) dd {
+  font-weight: 600;
 }
 
 .roles {
@@ -1244,11 +1273,16 @@ button {
   .vc__lens {
     grid-template-columns: 1fr;
   }
-  .dec__body {
-    padding-left: 0;
-  }
   .dec summary {
-    grid-template-columns: 28px 1fr 16px;
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .dec__body {
+    margin: 0 16px 16px;
+  }
+  .dec__body > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
   }
 }
 
