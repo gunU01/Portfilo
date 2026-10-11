@@ -18,7 +18,6 @@ export default function Footer() {
     <footer className="footer">
       <div className="wrap footer__in">
         <div className="footer__hero">
-          <p className="footer__big">Let’s talk.</p>
           <p className="footer__role">
             {profile.name}, {profile.roleLine}
           </p>
