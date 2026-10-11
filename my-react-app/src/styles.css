@@ -628,9 +628,11 @@ button {
   background: var(--accent-soft);
   border-color: transparent;
 }
-.callout--note {
-  background: var(--warn-soft);
-  border-color: transparent;
+.footnote {
+  margin-top: -4px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--ink) 52%, var(--bg));
 }
 .callout__t {
   font-size: 13px;

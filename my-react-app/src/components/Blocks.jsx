@@ -94,6 +94,14 @@ function Block({ block }) {
       )
 
     case 'callout':
+      // 출처의 한계 같은 보조 설명(note)은 박스 없이 작은 각주로 보여 줍니다.
+      if (block.tone === 'note') {
+        return (
+          <p className="footnote">
+            ※ <Rich text={block.text} />
+          </p>
+        )
+      }
       return (
         <aside className={`callout callout--${block.tone ?? 'plain'}`}>
           <p className="callout__t">{block.title}</p>
