@@ -126,7 +126,9 @@ function Block({ block }) {
             <h4>{block.before.title}</h4>
             <ul>
               {block.before.items.map((t) => (
-                <li key={t}>{t}</li>
+                <li key={t}>
+                  <Rich text={t} />
+                </li>
               ))}
             </ul>
           </div>
@@ -134,7 +136,9 @@ function Block({ block }) {
             <h4>{block.after.title}</h4>
             <ul>
               {block.after.items.map((t) => (
-                <li key={t}>{t}</li>
+                <li key={t}>
+                  <Rich text={t} />
+                </li>
               ))}
             </ul>
           </div>
@@ -182,18 +186,24 @@ function Block({ block }) {
             <h4>Responsibility</h4>
             <ul className="list">
               {block.responsibilities.map((t) => (
-                <li key={t}>{t}</li>
+                <li key={t}>
+                  <Rich text={t} />
+                </li>
               ))}
             </ul>
           </div>
-          <div className="roles__card">
-            <h4>Result</h4>
-            <ul className="list">
-              {block.results.map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
-          </div>
+          {block.results?.length > 0 && (
+            <div className="roles__card">
+              <h4>Result</h4>
+              <ul className="list">
+                {block.results.map((t) => (
+                  <li key={t}>
+                    <Rich text={t} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )
 
