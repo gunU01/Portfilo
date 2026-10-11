@@ -10,8 +10,6 @@ function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="wrap">
-        <p className="eyebrow">{hero.eyebrow}</p>
-
         <p className="kw" aria-hidden="true">
           {hero.keywords.map((k) => (
             <span key={k}>{k}</span>
@@ -33,26 +31,20 @@ function Hero() {
           </div>
 
           <aside className="spec" aria-label="한눈에 보기">
-            <p className="spec__t">At a glance</p>
+            <p className="spec__t">한눈에 보기</p>
             <dl>
               <div>
                 <dt>이름</dt>
                 <dd>{profile.name}</dd>
               </div>
               <div>
-                <dt>역할</dt>
+                <dt>직무</dt>
                 <dd>{profile.roleLine}</dd>
               </div>
               <div>
                 <dt>소속</dt>
                 <dd>{profile.school}</dd>
               </div>
-              {hero.facts.map((f) => (
-                <div key={f}>
-                  <dt>기록</dt>
-                  <dd>{f}</dd>
-                </div>
-              ))}
               {profile.contact.github && (
                 <div>
                   <dt>GitHub</dt>
@@ -83,9 +75,7 @@ function Overview() {
           <a className="ov__card reveal" href="#/project">
             <span className="ov__n tnum">01</span>
             <h3>Project</h3>
-            <p>
-              {cases.map((c) => c.title).join(' · ')} — 목표·방식·결과로 읽는 케이스 {cases.length}개
-            </p>
+            <p>케이스 {cases.length}개를 목표·방식·결과 순서로 정리했습니다.</p>
             <span className="ov__go">프로젝트 보기 →</span>
           </a>
           <a className="ov__card reveal" href="#/about">
@@ -103,29 +93,11 @@ function Overview() {
   )
 }
 
-function Capabilities() {
-  return (
-    <section className="wrap caps-wrap" aria-label="핵심 역량">
-      <div className="caps">
-        {profile.capabilities.map((c, i) => (
-          <a className="cap reveal" key={c.title} href={`#/work/${c.to.slug}?s=${c.to.section}`}>
-            <span className="cap__n tnum">0{i + 1}</span>
-            <h3>{c.title}</h3>
-            <p>{c.body}</p>
-            <span className="cap__go">근거 보기 →</span>
-          </a>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 export default function Home() {
   useReveal()
   return (
     <>
       <Hero />
-      <Capabilities />
       <Overview />
     </>
   )

@@ -46,8 +46,6 @@ export default function App() {
           <Case
             key={current.slug}
             data={current}
-            index={index}
-            total={cases.length}
             next={cases[(index + 1) % cases.length]}
           />
         ) : path === '/world' ? (

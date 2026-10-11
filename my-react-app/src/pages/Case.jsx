@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Blocks from '../components/Blocks.jsx'
 import CaseCover from '../components/CaseCover.jsx'
 
-export default function Case({ data, index, total, next }) {
+export default function Case({ data, next }) {
   const [active, setActive] = useState(data.sections[0].id)
 
   // 읽는 위치에 따라 목차 강조
@@ -34,9 +34,6 @@ export default function Case({ data, index, total, next }) {
         <a className="back" href="#/project">
           ← 프로젝트 목록
         </a>
-        <p className="eyebrow">
-          Case {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
-        </p>
         <h1 className="case__title">{data.title}</h1>
         <p className="case__sub">{data.subtitle}</p>
         <p className="case__sum">{data.summary}</p>
@@ -87,7 +84,6 @@ export default function Case({ data, index, total, next }) {
         <div>
           {data.sections.map((s) => (
             <section className="csec" id={s.id} key={s.id} aria-labelledby={`${s.id}-t`}>
-              <p className="csec__kicker">{s.kicker}</p>
               <h2 className="csec__title" id={`${s.id}-t`}>
                 {s.title}
               </h2>

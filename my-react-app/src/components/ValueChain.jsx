@@ -68,7 +68,6 @@ export default function ValueChain({ stages, labels }) {
           >
             <span className="rail__dot tnum">{String(i + 1).padStart(2, '0')}</span>
             <span className="rail__name">{s.name}</span>
-            <span className="rail__en">{s.en}</span>
           </button>
         ))}
       </div>
@@ -81,7 +80,7 @@ export default function ValueChain({ stages, labels }) {
       >
         <h3 className="vc__q">
           <small>
-            {String(index + 1).padStart(2, '0')} · {stage.name} · {stage.en}
+            {String(index + 1).padStart(2, '0')} · {stage.name}
           </small>
           {stage.question}
         </h3>

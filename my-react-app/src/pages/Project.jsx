@@ -40,7 +40,6 @@ export default function Project() {
             <a className="pcard reveal is-in" key={c.slug} href={`#/work/${c.slug}`}>
               <CaseCover cover={c.cover} size="card" />
               <div className="pcard__text">
-                <p className="pcard__en">{c.en}</p>
                 <h2 className="pcard__t">{c.title}</h2>
                 <p className="pcard__sub">{c.subtitle}</p>
                 <p className="pcard__sum">{c.summary}</p>

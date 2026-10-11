@@ -38,8 +38,9 @@ export default function About() {
       <SectionIndex items={items} />
 
       <section className="wrap ab__intro" id="intro" aria-labelledby="ab-title">
-        <p className="eyebrow">About</p>
-        <h1 id="ab-title">{about.statement}</h1>
+        <h1 className="sr" id="ab-title">
+          소개
+        </h1>
         <div className="ab__text">
           {about.paragraphs.map((p) => (
             <p key={p}>{p}</p>
@@ -51,7 +52,6 @@ export default function About() {
         <h2 className="ab__h" id="sk-title">
           나의 기술들
         </h2>
-        <p className="ab__hl">무엇을 아는지가 아니라, 어디에 어떻게 썼는지로 적었습니다.</p>
         <div className="skcards">
           {skillGroups.map((g, i) => (
             <article className="skcard reveal" key={g.title}>

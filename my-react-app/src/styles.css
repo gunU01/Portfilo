@@ -360,49 +360,6 @@ button {
   max-width: 620px;
 }
 
-/* ---------- Capabilities ---------- */
-.caps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-.cap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 24px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  text-decoration: none;
-  transition: border-color 0.15s, transform 0.15s;
-}
-.cap:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-.cap__n {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 0.04em;
-}
-.cap h3 {
-  font-size: 19px;
-}
-.cap p {
-  font-size: 15px;
-  color: var(--muted);
-  line-height: 1.7;
-}
-.cap__go {
-  margin-top: auto;
-  padding-top: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--accent-ink);
-}
-
 /* ---------- About ---------- */
 .tl {
   position: relative;
@@ -1159,14 +1116,8 @@ button {
     grid-template-columns: 1fr;
     gap: 6px;
   }
-  .caps,
-  .skills,
-  .about,
   .ba {
     grid-template-columns: 1fr;
-  }
-  .about {
-    gap: 40px;
   }
   .case__body {
     grid-template-columns: 1fr;
@@ -1556,8 +1507,11 @@ button {
   .world__bar,
   .world__frame,
   .nav__3d,
-  .hero__cta,
-  
+  .hero__cta {
+    display: none;
+  }
+}
+
 /* ---------- Visual system: 버튼 · 라벨 · 커버 · 화면 프레임 ---------- */
 .section__kicker,
 .csec__kicker,
@@ -1983,11 +1937,6 @@ h4 {
   color: var(--accent-ink);
 }
 
-.caps-wrap {
-  padding-top: 8px;
-  padding-bottom: 72px;
-}
-
 /* Overview */
 .ov {
   padding: 72px 0 96px;
@@ -2163,18 +2112,11 @@ h4 {
   padding-bottom: 96px;
 }
 .ab__intro {
-  padding-top: 56px;
-  padding-bottom: 56px;
-}
-.ab__intro h1 {
-  margin-top: 18px;
-  max-width: 900px;
-  font-size: clamp(2.4rem, 6.6vw, 5rem);
-  letter-spacing: -0.045em;
-  line-height: 1.08;
+  padding-top: 64px;
+  padding-bottom: 24px;
 }
 .ab__text {
-  margin-top: 36px;
+  margin-top: 0;
   display: grid;
   gap: 18px;
   max-width: 720px;
@@ -2200,14 +2142,10 @@ h4 {
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   letter-spacing: -0.04em;
 }
-.ab__hl {
-  margin-top: 8px;
-  color: var(--muted);
-}
 .skcards {
   margin-top: 28px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 .skcard {
@@ -2310,14 +2248,19 @@ h4 {
 }
 .footer__bar {
   margin-top: 36px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
   gap: 8px 24px;
   flex-wrap: wrap;
   color: var(--faint);
   font-size: 13.5px;
+}
+.footer__bar::before {
+  content: '';
+  flex-basis: 100%;
+  height: 1px;
+  background: var(--line);
+  margin-bottom: 14px;
 }
 
 /* 어두운 배경 위의 커버 요소는 테마와 무관하게 고정 색 */
@@ -2333,18 +2276,18 @@ h4 {
 
 @media (max-width: 900px) {
   .hero__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 32px;
   }
   .ov__cards,
   .pj__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .skcards {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .footer__in {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .footer__nav {
     justify-items: start;
@@ -2381,4 +2324,13 @@ h4 {
 .world__stage {
   border-color: var(--line);
   background: #11151f;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
