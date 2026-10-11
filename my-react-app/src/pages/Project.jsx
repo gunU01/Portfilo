@@ -23,7 +23,7 @@ export default function Project() {
       <div className="wrap">
         <h1 className="pj__t">MY PROJECT</h1>
         <p className="pj__lead">
-          프로젝트는 목표, 방식 및 결과 순으로, 내 역할은 역할, 책임 및 결과 순으로 읽도록 정리했습니다. 카드를 누르면 케이스로 이동합니다.
+          각 프로젝트는 목표, 방식, 결과 순서로 읽을 수 있고, 제가 맡은 역할도 함께 정리했습니다. 카드를 누르면 자세한 내용으로 이동합니다.
         </p>
 
         <div className="pj__tabs" role="group" aria-label="분류">
