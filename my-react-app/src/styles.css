@@ -1271,58 +1271,87 @@ button {
   }
 }
 
-/* 3D 월드 */
-.world__bar {
+/* 3D 월드: 화면 전체를 채우고 UI는 유리 질감으로 위에 얹습니다. */
+.world__top {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 2;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  padding-top: 20px;
-  padding-bottom: 12px;
+  pointer-events: none;
+}
+.world__top > * {
+  pointer-events: auto;
 }
 .world__zones {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
 }
 .world__zones button {
-  padding: 8px 16px;
-  border: 1px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 8px 12px;
+  border: 0;
   border-radius: 999px;
-  background: var(--surface);
+  background: transparent;
   color: var(--ink);
   font: inherit;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
 }
-.world__zones button.is-on,
-.world__zones button:hover {
-  border-color: var(--accent);
+.world__zones button i {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   color: var(--accent-ink);
-  background: var(--accent-soft);
+}
+.world__zones button:hover {
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.world__zones button.is-on {
+  background: var(--accent);
+  color: #fff;
+}
+.world__zones button.is-on i {
+  color: #fff;
 }
 .world__exit {
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
   font-size: 14px;
   font-weight: 600;
+  color: var(--ink);
 }
-.world__frame {
-  padding-bottom: 28px;
+.world__exit:hover {
+  background: var(--ink);
+  color: var(--bg);
 }
 .world__stage {
-  position: relative;
-  height: min(72svh, 720px);
-  min-height: 420px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--bg);
+  position: absolute;
+  inset: 0;
   touch-action: none;
   outline: none;
 }
 .world__stage:focus-visible {
-  box-shadow: 0 0 0 3px var(--accent);
+  box-shadow: inset 0 0 0 3px var(--accent);
 }
 .world__labels {
   position: absolute;
@@ -1342,10 +1371,11 @@ button {
   max-width: min(240px, 70%);
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 3px 9px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  backdrop-filter: blur(8px);
   font-size: 12px;
   font-weight: 600;
   color: var(--ink);
@@ -1356,46 +1386,103 @@ button {
   letter-spacing: -0.01em;
   color: var(--accent-ink);
 }
-.world__hud {
+.world__where {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  right: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 6px 12px;
+  left: 16px;
+  top: 76px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
   font-size: 13px;
+  font-weight: 600;
   pointer-events: none;
 }
-.world__where,
+.world__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  border-bottom-width: 2px;
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
 .world__hint {
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  color: var(--muted);
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+}
+.world__hint .keys {
+  display: inline-flex;
+  gap: 3px;
+}
+.world__sep {
+  width: 1px;
+  height: 16px;
+  margin: 0 4px;
+  background: color-mix(in srgb, var(--ink) 24%, transparent);
 }
 .world__card {
   position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  max-width: 440px;
-  margin: 0 auto;
+  left: 50%;
+  bottom: 20px;
+  z-index: 3;
+  width: min(460px, calc(100% - 32px));
+  transform: translateX(-50%);
   display: grid;
-  gap: 2px;
-  padding: 14px 16px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--accent);
-  box-shadow: var(--shadow);
+  gap: 4px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  backdrop-filter: blur(18px) saturate(1.5);
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.45);
   text-decoration: none;
   color: var(--ink);
   line-height: 1.5;
+  animation: world-card-in 0.22s ease-out;
+}
+@keyframes world-card-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
 }
 .world__card b {
-  font-size: 16px;
+  font-size: 18px;
+  letter-spacing: -0.02em;
 }
 .world__card span {
   font-size: 13px;
@@ -1406,6 +1493,10 @@ button {
   overflow: hidden;
 }
 .world__card em {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
   font-style: normal;
   font-size: 13px;
   font-weight: 700;
@@ -1413,23 +1504,25 @@ button {
 }
 .world__pad {
   position: absolute;
-  left: 14px;
-  bottom: 14px;
-  width: 96px;
-  height: 96px;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2;
+  width: 104px;
+  height: 104px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--surface) 80%, transparent);
-  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  backdrop-filter: blur(14px);
   display: none;
   place-items: center;
   touch-action: none;
 }
 .world__pad span {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--accent);
-  opacity: 0.85;
+  opacity: 0.9;
 }
 @media (pointer: coarse), (max-width: 720px) {
   .world__pad {
@@ -1439,9 +1532,21 @@ button {
     display: none;
   }
   .world__card {
-    left: 122px;
-    right: 12px;
-    max-width: none;
+    left: auto;
+    right: 16px;
+    bottom: 16px;
+    width: calc(100% - 152px);
+    transform: none;
+    animation: none;
+  }
+  .world__top {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+  .world__where {
+    left: 10px;
+    top: 118px;
   }
 }
 .world__live {
@@ -1482,8 +1587,7 @@ button {
   color: var(--muted);
 }
 @media print {
-  .world__bar,
-  .world__frame,
+  .world,
   .nav__3d,
   .hero__cta {
     display: none;
@@ -2308,11 +2412,12 @@ h4 {
   --warn-soft: #2d2518;
   background: var(--bg);
   color: var(--ink);
-  min-height: calc(100svh - 61px);
-  padding-bottom: 24px;
+  position: relative;
+  height: calc(100svh - 61px);
+  min-height: 480px;
+  overflow: hidden;
 }
 .world__stage {
-  border-color: var(--line);
   background: #11151f;
 }
 

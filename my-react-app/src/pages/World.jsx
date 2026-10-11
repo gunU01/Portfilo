@@ -90,9 +90,17 @@ export default function World() {
 
   return (
     <section className="world" aria-label="3D 포트폴리오 월드">
-      <div className="world__bar wrap">
+      <div
+        className="world__stage"
+        ref={hostRef}
+        tabIndex={0}
+        role="application"
+        aria-label="3D 월드. 방향키 또는 WASD로 이동하고, 가까운 건물에서 Enter 키로 엽니다."
+      />
+
+      <div className="world__top">
         <div className="world__zones" role="group" aria-label="구역으로 바로 이동">
-          {zones.map((z) => (
+          {zones.map((z, i) => (
             <button
               key={z.id}
               type="button"
@@ -102,55 +110,64 @@ export default function World() {
                 hostRef.current?.focus({ preventScroll: true })
               }}
             >
+              <i>{String(i + 1).padStart(2, '0')}</i>
               {z.name}
             </button>
           ))}
         </div>
         <a className="world__exit" href="#/">
           읽기 모드로 보기
+          <span aria-hidden="true"> ↗</span>
         </a>
       </div>
 
-      <div className="world__frame wrap">
-        <div
-          className="world__stage"
-          ref={hostRef}
-          tabIndex={0}
-          role="application"
-          aria-label="3D 월드. 방향키 또는 WASD로 이동하고, 가까운 건물에서 Enter 키로 엽니다."
-        >
-          <div className="world__hud">
-            <span className="world__where">{zoneName ? `현재 구역 · ${zoneName}` : '길을 따라 구역으로 이동하세요'}</span>
-            <span className="world__hint">방향키 또는 WASD로 이동, Enter로 열기</span>
-          </div>
+      <p className="world__where">
+        <span className="world__dot" aria-hidden="true" />
+        {zoneName ?? '길을 따라 구역으로 이동하세요'}
+      </p>
 
-          {near && (
-            <a className="world__card" href={near.href}>
-              <b>{near.title}</b>
-              <span>{near.sub}</span>
-              <em>열기 →</em>
-            </a>
-          )}
+      <p className="world__hint" aria-hidden="true">
+        <span className="keys">
+          <kbd>W</kbd>
+          <kbd>A</kbd>
+          <kbd>S</kbd>
+          <kbd>D</kbd>
+        </span>
+        이동
+        <span className="world__sep" />
+        <kbd>Enter</kbd>
+        열기
+      </p>
 
-          <div
-            className="world__pad"
-            ref={padRef}
-            onPointerDown={(e) => {
-              e.currentTarget.setPointerCapture(e.pointerId)
-              moveStick(e)
-            }}
-            onPointerMove={(e) => e.buttons && moveStick(e)}
-            onPointerUp={endStick}
-            onPointerCancel={endStick}
-            aria-hidden="true"
-          >
-            <span />
-          </div>
-        </div>
-        <p className="world__live" aria-live="polite">
-          {near ? `${near.title}. Enter 키로 엽니다.` : ''}
-        </p>
+      {near && (
+        <a className="world__card" href={near.href}>
+          <b>{near.title}</b>
+          <span>{near.sub}</span>
+          <em>
+            <kbd>Enter</kbd>
+            열기 →
+          </em>
+        </a>
+      )}
+
+      <div
+        className="world__pad"
+        ref={padRef}
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId)
+          moveStick(e)
+        }}
+        onPointerMove={(e) => e.buttons && moveStick(e)}
+        onPointerUp={endStick}
+        onPointerCancel={endStick}
+        aria-hidden="true"
+      >
+        <span />
       </div>
+
+      <p className="world__live" aria-live="polite">
+        {near ? `${near.title}. Enter 키로 엽니다.` : ''}
+      </p>
     </section>
   )
 }

@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 
-// 저폴리 미니어처 월드. React와 분리해 두어, 월드를 열 때만(lazy import) three가 로드됩니다.
-// 그림자·후처리·외부 모델 없이 기본 도형만 쓰고, 화면 밖이나 탭이 숨겨지면 렌더를 멈춥니다.
+// 밤의 저폴리 미니어처 월드. React와 분리해 두어, 월드를 열 때만(lazy import) three가 로드됩니다.
+// 외부 모델과 후처리 없이 기본 도형, 그림자, 불빛으로 분위기를 내고, 화면 밖이나 탭이 숨겨지면 렌더를 멈춥니다.
 
 const ZONE_RADIUS = 15 // 월드 중심에서 구역 중심까지
 const ZONE_DISC = 7
@@ -14,6 +14,7 @@ const css = (el, name, fallback) =>
 
 const mat = (color) => new THREE.MeshLambertMaterial({ color, flatShading: true })
 
+const glow = (w, h, d, color) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshBasicMaterial({ color }))
 const box = (w, h, d, color) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(color))
 const cyl = (rt, rb, h, seg, color) => new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat(color))
 const at = (mesh, x, y, z) => {
@@ -39,7 +40,7 @@ const SHAPES = {
     g.add(at(box(1.8, 1.3, 1.7, tint), 0, 0.95, 0))
     const roof = at(new THREE.Mesh(new THREE.ConeGeometry(1.6, 1.0, 4), mat(0x2b2f3a)), 0, 2.1, 0)
     roof.rotation.y = Math.PI / 4
-    g.add(roof, at(box(0.45, 0.8, 0.06, 0xffe9a8), -0.4, 0.75, 0.88), at(box(0.5, 0.5, 0.06, 0xffe9a8), 0.4, 1.1, 0.88))
+    g.add(roof, at(glow(0.45, 0.8, 0.06, 0xffd98a), -0.4, 0.75, 0.88), at(glow(0.5, 0.5, 0.06, 0xffd98a), 0.4, 1.1, 0.88))
     const frame = at(box(0.55, 0.65, 0.07, 0xffffff), 1.25, 1.1, 0)
     frame.rotation.y = 0.5
     g.add(frame)
@@ -68,7 +69,7 @@ const SHAPES = {
     const g = new THREE.Group()
     g.add(at(cyl(0.07, 0.07, 1.6, 6, 0x2b2f3a), -0.8, 1.0, 0), at(cyl(0.07, 0.07, 1.6, 6, 0x2b2f3a), 0.8, 1.0, 0))
     g.add(at(box(2.2, 1.4, 0.12, 0xffffff), 0, 1.9, 0))
-    g.add(at(box(0.55, 1.0, 0.04, tint), -0.65, 1.9, 0.08), at(box(0.55, 1.0, 0.04, 0xffe9a8), 0, 1.9, 0.08), at(box(0.55, 1.0, 0.04, tint), 0.65, 1.9, 0.08))
+    g.add(at(box(0.55, 1.0, 0.04, tint), -0.65, 1.9, 0.08), at(glow(0.55, 1.0, 0.04, 0xffd98a), 0, 1.9, 0.08), at(box(0.55, 1.0, 0.04, tint), 0.65, 1.9, 0.08))
     return g
   },
   // 토스 역기획 문서: 펼친 보고서
@@ -88,7 +89,7 @@ const SHAPES = {
     g.add(at(box(1.0, 0.3, 1.0, 0x2b2f3a), 0, 0.45, 0))
     g.add(at(cyl(0.14, 0.14, 0.7, 6, tint), 0, 1.0, 0))
     g.add(at(cyl(0.75, 0.38, 0.95, 8, tint), 0, 1.7, 0))
-    const star = at(new THREE.Mesh(new THREE.OctahedronGeometry(0.34), mat(0xfff0b3)), 0, 2.55, 0)
+    const star = at(new THREE.Mesh(new THREE.OctahedronGeometry(0.34), new THREE.MeshBasicMaterial({ color: 0xfff0b3 })), 0, 2.55, 0)
     star.userData.spin = true
     g.add(star)
     return g
@@ -145,27 +146,75 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   const zoneTint = [palette.accent, new THREE.Color('#e8a33d'), new THREE.Color('#3fb68b')]
   const zoneGround = [palette.accentSoft, palette.warnSoft, palette.sunken]
 
+  const coarse = window.matchMedia('(pointer: coarse)').matches
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
+  renderer.toneMapping = THREE.ACESFilmicToneMapping
+  renderer.toneMappingExposure = 1.4
+  renderer.shadowMap.enabled = true
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap
   renderer.domElement.style.cssText = 'display:block;width:100%;height:100%'
   container.prepend(renderer.domElement)
 
+  const SKY = new THREE.Color('#121c3a')
   const scene = new THREE.Scene()
-  scene.background = palette.bg
-  scene.fog = new THREE.Fog(palette.bg, 28, 52)
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a90a0, 1.5))
-  const sun = new THREE.DirectionalLight(0xffffff, 1.6)
-  sun.position.set(6, 12, 8)
-  scene.add(sun)
+  scene.background = SKY
+  scene.fog = new THREE.Fog(SKY, 24, 60)
+  scene.add(new THREE.HemisphereLight(0x9fc0ff, 0x2a2350, 2.0))
+  const moonlight = new THREE.DirectionalLight(0xc4d6ff, 2.3)
+  moonlight.position.set(-12, 20, 9)
+  moonlight.castShadow = true
+  moonlight.shadow.mapSize.set(coarse ? 1024 : 2048, coarse ? 1024 : 2048)
+  Object.assign(moonlight.shadow.camera, { left: -34, right: 34, top: 34, bottom: -34, near: 1, far: 70 })
+  moonlight.shadow.bias = -0.0006
+  moonlight.shadow.normalBias = 0.03
+  scene.add(moonlight)
 
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 120)
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 160)
   // 세로로 긴 화면(모바일)에서는 더 높고 멀리서 봐서 주변 건물이 보이게 함
   const camOffset = new THREE.Vector3(0, 10, 12)
   camera.position.set(0, 10, 14)
 
-  const ground = new THREE.Mesh(new THREE.CircleGeometry(BOUND + 2, 48), mat(palette.sunken))
+  const ground = new THREE.Mesh(new THREE.CircleGeometry(BOUND + 6, 64), mat(0x1d2a4a))
   ground.rotation.x = -Math.PI / 2
   scene.add(ground)
+  const rim = new THREE.Mesh(
+    new THREE.RingGeometry(BOUND + 0.2, BOUND + 0.45, 96),
+    new THREE.MeshBasicMaterial({ color: palette.accent, transparent: true, opacity: 0.35, side: THREE.DoubleSide }),
+  )
+  rim.rotation.x = -Math.PI / 2
+  rim.position.y = 0.03
+  scene.add(rim)
+
+  const dot = document.createElement('canvas')
+  dot.width = dot.height = 32
+  const dc = dot.getContext('2d')
+  dc.fillStyle = '#fff'
+  dc.beginPath()
+  dc.arc(16, 16, 14, 0, Math.PI * 2)
+  dc.fill()
+  const dotTex = new THREE.CanvasTexture(dot)
+  // 하늘: 별과 달. 카메라를 따라다녀서 멀리 있는 것처럼 보입니다.
+  const sky = new THREE.Group()
+  const starPos = []
+  for (let i = 0; i < 360; i += 1) {
+    const u = Math.random() * Math.PI * 2
+    const w = 0.12 + Math.random() * 0.88
+    const r = 90
+    starPos.push(Math.cos(u) * Math.sqrt(1 - w * w) * r, w * r, Math.sin(u) * Math.sqrt(1 - w * w) * r)
+  }
+  const starGeo = new THREE.BufferGeometry()
+  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3))
+  sky.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xd6e4ff, size: 0.6, map: dotTex, alphaTest: 0.4, sizeAttenuation: true, fog: false, transparent: true, opacity: 0.9 })))
+  const moon = new THREE.Mesh(new THREE.SphereGeometry(3.4, 24, 16), new THREE.MeshBasicMaterial({ color: 0xf2f6ff, fog: false }))
+  moon.position.set(-38, 44, -62)
+  const halo = new THREE.Mesh(
+    new THREE.SphereGeometry(5.6, 24, 16),
+    new THREE.MeshBasicMaterial({ color: 0x9db8ff, transparent: true, opacity: 0.14, fog: false, depthWrite: false }),
+  )
+  halo.position.copy(moon.position)
+  sky.add(moon, halo)
+  scene.add(sky)
 
   const labelLayer = document.createElement('div')
   labelLayer.className = 'world__labels'
@@ -191,12 +240,32 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     const disc = new THREE.Mesh(new THREE.CylinderGeometry(ZONE_DISC, ZONE_DISC, 0.12, 40), mat(zoneGround[zi % 3]))
     disc.position.set(cx, 0.06, cz)
     scene.add(disc)
+    const edge = new THREE.Mesh(
+      new THREE.RingGeometry(ZONE_DISC - 0.18, ZONE_DISC, 64),
+      new THREE.MeshBasicMaterial({ color: zoneTint[zi % 3], transparent: true, opacity: 0.7, side: THREE.DoubleSide }),
+    )
+    edge.rotation.x = -Math.PI / 2
+    edge.position.set(cx, 0.14, cz)
+    scene.add(edge)
+    const warm = new THREE.PointLight(0xffc27a, 170, 22, 2)
+    warm.position.set(cx, 4.5, cz)
+    scene.add(warm)
 
     const pathLen = ZONE_RADIUS - ZONE_DISC
     const path = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.08, pathLen), mat(palette.line))
     path.position.set((Math.cos(theta) * (pathLen / 2 + 0.3)), 0.04, Math.sin(theta) * (pathLen / 2 + 0.3))
     path.rotation.y = -theta + Math.PI / 2
     scene.add(path)
+    for (const t of [0.3, 0.75]) {
+      const lx = Math.cos(theta) * (ZONE_DISC + pathLen * t) + Math.cos(theta + Math.PI / 2) * 1.5
+      const lz = Math.sin(theta) * (ZONE_DISC + pathLen * t) + Math.sin(theta + Math.PI / 2) * 1.5
+      const lamp = new THREE.Group()
+      lamp.add(at(cyl(0.07, 0.09, 1.9, 6, 0x2a3350), 0, 0.95, 0))
+      lamp.add(at(new THREE.Mesh(new THREE.SphereGeometry(0.22, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffe3a6 })), 0, 2.0, 0))
+      lamp.add(at(new THREE.Mesh(new THREE.SphereGeometry(0.55, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffc27a, transparent: true, opacity: 0.16, depthWrite: false })), 0, 2.0, 0))
+      lamp.position.set(lx, 0, lz)
+      scene.add(lamp)
+    }
 
     const info = { id: zone.id, name: zone.name, x: cx, z: cz, mx: cx, mz: cz, label: makeLabel(zone.name, 'world__zone') }
     zoneInfo.push(info)
@@ -235,14 +304,85 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     info.az = cz + oz * 1.5
   })
 
-  const character = buildCharacter(palette.accent)
-  const shadow = new THREE.Mesh(
-    new THREE.CircleGeometry(0.55, 14),
-    new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.18 }),
+  // 풍경: 나무와 바위. 구역과 길을 피해 바깥쪽에 흩어 둡니다. 시드를 고정해 매번 같은 모습입니다.
+  let seed = 7
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647
+    return seed / 2147483647
+  }
+  const leaf = [mat(0x1d4a52), mat(0x235a57), mat(0x2b4d6b)]
+  const trunkMat = mat(0x3a2b3d)
+  const coneGeo = new THREE.ConeGeometry(1, 2.2, 6)
+  const trunkGeo = new THREE.CylinderGeometry(0.16, 0.22, 0.8, 5)
+  const rockGeo = new THREE.DodecahedronGeometry(0.7, 0)
+  const rockMat = mat(0x3a4560)
+  const clear = (x, z) => {
+    const r = Math.hypot(x, z)
+    if (r < 6) return false
+    for (const zi of zoneInfo) if (Math.hypot(x - zi.x, z - zi.z) < ZONE_DISC + 2) return false
+    for (let i = 0; i < zones.length; i += 1) {
+      const th = -Math.PI / 2 + (i * 2 * Math.PI) / zones.length
+      const along = x * Math.cos(th) + z * Math.sin(th)
+      const across = Math.abs(-x * Math.sin(th) + z * Math.cos(th))
+      if (along > 0 && along < ZONE_RADIUS && across < 3.2) return false
+    }
+    return true
+  }
+  let placed = 0
+  for (let tries = 0; tries < 400 && placed < 46; tries += 1) {
+    const a = rand() * Math.PI * 2
+    const rr = 7 + rand() * (BOUND - 4)
+    const x = Math.cos(a) * rr
+    const z = Math.sin(a) * rr
+    if (!clear(x, z)) continue
+    placed += 1
+    if (rand() < 0.2) {
+      const rock = new THREE.Mesh(rockGeo, rockMat)
+      rock.position.set(x, 0.3, z)
+      rock.scale.set(0.8 + rand() * 0.8, 0.6 + rand() * 0.5, 0.8 + rand() * 0.8)
+      rock.rotation.set(rand() * 3, rand() * 3, 0)
+      scene.add(rock)
+    } else {
+      const k = 0.8 + rand() * 0.9
+      const tree = new THREE.Group()
+      tree.add(at(new THREE.Mesh(trunkGeo, trunkMat), 0, 0.4, 0))
+      tree.add(at(new THREE.Mesh(coneGeo, leaf[placed % 3]), 0, 1.9, 0))
+      const top = at(new THREE.Mesh(coneGeo, leaf[placed % 3]), 0, 2.9, 0)
+      top.scale.setScalar(0.72)
+      tree.add(top)
+      tree.position.set(x, 0, z)
+      tree.scale.setScalar(k)
+      tree.rotation.y = rand() * 6
+      scene.add(tree)
+    }
+  }
+
+  // 반딧불: 천천히 떠다니는 빛 점
+  const FLIES = 70
+  const flyBase = []
+  const flyPos = new Float32Array(FLIES * 3)
+  for (let i = 0; i < FLIES; i += 1) {
+    const a = rand() * Math.PI * 2
+    const rr = rand() * BOUND
+    flyBase.push([Math.cos(a) * rr, 0.8 + rand() * 3.2, Math.sin(a) * rr, rand() * 6])
+  }
+  const flyGeo = new THREE.BufferGeometry()
+  flyGeo.setAttribute('position', new THREE.BufferAttribute(flyPos, 3))
+  const flies = new THREE.Points(
+    flyGeo,
+    new THREE.PointsMaterial({ color: 0xffe3a6, size: 0.22, map: dotTex, alphaTest: 0.4, transparent: true, opacity: 0.95, depthWrite: false }),
   )
-  shadow.rotation.x = -Math.PI / 2
-  shadow.position.y = 0.02
-  scene.add(shadow, character)
+  scene.add(flies)
+
+  const character = buildCharacter(palette.accent)
+  scene.add(character)
+  scene.traverse((o) => {
+    if (o.isMesh && o.material.isMeshLambertMaterial) {
+      // 바닥에 깔린 납작한 도형은 그림자를 드리우지 않습니다(자기 그림자로 어두워지는 것을 막음).
+      o.castShadow = o !== ground && (o.geometry.parameters?.height ?? 1) > 0.2
+      o.receiveShadow = true
+    }
+  })
 
   const pos = new THREE.Vector3(0, 0, 2)
   let facing = Math.PI
@@ -252,40 +392,44 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   let nearId = null
   let zoneId = null
 
+  // e.key 대신 e.code를 씁니다. 한글 입력 상태에서는 W가 ㅈ으로 들어와 e.key로는 인식되지 않습니다.
   const KEYMAP = {
-    ArrowUp: 'up', w: 'up', W: 'up',
-    ArrowDown: 'down', s: 'down', S: 'down',
-    ArrowLeft: 'left', a: 'left', A: 'left',
-    ArrowRight: 'right', d: 'right', D: 'right',
+    ArrowUp: 'up', KeyW: 'up',
+    ArrowDown: 'down', KeyS: 'down',
+    ArrowLeft: 'left', KeyA: 'left',
+    ArrowRight: 'right', KeyD: 'right',
   }
+  const OPEN = new Set(['Enter', 'NumpadEnter', 'KeyE', 'Space'])
 
   const activate = () => {
     const hit = landmarks.find((l) => l.id === nearId)
     if (hit) onActivate?.(hit.href)
   }
 
+  const typing = (el) => el instanceof Element && el.closest('input, textarea, select, [contenteditable="true"]')
   const onKeyDown = (e) => {
-    if (e.metaKey || e.ctrlKey || e.altKey) return
-    if (KEYMAP[e.key]) {
-      keys[KEYMAP[e.key]] = true
+    if (e.metaKey || e.ctrlKey || e.altKey || typing(e.target)) return
+    if (KEYMAP[e.code]) {
+      keys[KEYMAP[e.code]] = true
       target = null
       e.preventDefault()
-    } else if (e.key === 'Enter' || e.key === 'e' || e.key === 'E' || e.key === ' ') {
-      if (nearId) {
+    } else if (OPEN.has(e.code)) {
+      // 버튼이나 링크에 포커스가 있을 때의 Enter와 Space는 그 요소의 동작을 그대로 둡니다.
+      if (nearId && !(e.target instanceof Element && e.target.closest('a, button'))) {
         e.preventDefault()
         activate()
       }
     }
   }
   const onKeyUp = (e) => {
-    if (KEYMAP[e.key]) keys[KEYMAP[e.key]] = false
+    if (KEYMAP[e.code]) keys[KEYMAP[e.code]] = false
   }
   const onBlur = () => {
     keys.up = keys.down = keys.left = keys.right = false
   }
-  container.addEventListener('keydown', onKeyDown)
-  container.addEventListener('keyup', onKeyUp)
-  container.addEventListener('blur', onBlur)
+  window.addEventListener('keydown', onKeyDown)
+  window.addEventListener('keyup', onKeyUp)
+  window.addEventListener('blur', onBlur)
 
   const size = () => {
     const w = Math.max(container.clientWidth, 1)
@@ -389,8 +533,13 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     legR.rotation.x = -swing
     armL.rotation.x = -swing * 0.8
     armR.rotation.x = swing * 0.8
-    shadow.position.x = pos.x
-    shadow.position.z = pos.z
+    sky.position.set(camera.position.x, 0, camera.position.z)
+    const fp = flyGeo.attributes.position
+    for (let i = 0; i < FLIES; i += 1) {
+      const [bx, by, bz, ph] = flyBase[i]
+      fp.setXYZ(i, bx + Math.sin(t * 0.4 + ph) * 0.9, by + Math.sin(t * 0.7 + ph * 2) * 0.4, bz + Math.cos(t * 0.35 + ph) * 0.9)
+    }
+    fp.needsUpdate = true
 
     // 가까운 랜드마크와 현재 구역 (바뀔 때만 알림)
     let best = null
@@ -475,9 +624,9 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       io.disconnect()
       ro.disconnect()
       document.removeEventListener('visibilitychange', onVisibility)
-      container.removeEventListener('keydown', onKeyDown)
-      container.removeEventListener('keyup', onKeyUp)
-      container.removeEventListener('blur', onBlur)
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+      window.removeEventListener('blur', onBlur)
       scene.traverse((o) => {
         if (o.geometry) o.geometry.dispose()
         if (o.material) o.material.dispose()
