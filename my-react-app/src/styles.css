@@ -1455,6 +1455,9 @@ button {
   will-change: transform;
 }
 .world__label {
+  max-width: min(240px, 70%);
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: 3px 9px;
   border-radius: 999px;
   background: var(--surface);
