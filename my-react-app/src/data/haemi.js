@@ -27,6 +27,13 @@ export const haemi = {
     ],
   },
 
+  links: [
+    {
+      label: '해미 기능명세서 (Notion)',
+      href: 'https://various-goldenrod-b24.notion.site/3c4a22f379488036a595c34b389fd336',
+    },
+  ],
+
   meta: [
     ['유형', '대회 출품 팀 프로젝트: 2026 글로벌 피우다 프로젝트 (팀 밈부밈부, 5인: 프론트 3 · 백엔드 2)'],
     ['기간', '2026.05 – 2026.08'],
