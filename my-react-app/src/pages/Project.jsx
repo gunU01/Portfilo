@@ -23,7 +23,7 @@ export default function Project() {
       <div className="wrap">
         <h1 className="pj__t">MY PROJECT</h1>
         <p className="pj__lead">
-          각 프로젝트의 문제와 판단, 결과를 정리했고, 제가 맡은 역할도 함께 적었습니다. 카드를 누르면 자세한 내용으로 이동합니다.
+          프로젝트마다 어떤 문제를 풀었고, 어떻게 판단했고, 어떤 결과가 나왔는지 적었습니다. 제가 맡은 역할도 함께 담았습니다. 카드를 누르면 자세한 내용을 볼 수 있습니다.
         </p>
 
         <div className="pj__tabs" role="group" aria-label="분류">
