@@ -1,4 +1,4 @@
-/* 흰 바탕 + 파란 계열. 다크 모드는 html[data-theme='dark'] (저장된 선택이 없으면 기기 설정) */
+/* 흰 바탕 + 파란 계열. 라이트 모드만 지원합니다. */
 :root {
   --bg: #ffffff;
   --surface: #f6f8fd;
@@ -19,39 +19,6 @@
   --wrap: 1120px;
   --read: 720px;
   color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #0c1424;
-    --surface: #121c30;
-    --sunken: #182440;
-    --ink: #eef3ff;
-    --muted: #dbe4fa;
-    --faint: #8fbfff;
-    --line: #25324d;
-    --accent: #5aa2ff;
-    --accent-ink: #8fbfff;
-    --accent-soft: #14284d;
-    --warn-soft: #33290f;
-    --shadow: none;
-    color-scheme: dark;
-  }
-}
-:root[data-theme='dark'] {
-  --bg: #0c1424;
-  --surface: #121c30;
-  --sunken: #182440;
-  --ink: #eef3ff;
-  --muted: #dbe4fa;
-  --faint: #8fbfff;
-  --line: #25324d;
-  --accent: #5aa2ff;
-  --accent-ink: #8fbfff;
-  --accent-soft: #14284d;
-  --warn-soft: #33290f;
-  --shadow: none;
-  color-scheme: dark;
 }
 
 *,
@@ -1123,6 +1090,13 @@ button {
   .stats--2 {
     grid-template-columns: minmax(0, 1fr);
   }
+  /* 수치가 3개면 모바일에서 위 2개는 나란히, 아래 1개는 길게 */
+  .stats--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .stats--3 .stat:last-child {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 900px) {
@@ -2066,24 +2040,6 @@ h4 {
   color: var(--accent-ink);
   font-weight: 700;
 }
-.theme {
-  flex: none;
-  display: inline-grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--surface);
-  color: var(--ink);
-  cursor: pointer;
-}
-.theme:hover {
-  border-color: var(--accent);
-  color: var(--accent-ink);
-}
-
 /* Overview */
 .ov {
   padding: 72px 0 96px;
@@ -2451,7 +2407,6 @@ h4 {
   }
   }
 @media print {
-  .theme,
   .nav__3d {
     display: none;
   }

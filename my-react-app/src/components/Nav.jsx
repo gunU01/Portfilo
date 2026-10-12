@@ -1,5 +1,4 @@
 import { profile } from '../data/profile.js'
-import ThemeToggle from './ThemeToggle.jsx'
 
 const LINKS = [
   ['/', 'Home'],
@@ -24,7 +23,6 @@ export default function Nav({ path }) {
             </a>
           ))}
         </div>
-        <ThemeToggle />
         <a className="nav__3d" href="#/world">
           3D<span className="nav__3d-long">로 감상하기</span>
         </a>
