@@ -37,7 +37,7 @@ export const zones = [
     blurb: '명세·분석처럼 팀이 바로 쓰는 문서',
     items: [
       { id: 'doc-eolma', title: '얼마 기획 문서', sub: meta(eolma, '산출물'), href: '#/work/howmuch?s=role', shape: 'sheets' },
-      { id: 'doc-haemi', title: '해미 기획 문서', sub: meta(haemi, '산출물'), href: '#/work/haemi?s=role', shape: 'board' },
+      { id: 'doc-haemi', title: '해미 기획 문서', sub: meta(haemi, '산출물'), href: haemi.links[0].href, shape: 'board' },
       {
         id: 'doc-toss',
         title: '토스 BM 분석',

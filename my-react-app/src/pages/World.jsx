@@ -31,7 +31,8 @@ export default function World() {
       onNear: setNear,
       onZone: setZoneId,
       onActivate: (href) => {
-        window.location.hash = href
+        if (/^https?:/.test(href)) window.open(href, '_blank', 'noopener,noreferrer')
+        else window.location.hash = href
       },
     })
     worldRef.current = world
@@ -143,7 +144,11 @@ export default function World() {
       </p>
 
       {near && (
-        <a className="world__card" href={near.href}>
+        <a
+          className="world__card"
+          href={near.href}
+          {...(/^https?:/.test(near.href) ? { target: '_blank', rel: 'noreferrer' } : {})}
+        >
           <b>{near.title}</b>
           <span>{near.sub}</span>
           <em>
