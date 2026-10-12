@@ -7,15 +7,26 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 import { createPhysics, GRAVITY } from './worldPhysics.js'
 import { createSlime } from './worldSlime.js'
+import {
+  terrainHeight,
+  buildTerrain,
+  buildTreeGeometry,
+  buildRockGeometry,
+  buildBushGeometry,
+  buildBladeGeometry,
+  buildFlowerGeometry,
+  buildButterfly,
+  makeGrassMaterial,
+} from './worldNature.js'
 
-// 하늘 위에 떠 있는 장난감 같은 미니어처 섬(어린이 게임 배경 느낌). React와 분리해 두어, 월드를 열 때만(lazy import) three가 로드됩니다.
+// 푸른 초원 한가운데 울타리로 둘러싼 장난감 같은 놀이터(어린이 게임 배경 느낌). React와 분리해 두어, 월드를 열 때만(lazy import) three가 로드됩니다.
 // 외부 모델 없이 기본 도형, 캔버스 텍스처, 환경광으로 질감을 내고, 화면 밖이나 탭이 숨겨지면 렌더를 멈춥니다.
 
 const ZONE_RADIUS = 12.5 // 월드 중심(광장)에서 구역 중심까지
 const ZONE_DISC = 6.2
 const NEAR = 2.9
 const BOUND = 21.5 // 걸어 다닐 수 있는 반경
-const ISLAND_R = 27
+const FENCE_R = BOUND + 1.15 // 울타리 위치. 슬라임과 공은 이 안쪽에서만 움직입니다.
 const SPEED = 6.5
 const HUB_R = 3.5
 
@@ -170,51 +181,14 @@ const bookTex = () =>
     g.fillRect(28, 24, 70, 6)
   })
 
-// 광장 표지판: 구역 이름과, 그 구역이 있는 방향(화면 기준)을 가리키는 화살표
-const signTex = (text, color, angle, w = 512, h = 128) =>
-  canvasTexture(w, h, (g) => {
-    g.fillStyle = '#ffffff'
+const clearingTex = () =>
+  canvasTexture(128, 128, (g, w, h) => {
+    const r = g.createRadialGradient(w / 2, h / 2, 6, w / 2, h / 2, w / 2)
+    r.addColorStop(0, 'rgba(226,214,160,0.62)')
+    r.addColorStop(0.7, 'rgba(200,214,150,0.4)')
+    r.addColorStop(1, 'rgba(200,214,150,0)')
+    g.fillStyle = r
     g.fillRect(0, 0, w, h)
-    g.fillStyle = color
-    g.fillRect(0, 0, 14, h)
-    g.fillStyle = INK
-    g.font = `800 ${Math.round(h * 0.42)}px ${FONT}`
-    g.textAlign = 'left'
-    g.textBaseline = 'middle'
-    g.fillText(text, 44, h / 2 + 4)
-    g.save()
-    g.translate(w - 64, h / 2)
-    g.rotate(angle)
-    g.fillStyle = color
-    g.beginPath()
-    g.moveTo(34, 0)
-    g.lineTo(2, -28)
-    g.lineTo(2, -11)
-    g.lineTo(-30, -11)
-    g.lineTo(-30, 11)
-    g.lineTo(2, 11)
-    g.lineTo(2, 28)
-    g.closePath()
-    g.fill()
-    g.restore()
-  })
-
-const welcomeTex = () =>
-  canvasTexture(768, 300, (g, w, h) => {
-    g.fillStyle = '#ffffff'
-    g.fillRect(0, 0, w, h)
-    g.fillStyle = '#1f6bff'
-    g.fillRect(0, 0, 14, h)
-    g.fillStyle = INK
-    g.textAlign = 'left'
-    g.font = `800 84px ${FONT}`
-    g.fillText('문채원', 56, 128)
-    g.fillStyle = '#1f6bff'
-    g.font = `800 40px ${FONT}`
-    g.fillText('PM / FE Portfolio', 58, 188)
-    g.fillStyle = '#6b7a99'
-    g.font = `600 30px ${FONT}`
-    g.fillText('길을 따라 구역을 둘러보세요', 58, 246)
   })
 
 const blobTex = () =>
@@ -237,20 +211,29 @@ const glowTex = () =>
     g.fillRect(0, 0, w, h)
   })
 
-const groundTex = (rand) =>
-  canvasTexture(512, 512, (g, w, h) => {
-    g.fillStyle = '#a9e69c'
+const detailTex = (rand) =>
+  canvasTexture(256, 256, (g, w, h) => {
+    g.fillStyle = '#ffffff'
     g.fillRect(0, 0, w, h)
-    for (let i = 0; i < 420; i += 1) {
+    for (let i = 0; i < 70; i += 1) {
       const x = rand() * w
       const y = rand() * h
-      const r = 14 + rand() * 46
+      const r = 12 + rand() * 38
       const grad = g.createRadialGradient(x, y, 0, x, y, r)
-      const light = rand() > 0.5
-      grad.addColorStop(0, light ? 'rgba(222,255,200,0.42)' : 'rgba(70,185,105,0.3)')
+      grad.addColorStop(0, rand() > 0.5 ? 'rgba(40,110,60,0.16)' : 'rgba(255,255,210,0.2)')
       grad.addColorStop(1, 'rgba(255,255,255,0)')
       g.fillStyle = grad
       g.fillRect(x - r, y - r, r * 2, r * 2)
+    }
+    g.lineWidth = 1
+    for (let i = 0; i < 1400; i += 1) {
+      const x = rand() * w
+      const y = rand() * h
+      g.strokeStyle = rand() > 0.5 ? 'rgba(30,100,50,0.2)' : 'rgba(240,255,190,0.28)'
+      g.beginPath()
+      g.moveTo(x, y)
+      g.lineTo(x + (rand() - 0.5) * 3, y - 2 - rand() * 5)
+      g.stroke()
     }
   })
 
@@ -264,20 +247,6 @@ const heartShape = () => {
   s.bezierCurveTo(0.6, 0.77, 0.8, 0.55, 0.8, 0.35)
   s.bezierCurveTo(0.8, 0.35, 0.8, 0, 0.5, 0)
   s.bezierCurveTo(0.35, 0, 0.25, 0.25, 0.25, 0.25)
-  return s
-}
-
-const starShape = (outer, inner) => {
-  const s = new THREE.Shape()
-  for (let i = 0; i < 10; i += 1) {
-    const r = i % 2 ? inner : outer
-    const a = (i / 10) * Math.PI * 2 + Math.PI / 2
-    const x = Math.cos(a) * r
-    const y = Math.sin(a) * r
-    if (i === 0) s.moveTo(x, y)
-    else s.lineTo(x, y)
-  }
-  s.closePath()
   return s
 }
 
@@ -523,7 +492,7 @@ const SHAPES = {
     }
   },
 
-  // 수상: 광택 나는 트로피와 돌아가는 별
+  // 수상: 광택 나는 트로피
   trophy(tint) {
     const g = new THREE.Group()
     const metal = { metalness: 0.9, roughness: 0.22 }
@@ -539,15 +508,7 @@ const SHAPES = {
       h.rotation.z = dir > 0 ? -Math.PI / 2 - 0.5 : Math.PI / 2 - 0.5 + Math.PI
       g.add(h)
     }
-    const star = extruded(starShape(0.42, 0.18), 0.12, '#ffe58a', { emissive: '#ffd25e', emissiveIntensity: 0.7, roughness: 0.3 })
-    g.add(star)
-    return {
-      group: g,
-      anim(t) {
-        star.position.set(0, 3.35 + Math.sin(t * 2) * 0.1, 0)
-        star.rotation.y = t * 1.8
-      },
-    }
+    return { group: g, anim: null }
   },
 }
 
@@ -555,11 +516,12 @@ function buildLandmark(shape, tint, scale = 1) {
   const g = new THREE.Group()
   const ped = new THREE.Group()
   ped.scale.setScalar(shape === 'trophy' ? 0.78 : 1)
-  ped.add(at(cyl(1.75, 1.95, 0.34, 56, '#f6f9ff', { roughness: 0.5 }), 0, 0.17, 0))
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.06, 10, 64), std(tint, { roughness: 0.4 }))
-  rim.rotation.x = Math.PI / 2
-  rim.position.y = 0.36
-  ped.add(rim)
+  const slab = new THREE.Mesh(buildRockGeometry(41, 5), std('#ffffff', { roughness: 0.93, vertexColors: true }))
+  slab.scale.set(2.0, 0.6, 2.0)
+  slab.position.y = -0.04
+  slab.castShadow = true
+  slab.receiveShadow = true
+  ped.add(slab)
   g.add(ped)
   const built = (SHAPES[shape] ?? SHAPES.house)(tint)
   built.group.scale.setScalar(scale)
@@ -581,95 +543,6 @@ function buildCloud(rand) {
   return g
 }
 
-
-// ---------- 놀이터 소품 ----------
-const beachTex = (hue) =>
-  canvasTexture(256, 128, (g, w, h) => {
-    const cols = [`hsl(${hue},85%,62%)`, '#ffffff', `hsl(${(hue + 50) % 360},90%,64%)`, '#ffffff', `hsl(${(hue + 110) % 360},85%,62%)`, '#ffffff']
-    cols.forEach((c, i) => {
-      g.fillStyle = c
-      g.fillRect((i * w) / cols.length, 0, w / cols.length + 1, h)
-    })
-  })
-
-const balloonTex = () =>
-  canvasTexture(256, 128, (g, w, h) => {
-    const cols = ['#ff6b81', '#ffd166', '#6bcBff', '#ffffff']
-    for (let i = 0; i < 8; i += 1) {
-      g.fillStyle = cols[i % cols.length]
-      g.fillRect((i * w) / 8, 0, w / 8 + 1, h)
-    }
-  })
-
-function buildMushroom(hue) {
-  const g = new THREE.Group()
-  g.add(at(cyl(0.34, 0.46, 0.62, 20, '#fff4e0', { roughness: 0.8 }), 0, 0.31, 0))
-  const cap = new THREE.Group()
-  const dome = new THREE.Mesh(new THREE.SphereGeometry(1.0, 36, 20, 0, Math.PI * 2, 0, Math.PI / 2), std(hue, { roughness: 0.35 }))
-  dome.scale.set(1, 0.62, 1)
-  cap.add(dome)
-  cap.add(at(new THREE.Mesh(new THREE.CircleGeometry(1.0, 36), std('#ffe9c9', { side: THREE.DoubleSide })), 0, 0.001, 0))
-  cap.children[1].rotation.x = Math.PI / 2
-  const dots = [[0.0, 0.58, 0.0, 0.2], [0.55, 0.42, 0.25, 0.15], [-0.5, 0.44, 0.3, 0.16], [0.25, 0.4, -0.55, 0.14], [-0.35, 0.42, -0.5, 0.13]]
-  for (const [x, y, z, r] of dots) {
-    const d = at(sph(r, '#ffffff', { roughness: 0.5 }, 14, 10), x, y, z)
-    d.scale.y = 0.45
-    cap.add(d)
-  }
-  cap.position.y = 0.55
-  g.add(cap)
-  return { group: g, cap }
-}
-
-function buildBalloon() {
-  const g = new THREE.Group()
-  const env = new THREE.Mesh(new THREE.SphereGeometry(3.2, 28, 20), new THREE.MeshStandardMaterial({ map: balloonTex(), roughness: 0.55 }))
-  env.scale.y = 1.15
-  g.add(env)
-  g.add(at(new THREE.Mesh(new THREE.ConeGeometry(1.4, 1.6, 20), std('#ff6b81', { roughness: 0.55 })), 0, -4.1, 0))
-  g.children[1].rotation.x = Math.PI
-  g.add(at(rbox(1.5, 1.0, 1.5, '#b98a62', 0.15, { roughness: 0.8 }), 0, -6.1, 0))
-  for (const [x, z] of [[-0.6, -0.6], [0.6, -0.6], [-0.6, 0.6], [0.6, 0.6]]) g.add(at(cyl(0.03, 0.03, 2.2, 6, '#7a5d44'), x, -4.9, z))
-  return g
-}
-
-function buildWindmill() {
-  const g = new THREE.Group()
-  g.add(at(new THREE.Mesh(new THREE.CylinderGeometry(0.8, 1.35, 3.6, 20), std('#fff4e0', { roughness: 0.7 })), 0, 1.8, 0))
-  g.add(at(new THREE.Mesh(new THREE.ConeGeometry(1.15, 1.2, 20), std('#ff6b81', { roughness: 0.5 })), 0, 4.2, 0))
-  g.add(at(rbox(0.5, 0.8, 0.12, '#8ec5ff', 0.05), 0, 2.0, 1.1))
-  const blades = new THREE.Group()
-  for (let i = 0; i < 4; i += 1) {
-    const arm = new THREE.Group()
-    arm.add(at(rbox(0.2, 2.6, 0.08, '#b98a62', 0.04), 0, 1.5, 0))
-    arm.add(at(rbox(0.8, 1.7, 0.05, '#ffffff', 0.04, { roughness: 0.8 }), 0.45, 1.8, 0.04))
-    arm.rotation.z = (i * Math.PI) / 2
-    blades.add(arm)
-  }
-  blades.position.set(0, 3.5, 1.15)
-  g.add(blades, at(sph(0.28, '#ffb43c', {}, 14, 10), 0, 3.5, 1.2))
-  return { group: g, blades }
-}
-
-function buildButterfly(color) {
-  const g = new THREE.Group()
-  const wingMat = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide })
-  const mk = (dir) => {
-    const w = new THREE.Group()
-    const m = new THREE.Mesh(new THREE.CircleGeometry(0.28, 14), wingMat)
-    m.scale.set(1, 0.8, 1)
-    m.position.x = dir * 0.26
-    m.rotation.x = -Math.PI / 2
-    w.add(m)
-    g.add(w)
-    return w
-  }
-  const wl = mk(-1)
-  const wr = mk(1)
-  g.add(at(new THREE.Mesh(new THREE.CapsuleGeometry(0.04, 0.22, 4, 6), basic('#3a2c2a')), 0, 0, 0))
-  g.children[2].rotation.x = Math.PI / 2
-  return { group: g, wl, wr }
-}
 
 export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   const accent = css(container, '--accent', '#1f6bff')
@@ -695,7 +568,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
 
   const HORIZON = new THREE.Color('#dcebff')
   const scene = new THREE.Scene()
-  scene.fog = new THREE.Fog(HORIZON, 48, 140)
+  scene.fog = new THREE.Fog(HORIZON, 80, 300)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   const roomEnv = new RoomEnvironment()
@@ -714,7 +587,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   sun.shadow.normalBias = 0.035
   scene.add(sun, sun.target)
 
-  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 400)
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 700)
   camera.position.set(0, 19, 23)
   const camOffset = new THREE.Vector3(0, 13, 15.5)
   const camOverview = new THREE.Vector3(0, 12, 14.5)
@@ -747,7 +620,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     fog: false,
     uniforms: {
       top: { value: new THREE.Color('#4f9bff') },
-      mid: { value: new THREE.Color('#bfe0ff') },
+      mid: { value: new THREE.Color('#d6eaff') },
       low: { value: new THREE.Color('#eaf4ff') },
     },
     vertexShader: 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
@@ -765,7 +638,9 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       }
     `,
   })
-  sky.add(new THREE.Mesh(new THREE.SphereGeometry(250, 32, 18), skyMat))
+  const skyDome = new THREE.Mesh(new THREE.SphereGeometry(250, 32, 18), skyMat)
+  skyDome.renderOrder = -10
+  sky.add(skyDome)
   const glow = glowTex()
   const sunSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0xfff3c8, fog: false, depthWrite: false, transparent: true, blending: THREE.AdditiveBlending }))
   sunSprite.scale.set(90, 90, 1)
@@ -782,7 +657,8 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     )
     rainbow.add(arc)
   })
-  rainbow.position.set(0, -8, -78)
+  rainbow.position.set(0, -4, -150)
+  rainbow.scale.setScalar(1.5)
   scene.add(rainbow)
 
   const drifters = []
@@ -796,52 +672,17 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     scene.add(c)
     drifters.push(c)
   }
-  const balloon = buildBalloon()
-  balloon.position.set(-34, 26, -36)
-  balloon.scale.setScalar(0.9)
-  scene.add(balloon)
 
-  const sea = new THREE.Mesh(new THREE.CircleGeometry(260, 48), new THREE.MeshBasicMaterial({ color: 0xe8f2ff }))
-  sea.rotation.x = -Math.PI / 2
-  sea.position.y = -18
-  scene.add(sea)
+  const dummy = new THREE.Object3D()
 
-  // ---------- 섬 ----------
-  const gTex = groundTex(rand)
-  gTex.wrapS = gTex.wrapT = THREE.RepeatWrapping
-  gTex.repeat.set(7, 7)
-  const island = new THREE.Mesh(new THREE.CylinderGeometry(ISLAND_R, ISLAND_R - 0.4, 1.1, 96), [
-    std('#d9b98a', { roughness: 0.9 }),
-    new THREE.MeshStandardMaterial({ map: gTex, roughness: 0.95 }),
-    std('#a9bedd'),
-  ])
-  island.position.y = -0.55
-  island.receiveShadow = true
-  scene.add(island)
-  const rockCore = new THREE.Mesh(new THREE.ConeGeometry(ISLAND_R - 0.8, 13, 14), std('#b3a6d6', { roughness: 0.95, flatShading: true }))
-  rockCore.rotation.x = Math.PI
-  rockCore.position.y = -7.6
-  scene.add(rockCore)
-  const crystalColors = ['#7fe0ff', '#ff9fd2', '#ffe27a', '#a89bff']
-  for (let i = 0; i < 14; i += 1) {
-    const a = (i / 14) * Math.PI * 2 + rand() * 0.3
-    const r = 8 + rand() * 12
-    const h = 2 + rand() * 3.5
-    const cc = crystalColors[i % 4]
-    const cr = new THREE.Mesh(new THREE.ConeGeometry(0.5 + rand() * 0.5, h, 6), std(cc, { emissive: cc, emissiveIntensity: 0.9, roughness: 0.25 }))
-    cr.rotation.x = Math.PI
-    cr.position.set(Math.cos(a) * r, -5.5 - h / 2 + (r < 12 ? 0 : 1.5), Math.sin(a) * r)
-    scene.add(cr)
-  }
-  for (let i = 0; i < 7; i += 1) {
-    const a = rand() * Math.PI * 2
-    const r = 5 + rand() * 13
-    const s = new THREE.Mesh(new THREE.DodecahedronGeometry(1 + rand() * 1.6, 0), std('#c9bde8', { roughness: 0.95, flatShading: true }))
-    s.position.set(Math.cos(a) * r, -10 - rand() * 6, Math.sin(a) * r)
-    s.userData.float = rand() * 6
-    scene.add(s)
-    drifters.push(s)
-  }
+  // ---------- 푸른 초원: 울타리 밖은 끝없이 이어지는 언덕입니다 ----------
+  const terrainTex = detailTex(rand)
+  terrainTex.wrapS = terrainTex.wrapT = THREE.RepeatWrapping
+  terrainTex.repeat.set(233, 233)
+  terrainTex.anisotropy = 8
+  const terrain = new THREE.Mesh(buildTerrain(rand), new THREE.MeshStandardMaterial({ vertexColors: true, map: terrainTex, roughness: 1 }))
+  terrain.receiveShadow = true
+  scene.add(terrain)
 
   const blob = blobTex()
   const labelLayer = document.createElement('div')
@@ -857,41 +698,16 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   }
 
   const zoneTint = [accent, new THREE.Color('#ffab2e'), new THREE.Color('#ff6fa3')]
-  const zoneGround = ['#cfe4ff', '#ffe9b8', '#ffd6e6']
-  const stoneMat = std('#f5ecd6', { roughness: 0.7 })
+  const clearing = clearingTex()
 
   // 물리 기둥 목록(걷기, 부딪힘, 올라타기)
   const columns = []
-
-  // ---------- 광장(허브) ----------
-  const hub = new THREE.Group()
-  hub.add(at(cyl(HUB_R, HUB_R + 0.12, 0.2, 64, '#bcd9ff', { roughness: 0.6 }), 0, 0.1, 0))
-  columns.push({ x: 0, z: 0, r: HUB_R, top: 0.2, stand: true })
-  const hubRing = new THREE.Mesh(new THREE.TorusGeometry(HUB_R - 0.12, 0.07, 10, 80), std(accent, { roughness: 0.4 }))
-  hubRing.rotation.x = Math.PI / 2
-  hubRing.position.y = 0.22
-  hub.add(hubRing)
-  const board = new THREE.Group()
-  const bw = 3.6
-  const bh = 1.4
-  board.add(at(cyl(0.09, 0.09, 2.4, 10, '#b98a62', { roughness: 0.8 }), -bw / 2 + 0.3, 1.2, 0))
-  board.add(at(cyl(0.09, 0.09, 2.4, 10, '#b98a62', { roughness: 0.8 }), bw / 2 - 0.3, 1.2, 0))
-  board.add(at(rbox(bw, bh, 0.14, '#ffffff', 0.1, { roughness: 0.6 }), 0, 2.2, 0))
-  const bface = new THREE.Mesh(new THREE.PlaneGeometry(bw - 0.2, bh - 0.2), new THREE.MeshStandardMaterial({ map: welcomeTex(), roughness: 0.7 }))
-  bface.position.set(0, 2.2, 0.08)
-  board.add(bface)
-  board.position.set(-2.1, 0.2, 0.9)
-  board.rotation.y = 0.4
-  hub.add(board)
-  scene.add(hub)
 
   const zoneInfo = []
   const landmarks = []
   const animators = []
   const stones = []
   const hedges = []
-  const lamps = []
-  const signs = []
 
   zones.forEach((zone, zi) => {
     const theta = -Math.PI / 2 + (zi * 2 * Math.PI) / zones.length
@@ -899,19 +715,10 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     const cz = Math.sin(theta) * ZONE_RADIUS
     const tint = zoneTint[zi % 3]
 
-    const disc = new THREE.Mesh(new THREE.CylinderGeometry(ZONE_DISC, ZONE_DISC + 0.12, 0.22, 72), std(zoneGround[zi % 3], { roughness: 0.75 }))
-    disc.position.set(cx, 0.11, cz)
-    disc.receiveShadow = true
-    scene.add(disc)
-    columns.push({ x: cx, z: cz, r: ZONE_DISC, top: 0.22, stand: true })
-    const curb = new THREE.Mesh(new THREE.TorusGeometry(ZONE_DISC, 0.1, 10, 96), std(tint, { roughness: 0.45 }))
-    curb.rotation.x = Math.PI / 2
-    curb.position.set(cx, 0.22, cz)
-    scene.add(curb)
-    const inner = new THREE.Mesh(new THREE.RingGeometry(ZONE_DISC - 1.1, ZONE_DISC - 0.95, 96), basic(tint, { transparent: true, opacity: 0.35, side: THREE.DoubleSide }))
-    inner.rotation.x = -Math.PI / 2
-    inner.position.set(cx, 0.235, cz)
-    scene.add(inner)
+    const patchMesh = new THREE.Mesh(new THREE.CircleGeometry(ZONE_DISC + 1.2, 64), new THREE.MeshBasicMaterial({ map: clearing, transparent: true, depthWrite: false }))
+    patchMesh.rotation.x = -Math.PI / 2
+    patchMesh.position.set(cx, 0.03, cz)
+    scene.add(patchMesh)
 
     for (let k = 0; k < 40; k += 1) {
       const a = (k / 40) * Math.PI * 2
@@ -928,9 +735,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       const side = Math.sin(i * 1.7) * 0.18
       stones.push([dx * s - dz * side, dz * s + dx * side, rand() * Math.PI, 0.62 + rand() * 0.1])
     }
-    for (const side of [-1, 1]) lamps.push([dx * (end - 0.3) - dz * side * 1.7, dz * (end - 0.3) + dx * side * 1.7])
-
-    signs.push({ name: zone.name, color: '#' + tint.getHexString(), angle: Math.atan2(dz, dx) })
 
     const info = { id: zone.id, name: zone.name, x: cx, z: cz, mx: cx, mz: cz, label: makeLabel(zone.name, 'world__zone'), dx, dz }
     zoneInfo.push(info)
@@ -944,19 +748,19 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       const z = cz + Math.sin(phi) * arc
       const itemTint = item.tint ? new THREE.Color(item.tint) : tint
       const built = buildLandmark(item.shape, itemTint, item.scale)
-      built.group.position.set(x, 0.22, z)
+      built.group.position.set(x, 0.12, z)
       built.group.rotation.y = -phi - Math.PI / 2
       scene.add(built.group)
 
       const ring = new THREE.Mesh(new THREE.RingGeometry(2.05, 2.3, 48), basic(itemTint, { side: THREE.DoubleSide, transparent: true, opacity: 0.9 }))
       ring.rotation.x = -Math.PI / 2
-      ring.position.set(x, 0.26, z)
+      ring.position.set(x, 0.06, z)
       ring.visible = false
       scene.add(ring)
 
       const shadowBlob = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 5.2), new THREE.MeshBasicMaterial({ map: blob, transparent: true, depthWrite: false }))
       shadowBlob.rotation.x = -Math.PI / 2
-      shadowBlob.position.set(x, 0.24, z)
+      shadowBlob.position.set(x, 0.05, z)
       scene.add(shadowBlob)
 
       const label = makeLabel(item.short ?? item.title, 'world__label')
@@ -964,7 +768,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       landmarks.push(lm)
       if (built.anim) animators.push(built.anim)
       // 받침대는 올라설 수 있고, 건물은 단단하게 막으며 부딪히면 흔들립니다.
-      columns.push({ x, z, r: item.shape === 'trophy' ? 1.38 : 1.75, top: 0.56, stand: true })
+      columns.push({ x, z, r: item.shape === 'trophy' ? 1.38 : 1.75, top: 0.5, stand: true })
       columns.push({
         x,
         z,
@@ -984,70 +788,35 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     info.az = cz - dz * 1.0
   })
 
-  // 광장 표지판
-  const signpost = new THREE.Group()
-  signpost.add(at(cyl(0.09, 0.11, 3.2, 10, '#b98a62', { roughness: 0.8 }), 0, 1.6, 0))
-  signpost.add(at(sph(0.2, '#ffb43c', { roughness: 0.4 }), 0, 3.3, 0))
-  signs.forEach((sg, i) => {
-    const plate = new THREE.Group()
-    plate.add(rbox(2.5, 0.62, 0.1, '#ffffff', 0.09, { roughness: 0.6 }))
-    const face = new THREE.Mesh(new THREE.PlaneGeometry(2.36, 0.5), new THREE.MeshStandardMaterial({ map: signTex(sg.name, sg.color, sg.angle), roughness: 0.7 }))
-    face.position.z = 0.06
-    plate.add(face)
-    plate.position.set(0.95, 1.2 + i * 0.72, 0)
-    signpost.add(plate)
-  })
-  signpost.position.set(2.2, 0.2, 1.0)
-  scene.add(signpost)
-  columns.push({ x: 2.2, z: 1.0, r: 0.3, top: 99, stand: false })
-  columns.push({ x: -2.9, z: 0.75, r: 0.25, top: 99, stand: false }, { x: -1.3, z: 1.05, r: 0.25, top: 99, stand: false })
-
-  // 징검돌, 울타리 덤불, 가로등
-  const dummy = new THREE.Object3D()
-  const stoneMesh = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.5, 0.55, 0.1, 12), stoneMat, stones.length)
+  // 징검돌(납작한 돌)과 덤불
+  const stoneGeo = buildRockGeometry(7, 4)
+  const stoneMesh = new THREE.InstancedMesh(stoneGeo, std('#ffffff', { roughness: 0.93, vertexColors: true }), stones.length)
   stones.forEach(([x, z, r, s], i) => {
-    dummy.position.set(x, 0.05, z)
+    dummy.position.set(x, -0.02, z)
     dummy.rotation.set(0, r, 0)
-    dummy.scale.set(s, 1, s * 0.82)
+    dummy.scale.set(s * 0.55, 0.2, s * 0.46)
     dummy.updateMatrix()
     stoneMesh.setMatrixAt(i, dummy.matrix)
   })
   stoneMesh.receiveShadow = true
+  stoneMesh.computeBoundingSphere()
   scene.add(stoneMesh)
 
-  const hedgeMesh = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 2), std('#58c47e', { roughness: 0.8 }), hedges.length)
-  const hedgeColors = ['#62d08a', '#52c27b', '#78dc9c']
+  const hedgeMesh = new THREE.InstancedMesh(buildBushGeometry(5), std('#ffffff', { roughness: 0.85, vertexColors: true }), hedges.length)
+  const hedgeTint = new THREE.Color()
   hedges.forEach(([x, z, s], i) => {
     dummy.position.set(x, s * 0.7, z)
-    dummy.rotation.set(0, rand() * 3, 0)
+    dummy.rotation.set(0, rand() * 6.28, 0)
     dummy.scale.set(s, s * 0.8, s)
     dummy.updateMatrix()
     hedgeMesh.setMatrixAt(i, dummy.matrix)
-    hedgeMesh.setColorAt(i, new THREE.Color(hedgeColors[i % 3]))
+    hedgeMesh.setColorAt(i, hedgeTint.setRGB(0.88 + rand() * 0.18, 0.92 + rand() * 0.1, 0.88 + rand() * 0.14))
     columns.push({ x, z, r: s * 0.95, top: s * 1.45, stand: true })
   })
   hedgeMesh.castShadow = true
+  hedgeMesh.computeBoundingSphere()
   hedgeMesh.receiveShadow = true
   scene.add(hedgeMesh)
-
-  const lampGlass = std('#fff2c2', { emissive: '#ffd77a', emissiveIntensity: 3.2, roughness: 0.3 })
-  const lampObjs = []
-  lamps.forEach(([x, z], i) => {
-    const lamp = new THREE.Group()
-    lamp.add(at(cyl(0.07, 0.1, 2.1, 10, '#41507a', { roughness: 0.6 }), 0, 1.05, 0))
-    const bulb = at(sph(0.26, '#fff2c2', {}, 16, 12), 0, 2.25, 0)
-    bulb.material = lampGlass
-    lamp.add(bulb)
-    const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0xffe3a0, transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending }))
-    halo.scale.set(1.8, 1.8, 1)
-    halo.position.y = 2.25
-    lamp.add(halo)
-    lamp.position.set(x, 0.2, z)
-    lamp.userData.phase = i
-    scene.add(lamp)
-    lampObjs.push(lamp)
-    columns.push({ x, z, r: 0.14, top: 99, stand: false })
-  })
 
   // ---------- 풍경 ----------
   const clear = (x, z, pad = 0) => {
@@ -1062,171 +831,289 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     }
     return true
   }
-  const trees = []
-  for (let tries = 0; tries < 1500 && trees.length < 46; tries += 1) {
+  const tint = (c, spread = 0.12) => c.setRGB(1 - rand() * spread, 1 - rand() * spread * 0.7, 1 - rand() * spread)
+
+  // 잎이 바람에 살랑이는 재질(나무 꼭대기일수록 크게 흔들립니다)
+  const swayMat = (mat, amp) => {
+    mat.onBeforeCompile = (sh) => {
+      sh.uniforms.uTime = grassU.uTime
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\nuniform float uTime;')
+        .replace(
+          '#include <begin_vertex>',
+          `#include <begin_vertex>
+          #ifdef USE_INSTANCING
+            vec4 wp = instanceMatrix * vec4(transformed, 1.0);
+            float k = max(position.y, 0.0) * 0.2;
+            transformed.x += sin(uTime * 1.4 + wp.x * 0.4 + wp.z * 0.3) * ${amp} * k * k;
+            transformed.z += cos(uTime * 1.1 + wp.z * 0.35 + wp.x * 0.2) * ${amp * 0.7} * k * k;
+          #endif`,
+        )
+    }
+    return mat
+  }
+  const grassU = { uTime: { value: 0 }, uSlime: { value: new THREE.Vector3(0, -99, 0) } }
+
+  // ---------- 나무: 울타리 안쪽은 정교한 고폴리, 바깥 언덕은 가벼운 모델 ----------
+  const SPECIES = [['oak', 11], ['oak', 23], ['birch', 5], ['pine', 8], ['pine', 31], ['blossom', 4]]
+  const trunkMat = std('#ffffff', { roughness: 0.92, vertexColors: true })
+  const leafMat = swayMat(std('#ffffff', { roughness: 0.72, vertexColors: true }), 0.045)
+  const shadowProxyMat = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false })
+  const species = SPECIES.map(([kind, sd]) => {
+    const lo = buildTreeGeometry(kind, 1, sd)
+    return { hi: buildTreeGeometry(kind, 4, sd), mid: buildTreeGeometry(kind, 2, sd), lo, near: [], ring: [], far: [] }
+  })
+  const nearTrees = []
+  for (let tries = 0; tries < 2000 && nearTrees.length < 28; tries += 1) {
     const a = rand() * Math.PI * 2
-    const rr = 15.5 + rand() * (ISLAND_R - 17.5)
+    const rr = 14.5 + rand() * (BOUND - 15.2)
     const x = Math.cos(a) * rr
     const z = Math.sin(a) * rr
     if (!clear(x, z, 0.4)) continue
-    if (trees.some((t) => Math.hypot(t[0] - x, t[1] - z) < 2.6)) continue
-    trees.push([x, z, 0.7 + rand() * 0.5, rand() * 6, Math.floor(rand() * 5)])
+    if (nearTrees.some((t) => Math.hypot(t.x - x, t.z - z) < 3.1)) continue
+    const t = { x, z, s: 0.75 + rand() * 0.4, rot: rand() * 6.28 }
+    nearTrees.push(t)
+    species[nearTrees.length % species.length].near.push(t)
+    columns.push({ x, z, r: 0.34 * t.s + 0.06, top: 99, stand: false })
   }
-  const trunkGeo = new THREE.CylinderGeometry(0.14, 0.22, 1.1, 10)
-  const bigGeo = new THREE.IcosahedronGeometry(1, 2)
-  const trunks = new THREE.InstancedMesh(trunkGeo, std('#a9795a', { roughness: 0.85 }), trees.length)
-  const crowns = new THREE.InstancedMesh(bigGeo, std('#ffffff', { roughness: 0.7 }), trees.length)
-  const tops = new THREE.InstancedMesh(bigGeo, std('#ffffff', { roughness: 0.7 }), trees.length)
-  const leafColors = ['#5fd18a', '#7be0a0', '#43c37a', '#ffb7d0', '#ffd96b'].map((c) => new THREE.Color(c))
-  trees.forEach(([x, z, k, rot, ci], i) => {
-    columns.push({ x, z, r: 0.36 * k + 0.05, top: 99, stand: false })
-    dummy.rotation.set(0, rot, 0)
-    dummy.position.set(x, 0.55 * k, z)
-    dummy.scale.set(k, k, k)
-    dummy.updateMatrix()
-    trunks.setMatrixAt(i, dummy.matrix)
-    dummy.position.set(x, 1.95 * k, z)
-    dummy.scale.set(1.15 * k, 1.0 * k, 1.15 * k)
-    dummy.updateMatrix()
-    crowns.setMatrixAt(i, dummy.matrix)
-    crowns.setColorAt(i, leafColors[ci])
-    dummy.position.set(x + 0.15 * k, 2.95 * k, z - 0.1 * k)
-    dummy.scale.set(0.78 * k, 0.7 * k, 0.78 * k)
-    dummy.updateMatrix()
-    tops.setMatrixAt(i, dummy.matrix)
-    tops.setColorAt(i, leafColors[(ci + 1) % 5])
-  })
-  for (const m of [trunks, crowns, tops]) {
-    m.castShadow = true
-    m.receiveShadow = true
-    scene.add(m)
-  }
-
-  const flowerPts = []
-  for (let tries = 0; tries < 900 && flowerPts.length < 240; tries += 1) {
+  // 놀이터를 둘러싼 숲: 빽빽한 나무와 덤불이 길을 막아, 숲 밖으로 나갈 수 없다는 것을 보여 줍니다.
+  const ringTrees = []
+  for (let tries = 0; tries < 3000 && ringTrees.length < 78; tries += 1) {
     const a = rand() * Math.PI * 2
-    const rr = 5 + rand() * (ISLAND_R - 4)
+    const rr = BOUND + 1.0 + rand() * 4.2
     const x = Math.cos(a) * rr
     const z = Math.sin(a) * rr
-    if (clear(x, z)) flowerPts.push([x, z])
+    if (ringTrees.some((t) => Math.hypot(t.x - x, t.z - z) < 2.5)) continue
+    const t = { x, z, s: 1.0 + rand() * 0.7, rot: rand() * 6.28 }
+    ringTrees.push(t)
+    species[ringTrees.length % species.length].ring.push(t)
   }
-  const flowerMesh = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.085, 1), std('#ffffff', { roughness: 0.6 }), flowerPts.length)
-  const flowerColors = ['#ffffff', '#ffe27a', '#ff9fc0', '#9fc8ff', '#ffb36b'].map((c) => new THREE.Color(c))
-  flowerPts.forEach(([x, z], i) => {
-    dummy.position.set(x, 0.2 + rand() * 0.08, z)
-    dummy.rotation.set(0, 0, 0)
-    const s = 0.9 + rand() * 0.8
-    dummy.scale.set(s, s, s)
-    dummy.updateMatrix()
-    flowerMesh.setMatrixAt(i, dummy.matrix)
-    flowerMesh.setColorAt(i, flowerColors[i % 5])
-  })
-  scene.add(flowerMesh)
-
-  const tuftPts = []
-  for (let tries = 0; tries < 1400 && tuftPts.length < 240; tries += 1) {
+  for (let tries = 0; tries < 4000 && species.reduce((n, sp) => n + sp.far.length, 0) < 170; tries += 1) {
     const a = rand() * Math.PI * 2
-    const rr = 4 + rand() * (ISLAND_R - 3)
+    const rr = 28 + Math.pow(rand(), 0.8) * 130
     const x = Math.cos(a) * rr
     const z = Math.sin(a) * rr
-    if (clear(x, z)) tuftPts.push([x, z])
+    const sp = species[Math.floor(rand() * species.length)]
+    sp.far.push({ x, z, s: 1.3 + rand() * 1.2 + rr * 0.006, rot: rand() * 6.28, y: terrainHeight(x, z) - 0.2 })
   }
-  const tuftMesh = new THREE.InstancedMesh(new THREE.ConeGeometry(0.07, 0.38, 5), std('#7edc98', { roughness: 0.9 }), tuftPts.length * 3)
-  tuftPts.forEach(([x, z], i) => {
-    for (let k = 0; k < 3; k += 1) {
-      dummy.position.set(x + (k - 1) * 0.08, 0.22, z + (rand() - 0.5) * 0.1)
-      dummy.rotation.set((rand() - 0.5) * 0.4, 0, (rand() - 0.5) * 0.5)
-      const s = 0.8 + rand() * 0.9
-      dummy.scale.set(s, s, s)
+  const treeParts = []
+  const placeTrees = (geo, list, mat, { shadow = false, proxy = false } = {}) => {
+    if (!list.length) return null
+    const m = new THREE.InstancedMesh(geo, mat, list.length)
+    const c = new THREE.Color()
+    list.forEach((t, i) => {
+      dummy.position.set(t.x, t.y ?? 0, t.z)
+      dummy.rotation.set(0, t.rot, 0)
+      dummy.scale.set(t.s * (0.92 + (i % 3) * 0.06), t.s, t.s * (0.92 + ((i + 1) % 3) * 0.05))
       dummy.updateMatrix()
-      tuftMesh.setMatrixAt(i * 3 + k, dummy.matrix)
-    }
-  })
-  scene.add(tuftMesh)
+      m.setMatrixAt(i, dummy.matrix)
+      if (mat === leafMat) m.setColorAt(i, tint(c, 0.16))
+    })
+    m.castShadow = shadow || proxy
+    m.receiveShadow = !proxy
+    m.computeBoundingSphere()
+    scene.add(m)
+    treeParts.push(m)
+    return m
+  }
+  for (const sp of species) {
+    placeTrees(sp.hi.trunk, sp.near, trunkMat, { shadow: true })
+    placeTrees(sp.hi.leaves, sp.near, leafMat)
+    placeTrees(sp.lo.leaves, sp.near, shadowProxyMat, { proxy: true })
+    placeTrees(sp.mid.trunk, sp.ring, trunkMat)
+    placeTrees(sp.mid.leaves, sp.ring, leafMat)
+    placeTrees(sp.lo.trunk, sp.far, trunkMat)
+    placeTrees(sp.lo.leaves, sp.far, leafMat)
+  }
 
-  const rockMesh = new THREE.InstancedMesh(new THREE.DodecahedronGeometry(0.7, 0), std('#cdd5ea', { roughness: 0.9, flatShading: true }), 16)
-  let rocks = 0
-  for (let tries = 0; tries < 400 && rocks < 16; tries += 1) {
+  // ---------- 바위: 이끼가 낀 고폴리 ----------
+  const rockMat = std('#ffffff', { roughness: 0.93, vertexColors: true })
+  const rockGeos = [3, 17, 29].map((sd) => buildRockGeometry(sd, 6))
+  const rockLists = rockGeos.map(() => [])
+  let nearRocks = 0
+  for (let tries = 0; tries < 600 && nearRocks < 15; tries += 1) {
     const a = rand() * Math.PI * 2
-    const rr = 7 + rand() * (ISLAND_R - 6)
+    const rr = 7 + rand() * (BOUND - 8)
     const x = Math.cos(a) * rr
     const z = Math.sin(a) * rr
     if (!clear(x, z, 0.6)) continue
-    dummy.position.set(x, 0.25, z)
-    dummy.rotation.set(rand() * 3, rand() * 3, 0)
-    const sx = 0.7 + rand() * 0.9
-    dummy.scale.set(sx, 0.5 + rand() * 0.5, sx)
-    dummy.updateMatrix()
-    rockMesh.setMatrixAt(rocks, dummy.matrix)
-    columns.push({ x, z, r: 0.62 * sx, top: 0.55, stand: true })
-    rocks += 1
+    const sx = 0.55 + rand() * 0.6
+    const sy = sx * (0.65 + rand() * 0.35)
+    rockLists[nearRocks % 3].push({ x, z, sx, sy, rot: rand() * 6.28, y: -0.05 })
+    columns.push({ x, z, r: 0.95 * sx, top: 0.62 * sy, stand: true })
+    nearRocks += 1
   }
-  rockMesh.count = rocks
-  rockMesh.castShadow = true
-  rockMesh.receiveShadow = true
-  scene.add(rockMesh)
-
-  // 풍차(섬 가장자리)
-  const windmill = buildWindmill()
-  windmill.group.position.set(17.5, 0, -9.5)
-  windmill.group.rotation.y = -0.6
-  scene.add(windmill.group)
-  columns.push({ x: 17.5, z: -9.5, r: 1.3, top: 99, stand: false })
-
-  // 통통 튀는 버섯(트램펄린): 올라타면 높이 날아오릅니다.
-  const mushrooms = []
-  ;[[-30, '#ff5d73'], [90, '#ffb43c'], [210, '#b48cff'], [330, '#4fc3f7']].forEach(([deg, color], i) => {
-    const a = (deg * Math.PI) / 180
-    const x = Math.cos(a) * 5.7
-    const z = Math.sin(a) * 5.7
-    const m = buildMushroom(color)
-    m.group.position.set(x, 0, z)
-    m.group.scale.setScalar(1.1)
-    scene.add(m.group)
-    const col = { x, z, r: 1.08, top: 1.0, stand: true, bounce: 21 }
-    columns.push(col)
-    mushrooms.push({ ...m, col, sq: 0, sv: 0, phase: i })
+  for (let i = 0; i < 70; i += 1) {
+    const a = rand() * Math.PI * 2
+    const rr = BOUND + 0.8 + Math.pow(rand(), 0.9) * 110
+    const x = Math.cos(a) * rr
+    const z = Math.sin(a) * rr
+    const sx = 0.8 + rand() * 2.6
+    rockLists[i % 3].push({ x, z, sx, sy: sx * (0.6 + rand() * 0.4), rot: rand() * 6.28, y: terrainHeight(x, z) - 0.1 })
+  }
+  rockGeos.forEach((geo, k) => {
+    const list = rockLists[k]
+    const m = new THREE.InstancedMesh(geo, rockMat, list.length)
+    list.forEach((r, i) => {
+      dummy.position.set(r.x, r.y, r.z)
+      dummy.rotation.set(0, r.rot, 0)
+      dummy.scale.set(r.sx, r.sy, r.sx * 0.9)
+      dummy.updateMatrix()
+      m.setMatrixAt(i, dummy.matrix)
+    })
+    m.castShadow = true
+    m.receiveShadow = true
+    m.computeBoundingSphere()
+    scene.add(m)
   })
 
-  // 나비
-  const butterflies = []
-  const bfColors = ['#ff8fb8', '#ffd45e', '#8fd3ff', '#c3a2ff', '#ff9f5e']
-  for (let i = 0; i < 10; i += 1) {
-    const b = buildButterfly(bfColors[i % 5])
+  // 덤불: 숲 바닥과 가장자리에 무리 지어 자랍니다.
+  const bushGeos = [13, 29].map((sd) => buildBushGeometry(sd))
+  const bushMat = std('#ffffff', { roughness: 0.85, vertexColors: true })
+  const bushLists = [[], []]
+  for (let tries = 0; tries < 900 && bushLists[0].length + bushLists[1].length < 120; tries += 1) {
     const a = rand() * Math.PI * 2
-    const rr = 6 + rand() * 15
+    const rr = 12 + rand() * (BOUND + 5 - 12)
+    const x = Math.cos(a) * rr
+    const z = Math.sin(a) * rr
+    if (rr < BOUND - 0.5 && !clear(x, z, 0.5)) continue
+    const sc = 0.5 + rand() * 0.8
+    bushLists[tries % 2].push({ x, z, s: sc, rot: rand() * 6.28 })
+  }
+  bushGeos.forEach((geo, k) => {
+    const list = bushLists[k]
+    const m = new THREE.InstancedMesh(geo, bushMat, list.length)
+    const c = new THREE.Color()
+    list.forEach((b, i) => {
+      dummy.position.set(b.x, b.s * 0.55, b.z)
+      dummy.rotation.set(0, b.rot, 0)
+      dummy.scale.set(b.s, b.s * 0.85, b.s)
+      dummy.updateMatrix()
+      m.setMatrixAt(i, dummy.matrix)
+      m.setColorAt(i, tint(c, 0.2))
+    })
+    m.castShadow = true
+    m.receiveShadow = true
+    m.computeBoundingSphere()
+    scene.add(m)
+  })
+
+  // ---------- 풀과 꽃: 구역 단위로 나눠 화면 밖은 그리지 않습니다 ----------
+  const grassMat = makeGrassMaterial(grassU)
+  const bladeNear = buildBladeGeometry(6)
+  const bladeFar = buildBladeGeometry(2)
+  const grassTiles = []
+  const grassTint = [new THREE.Color('#ffffff'), new THREE.Color('#e4ffb4'), new THREE.Color('#bff3e0'), new THREE.Color('#f4ffd0')]
+  const addGrassTile = (cx, cz, size, density, geo, near, rMin, rMax, hMin, hMax) => {
+    const n = Math.round(size * size * density)
+    const m = new THREE.InstancedMesh(geo, grassMat, n)
+    let k = 0
+    const c = new THREE.Color()
+    for (let i = 0; i < n; i += 1) {
+      const x = cx + (rand() - 0.5) * size
+      const z = cz + (rand() - 0.5) * size
+      const r = Math.hypot(x, z)
+      if (r < rMin || r >= rMax) continue
+      if (near && !clear(x, z, -0.1)) continue
+      const h = hMin + rand() * (hMax - hMin)
+      dummy.position.set(x, terrainHeight(x, z) - 0.04, z)
+      dummy.rotation.set(0, rand() * 6.28, 0)
+      dummy.scale.setScalar(h)
+      dummy.updateMatrix()
+      m.setMatrixAt(k, dummy.matrix)
+      m.setColorAt(k, c.copy(grassTint[Math.floor(rand() * grassTint.length)]).multiplyScalar(0.85 + rand() * 0.25))
+      k += 1
+    }
+    if (!k) {
+      m.dispose()
+      return
+    }
+    m.count = k
+    m.receiveShadow = true
+    m.computeBoundingSphere()
+    scene.add(m)
+    grassTiles.push({ m, near, full: k, x: cx, z: cz, size })
+  }
+  const NEAR_R = FENCE_R + 0.6
+  for (let gx = -3; gx < 3; gx += 1) {
+    for (let gz = -3; gz < 3; gz += 1) addGrassTile(gx * 8 + 4, gz * 8 + 4, 8, 30, bladeNear, true, 0, NEAR_R, 0.4, 0.85)
+  }
+  for (let gx = -5; gx < 5; gx += 1) {
+    for (let gz = -5; gz < 5; gz += 1) addGrassTile(gx * 12 + 6, gz * 12 + 6, 12, 5, bladeFar, false, NEAR_R, 62, 0.7, 1.5)
+  }
+
+  // 꽃: 무리지어 핍니다. 색마다 한 덩어리의 인스턴스로 묶습니다.
+  const FLOWERS = [['daisy', '#ffffff'], ['daisy', '#fff0a0'], ['tulip', '#ff5a72'], ['tulip', '#ffb43c'], ['tulip', '#ff8fd0'], ['wild', '#9db8ff'], ['wild', '#c9a8ff']]
+  const flowerLists = FLOWERS.map(() => [])
+  const patch = (cx, cz, n, spread, kinds) => {
+    for (let i = 0; i < n; i += 1) {
+      const a = rand() * Math.PI * 2
+      const d = Math.pow(rand(), 0.7) * spread
+      const x = cx + Math.cos(a) * d
+      const z = cz + Math.sin(a) * d
+      if (Math.hypot(x, z) < FENCE_R - 0.5 && !clear(x, z, 0.1)) continue
+      if (Math.hypot(x, z) >= FENCE_R - 0.5 && Math.hypot(x, z) < FENCE_R + 0.9) continue
+      flowerLists[kinds[Math.floor(rand() * kinds.length)]].push({ x, z, s: 1.5 + rand() * 1.1, rot: rand() * 6.28, y: terrainHeight(x, z) - 0.02 })
+    }
+  }
+  for (let i = 0; i < 20; i += 1) {
+    const a = rand() * Math.PI * 2
+    const rr = 5 + rand() * 16
+    const kinds = [[0, 1], [2, 3, 4], [5, 6], [0, 5], [1, 3]][i % 5]
+    patch(Math.cos(a) * rr, Math.sin(a) * rr, 26, 2.1, kinds)
+  }
+  for (let i = 0; i < 22; i += 1) {
+    const a = rand() * Math.PI * 2
+    const rr = 25 + rand() * 30
+    patch(Math.cos(a) * rr, Math.sin(a) * rr, 40, 3.6, [[0, 1], [2, 3, 4], [5, 6], [0, 5], [1, 3]][i % 5])
+  }
+  FLOWERS.forEach(([kind, petal], k) => {
+    const list = flowerLists[k]
+    if (!list.length) return
+    const m = new THREE.InstancedMesh(buildFlowerGeometry(kind, 3 + k, petal), grassMat, list.length)
+    list.forEach((f, i) => {
+      dummy.position.set(f.x, f.y, f.z)
+      dummy.rotation.set(0, f.rot, 0)
+      dummy.scale.setScalar(f.s)
+      dummy.updateMatrix()
+      m.setMatrixAt(i, dummy.matrix)
+    })
+    m.receiveShadow = true
+    m.computeBoundingSphere()
+    scene.add(m)
+  })
+
+  // 나비: 꽃밭 위를 날며, 앞뒤 날개가 따로 펄럭입니다.
+  const butterflies = []
+  const BF = [
+    ['#ffe3b0', '#ff9a3c', '#c44a12'],
+    ['#eaf5ff', '#7fb6ff', '#2b5fc4'],
+    ['#fff6c4', '#ffd23c', '#d79a00'],
+    ['#ffe0f0', '#ff8fc0', '#c4377a'],
+    ['#f0e6ff', '#b49aff', '#6a45c4'],
+  ]
+  for (let i = 0; i < 9; i += 1) {
+    const b = buildButterfly(BF[i % BF.length])
+    const a = rand() * Math.PI * 2
+    const rr = 4 + rand() * 18
     b.cx = Math.cos(a) * rr
     b.cz = Math.sin(a) * rr
-    b.rad = 1.5 + rand() * 2.5
-    b.speed = 0.4 + rand() * 0.5
+    b.rad = 1.6 + rand() * 2.6
+    b.speed = 0.35 + rand() * 0.35
     b.phase = rand() * 6
-    b.h = 1.2 + rand() * 1.8
+    b.h = 1.1 + rand() * 1.6
+    b.group.scale.setScalar(0.85 + rand() * 0.5)
     scene.add(b.group)
     butterflies.push(b)
+  }
+  const bfPoint = (b, tt, out) => {
+    const a = tt * b.speed + b.phase
+    return out.set(b.cx + Math.cos(a) * b.rad, b.h + Math.sin(a * 2.3) * 0.35, b.cz + Math.sin(a * 1.3) * b.rad)
   }
 
   // ---------- 물리와 슬라임 ----------
   const spawnPos = { x: 0, z: 3.4 }
-  const physics = createPhysics({ columns, islandR: ISLAND_R, bound: BOUND, spawn: spawnPos })
-
-  // 비치볼: 슬라임이 밀거나 튕길 수 있는 장난감
-  const ballSpots = [[-1.6, 3.4], [1.9, 4.2], [0.2, 5.6]]
-  zoneInfo.forEach((zi, i) => {
-    ballSpots.push([zi.x - zi.dx * 3.2 + zi.dz * 1.4, zi.z - zi.dz * 3.2 - zi.dx * 1.4], [zi.x - zi.dx * 4.2 - zi.dz * 1.2, zi.z - zi.dz * 4.2 + zi.dx * 1.2])
-    void i
-  })
-  const balls = ballSpots.map(([x, z], i) => {
-    const r = 0.42 + (i % 3) * 0.07
-    const body = physics.addBall(x, z, r)
-    const mesh = new THREE.Mesh(new THREE.SphereGeometry(r, 28, 20), new THREE.MeshStandardMaterial({ map: beachTex((i * 57) % 360), roughness: 0.35 }))
-    mesh.castShadow = true
-    mesh.receiveShadow = true
-    scene.add(mesh)
-    const sh = new THREE.Mesh(new THREE.PlaneGeometry(r * 3.2, r * 3.2), new THREE.MeshBasicMaterial({ map: blob, transparent: true, depthWrite: false }))
-    sh.rotation.x = -Math.PI / 2
-    scene.add(sh)
-    return { body, mesh, sh, r }
-  })
+  const physics = createPhysics({ columns, islandR: 1e5, bound: BOUND, ballBound: BOUND + 0.3, spawn: spawnPos })
 
   const slime = createSlime(glow)
   slime.setGlow(bloomOn ? 1.7 : 1.3)
@@ -1290,7 +1177,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       o.receiveShadow = true
     }
   })
-  island.castShadow = false
 
   const pos = new THREE.Vector3()
   const visual = new THREE.Vector3(spawnPos.x, 0, spawnPos.z)
@@ -1364,6 +1250,8 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   ro.observe(container)
 
   const v = new THREE.Vector3()
+  const bfA = new THREE.Vector3()
+  const bfB = new THREE.Vector3()
   const camTarget = new THREE.Vector3()
   const focus = { x: spawnPos.x, z: spawnPos.z - 2.2 }
   const kick = { y: 0, vy: 0 }
@@ -1384,6 +1272,20 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     const half = (lw || 0) / 2 + 6
     const px = Math.min(Math.max(((v.x + 1) / 2) * w, half), w - half)
     el.style.transform = `translate3d(${px}px, ${((1 - v.y) / 2) * h}px, 0) translate(-50%, -100%)`
+  }
+
+  // 화질 단계: 2 = 블룸과 전부, 1 = 블룸 끔, 0 = 풀 절반과 그림자 끔
+  let quality = bloomOn ? 2 : 1
+  const applyQuality = (q) => {
+    quality = q
+    if (q < 2) {
+      bloomOn = false
+      slime.setGlow(1.3)
+      renderer.setPixelRatio(1)
+    }
+    if (q < 1) sun.castShadow = false
+    for (const g of grassTiles) g.m.count = q === 0 && g.near ? Math.ceil(g.full * 0.5) : g.full
+    size()
   }
 
   let raf = 0
@@ -1409,10 +1311,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
         slime.launch(14)
         spawnDrops(ev.x, ev.y, ev.z, 8, 1.6, splashColor)
         spawnRipple(ev.x, ev.y, ev.z, 1.5)
-      } else if (ev.type === 'airjump') {
-        slime.launch(12)
-        spawnDrops(ev.x, ev.y, ev.z, 12, 2, splashColor)
-        spawnRipple(ev.x, ev.y, ev.z, 1.9)
       } else if (ev.type === 'bounce') {
         if (!ev.ball) {
           slime.impact(ev.impact * 0.6)
@@ -1421,8 +1319,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
         }
         spawnDrops(ev.x, ev.y, ev.z, 14, 2.4, splashColor)
         spawnRipple(ev.x, ev.y, ev.z, 2.2)
-        const mu = mushrooms.find((m) => m.col === ev.col)
-        if (mu) mu.sv -= 6
       } else if (ev.type === 'knock') {
         spawnDrops(ev.x, ev.y + 0.3, ev.z, 4, 1.2, splashColor)
       } else if (ev.type === 'ballbounce') {
@@ -1474,17 +1370,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     slime.group.position.copy(visual)
     slime.group.scale.setScalar(slime.radius)
     slime.update(dt, t, s, { mag })
-
-    // 공: 물리 결과를 그리고, 굴러간 만큼 돌립니다.
-    for (const b of balls) {
-      const p = b.body
-      b.mesh.position.set(p.x, p.y + b.r, p.z)
-      if (p.spinX) b.mesh.rotateOnWorldAxis(AXIS_X, p.spinX)
-      if (p.spinZ) b.mesh.rotateOnWorldAxis(AXIS_Z, p.spinZ)
-      b.sh.position.set(p.x, Math.max(0.03, physics.groundAt(p.x, p.z, p.y + 0.3).h + 0.03), p.z)
-      const hgt = Math.max(0, p.y - Math.max(0, physics.groundAt(p.x, p.z, p.y + 0.3).h))
-      b.sh.material.opacity = Math.max(0.2, 1 - hgt * 0.15)
-    }
 
     // 지나간 자국
     trailTimer -= dt
@@ -1554,29 +1439,24 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       l.body.rotation.x = tl.x
       l.body.rotation.z = tl.z
     }
-    // 버섯은 밟히면 납작해졌다가 튕깁니다.
-    for (const m of mushrooms) {
-      m.sv += (-170 * m.sq - 7 * m.sv) * dt
-      m.sq += m.sv * dt
-      m.cap.scale.set(1 - m.sq * 0.4, 1 + m.sq * 0.9, 1 - m.sq * 0.4)
-      m.cap.position.y = 0.55 + m.sq * 0.1
-    }
-    windmill.blades.rotation.z = t * 0.9
-    lampObjs.forEach((lamp) => {
-      lamp.rotation.z = Math.sin(t * 1.1 + lamp.userData.phase) * 0.012
-    })
     butterflies.forEach((b) => {
-      const a = t * b.speed + b.phase
-      b.group.position.set(b.cx + Math.cos(a) * b.rad, b.h + Math.sin(a * 2.3) * 0.35, b.cz + Math.sin(a * 1.3) * b.rad)
-      b.group.rotation.y = -a + Math.PI / 2
-      const flap = Math.sin(t * 22 + b.phase) * 0.85
-      b.wl.rotation.z = flap
-      b.wr.rotation.z = -flap
+      bfPoint(b, t, bfA)
+      bfPoint(b, t + 0.08, bfB)
+      b.group.position.copy(bfA)
+      const heading = Math.atan2(bfB.x - bfA.x, bfB.z - bfA.z)
+      b.group.rotation.set(0, heading, Math.sin(t * 1.7 + b.phase) * 0.18)
+      const beat = Math.sin(t * 17 + b.phase)
+      const w = 0.35 + beat * 0.95
+      const wh = 0.35 + Math.sin(t * 17 + b.phase - 0.5) * 0.8
+      b.wings.fr.rotation.z = w
+      b.wings.fl.rotation.z = -w
+      b.wings.hr.rotation.z = wh
+      b.wings.hl.rotation.z = -wh
     })
+    grassU.uTime.value = t
+    grassU.uSlime.value.set(pos.x, pos.y, pos.z)
 
     sky.position.set(camera.position.x, 0, camera.position.z)
-    balloon.position.y = 26 + Math.sin(t * 0.4) * 0.8
-    balloon.rotation.y = t * 0.05
     for (const c of drifters) {
       if (c.userData.speed) {
         c.position.x += c.userData.speed * dt
@@ -1651,11 +1531,16 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     frames += 1
     frameEma += ((now - (frame.prev ?? now)) / 1000 - frameEma) * 0.05
     frame.prev = now
-    if (!forceFull && frames === 150 && frameEma > 0.045) {
-      bloomOn = false
-      slime.setGlow(1.3)
-      renderer.setPixelRatio(1)
-      size()
+    if (!forceFull && frameEma > 0.045) {
+      if (frames === 150 && quality === 2) applyQuality(1)
+      else if (frames === 420 && quality === 1) applyQuality(0)
+    }
+    // 멀리 있는 풀 구역은 그리지 않습니다.
+    if (frames % 20 === 0) {
+      for (const g of grassTiles) {
+        const d = Math.hypot(g.x - camera.position.x, g.z - camera.position.z)
+        g.m.visible = g.near || (quality > 0 && d < 90)
+      }
     }
   }
 

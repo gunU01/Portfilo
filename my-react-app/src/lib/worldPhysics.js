@@ -2,20 +2,19 @@
 // - 모든 개체는 구체이고, y는 발밑(바닥에 닿는 점) 높이입니다.
 // - 세계의 단단한 것(나무, 울타리, 건물, 받침대)은 원기둥 { x, z, r, top }으로 표현합니다.
 // - 낮은 단차는 걸어서 오르고(stepMax), 높은 것은 막히거나 위로 뛰어 올라탈 수 있습니다.
-// - 슬라임: 가속과 마찰, 자동 통통 뛰기, 점프와 2단 점프, 착지 충격, 버섯 트램펄린.
-// - 공: 중력, 반발, 구름 마찰, 서로와 슬라임, 기둥과의 충돌. 섬 밖으로 나가면 떨어졌다가 되돌아옵니다.
+// - 슬라임: 가속과 마찰, 자동 통통 뛰기, 점프(공중에서는 다시 뛸 수 없습니다), 착지 충격, 버섯 트램펄린.
+// - 공: 중력, 반발, 구름 마찰, 서로와 슬라임, 기둥과의 충돌. 울타리 밖으로는 나가지 못합니다.
 
 export const GRAVITY = -32
 const SUB_DT = 1 / 120
 
 const HOP_V = 7.4
 const JUMP_V = 14.5
-const AIR_JUMP_V = 12
 const SPEED = 7.6
 const SLIME_STEP = 0.46
 const BALL_STEP = 0.26
 
-export function createPhysics({ columns, islandR, bound, spawn }) {
+export function createPhysics({ columns, islandR, bound, ballBound, spawn }) {
   const events = []
 
   const slime = {
@@ -85,10 +84,6 @@ export function createPhysics({ columns, islandR, bound, spawn }) {
       slime.coyote = 0
       slime.jumps = 1
       events.push({ type: 'jump', x: slime.x, y: slime.y, z: slime.z })
-    } else if (slime.jumps > 0) {
-      slime.jumps -= 1
-      slime.vy = AIR_JUMP_V
-      events.push({ type: 'airjump', x: slime.x, y: slime.y, z: slime.z })
     }
   }
 
@@ -130,7 +125,7 @@ export function createPhysics({ columns, islandR, bound, spawn }) {
 
     pushOut(s, SLIME_STEP, 0.4)
 
-    // 섬 가장자리의 보이지 않는 벽(말랑하게 튕김)
+    // 울타리 안쪽의 보이지 않는 벽(말랑하게 튕김)
     const rad = Math.hypot(s.x, s.z)
     if (rad > bound) {
       const nx = s.x / rad
@@ -181,6 +176,20 @@ export function createPhysics({ columns, islandR, bound, spawn }) {
       b.z += b.vz * dt
       b.y += b.vy * dt
       pushOut(b, BALL_STEP, 0.62)
+      // 울타리 안쪽의 보이지 않는 벽: 공도 밖으로 나가지 못하고 튕겨 돌아옵니다.
+      const rad = Math.hypot(b.x, b.z)
+      if (rad > ballBound) {
+        const nx = b.x / rad
+        const nz = b.z / rad
+        b.x = nx * ballBound
+        b.z = nz * ballBound
+        const vn = b.vx * nx + b.vz * nz
+        if (vn > 0) {
+          b.vx -= 1.6 * vn * nx
+          b.vz -= 1.6 * vn * nz
+          if (vn > 2.5) events.push({ type: 'knock', x: b.x, y: b.y, z: b.z, power: vn })
+        }
+      }
       const { h, col } = groundAt(b.x, b.z, b.y + BALL_STEP)
       if (b.y <= h) {
         const impact = -b.vy

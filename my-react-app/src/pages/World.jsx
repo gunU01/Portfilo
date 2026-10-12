@@ -122,10 +122,12 @@ export default function World() {
         </a>
       </div>
 
-      <p className="world__where">
-        <span className="world__dot" aria-hidden="true" />
-        {zoneName ?? '길을 따라 구역으로 이동하세요'}
-      </p>
+      {zoneName && (
+        <p className="world__where">
+          <span className="world__dot" aria-hidden="true" />
+          {zoneName}
+        </p>
+      )}
 
       <p className="world__hint" aria-hidden="true">
         <span className="keys">
