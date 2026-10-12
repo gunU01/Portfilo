@@ -1,10 +1,6 @@
 import * as THREE from 'three'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 import { createPhysics, GRAVITY } from './worldPhysics.js'
 import { createSlime } from './worldSlime.js'
 
@@ -179,16 +175,6 @@ const blobTex = () =>
     g.fillRect(0, 0, w, h)
   })
 
-const glowTex = () =>
-  canvasTexture(128, 128, (g, w, h) => {
-    const r = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2)
-    r.addColorStop(0, 'rgba(255,255,255,1)')
-    r.addColorStop(0.25, 'rgba(255,255,255,0.55)')
-    r.addColorStop(1, 'rgba(255,255,255,0)')
-    g.fillStyle = r
-    g.fillRect(0, 0, w, h)
-  })
-
 // ---------- 구조물 ----------
 const heartShape = () => {
   const s = new THREE.Shape()
@@ -280,7 +266,7 @@ const SHAPES = {
     g.add(at(rbox(0.32, 0.8, 0.32, '#e9ddc9', 0.05), 0.62, 2.55, -0.35))
     g.add(at(rbox(0.5, 0.9, 0.08, '#b98a62', 0.05), 0, 0.72, 0.97))
     g.add(at(sph(0.05, '#f2c14e', { metalness: 0.6, roughness: 0.3 }, 10, 8), 0.14, 0.72, 1.03))
-    const win = { color: '#ffe08a', emissive: '#ffcf6b', emissiveIntensity: 0.9, roughness: 0.3 }
+    const win = { color: '#ffe9a8', roughness: 0.4 }
     for (const x of [-0.72, 0.72]) {
       g.add(at(rbox(0.52, 0.52, 0.08, '#ffffff', 0.04), x, 1.1, 0.96))
       g.add(at(rbox(0.38, 0.38, 0.06, '#ffe08a', 0.03, win), x, 1.1, 1.0))
@@ -525,26 +511,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   const camOverview = new THREE.Vector3(0, 12, 14.5)
   const camZone = new THREE.Vector3(0, 10, 13.2)
 
-  // ---------- 후처리(블룸): 슬라임과 등불이 부드럽게 번집니다 ----------
-  let composer = null
-  let bloomPass = null
-  let bloomOn = !coarse || forceFull
-  const makeComposer = () => {
-    try {
-      const rt = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, samples: 4 })
-      composer = new EffectComposer(renderer, rt)
-      composer.addPass(new RenderPass(scene, camera))
-      bloomPass = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.65, 0.55, 2.0)
-      composer.addPass(bloomPass)
-      composer.addPass(new OutputPass())
-    } catch {
-      composer = null
-      bloomOn = false
-    }
-  }
-  if (bloomOn) makeComposer()
-
-  const glow = glowTex()
   const dummy = new THREE.Object3D()
 
   // ---------- 새하얀 바닥: 멀어지면 흰 안개로 사라집니다 ----------
@@ -701,58 +667,8 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   const spawnPos = { x: 0, z: 3.4 }
   const physics = createPhysics({ columns, islandR: 1e5, bound: BOUND, ballBound: BOUND + 0.3, spawn: spawnPos })
 
-  const slime = createSlime(glow)
-  slime.setGlow(bloomOn ? 1.7 : 1.3)
+  const slime = createSlime()
   scene.add(slime.group)
-
-  // 물방울 입자와 파문, 지나간 자국
-  const DROPS = 140
-  const dropMesh = new THREE.InstancedMesh(new THREE.SphereGeometry(0.1, 8, 6), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.6, 1.9, 2.2) }), DROPS)
-  dropMesh.frustumCulled = false
-  scene.add(dropMesh)
-  const drops = Array.from({ length: DROPS }, () => ({ life: 0, x: 0, y: -50, z: 0, vx: 0, vy: 0, vz: 0, s: 1 }))
-  let dropCursor = 0
-  const spawnDrops = (x, y, z, n, power, color) => {
-    for (let i = 0; i < n; i += 1) {
-      const d = drops[dropCursor]
-      dropCursor = (dropCursor + 1) % DROPS
-      const a = Math.random() * Math.PI * 2
-      const sp = (0.4 + Math.random()) * power
-      d.life = 0.5 + Math.random() * 0.6
-      d.x = x + Math.cos(a) * 0.3
-      d.z = z + Math.sin(a) * 0.3
-      d.y = y + 0.15
-      d.vx = Math.cos(a) * sp
-      d.vz = Math.sin(a) * sp
-      d.vy = 2 + Math.random() * power * 0.9
-      d.s = 0.5 + Math.random() * 0.8
-      if (color) dropMesh.setColorAt(dropCursor, color)
-    }
-  }
-  const RIPPLES = 8
-  const ripples = Array.from({ length: RIPPLES }, () => {
-    const m = new THREE.Mesh(new THREE.RingGeometry(0.85, 1, 40), new THREE.MeshBasicMaterial({ map: glow, color: 0xcdeeff, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }))
-    m.rotation.x = -Math.PI / 2
-    m.visible = false
-    scene.add(m)
-    return { m, t: 1, life: 0.7 }
-  })
-  let rippleCursor = 0
-  const spawnRipple = (x, y, z, size) => {
-    const r = ripples[rippleCursor]
-    rippleCursor = (rippleCursor + 1) % RIPPLES
-    r.t = 0
-    r.size = size
-    r.m.position.set(x, y + 0.06, z)
-    r.m.visible = true
-  }
-  const TRAIL = 30
-  const trailMesh = new THREE.InstancedMesh(new THREE.CircleGeometry(0.5, 16), new THREE.MeshBasicMaterial({ map: glow, color: 0xbfe6ff, transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending }), TRAIL)
-  trailMesh.frustumCulled = false
-  scene.add(trailMesh)
-  const trail = Array.from({ length: TRAIL }, () => ({ life: 0, x: 0, y: 0, z: 0 }))
-  let trailCursor = 0
-  let trailTimer = 0
 
   // 그림자는 입체물이 드리우고, 섬과 구역 바닥이 받습니다.
   scene.traverse((o) => {
@@ -821,11 +737,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     const w = Math.max(container.clientWidth, 1)
     const h = Math.max(container.clientHeight, 1)
     renderer.setSize(w, h, false)
-    if (composer) {
-      composer.setPixelRatio(renderer.getPixelRatio())
-      composer.setSize(w, h)
-      bloomPass?.setSize(w, h)
-    }
     camera.aspect = w / h
     narrow = w / h < 0.8
     camera.fov = narrow ? 58 : 40
@@ -858,16 +769,14 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     el.style.transform = `translate3d(${px}px, ${((1 - v.y) / 2) * h}px, 0) translate(-50%, -100%)`
   }
 
-  // 화질 단계: 2 = 블룸과 전부, 1 = 블룸 끔, 0 = 그림자까지 끔
-  let quality = bloomOn ? 2 : 1
+  // 화질 단계: 1 = 전부, 0 = 해상도와 그림자를 낮춤
+  let quality = 1
   const applyQuality = (q) => {
     quality = q
-    if (q < 2) {
-      bloomOn = false
-      slime.setGlow(1.3)
+    if (q < 1) {
       renderer.setPixelRatio(1)
+      sun.castShadow = false
     }
-    if (q < 1) sun.castShadow = false
     size()
   }
 
@@ -878,34 +787,22 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   let blend = 0
   let frames = 0
   let frameEma = 0.016
-  const splashColor = new THREE.Color(1.6, 1.9, 2.2)
 
   const handleEvents = () => {
     for (const ev of physics.drain()) {
       if (ev.type === 'land') {
         slime.impact(ev.impact)
-        spawnDrops(ev.x, ev.y, ev.z, Math.min(26, Math.round(ev.impact * 1.1)), 1.2 + ev.impact * 0.12, splashColor)
-        if (ev.impact > 6) spawnRipple(ev.x, ev.y, ev.z, 1.6 + ev.impact * 0.08)
         if (ev.impact > 12) kick.vy -= ev.impact * 0.05
       } else if (ev.type === 'hop') {
         slime.launch(9)
-        spawnDrops(ev.x, ev.y, ev.z, 3, 0.9, splashColor)
       } else if (ev.type === 'jump') {
         slime.launch(14)
-        spawnDrops(ev.x, ev.y, ev.z, 8, 1.6, splashColor)
-        spawnRipple(ev.x, ev.y, ev.z, 1.5)
       } else if (ev.type === 'bounce') {
         if (!ev.ball) {
           slime.impact(ev.impact * 0.6)
           slime.launch(18)
           kick.vy -= 0.5
         }
-        spawnDrops(ev.x, ev.y, ev.z, 14, 2.4, splashColor)
-        spawnRipple(ev.x, ev.y, ev.z, 2.2)
-      } else if (ev.type === 'knock') {
-        spawnDrops(ev.x, ev.y + 0.3, ev.z, 4, 1.2, splashColor)
-      } else if (ev.type === 'ballbounce') {
-        spawnDrops(ev.x, ev.y, ev.z, 3, 1, splashColor)
       }
     }
   }
@@ -953,64 +850,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     slime.group.position.copy(visual)
     slime.group.scale.setScalar(slime.radius)
     slime.update(dt, t, s, { mag })
-
-    // 지나간 자국
-    trailTimer -= dt
-    if (s.grounded && Math.hypot(s.vx, s.vz) > 2 && trailTimer <= 0) {
-      trailTimer = 0.12
-      const tr = trail[trailCursor]
-      trailCursor = (trailCursor + 1) % TRAIL
-      tr.life = 1.1
-      tr.x = s.x
-      tr.y = s.y + 0.04
-      tr.z = s.z
-    }
-    trail.forEach((tr, i) => {
-      tr.life = Math.max(0, tr.life - dt)
-      dummy.position.set(tr.x, tr.y, tr.z)
-      dummy.rotation.set(-Math.PI / 2, 0, 0)
-      const k = tr.life / 1.1
-      dummy.scale.setScalar(Math.max(0.0001, k * 1.1))
-      dummy.updateMatrix()
-      trailMesh.setMatrixAt(i, dummy.matrix)
-    })
-    trailMesh.instanceMatrix.needsUpdate = true
-
-    // 물방울
-    drops.forEach((d, i) => {
-      if (d.life > 0) {
-        d.life -= dt
-        d.vy += GRAVITY * 0.7 * dt
-        d.x += d.vx * dt
-        d.y += d.vy * dt
-        d.z += d.vz * dt
-        const ground = physics.groundAt(d.x, d.z, d.y + 1).h
-        if (d.y < ground + 0.05) {
-          d.y = ground + 0.05
-          d.vy *= -0.3
-          d.vx *= 0.6
-          d.vz *= 0.6
-        }
-      }
-      const live = d.life > 0
-      dummy.position.set(d.x, d.y, d.z)
-      dummy.rotation.set(0, 0, 0)
-      dummy.scale.setScalar(live ? d.s * Math.min(1, d.life * 3) : 0.0001)
-      dummy.updateMatrix()
-      dropMesh.setMatrixAt(i, dummy.matrix)
-    })
-    dropMesh.instanceMatrix.needsUpdate = true
-    for (const r of ripples) {
-      if (!r.m.visible) continue
-      r.t += dt / r.life
-      if (r.t >= 1) {
-        r.m.visible = false
-        continue
-      }
-      const sc = 0.3 + r.t * r.size
-      r.m.scale.set(sc, sc, 1)
-      r.m.material.opacity = (1 - r.t) * 0.7
-    }
 
     // 건물은 부딪히면 말랑하게 흔들립니다.
     for (const l of landmarks) {
@@ -1074,8 +913,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     sun.position.set(focus.x + sunOffset.x, sunOffset.y, focus.z + sunOffset.z)
     sun.target.position.set(focus.x, 0, focus.z)
 
-    if (bloomOn && composer) composer.render()
-    else renderer.render(scene, camera)
+    renderer.render(scene, camera)
 
     for (const z of zoneInfo) {
       const dz = Math.hypot(pos.x - z.x, pos.z - z.z)
@@ -1088,8 +926,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     frameEma += ((now - (frame.prev ?? now)) / 1000 - frameEma) * 0.05
     frame.prev = now
     if (!forceFull && frameEma > 0.045) {
-      if (frames === 150 && quality === 2) applyQuality(1)
-      else if (frames === 420 && quality === 1) applyQuality(0)
+      if (frames === 150 && quality === 1) applyQuality(0)
     }
   }
 
@@ -1146,10 +983,8 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       })
       textures.forEach((tx) => tx.dispose())
       blob.dispose()
-      glow.dispose()
       envTex.dispose()
       pmrem.dispose()
-      composer?.dispose()
       renderer.dispose()
       renderer.domElement.remove()
       labelLayer.remove()

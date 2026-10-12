@@ -1,10 +1,9 @@
 import * as THREE from 'three'
 
-// 동그랗고 하얗게 빛나는 슬라임. 모양은 단위 구(반지름 1)를 바닥 기준으로 늘이고 찌그러뜨립니다.
+// 동그랗고 하얀 슬라임. 모양은 단위 구(반지름 1)를 바닥 기준으로 늘이고 찌그러뜨립니다.
 // - 스프링으로 늘어남과 찌그러짐(착지 충격, 통통 튀기, 숨쉬기)을 만들고
 // - 정점 셰이더로 젤리처럼 출렁이며(속도와 충격에 비례), 위쪽이 이동 반대로 끌려옵니다.
-// - 프레넬 림 라이트와 반사광, 내부 핵과 기포로 말랑한 반투명 질감을 냅니다.
-// - 발광: 밝은 색(1 이상)은 블룸으로 번지고, 주변 땅에는 점광원과 후광이 비춥니다.
+// - 프레넬 림과 약한 반사광으로 말랑한 질감을 냅니다. 발광, 후광, 반짝임은 쓰지 않습니다.
 
 const vertex = `
   uniform float uTime;
@@ -60,10 +59,8 @@ const fragment = `
     col *= 0.78 + 0.34 * diff + 0.1 * vH;
     col = mix(col, vec3(0.45, 0.74, 1.0), (1.0 - vH) * 0.3);
     float spec = pow(max(dot(reflect(-L, N), V), 0.0), 38.0);
-    col += vec3(1.0) * spec * 1.1;
-    // 숨 쉬듯 일렁이는 발광
-    float pulse = 1.0 + sin(uTime * 2.2) * 0.07;
-    col *= uGlow * pulse;
+    col += vec3(1.0) * spec * 0.35;
+    col *= uGlow;
     float alpha = mix(0.97, 0.78, fres);
     gl_FragColor = vec4(col, alpha);
     #include <tonemapping_fragment>
@@ -71,7 +68,7 @@ const fragment = `
   }
 `
 
-export function createSlime(glowTexture) {
+export function createSlime() {
   const group = new THREE.Group()
   const body = new THREE.Group() // 바닥이 원점 → 이 그룹의 scale이 스프링으로 변합니다
   group.add(body)
@@ -80,7 +77,7 @@ export function createSlime(glowTexture) {
     uTime: { value: 0 },
     uWob: { value: 0 },
     uShear: { value: new THREE.Vector2() },
-    uGlow: { value: 1.45 },
+    uGlow: { value: 1.0 },
   }
   const skinMat = new THREE.ShaderMaterial({ uniforms, vertexShader: vertex, fragmentShader: fragment, transparent: true })
   const skin = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 48), skinMat)
@@ -95,24 +92,6 @@ export function createSlime(glowTexture) {
   outline.position.y = 1
   outline.renderOrder = 1
   body.add(outline)
-
-  // 속이 비치는 핵과 기포
-  const core = new THREE.Mesh(
-    new THREE.SphereGeometry(0.56, 32, 24),
-    new THREE.MeshBasicMaterial({ color: new THREE.Color(2.2, 2.4, 2.6), transparent: true, opacity: 0.55, depthWrite: false }),
-  )
-  core.position.y = 0.95
-  body.add(core)
-  const bubbles = []
-  for (let i = 0; i < 4; i += 1) {
-    const b = new THREE.Mesh(
-      new THREE.SphereGeometry(0.1 + i * 0.025, 12, 10),
-      new THREE.MeshBasicMaterial({ color: new THREE.Color(2, 2.2, 2.4), transparent: true, opacity: 0.5, depthWrite: false }),
-    )
-    b.userData.seed = i * 1.9
-    body.add(b)
-    bubbles.push(b)
-  }
 
   // 얼굴: 몸과 같이 변형되도록 body의 자식으로 두고, 구 표면 위에 얹습니다.
   const face = new THREE.Group()
@@ -146,22 +125,6 @@ export function createSlime(glowTexture) {
     }
   })
   body.add(face)
-
-  // 땅을 비추는 빛과 후광
-  const light = new THREE.PointLight(0xbfe6ff, 16, 9, 2)
-  light.position.y = 1.2
-  group.add(light)
-  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture, color: 0xcdeeff, transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending }))
-  halo.scale.set(4.2, 4.2, 1)
-  halo.position.y = 0.9
-  group.add(halo)
-  const pool = new THREE.Mesh(
-    new THREE.CircleGeometry(1, 40),
-    new THREE.MeshBasicMaterial({ map: glowTexture, color: 0xcdeeff, transparent: true, opacity: 0.6, depthWrite: false, blending: THREE.AdditiveBlending }),
-  )
-  pool.rotation.x = -Math.PI / 2
-  pool.position.y = 0.05
-  group.add(pool)
 
   // 스프링 상태(축별 크기와 속도)
   const sp = { sx: 1, sy: 1, sz: 1, vx: 0, vy: 0, vz: 0 }
@@ -245,22 +208,6 @@ export function createSlime(glowTexture) {
       blinking = Math.max(0, blinking - dt)
       eyes.scale.y += ((blinking > 0 ? 0.1 : 1) - eyes.scale.y) * 0.6
 
-      // 핵과 기포가 천천히 떠다닙니다.
-      core.position.y = 0.95 + Math.sin(t * 1.7) * 0.03
-      bubbles.forEach((b) => {
-        const a = t * 0.9 + b.userData.seed
-        b.position.set(Math.cos(a) * 0.36, 0.7 + ((t * 0.3 + b.userData.seed) % 1.2) * 0.55, Math.sin(a) * 0.36)
-        b.scale.setScalar(0.7 + Math.sin(a * 2) * 0.2)
-      })
-
-      // 빛: 높이 뜨면 땅의 빛 웅덩이가 넓고 흐려집니다.
-      const height = Math.max(0, state.y)
-      const pr = 1.5 + height * 0.35
-      pool.scale.set(pr, pr, 1)
-      pool.material.opacity = Math.max(0.15, 0.6 - height * 0.12)
-      pool.position.y = 0.05 - height
-      halo.material.opacity = 0.5 + Math.sin(t * 2.2) * 0.06
-      light.intensity = 16 + Math.sin(t * 2.2) * 2
     },
     dispose() {
       group.traverse((o) => {
