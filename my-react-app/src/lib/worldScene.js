@@ -469,10 +469,6 @@ function buildLandmark(shape, tint, scale = 1) {
   const ped = new THREE.Group()
   ped.scale.setScalar(shape === 'trophy' ? 0.78 : 1)
   ped.add(at(cyl(1.75, 1.75, 0.34, 96, '#eceff5', { roughness: 0.45 }), 0, 0.17, 0))
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.025, 10, 120), std(tint, { roughness: 0.4 }))
-  rim.rotation.x = Math.PI / 2
-  rim.position.y = 0.34
-  ped.add(rim)
   g.add(ped)
   const built = (SHAPES[shape] ?? SHAPES.house)(tint)
   built.group.scale.setScalar(scale)
@@ -557,33 +553,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   floor.receiveShadow = true
   scene.add(floor)
 
-  // 경계: 바닥의 가는 선과, 위로 옅어지는 유리벽. 슬라임은 이 안에서만 움직입니다.
-  const edge = new THREE.Mesh(new THREE.RingGeometry(BOUND + 0.42, BOUND + 0.5, 192), basic(accent, { transparent: true, opacity: 0.85, side: THREE.DoubleSide }))
-  edge.rotation.x = -Math.PI / 2
-  edge.position.y = 0.02
-  scene.add(edge)
-  const wall = new THREE.Mesh(
-    new THREE.CylinderGeometry(BOUND + 0.5, BOUND + 0.5, 7, 192, 1, true),
-    new THREE.ShaderMaterial({
-      transparent: true,
-      depthWrite: false,
-      side: THREE.DoubleSide,
-      fog: false,
-      uniforms: { c: { value: accent.clone() } },
-      vertexShader: 'varying float vY; void main(){ vY = position.y / 7.0 + 0.5; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-      fragmentShader: `
-        uniform vec3 c;
-        varying float vY;
-        void main() {
-          gl_FragColor = vec4(c, pow(1.0 - vY, 2.4) * 0.3);
-          #include <colorspace_fragment>
-        }
-      `,
-    }),
-  )
-  wall.position.y = 3.5
-  scene.add(wall)
-
   // 바깥의 미니멀한 조형물: 흰 구, 상자, 기둥이 안개 속으로 이어집니다.
   const decorKinds = [
     new THREE.SphereGeometry(0.5, 56, 40),
@@ -620,12 +589,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     scene.add(m)
   })
 
-  // 광장: 가운데의 얇은 원
-  const hubRing = new THREE.Mesh(new THREE.RingGeometry(HUB_R - 0.05, HUB_R, 96), basic('#cfd6e2', { transparent: true, opacity: 0.9, side: THREE.DoubleSide }))
-  hubRing.rotation.x = -Math.PI / 2
-  hubRing.position.y = 0.02
-  scene.add(hubRing)
-
   // 물리 기둥 목록(걷기, 부딪힘, 올라타기)
   const columns = []
 
@@ -660,10 +623,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     disc.position.set(cx, 0.015, cz)
     disc.receiveShadow = true
     scene.add(disc)
-    const outline = new THREE.Mesh(new THREE.RingGeometry(ZONE_DISC - 0.07, ZONE_DISC, 128), basic(tint, { transparent: true, opacity: 0.55, side: THREE.DoubleSide }))
-    outline.rotation.x = -Math.PI / 2
-    outline.position.set(cx, 0.025, cz)
-    scene.add(outline)
 
     const dx = Math.cos(theta)
     const dz = Math.sin(theta)
