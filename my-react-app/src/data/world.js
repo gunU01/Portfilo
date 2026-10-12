@@ -41,8 +41,8 @@ export const zones = [
       {
         id: 'doc-toss',
         title: '토스 BM 분석',
-        sub: '무료 송금으로 확보한 유입과 BM 구조',
-        href: '#/work/value-chain?s=chain',
+        sub: '무료 송금 위에 쌓인 수익 구조와 성장의 구성',
+        href: '#/work/value-chain',
         shape: 'book',
       },
     ],
