@@ -12,7 +12,7 @@ const TAGS = {
   drawerR: [1085, 664],
   calendar: [1455, 112],
   laptop: [712, 438],
-  books: [414, 506],
+  books: [414, 436],
   notebook: [1070, 584],
 }
 
@@ -50,6 +50,180 @@ function Fern({ x, y, scale = 1, fronds = 11, spread = 150, len = 150, dark = '#
     }
   }
   return <g transform={`translate(${x} ${y}) scale(${scale})`}>{out}</g>
+}
+
+
+const FLAG = ['#ff8a70', '#ffd35e', '#7ed6a4', '#ff9ec7', '#79b8ff']
+
+// 깃발 가랜드
+function Bunting() {
+  const flags = []
+  for (let i = 0; i < 9; i += 1) {
+    const t = (i + 0.5) / 9
+    const x = (1 - t) * (1 - t) * 1004 + 2 * (1 - t) * t * 1170 + t * t * 1336
+    const y = (1 - t) * (1 - t) * 92 + 2 * (1 - t) * t * 168 + t * t * 98
+    flags.push(<polygon key={i} points={`${x - 13},${y - 2} ${x + 13},${y - 2} ${x},${y + 30}`} fill={FLAG[i % FLAG.length]} />)
+  }
+  return (
+    <g className="desk__sway" style={{ transformOrigin: '1170px 90px' }}>
+      <path d="M1004 92 Q1170 168 1336 98" fill="none" stroke="#b98a58" strokeWidth="3" />
+      {flags}
+    </g>
+  )
+}
+
+// 줄에 집게로 매단 폴라로이드 사진
+function Polaroids() {
+  const pics = [
+    { x: 1185, y: 169, r: -4, c: '#bfe3ff', icon: 'sun' },
+    { x: 1254, y: 166, r: 3, c: '#ffd9e3', icon: 'heart' },
+    { x: 1317, y: 151, r: -2, c: '#d3f0c4', icon: 'hill' },
+  ]
+  return (
+    <g>
+      <path d="M1060 140 Q1200 196 1336 144" fill="none" stroke="#b98a58" strokeWidth="2.5" />
+      {pics.map((p) => (
+        <g key={p.icon} transform={`translate(${p.x} ${p.y}) rotate(${p.r})`}>
+          <rect x="-4" y="-6" width="8" height="16" rx="2" fill="#e2a46a" />
+          <rect x="-28" y="6" width="56" height="66" rx="2" fill="#fffdf6" />
+          <rect x="-24" y="10" width="48" height="46" fill={p.c} />
+          {p.icon === 'sun' && (
+            <g>
+              <circle cx="0" cy="30" r="9" fill="#ffc83d" />
+              <path d="M-24 56 L-8 40 L6 52 L14 46 L24 56Z" fill="#7fc47a" />
+            </g>
+          )}
+          {p.icon === 'heart' && <path d="M0 46 C-18 32 -10 20 0 28 C10 20 18 32 0 46Z" fill="#ff6f8f" />}
+          {p.icon === 'hill' && (
+            <g>
+              <path d="M-24 56 L-6 28 L8 48 L16 38 L24 56Z" fill="#5fae6a" />
+              <circle cx="14" cy="22" r="5" fill="#fff" opacity="0.9" />
+            </g>
+          )}
+          <line x1="-16" y1="64" x2="10" y2="64" stroke="#d8cdb0" strokeWidth="2.5" strokeLinecap="round" />
+        </g>
+      ))}
+    </g>
+  )
+}
+
+// 창가에 늘어진 하트잎 덩굴
+function Ivy() {
+  const leaves = []
+  const pts = [[468, 118], [474, 150], [466, 184], [478, 214], [470, 246], [462, 278], [474, 306], [466, 336]]
+  pts.forEach(([x, y], i) => {
+    const side = i % 2 ? 1 : -1
+    leaves.push(
+      <g key={i} transform={`translate(${x} ${y}) rotate(${side * 28})`}>
+        <path d="M0 0 C-14 -10 -8 -24 0 -16 C8 -24 14 -10 0 0Z" fill={i % 2 ? '#5fc05a' : '#86d46a'} transform="scale(1.5) translate(0 14)" />
+      </g>,
+    )
+  })
+  return (
+    <g className="desk__sway" style={{ transformOrigin: '470px 84px' }}>
+      <path d="M470 84 C462 140 486 190 470 250 C458 300 478 330 466 352" fill="none" stroke="#3f9a4a" strokeWidth="3" strokeLinecap="round" />
+      {leaves}
+    </g>
+  )
+}
+
+// 창턱의 작은 화분들
+function SillPots() {
+  return (
+    <g>
+      <g transform="translate(150 406)">
+        <path d="M-18 -26 H18 L14 0 H-14Z" fill="#f0a98a" />
+        {[0, 60, 120, 180, 240, 300].map((a) => (
+          <ellipse key={a} cx="0" cy="-40" rx="8" ry="16" fill={a % 120 ? '#7fcf9a' : '#5fbf86'} transform={`rotate(${a} 0 -34) translate(0 -2)`} />
+        ))}
+        <circle cy="-36" r="6" fill="#ffb7c8" />
+      </g>
+      <g transform="translate(222 406)">
+        <path d="M-16 -22 H16 L12 0 H-12Z" fill="#f6d18a" />
+        <rect x="-9" y="-62" width="18" height="42" rx="9" fill="#5fae6a" />
+        <rect x="-22" y="-52" width="10" height="22" rx="5" fill="#5fae6a" />
+        <rect x="12" y="-46" width="10" height="18" rx="5" fill="#5fae6a" />
+        <circle cy="-64" r="6" fill="#ff7aa8" />
+      </g>
+      <g transform="translate(396 406)">
+        <path d="M-18 -24 H18 L14 0 H-14Z" fill="#9fd0e8" />
+        <circle cx="-8" cy="-34" r="14" fill="#6fc47a" />
+        <circle cx="8" cy="-36" r="15" fill="#86d46a" />
+        <circle cy="-46" r="12" fill="#5fb470" />
+      </g>
+    </g>
+  )
+}
+
+// 벽에 붙인 포스트잇과 별 스티커
+function Stickies() {
+  const notes = [
+    { x: 600, y: 352, c: '#fff1a6', r: -5 },
+    { x: 686, y: 362, c: '#ffd0dc', r: 4 },
+    { x: 774, y: 350, c: '#c9f0dc', r: -3 },
+  ]
+  const star = (x, y, k) => <polygon key={`${x}${y}`} transform={`translate(${x} ${y}) scale(${k})`} points="0,-10 3,-3 10,-3 4,2 6,9 0,5 -6,9 -4,2 -10,-3 -3,-3" fill="#ffc83d" />
+  return (
+    <g>
+      {notes.map((n) => (
+        <g key={n.x} transform={`translate(${n.x} ${n.y}) rotate(${n.r})`}>
+          <rect x="3" y="4" width="62" height="58" fill="#8a7a3a" opacity="0.18" />
+          <rect width="62" height="58" fill={n.c} />
+          <rect x="-4" y="-5" width="36" height="12" fill="#fff" opacity="0.6" transform="rotate(-4)" />
+          <path d="M10 22 H50 M10 32 H44 M10 42 H34" stroke="#b9a66a" strokeWidth="2.4" strokeLinecap="round" />
+        </g>
+      ))}
+      {star(560, 372, 1.1)}
+      {star(842, 372, 0.9)}
+      {star(950, 340, 1)}
+      {star(1000, 300, 0.7)}
+    </g>
+  )
+}
+
+// 책 위에서 낮잠 자는 고양이
+function Cat() {
+  return (
+    <g>
+      <g className="desk__breathe">
+        <path d="M366 524 C340 524 334 494 356 490" fill="none" stroke="#f0b27a" strokeWidth="11" strokeLinecap="round" />
+        <ellipse cx="418" cy="514" rx="58" ry="26" fill="#f6efe3" />
+        <path d="M376 500 C390 486 410 488 414 500 C402 504 388 506 376 500Z" fill="#f0b27a" />
+        <ellipse cx="438" cy="522" rx="26" ry="8" fill="#ffffff" opacity="0.7" />
+      </g>
+      <g transform="translate(466 496)">
+        <path d="M-20 -8 L-17 -30 L-4 -16Z" fill="#f6efe3" />
+        <path d="M20 -8 L17 -30 L4 -16Z" fill="#f0b27a" />
+        <path d="M-16 -10 L-15 -24 L-8 -16Z" fill="#ffb8c4" />
+        <ellipse rx="24" ry="20" fill="#f6efe3" />
+        <path d="M2 -20 C14 -20 22 -10 20 0 C12 -2 6 -8 2 -20Z" fill="#f0b27a" />
+        <path d="M-13 -2 Q-8 3 -3 -2 M5 -2 Q10 3 15 -2" fill="none" stroke="#5a3b2a" strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M-2.5 5 H3.5 L0.5 9Z" fill="#ff8fa3" />
+        <ellipse cx="-14" cy="6" rx="4.5" ry="3" fill="#ffb8c4" opacity="0.8" />
+        <ellipse cx="18" cy="6" rx="4.5" ry="3" fill="#ffb8c4" opacity="0.8" />
+        <path d="M-26 4 H-16 M-26 9 L-16 8 M26 4 H16 M26 9 L16 8" stroke="#c9b9a4" strokeWidth="1.4" />
+      </g>
+      <text x="498" y="472" className="desk__zzz">
+        z
+      </text>
+      <text x="514" y="454" className="desk__zzz desk__zzz--b">
+        z
+      </text>
+    </g>
+  )
+}
+
+// 바닥의 동그란 러그
+function Rug() {
+  return (
+    <g>
+      <ellipse cx="800" cy="884" rx="400" ry="40" fill="#ee9c78" />
+      <ellipse cx="800" cy="884" rx="352" ry="32" fill="#fdf0d6" />
+      <ellipse cx="800" cy="884" rx="304" ry="26" fill="#7fc9a6" />
+      <ellipse cx="800" cy="884" rx="256" ry="20" fill="#fdf0d6" />
+      <ellipse cx="800" cy="884" rx="208" ry="15" fill="#ffd27a" />
+    </g>
+  )
 }
 
 function Hs({ id, label, active, setActive, onOpen, children }) {
@@ -219,6 +393,12 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
           <rect x="-4" y="-14" width="8" height="14" fill="#b9884f" />
         </g>
 
+        <Ivy />
+        <SillPots />
+        <Bunting />
+        <Polaroids />
+        <Stickies />
+
         {/* 달력(활동 기록) */}
         <Hs id="calendar" label="활동기록" {...hs}>
 <g transform="translate(0 66)">
@@ -263,14 +443,18 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         <Hs id="drawerL" label="대회 참가" {...hs}>
           <rect x="300" y="690" width="430" height="68" fill="transparent" />
           <rect x="304" y="694" width="422" height="60" rx="4" fill="#f6d9a8" stroke="#dba96c" strokeWidth="3" />
-          <rect x="478" y="716" width="76" height="16" rx="8" fill="#b9884f" />
-          <rect x="482" y="718" width="68" height="5" rx="2.5" fill="#cf9d62" />
+          <rect x="486" y="700" width="60" height="16" rx="3" fill="#fffdf6" stroke="#d9b98a" strokeWidth="1.6" />
+          <polygon points="516,702 518,707 523,707 519,710 521,715 516,712 511,715 513,710 509,707 514,707" fill="#ffc83d" />
+          <rect x="478" y="722" width="76" height="16" rx="8" fill="#b9884f" />
+          <rect x="482" y="724" width="68" height="5" rx="2.5" fill="#cf9d62" />
         </Hs>
         <Hs id="drawerR" label="학력과 연락" {...hs}>
           <rect x="870" y="690" width="430" height="68" fill="transparent" />
           <rect x="874" y="694" width="422" height="60" rx="4" fill="#f6d9a8" stroke="#dba96c" strokeWidth="3" />
-          <rect x="1048" y="716" width="76" height="16" rx="8" fill="#b9884f" />
-          <rect x="1052" y="718" width="68" height="5" rx="2.5" fill="#cf9d62" />
+          <rect x="1056" y="700" width="60" height="16" rx="3" fill="#fffdf6" stroke="#d9b98a" strokeWidth="1.6" />
+          <path d="M1086 713 C1076 706 1080 700 1086 704 C1092 700 1096 706 1086 713Z" fill="#ff6f8f" />
+          <rect x="1048" y="722" width="76" height="16" rx="8" fill="#b9884f" />
+          <rect x="1052" y="724" width="68" height="5" rx="2.5" fill="#cf9d62" />
         </Hs>
         {/* 상판 */}
         <polygon points="150,630 1450,630 1500,664 100,664" fill="url(#d-top)" />
@@ -290,7 +474,8 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
 
         {/* 책 더미(기획 작업물) */}
         <Hs id="books" label="기획물" {...hs}>
-          <rect x="326" y="522" width="190" height="124" fill="transparent" />
+          <rect x="326" y="446" width="200" height="200" fill="transparent" />
+          <Cat />
           <rect x="330" y="614" width="172" height="30" rx="3" fill="#4f8f7e" />
           <rect x="340" y="618" width="150" height="3" fill="#86b9a8" />
           <g transform="rotate(-2 415 600)">
@@ -341,6 +526,11 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
           <path d="M974 622 C992 622 992 642 974 642" fill="none" stroke="#fbf6ea" strokeWidth="6" />
         </g>
 
+        <g className="desk__steam" fill="none" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" opacity="0.8">
+          <path d="M946 606 C940 594 954 588 948 574" />
+          <path d="M962 606 C956 596 968 590 963 578" className="desk__steam--b" />
+        </g>
+
         {/* 노트(소개) */}
         <Hs id="notebook" label="소개" {...hs}>
           <rect x="990" y="596" width="240" height="68" fill="transparent" />
@@ -385,6 +575,7 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
 
       {/* 앞쪽: 의자와 바닥 화분 */}
       <g className="desk__layer desk__layer--front">
+        <Rug />
         <path d="M806 900 C792 812 820 774 892 764 L1118 746 C1170 744 1196 786 1180 900Z" fill="#7a583a" />
         {Array.from({ length: 15 }).map((_, i) => {
           const x = 826 + i * 23.5

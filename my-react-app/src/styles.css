@@ -1328,6 +1328,66 @@ button {
 .hs.is-on .hs__body {
   transform: translateY(-7px) scale(1.025);
 }
+.desk__sway {
+  animation: sway 6s ease-in-out infinite alternate;
+}
+@keyframes sway {
+  from {
+    transform: rotate(-1.4deg);
+  }
+  to {
+    transform: rotate(1.4deg);
+  }
+}
+.desk__breathe {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: breathe 3.4s ease-in-out infinite;
+}
+@keyframes breathe {
+  50% {
+    transform: scale(1.03, 1.07);
+  }
+}
+.desk__zzz {
+  font: 800 20px var(--font);
+  fill: #8a7ab8;
+  animation: zzz 3s ease-in-out infinite;
+}
+.desk__zzz--b {
+  font-size: 15px;
+  animation-delay: 1.2s;
+}
+@keyframes zzz {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: translateY(4px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+.desk__steam path {
+  animation: steam 3.2s ease-in-out infinite;
+}
+.desk__steam--b {
+  animation-delay: 1.4s !important;
+}
+@keyframes steam {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  50% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
 .desk__cal {
   font: 800 27px var(--font);
   fill: #fff;
@@ -1490,6 +1550,10 @@ button {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .desk__sway,
+  .desk__breathe,
+  .desk__zzz,
+  .desk__steam path,
   .desk__panel {
     animation: none;
   }
