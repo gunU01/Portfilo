@@ -8,8 +8,8 @@ const MEDAL = { 금상: '#f2c14e', 우수상: '#c9ced8', 동상: '#cd7f32', 장�
 // 이름표 위치(장면 좌표)
 const TAGS = {
   frames: [740, 62],
-  drawerL: [515, 790],
-  drawerR: [1085, 790],
+  drawerL: [515, 664],
+  drawerR: [1085, 664],
   calendar: [1455, 112],
   laptop: [712, 438],
   books: [414, 506],
