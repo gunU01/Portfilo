@@ -22,11 +22,13 @@ function Panel({ spot, onClose }) {
       <button className="desk__close" type="button" onClick={onClose} ref={closeRef} aria-label="닫기">
         <span aria-hidden="true">×</span>
       </button>
-      <p className="desk__eyebrow">{spot.label}</p>
       <h2>{spot.title}</h2>
-      {spot.lead && <p className="desk__lead">{spot.lead}</p>}
+
+      {spot.paragraphs && spot.paragraphs.map((p) => <p key={p}>{p}</p>)}
 
       {spot.items && (
+        <>
+          {spot.itemsTitle && <h3 className="desk__sub">{spot.itemsTitle}</h3>}
         <ul className="desk__list">
           {spot.items.map((it) => (
             <li key={it.title}>
@@ -37,9 +39,8 @@ function Panel({ spot, onClose }) {
             </li>
           ))}
         </ul>
+        </>
       )}
-
-      {spot.paragraphs && spot.paragraphs.map((p) => <p key={p}>{p}</p>)}
 
       {spot.timeline && (
         <ol className="desk__tl">
@@ -122,11 +123,6 @@ export default function Desk() {
         </a>
       </div>
 
-      {!spot && (
-        <p className="desk__hint" aria-hidden="true">
-          책상 위의 물건을 눌러 보세요
-        </p>
-      )}
       {spot && <Panel spot={spot} onClose={close} />}
     </section>
   )

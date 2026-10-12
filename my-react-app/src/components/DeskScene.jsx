@@ -8,13 +8,10 @@ const MEDAL = { 금상: '#f2c14e', 우수상: '#c9ced8', 동상: '#cd7f32', 장�
 
 // 이름표 위치(장면 좌표)
 const TAGS = {
-  frames: [740, 62],
   calendar: [1455, 112],
   laptop: [712, 438],
   books: [414, 506],
   notebook: [1070, 584],
-  drawerL: [515, 790],
-  drawerR: [1085, 790],
 }
 
 const rnd = (seed) => {
@@ -201,13 +198,12 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         <polygon points="110,424 470,424 840,740 300,740" fill="url(#d-beam)" />
 
         {/* 액자(수상) */}
-        <Hs id="frames" label="수상" {...hs}>
-          <rect x="500" y="56" width="470" height="270" fill="transparent" />
+        <g>
           <Frame x={520} y={110} w={120} h={150} color={medals[0] ?? '#c9ced8'} tilt={-1.5} />
           <Frame x={660} y={80} w={150} h={110} color={medals[1] ?? '#c9ced8'} tilt={1} />
           <Frame x={660} y={212} w={120} h={100} color={medals[2] ?? '#c9ced8'} tilt={-0.8} />
           <Frame x={830} y={136} w={110} h={140} color={medals[3] ?? '#c9ced8'} tilt={1.4} />
-        </Hs>
+        </g>
 
         {/* 문구 액자 */}
         <rect x="1006" y="76" width="200" height="140" rx="3" fill="#8b6a2c" opacity="0.2" transform="translate(6 8)" />
@@ -249,7 +245,7 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         </g>
 
         {/* 달력(활동 기록) */}
-        <Hs id="calendar" label="활동 기록" {...hs}>
+        <Hs id="calendar" label="활동기록" {...hs}>
 <g transform="translate(0 66)">
           <rect x="1368" y="60" width="188" height="290" fill="transparent" />
           <rect x="1376" y="70" width="170" height="284" rx="4" fill="#8b6a2c" opacity="0.2" />
@@ -290,18 +286,16 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         <rect x="200" y="676" width="1200" height="92" fill="#dea671" />
         <rect x="200" y="676" width="1200" height="8" fill="#c98f55" opacity="0.6" />
         {/* 서랍 */}
-        <Hs id="drawerL" label="대회 참가" {...hs}>
-          <rect x="300" y="690" width="430" height="68" fill="transparent" />
+        <g>
           <rect x="304" y="694" width="422" height="60" rx="4" fill="#ebbc86" stroke="#c98f55" strokeWidth="3" />
           <rect x="478" y="716" width="76" height="16" rx="8" fill="#a56f3d" />
           <rect x="482" y="718" width="68" height="5" rx="2.5" fill="#c58a50" />
-        </Hs>
-        <Hs id="drawerR" label="학력과 연락" {...hs}>
-          <rect x="870" y="690" width="430" height="68" fill="transparent" />
+        </g>
+        <g>
           <rect x="874" y="694" width="422" height="60" rx="4" fill="#ebbc86" stroke="#c98f55" strokeWidth="3" />
           <rect x="1048" y="716" width="76" height="16" rx="8" fill="#a56f3d" />
           <rect x="1052" y="718" width="68" height="5" rx="2.5" fill="#c58a50" />
-        </Hs>
+        </g>
         {/* 상판 */}
         <polygon points="150,630 1450,630 1500,664 100,664" fill="url(#d-top)" />
         <rect x="100" y="664" width="1400" height="18" rx="4" fill="#cf9558" />
@@ -319,7 +313,7 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         <rect x="218" y="594" width="64" height="10" rx="3" fill="#d98560" />
 
         {/* 책 더미(기획 작업물) */}
-        <Hs id="books" label="기획 작업물" {...hs}>
+        <Hs id="books" label="기획물" {...hs}>
           <rect x="326" y="522" width="190" height="124" fill="transparent" />
           <rect x="330" y="614" width="172" height="30" rx="3" fill="#3f6f8f" />
           <rect x="340" y="618" width="150" height="3" fill="#6c9bb9" />
@@ -437,7 +431,7 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
       {/* 이름표 */}
       <g className="desk__tags" pointerEvents="none">
         {Object.entries(TAGS).map(([id, [x, y]]) => {
-          const label = { frames: '수상', calendar: '활동 기록', laptop: '프로젝트', books: '기획 작업물', notebook: '소개', drawerL: '대회 참가', drawerR: '학력과 연락' }[id]
+          const label = { calendar: '활동기록', laptop: '프로젝트', books: '기획물', notebook: '소개' }[id]
           const w = label.length * 24 + 40
           return (
             <g key={id} className={active === id ? 'tag is-on' : 'tag'} transform={`translate(${x} ${y})`}>
