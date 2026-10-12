@@ -1492,6 +1492,15 @@ kbd {
   line-height: 1.5;
   animation: world-card-in 0.22s ease-out;
 }
+/* 건물 앞에서는 카드가 뜨므로 조작 안내는 숨기고, 작은 화면에서는 카드를 조이스틱 위로 올립니다. */
+.world.has-near .world__hint {
+  opacity: 0;
+}
+@media (max-width: 720px) {
+  .world__card {
+    bottom: 140px;
+  }
+}
 @keyframes world-card-in {
   from {
     opacity: 0;

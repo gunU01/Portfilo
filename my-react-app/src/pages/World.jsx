@@ -89,7 +89,7 @@ export default function World() {
   }
 
   return (
-    <section className="world" aria-label="3D 포트폴리오 월드">
+    <section className={near ? 'world has-near' : 'world'} aria-label="3D 포트폴리오 월드">
       <div
         className="world__stage"
         ref={hostRef}

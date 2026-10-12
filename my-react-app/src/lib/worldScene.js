@@ -546,6 +546,7 @@ const SHAPES = {
 function buildLandmark(shape, tint, scale = 1) {
   const g = new THREE.Group()
   const ped = new THREE.Group()
+  ped.scale.setScalar(shape === 'trophy' ? 0.78 : 1)
   ped.add(at(cyl(1.75, 1.95, 0.34, 56, '#f6f9ff', { roughness: 0.5 }), 0, 0.17, 0))
   const rim = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.06, 10, 64), std(tint, { roughness: 0.4 }))
   rim.rotation.x = Math.PI / 2
@@ -877,11 +878,12 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     zoneInfo.push(info)
 
     const n = zone.items.length
-    const step = n > 3 ? 0.72 : 0.88
+    const step = n > 3 ? 0.84 : 0.88
+    const arc = n > 3 ? 4.1 : 3.9
     zone.items.forEach((item, ii) => {
       const phi = theta + (ii - (n - 1) / 2) * step
-      const x = cx + Math.cos(phi) * 3.9
-      const z = cz + Math.sin(phi) * 3.9
+      const x = cx + Math.cos(phi) * arc
+      const z = cz + Math.sin(phi) * arc
       const itemTint = item.tint ? new THREE.Color(item.tint) : tint
       const built = buildLandmark(item.shape, itemTint, item.scale)
       built.group.position.set(x, 0.22, z)
@@ -899,7 +901,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       shadowBlob.position.set(x, 0.24, z)
       scene.add(shadowBlob)
 
-      const label = makeLabel(item.title, 'world__label')
+      const label = makeLabel(item.short ?? item.title, 'world__label')
       landmarks.push({ ...item, x, z, mesh: built.group, body: built.body, ring, label, anim: built.anim, base: 1 })
       if (built.anim) animators.push(built.anim)
     })

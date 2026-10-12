@@ -12,9 +12,9 @@ const SHAPE_BY_CASE = { howmuch: 'coins', haemi: 'house', 'value-chain': 'bars' 
 
 // 수상 트로피 색: 결과 이름으로 메달 색을 정합니다. 모르는 결과는 기본색.
 const MEDAL = {
-  금상: { tint: '#f2c14e', scale: 1.2 },
-  우수상: { tint: '#c9ced8', scale: 1.1 },
-  동상: { tint: '#cd7f32', scale: 1 },
+  금상: { tint: '#f2c14e', scale: 1.05 },
+  우수상: { tint: '#c9ced8', scale: 1 },
+  동상: { tint: '#cd7f32', scale: 0.95 },
   장려상: { tint: '#3fb68b', scale: 0.9 },
 }
 
@@ -22,7 +22,7 @@ export const zones = [
   {
     id: 'projects',
     name: '프로젝트',
-    blurb: '목표·방식·결과로 읽는 케이스 3개',
+    blurb: '문제와 판단, 결과를 담은 케이스 3개',
     items: cases.map((c) => ({
       id: `case-${c.slug}`,
       title: c.title,
@@ -54,6 +54,7 @@ export const zones = [
     items: awards.map((a) => ({
       id: `award-${a.year}-${a.result}`,
       title: `${a.result} · ${a.title}`,
+      short: a.result,
       sub: [a.year, a.org, a.note].filter(Boolean).join(' · '),
       href: '#/about?s=awards',
       shape: 'trophy',
