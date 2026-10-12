@@ -25,7 +25,7 @@ const rnd = (seed) => {
 }
 
 // 고사리 잎: 곡선 줄기에 작은 잎을 양쪽으로 달아 줍니다.
-function Fern({ x, y, scale = 1, fronds = 11, spread = 150, len = 150, dark = '#4f8f36', light = '#7cba4d' }) {
+function Fern({ x, y, scale = 1, fronds = 11, spread = 150, len = 150, dark = '#4aa03c', light = '#93d35e' }) {
   const out = []
   for (let i = 0; i < fronds; i += 1) {
     const f = i / (fronds - 1)
@@ -64,7 +64,7 @@ function Dapples() {
     leaves.push(<path key={i} d="M0 0 Q26 -34 0 -84 Q-26 -34 0 0Z" transform={`translate(${x} ${y}) rotate(${a}) scale(${s})`} />)
   }
   return (
-    <g className="desk__dapples" fill="#a07f3e" opacity="0.2">
+    <g className="desk__dapples" fill="#7f9a4a" opacity="0.2">
       {leaves}
     </g>
   )
@@ -100,7 +100,7 @@ function Frame({ x, y, w, h, color, tilt = 0 }) {
   return (
     <g transform={`rotate(${tilt} ${cx} ${cy})`}>
       <rect x={x + 6} y={y + 8} width={w} height={h} rx="3" fill="#8b6a2c" opacity="0.22" />
-      <rect x={x} y={y} width={w} height={h} rx="3" fill="#8a5636" />
+      <rect x={x} y={y} width={w} height={h} rx="3" fill="#c29463" />
       <rect x={x + 7} y={y + 7} width={w - 14} height={h - 14} fill="#fbf3df" />
       <rect x={x + 7} y={y + 7} width={w - 14} height={h - 14} fill="none" stroke="#e6d6b0" strokeWidth="2" />
       <g transform={`translate(${cx} ${cy + 4})`}>
@@ -129,7 +129,7 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
   for (let i = 0; i < 22; i += 1) {
     const y = 636 + g() * 22
     const x = 160 + g() * 1100
-    grain.push(<line key={i} x1={x} y1={y} x2={x + 120 + g() * 160} y2={y + (g() - 0.5) * 2} stroke="#b97f45" strokeWidth="1.6" opacity="0.35" />)
+    grain.push(<line key={i} x1={x} y1={y} x2={x + 120 + g() * 160} y2={y + (g() - 0.5) * 2} stroke="#cf9c60" strokeWidth="1.6" opacity="0.35" />)
   }
 
   return (
@@ -143,34 +143,34 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
     >
       <defs>
         <linearGradient id="d-wall" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#ecd9a9" />
-          <stop offset="1" stopColor="#e2c88e" />
+          <stop offset="0" stopColor="#f4ebcf" />
+          <stop offset="1" stopColor="#ecdcb2" />
         </linearGradient>
         <radialGradient id="d-vig" cx="0.5" cy="0.45" r="0.8">
-          <stop offset="0.55" stopColor="#8a6a2c" stopOpacity="0" />
-          <stop offset="1" stopColor="#8a6a2c" stopOpacity="0.38" />
+          <stop offset="0.55" stopColor="#9a8a4a" stopOpacity="0" />
+          <stop offset="1" stopColor="#9a8a4a" stopOpacity="0.24" />
         </radialGradient>
         <linearGradient id="d-top" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#e6b277" />
-          <stop offset="1" stopColor="#d89f62" />
+          <stop offset="0" stopColor="#f2cf98" />
+          <stop offset="1" stopColor="#ebbd7e" />
         </linearGradient>
         <linearGradient id="d-under" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#4a2f1d" />
-          <stop offset="1" stopColor="#7a5233" />
+          <stop offset="0" stopColor="#6a4a2c" />
+          <stop offset="1" stopColor="#93704a" />
         </linearGradient>
         <linearGradient id="d-win" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#cfe6c0" />
-          <stop offset="0.5" stopColor="#8fc070" />
-          <stop offset="1" stopColor="#5d9a47" />
+          <stop offset="0" stopColor="#e6f5cf" />
+          <stop offset="0.5" stopColor="#a6d46e" />
+          <stop offset="1" stopColor="#62ad4a" />
         </linearGradient>
         <linearGradient id="d-beam" x1="0" y1="0" x2="0.4" y2="1">
           <stop offset="0" stopColor="#fff6cf" stopOpacity="0.34" />
           <stop offset="1" stopColor="#fff6cf" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="d-shade" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#6f9a5a" />
-          <stop offset="0.5" stopColor="#8fb877" />
-          <stop offset="1" stopColor="#6b9556" />
+          <stop offset="0" stopColor="#9cc986" />
+          <stop offset="0.5" stopColor="#b9dca3" />
+          <stop offset="1" stopColor="#93bf7e" />
         </linearGradient>
         <filter id="d-soft" x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="6" />
@@ -182,13 +182,13 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
       {/* 뒷벽 */}
       <g className="desk__layer desk__layer--back">
         {/* 창문 */}
-        <rect x="86" y="66" width="392" height="352" rx="8" fill="#f8f1e0" />
+        <rect x="86" y="66" width="392" height="352" rx="8" fill="#fffaf0" />
         <rect x="104" y="84" width="356" height="316" fill="url(#d-win)" />
         {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <circle key={i} cx={130 + ((i * 97) % 320)} cy={140 + ((i * 61) % 230)} r={46 + (i % 3) * 14} fill={['#7fb35c', '#a3cf7d', '#5b9444'][i % 3]} opacity="0.7" filter="url(#d-soft)" />
         ))}
-        <rect x="276" y="84" width="10" height="316" fill="#f8f1e0" />
-        <rect x="104" y="236" width="356" height="9" fill="#f8f1e0" />
+        <rect x="276" y="84" width="10" height="316" fill="#fffaf0" />
+        <rect x="104" y="236" width="356" height="9" fill="#fffaf0" />
         <rect x="76" y="406" width="412" height="16" rx="4" fill="#efe4c9" />
         {/* 얇은 커튼 */}
         <path d="M104 84 H460 V196 C430 214 410 190 380 208 C350 226 320 196 290 212 C260 228 230 196 200 210 C170 224 140 198 104 206Z" fill="#e3f2ec" opacity="0.88" />
@@ -208,14 +208,14 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         </Hs>
 
         {/* 선반 */}
-        <rect x="1010" y="296" width="300" height="16" rx="3" fill="#c99560" />
-        <rect x="1010" y="296" width="300" height="5" rx="2" fill="#dba974" />
-        <path d="M1050 312 V352 M1270 312 V352" stroke="#b27f4e" strokeWidth="8" strokeLinecap="round" />
+        <rect x="1010" y="296" width="300" height="16" rx="3" fill="#e4bd88" />
+        <rect x="1010" y="296" width="300" height="5" rx="2" fill="#f2d3a4" />
+        <path d="M1050 312 V352 M1270 312 V352" stroke="#cf9d62" strokeWidth="8" strokeLinecap="round" />
         <g transform="translate(1066 296)">
-          <path d="M-22 0 C-26 -30 -14 -44 -10 -52 H10 C14 -44 26 -30 22 0Z" fill="#2f3a3e" />
+          <path d="M-22 0 C-26 -30 -14 -44 -10 -52 H10 C14 -44 26 -30 22 0Z" fill="#3f6f5a" />
           {[-14, -4, 8, 16].map((dx, i) => (
             <g key={dx} transform={`translate(${dx} -52) rotate(${(i - 1.5) * 14})`}>
-              <line x1="0" y1="0" x2="0" y2="-34" stroke="#5d9a47" strokeWidth="3" />
+              <line x1="0" y1="0" x2="0" y2="-34" stroke="#62ad4a" strokeWidth="3" />
               <circle cy="-40" r="9" fill="#fff" />
               <circle cy="-40" r="3.6" fill="#f2b705" />
             </g>
@@ -234,7 +234,7 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         <g transform="translate(1282 296)">
           <rect x="-18" y="-24" width="36" height="24" fill="#f6e4c4" />
           <polygon points="-24,-24 0,-46 24,-24" fill="#c0655a" />
-          <rect x="-4" y="-14" width="8" height="14" fill="#a56f3d" />
+          <rect x="-4" y="-14" width="8" height="14" fill="#b9884f" />
         </g>
 
         {/* 달력(활동 기록) */}
@@ -243,8 +243,8 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
           <rect x="1368" y="60" width="188" height="290" fill="transparent" />
           <rect x="1376" y="70" width="170" height="284" rx="4" fill="#8b6a2c" opacity="0.2" />
           <rect x="1370" y="62" width="170" height="284" rx="4" fill="#fbf7ea" />
-          <rect x="1370" y="62" width="170" height="54" rx="4" fill="#d9594c" />
-          <rect x="1370" y="96" width="170" height="20" fill="#d9594c" />
+          <rect x="1370" y="62" width="170" height="54" rx="4" fill="#6bb27a" />
+          <rect x="1370" y="96" width="170" height="20" fill="#6bb27a" />
           <text x="1455" y="102" textAnchor="middle" className="desk__cal">
             MONTH
           </text>
@@ -259,8 +259,8 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
       </g>
 
       {/* 바닥 */}
-      <rect x="0" y="796" width="1600" height="104" fill="#8d6b49" />
-      <rect x="0" y="786" width="1600" height="14" fill="#f0e3c3" />
+      <rect x="0" y="796" width="1600" height="104" fill="#c2a074" />
+      <rect x="0" y="786" width="1600" height="14" fill="#faf2dc" />
       {planks}
 
       {/* 책상 */}
@@ -269,31 +269,31 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         {/* 다리 */}
         {[140, 1385].map((x) => (
           <g key={x}>
-            <rect x={x} y="676" width="78" height="210" fill="#d49a5f" />
+            <rect x={x} y="676" width="78" height="210" fill="#ecc088" />
             {[0, 1, 2].map((i) => (
-              <rect key={i} x={x + 12 + i * 22} y="700" width="12" height="170" rx="3" fill="#c0834b" />
+              <rect key={i} x={x + 12 + i * 22} y="700" width="12" height="170" rx="3" fill="#d9a66a" />
             ))}
           </g>
         ))}
         {/* 앞면 */}
-        <rect x="200" y="676" width="1200" height="92" fill="#dea671" />
-        <rect x="200" y="676" width="1200" height="8" fill="#c98f55" opacity="0.6" />
+        <rect x="200" y="676" width="1200" height="92" fill="#f0c994" />
+        <rect x="200" y="676" width="1200" height="8" fill="#dba96c" opacity="0.6" />
         {/* 서랍 */}
         <Hs id="drawerL" label="대회 참가" {...hs}>
           <rect x="300" y="690" width="430" height="68" fill="transparent" />
-          <rect x="304" y="694" width="422" height="60" rx="4" fill="#ebbc86" stroke="#c98f55" strokeWidth="3" />
-          <rect x="478" y="716" width="76" height="16" rx="8" fill="#a56f3d" />
-          <rect x="482" y="718" width="68" height="5" rx="2.5" fill="#c58a50" />
+          <rect x="304" y="694" width="422" height="60" rx="4" fill="#f6d9a8" stroke="#dba96c" strokeWidth="3" />
+          <rect x="478" y="716" width="76" height="16" rx="8" fill="#b9884f" />
+          <rect x="482" y="718" width="68" height="5" rx="2.5" fill="#cf9d62" />
         </Hs>
         <Hs id="drawerR" label="학력과 연락" {...hs}>
           <rect x="870" y="690" width="430" height="68" fill="transparent" />
-          <rect x="874" y="694" width="422" height="60" rx="4" fill="#ebbc86" stroke="#c98f55" strokeWidth="3" />
-          <rect x="1048" y="716" width="76" height="16" rx="8" fill="#a56f3d" />
-          <rect x="1052" y="718" width="68" height="5" rx="2.5" fill="#c58a50" />
+          <rect x="874" y="694" width="422" height="60" rx="4" fill="#f6d9a8" stroke="#dba96c" strokeWidth="3" />
+          <rect x="1048" y="716" width="76" height="16" rx="8" fill="#b9884f" />
+          <rect x="1052" y="718" width="68" height="5" rx="2.5" fill="#cf9d62" />
         </Hs>
         {/* 상판 */}
         <polygon points="150,630 1450,630 1500,664 100,664" fill="url(#d-top)" />
-        <rect x="100" y="664" width="1400" height="18" rx="4" fill="#cf9558" />
+        <rect x="100" y="664" width="1400" height="18" rx="4" fill="#e4b57a" />
         {grain}
 
         {/* 상판 위 그림자 */}
@@ -304,25 +304,25 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
 
         {/* 화분 */}
         <Fern x={250} y={606} scale={0.62} fronds={9} spread={140} len={130} />
-        <path d="M222 600 H278 L272 644 H228Z" fill="#c8704a" />
-        <rect x="218" y="594" width="64" height="10" rx="3" fill="#d98560" />
+        <path d="M222 600 H278 L272 644 H228Z" fill="#e49a73" />
+        <rect x="218" y="594" width="64" height="10" rx="3" fill="#efae88" />
 
         {/* 책 더미(기획 작업물) */}
         <Hs id="books" label="기획물" {...hs}>
           <rect x="326" y="522" width="190" height="124" fill="transparent" />
-          <rect x="330" y="614" width="172" height="30" rx="3" fill="#3f6f8f" />
-          <rect x="340" y="618" width="150" height="3" fill="#6c9bb9" />
+          <rect x="330" y="614" width="172" height="30" rx="3" fill="#4f8f7e" />
+          <rect x="340" y="618" width="150" height="3" fill="#86b9a8" />
           <g transform="rotate(-2 415 600)">
-            <rect x="340" y="586" width="152" height="28" rx="3" fill="#d9674f" />
-            <rect x="350" y="591" width="110" height="3" fill="#ef9a86" />
+            <rect x="340" y="586" width="152" height="28" rx="3" fill="#f08a6b" />
+            <rect x="350" y="591" width="110" height="3" fill="#f7b49b" />
           </g>
           <g transform="rotate(1.5 415 574)">
-            <rect x="334" y="558" width="164" height="28" rx="3" fill="#e9c46a" />
-            <rect x="346" y="564" width="96" height="3" fill="#f6dd9a" />
+            <rect x="334" y="558" width="164" height="28" rx="3" fill="#f4d77a" />
+            <rect x="346" y="564" width="96" height="3" fill="#faeaa8" />
           </g>
           <g transform="rotate(-3 415 546)">
-            <rect x="346" y="532" width="142" height="26" rx="3" fill="#5a9e7a" />
-            <rect x="356" y="537" width="80" height="3" fill="#8cc4a6" />
+            <rect x="346" y="532" width="142" height="26" rx="3" fill="#7bb88a" />
+            <rect x="356" y="537" width="80" height="3" fill="#a9d6b4" />
           </g>
         </Hs>
 
@@ -356,7 +356,7 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         {/* 머그컵 */}
         <g>
           <rect x="934" y="614" width="40" height="34" rx="8" fill="#fbf6ea" />
-          <rect x="934" y="624" width="40" height="8" fill="#d9594c" />
+          <rect x="934" y="624" width="40" height="8" fill="#6bb27a" />
           <path d="M974 622 C992 622 992 642 974 642" fill="none" stroke="#fbf6ea" strokeWidth="6" />
         </g>
 
@@ -384,34 +384,34 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
         {/* 연필꽂이 */}
         <g>
           <path d="M1258 604 L1262 590 M1268 604 L1276 586 M1278 604 L1282 592" stroke="#e08a4f" strokeWidth="4" strokeLinecap="round" />
-          <path d="M1262 590 L1258 604 M1276 586 L1268 604" stroke="#5a9e7a" strokeWidth="0" />
+          <path d="M1262 590 L1258 604 M1276 586 L1268 604" stroke="#7bb88a" strokeWidth="0" />
           <rect x="1252" y="600" width="42" height="46" rx="7" fill="#d6ebee" opacity="0.8" stroke="#b5d3d8" strokeWidth="2" />
         </g>
 
         {/* 스탠드 */}
         <g>
-          <ellipse cx="1356" cy="646" rx="42" ry="9" fill="#7b4a2a" />
-          <rect x="1348" y="548" width="16" height="96" rx="4" fill="#9a5b32" />
-          <ellipse cx="1356" cy="548" rx="8" ry="6" fill="#7b4a2a" />
+          <ellipse cx="1356" cy="646" rx="42" ry="9" fill="#b98a58" />
+          <rect x="1348" y="548" width="16" height="96" rx="4" fill="#cf9d62" />
+          <ellipse cx="1356" cy="548" rx="8" ry="6" fill="#b98a58" />
           <path d="M1306 458 H1406 L1436 550 H1276Z" fill="url(#d-shade)" />
           {[1316, 1332, 1348, 1364, 1380, 1396, 1412, 1428].map((x, i) => (
-            <line key={x} x1={1310 + i * 14 * 0.9 + (i > 0 ? 0 : 0)} y1="460" x2={x - 6 + (i - 3.5) * 2} y2="548" stroke="#5f874c" strokeWidth="2.4" opacity="0.7" />
+            <line key={x} x1={1310 + i * 14 * 0.9 + (i > 0 ? 0 : 0)} y1="460" x2={x - 6 + (i - 3.5) * 2} y2="548" stroke="#86b36f" strokeWidth="2.4" opacity="0.7" />
           ))}
-          <ellipse cx="1356" cy="458" rx="50" ry="8" fill="#a8c991" />
+          <ellipse cx="1356" cy="458" rx="50" ry="8" fill="#cfe6ba" />
           <ellipse cx="1356" cy="458" rx="40" ry="5" fill="#d6e6c4" opacity="0.6" />
         </g>
       </g>
 
       {/* 앞쪽: 의자와 바닥 화분 */}
       <g className="desk__layer desk__layer--front">
-        <path d="M806 900 C792 812 820 774 892 764 L1118 746 C1170 744 1196 786 1180 900Z" fill="#5b3b24" />
+        <path d="M806 900 C792 812 820 774 892 764 L1118 746 C1170 744 1196 786 1180 900Z" fill="#7a583a" />
         {Array.from({ length: 15 }).map((_, i) => {
           const x = 826 + i * 23.5
           const top = 770 - Math.sin(((x - 810) / 380) * Math.PI) * 18
-          return <line key={i} x1={x} y1={top + 4} x2={x + (x - 995) * 0.03} y2="900" stroke="#c98f55" strokeWidth="7" strokeLinecap="round" />
+          return <line key={i} x1={x} y1={top + 4} x2={x + (x - 995) * 0.03} y2="900" stroke="#dba96c" strokeWidth="7" strokeLinecap="round" />
         })}
-        <path d="M806 896 C792 812 820 774 892 764 L1118 746 C1170 744 1196 786 1180 896" fill="none" stroke="#dcab70" strokeWidth="16" strokeLinecap="round" />
-        <path d="M806 836 C830 820 860 812 892 806 M1180 836 C1160 820 1140 812 1110 806" fill="none" stroke="#dcab70" strokeWidth="10" strokeLinecap="round" />
+        <path d="M806 896 C792 812 820 774 892 764 L1118 746 C1170 744 1196 786 1180 896" fill="none" stroke="#ecc794" strokeWidth="16" strokeLinecap="round" />
+        <path d="M806 836 C830 820 860 812 892 806 M1180 836 C1160 820 1140 812 1110 806" fill="none" stroke="#ecc794" strokeWidth="10" strokeLinecap="round" />
 
         <g>
           <Fern x={78} y={730} scale={0.95} fronds={11} spread={150} len={170} />

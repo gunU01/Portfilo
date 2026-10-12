@@ -109,20 +109,6 @@ export default function Desk() {
         <DeskScene active={active} setActive={setActive} onOpen={open} stageRef={stageRef} />
       </div>
 
-      <div className="desk__top">
-        <div className="desk__chips" role="group" aria-label="바로 가기">
-          {spots.map((s) => (
-            <button key={s.id} type="button" className={s.id === openId ? 'is-on' : ''} onClick={() => open(s.id)}>
-              {s.label}
-            </button>
-          ))}
-        </div>
-        <a className="desk__exit" href="#/">
-          읽기 모드로 보기
-          <span aria-hidden="true"> ↗</span>
-        </a>
-      </div>
-
       {spot && <Panel spot={spot} onClose={close} />}
     </section>
   )
