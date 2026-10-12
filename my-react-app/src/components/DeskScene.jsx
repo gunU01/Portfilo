@@ -114,7 +114,6 @@ function Frame({ x, y, w, h, color, tilt = 0 }) {
 export default function DeskScene({ active, setActive, onOpen, stageRef }) {
   const hs = { active, setActive, onOpen }
   const medals = awards.map((a) => MEDAL[a.result] ?? '#c9ced8')
-  const month = profile.updated.split('.')[1]
   const days = []
   for (let i = 0; i < 35; i += 1) {
     const cx = 1396 + (i % 7) * 20.5
@@ -253,7 +252,7 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
           <rect x="1370" y="62" width="170" height="54" rx="4" fill="#d9594c" />
           <rect x="1370" y="96" width="170" height="20" fill="#d9594c" />
           <text x="1455" y="102" textAnchor="middle" className="desk__cal">
-            {Number(month)}월
+            MONTH
           </text>
           {[1394, 1424, 1454, 1484, 1514].map((x) => (
             <rect key={x} x={x} y="54" width="6" height="18" rx="3" fill="#7a5a3a" />
