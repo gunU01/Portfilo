@@ -48,7 +48,7 @@ export function terrainHeight(x, z) {
   const r = Math.hypot(x, z)
   if (r <= FLAT_R) return 0
   const k = smooth(Math.min(1, (r - FLAT_R) / 80))
-  const hills = fbm3(x * 0.011 + 3.1, 0, z * 0.011 - 1.7, 4) * 26 + fbm3(x * 0.04, 1.3, z * 0.04, 2) * 0.9
+  const hills = fbm3(x * 0.011 + 3.1, 0, z * 0.011 - 1.7, 4) * 18 + fbm3(x * 0.04, 1.3, z * 0.04, 2) * 0.9
   return k * hills + (r - FLAT_R) * 0.018 * k
 }
 
@@ -60,10 +60,10 @@ export function buildTerrain(rand) {
   geo.rotateX(-Math.PI / 2)
   const pos = geo.attributes.position
   const colors = new Float32Array(pos.count * 3)
-  const a = new THREE.Color('#58c985')
-  const b = new THREE.Color('#3fb6a4') // 푸른빛이 도는 초원
-  const c = new THREE.Color('#8fe08f')
-  const d = new THREE.Color('#2f9f93')
+  const a = new THREE.Color('#8fdc6b')
+  const b = new THREE.Color('#a6e67a')
+  const c = new THREE.Color('#7fd464')
+  const d = new THREE.Color('#bdeb94')
   const tmp = new THREE.Color()
   for (let i = 0; i < pos.count; i += 1) {
     const x = pos.getX(i)
@@ -72,7 +72,7 @@ export function buildTerrain(rand) {
     pos.setY(i, h)
     const n = fbm3(x * 0.05, 0, z * 0.05, 3)
     const far = Math.min(1, Math.hypot(x, z) / 260)
-    tmp.copy(a).lerp(b, n * 0.8).lerp(c, Math.max(0, 0.55 - n) * 0.9).lerp(d, far * 0.55)
+    tmp.copy(a).lerp(b, n * 0.9).lerp(c, Math.max(0, 0.5 - n) * 0.8).lerp(d, far * 0.6)
     colors[i * 3] = tmp.r
     colors[i * 3 + 1] = tmp.g
     colors[i * 3 + 2] = tmp.b
@@ -174,69 +174,52 @@ const merge = (list) => {
 const polar = (r, a, y) => [Math.cos(a) * r, y, Math.sin(a) * r]
 
 // ---------- 나무 ----------
-// kind: oak(참나무), birch(자작나무), pine(소나무), blossom(벚나무). detail: 잎 덩어리 세분화(3 = 매우 정교, 1 = 먼 곳용)
+// kind: oak(둥근 나무), birch(열매 나무), pine(삼나무), blossom(벚나무). detail: 잎 덩어리 세분화(4 = 매우 정교, 1 = 먼 곳용)
+// 동물의 숲처럼 굵고 짧은 줄기 위에 통통하고 매끈한 수관을 얹습니다.
 export function buildTreeGeometry(kind, detail, seed) {
   const s = mulberry(seed)
   const trunk = []
   const leaves = []
-  const lean = () => (s() - 0.5) * 0.35
+  const lean = () => (s() - 0.5) * 0.12
   const pal = {
-    oak: ['#2f8f4d', '#58c46c', '#a6e07a'],
-    birch: ['#5aa85b', '#8fd176', '#d4ee8f'],
-    pine: ['#1f6f4a', '#2f9460', '#6fc58a'],
-    blossom: ['#ff9fbd', '#ffc3d8', '#fff0f5'],
+    oak: ['#4fb85a', '#7fdc6a', '#c4f28a'],
+    birch: ['#58c062', '#86e070', '#cdf593'],
+    pine: ['#2f9a5e', '#46b872', '#8ae0a4'],
+    blossom: ['#ffa9c6', '#ffcfe0', '#fff2f7'],
   }[kind]
 
   if (kind === 'pine') {
-    const H = 5.6
-    trunk.push(taperedTube({ points: [new THREE.Vector3(0, 0, 0), new THREE.Vector3(lean() * 0.2, H * 0.5, 0), new THREE.Vector3(0, H * 0.9, 0)], radial: 12, rings: 12, r0: 0.28, r1: 0.06, flare: 0.1, color: '#6b4a38', color2: '#8a6650', bark: 0.16, seed: seed, rand: s }))
-    const layers = 8
+    const H = 5.2
+    trunk.push(taperedTube({ points: [new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, H * 0.4, 0), new THREE.Vector3(0, H * 0.8, 0)], radial: 14, rings: 8, r0: 0.3, r1: 0.14, flare: 0.1, color: '#a9744f', color2: '#8a5a3c', bark: 0.02, seed, rand: s }))
+    const layers = 5
     for (let i = 0; i < layers; i += 1) {
       const t = i / (layers - 1)
-      const baseY = 1.0 + t * (H - 1.8)
-      const rad = lerp(1.55, 0.3, t)
-      const h = lerp(1.5, 1.0, t)
-      leaves.push(pineLayer(rad, h, baseY, 40 + Math.round(detail * 10), pal, seed + i))
+      const baseY = 0.9 + t * (H - 2.2)
+      leaves.push(pineLayer(lerp(1.6, 0.55, t), lerp(1.7, 1.3, t), baseY, 36 + detail * 12, pal, seed + i))
     }
   } else {
-    const H = kind === 'birch' ? 3.8 : 3.0
-    const spread = kind === 'blossom' ? 1.55 : kind === 'birch' ? 0.95 : 1.35
-    const c0 = kind === 'birch' ? '#f1ede2' : kind === 'blossom' ? '#5a3f3a' : '#6b4a38'
-    const c1 = kind === 'birch' ? '#c9c4b8' : kind === 'blossom' ? '#7a5650' : '#8a6650'
-    const top = new THREE.Vector3(lean() * 1.5, H, lean() * 1.5)
-    trunk.push(taperedTube({ points: [new THREE.Vector3(0, 0, 0), new THREE.Vector3(lean(), H * 0.45, lean()), top], radial: 14, rings: 20, r0: kind === 'birch' ? 0.2 : 0.3, r1: 0.1, flare: 0.14, color: c0, color2: c1, bark: kind === 'birch' ? 0.05 : 0.2, seed, rand: s }))
-    // 가지: 줄기 위쪽에서 바깥으로 뻗고, 끝에 잎 덩어리를 답니다.
-    const branches = kind === 'birch' ? 5 : 8
-    const tips = [[top.x, top.y + 0.2, top.z, 1]]
-    for (let i = 0; i < branches; i += 1) {
-      const a = (i / branches) * Math.PI * 2 + s() * 0.6
-      const hy = H * (0.55 + 0.4 * (i / branches))
-      const len = spread * (0.75 + s() * 0.45)
-      const start = new THREE.Vector3(top.x * (hy / H), hy, top.z * (hy / H))
-      const mid = new THREE.Vector3(start.x + Math.cos(a) * len * 0.55, start.y + len * 0.28, start.z + Math.sin(a) * len * 0.55)
-      const end = new THREE.Vector3(start.x + Math.cos(a) * len, start.y + len * 0.55, start.z + Math.sin(a) * len)
-      trunk.push(taperedTube({ points: [start, mid, end], radial: 8, rings: 8, r0: 0.09, r1: 0.025, color: c1, color2: c1, bark: 0.1, seed: seed + i, rand: s }))
-      tips.push([end.x, end.y, end.z, 0.9])
+    const fruit = kind === 'birch'
+    const H = fruit ? 1.7 : 2.0
+    const R = kind === 'blossom' ? 1.75 : fruit ? 1.4 : 1.65
+    const c0 = kind === 'blossom' ? '#9a6a55' : '#a9744f'
+    const c1 = kind === 'blossom' ? '#7d5242' : '#8a5a3c'
+    trunk.push(taperedTube({ points: [new THREE.Vector3(0, 0, 0), new THREE.Vector3(lean(), H * 0.5, lean()), new THREE.Vector3(0, H, 0)], radial: 18, rings: 10, r0: 0.38, r1: 0.26, flare: 0.18, color: c0, color2: c1, bark: 0.025, seed, rand: s }))
+    const cy = H + R * 0.78
+    leaves.push(noisyBlob({ radius: R, detail, center: [0, cy, 0], squash: [1, 0.88, 1], seed: seed * 3.1, amp: 0.05, freq: 1.1, colors: pal }))
+    const lobes = 5
+    for (let i = 0; i < lobes; i += 1) {
+      const a = (i / lobes) * Math.PI * 2 + s() * 0.5
+      const off = polar(R * 0.62, a, (s() - 0.3) * R * 0.5)
+      leaves.push(noisyBlob({ radius: R * (0.55 + s() * 0.12), detail, center: [off[0], cy + off[1] - 0.15, off[2]], squash: [1, 0.9, 1], seed: seed * 3.1 + i * 1.7 + 1, amp: 0.05, freq: 1.1, colors: pal }))
     }
-    const scale = kind === 'birch' ? 0.72 : kind === 'blossom' ? 1.0 : 1.0
-    tips.forEach(([x, y, z, k], ti) => {
-      const n = ti === 0 ? 4 : 2
-      for (let i = 0; i < n; i += 1) {
-        const r = (0.85 + s() * 0.55) * scale * k
-        const off = polar(s() * 0.55, s() * Math.PI * 2, (s() - 0.2) * 0.6)
-        leaves.push(
-          noisyBlob({
-            radius: r,
-            detail,
-            center: [x + off[0], y + off[1] + 0.25, z + off[2]],
-            squash: [1, kind === 'birch' ? 1.25 : 0.88, 1],
-            seed: seed * 3.1 + ti * 7 + i * 1.3,
-            amp: 0.3,
-            colors: pal,
-          }),
-        )
+    if (fruit) {
+      for (let i = 0; i < 11; i += 1) {
+        const a = s() * Math.PI * 2
+        const e = 0.1 + s() * 0.9
+        const rr = R * 1.02
+        leaves.push(sphereAt(0.13, Math.cos(a) * Math.sqrt(1 - e * e) * rr, cy + e * rr * 0.85 - 0.3 * (1 - e), Math.sin(a) * Math.sqrt(1 - e * e) * rr, 1, 1, 1, '#ff6a5e', 10))
       }
-    })
+    }
   }
   return { trunk: merge(trunk), leaves: merge(leaves) }
 }
@@ -256,7 +239,7 @@ function pineLayer(rad, h, baseY, radial, pal, seed) {
     const t = i / rings // 0 = 아래 가장자리, 1 = 꼭대기
     for (let j = 0; j <= radial; j += 1) {
       const a = (j / radial) * Math.PI * 2
-      const fringe = 1 + (vnoise3(Math.cos(a) * 2.5 + seed, t * 3, Math.sin(a) * 2.5) - 0.5) * 0.4 + Math.sin(a * 11 + seed) * 0.06 * (1 - t)
+      const fringe = 1 + (vnoise3(Math.cos(a) * 2.5 + seed, t * 3, Math.sin(a) * 2.5) - 0.5) * 0.08 + Math.sin(a * 11 + seed) * 0.02 * (1 - t)
       const r = rad * (1 - t) * fringe
       const droop = (1 - t) * 0.22
       pos.push(Math.cos(a) * r, baseY + t * h - droop, Math.sin(a) * r)
@@ -289,8 +272,8 @@ export function buildRockGeometry(seed, detail = 6) {
   g = mergeVertices(g)
   const pos = g.attributes.position
   const col = new Float32Array(pos.count * 3)
-  const stone = new THREE.Color('#aab4c8')
-  const stone2 = new THREE.Color('#7f8aa3')
+  const stone = new THREE.Color('#c6ccd6')
+  const stone2 = new THREE.Color('#a7b0c0')
   const moss = new THREE.Color('#6fc07a')
   const tmp = new THREE.Color()
   const sx = 0.9 + s() * 0.5
@@ -301,14 +284,14 @@ export function buildRockGeometry(seed, detail = 6) {
     const z = pos.getZ(i)
     const big = fbm3(x * 1.2 + seed, y * 1.2, z * 1.2 - seed, 3)
     const crack = Math.abs(vnoise3(x * 3 + seed, y * 3, z * 3) - 0.5) // 갈라진 면
-    const r = 1 + (big - 0.5) * 0.7 - crack * 0.25
+    const r = 1 + (big - 0.5) * 0.36 - crack * 0.06
     let py = y * r * 0.7
     py = Math.max(py, -0.35) // 땅에 파묻힌 납작한 바닥
     pos.setXYZ(i, x * r * sx, py, z * r * sz)
     tmp.copy(stone).lerp(stone2, vnoise3(x * 2 + seed, y * 2, z * 2))
     const top = Math.max(0, y - 0.15) // 위를 향한 면에 이끼
     tmp.lerp(moss, THREE.MathUtils.clamp(top * 1.4 * (0.4 + big), 0, 0.85))
-    const shade = 0.82 + crack * 0.5
+    const shade = 0.9 + crack * 0.4
     col[i * 3] = tmp.r * shade
     col[i * 3 + 1] = tmp.g * shade
     col[i * 3 + 2] = tmp.b * shade
@@ -320,7 +303,7 @@ export function buildRockGeometry(seed, detail = 6) {
 
 // 울타리 덤불
 export function buildBushGeometry(seed) {
-  return noisyBlob({ radius: 1, detail: 4, center: [0, 0, 0], squash: [1, 0.85, 1], seed, amp: 0.32, freq: 1.5, colors: ['#2f9f5c', '#58c47e', '#9be29a'] })
+  return noisyBlob({ radius: 1, detail: 4, center: [0, 0, 0], squash: [1, 0.85, 1], seed, amp: 0.12, freq: 1.3, colors: ['#3fb860', '#62d880', '#a6ef9c'] })
 }
 
 // ---------- 풀 ----------
@@ -330,8 +313,8 @@ export function buildBladeGeometry(segs) {
   const col = []
   const nor = []
   const idx = []
-  const base = new THREE.Color('#2c8a4a')
-  const tip = new THREE.Color('#b8f08a')
+  const base = new THREE.Color('#5ab845')
+  const tip = new THREE.Color('#cdf59a')
   const tmp = new THREE.Color()
   for (let i = 0; i <= segs; i += 1) {
     const t = i / segs

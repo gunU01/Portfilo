@@ -543,7 +543,23 @@ function buildCloud(rand) {
 }
 
 
+// 동물의 숲처럼 먼 땅이 아래로 말려 내려가 지평선이 둥글게 보입니다. 가까운 곳(놀이터)은 그대로입니다.
+const BEND_CHUNK = THREE.ShaderChunk.project_vertex
+function bendWorld(on) {
+  THREE.ShaderChunk.project_vertex = on
+    ? BEND_CHUNK.replace(
+        'gl_Position = projectionMatrix * mvPosition;',
+        `#ifndef DEPTH_PACKING
+          float bendD = max(-mvPosition.z - 26.0, 0.0);
+          mvPosition.y -= bendD * bendD * 0.0022;
+        #endif
+        gl_Position = projectionMatrix * mvPosition;`,
+      )
+    : BEND_CHUNK
+}
+
 export function createWorld({ container, zones, onNear, onZone, onActivate }) {
+  bendWorld(true)
   const accent = css(container, '--accent', '#1f6bff')
   const coarse = window.matchMedia('(pointer: coarse)').matches
   const query = new URLSearchParams(window.location.hash.split('?')[1] || '')
@@ -570,9 +586,9 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   grade.setAttribute('aria-hidden', 'true')
   container.append(grade)
 
-  const HORIZON = new THREE.Color('#d9eee4')
+  const HORIZON = new THREE.Color('#d8f1ff')
   const scene = new THREE.Scene()
-  scene.fog = new THREE.Fog(HORIZON, 80, 300)
+  scene.fog = new THREE.Fog(HORIZON, 90, 320)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   const roomEnv = new RoomEnvironment()
@@ -581,8 +597,8 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   scene.environmentIntensity = 0.5
   roomEnv.dispose()
 
-  scene.add(new THREE.HemisphereLight(0xdff3ea, 0xcfe8b0, 0.9))
-  const sun = new THREE.DirectionalLight(0xfff0d0, 2.4)
+  scene.add(new THREE.HemisphereLight(0xe6f6ff, 0xd8f0a8, 1.25))
+  const sun = new THREE.DirectionalLight(0xfff4d6, 1.9)
   const sunOffset = new THREE.Vector3(-14, 24, 12)
   sun.castShadow = true
   sun.shadow.mapSize.set(coarse ? 1536 : 2048, coarse ? 1536 : 2048)
@@ -623,9 +639,9 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     depthWrite: false,
     fog: false,
     uniforms: {
-      top: { value: new THREE.Color('#4f9bff') },
-      mid: { value: new THREE.Color('#d4eee6') },
-      low: { value: new THREE.Color('#eaf4ff') },
+      top: { value: new THREE.Color('#62b6ff') },
+      mid: { value: new THREE.Color('#d8f1ff') },
+      low: { value: new THREE.Color('#eaf8ff') },
     },
     vertexShader: 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
     fragmentShader: `
@@ -669,8 +685,8 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   for (let i = 0; i < 16; i += 1) {
     const c = buildCloud(rand)
     const a = rand() * Math.PI * 2
-    const r = 48 + rand() * 70
-    c.position.set(Math.cos(a) * r, 24 + rand() * 22, Math.sin(a) * r - 20)
+    const r = 42 + rand() * 80
+    c.position.set(Math.cos(a) * r, 20 + rand() * 18, Math.sin(a) * r - 20)
     c.scale.setScalar(0.9 + rand() * 1.1)
     c.userData.speed = 0.35 + rand() * 0.5
     scene.add(c)
@@ -1040,10 +1056,10 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   }
   const NEAR_R = FENCE_R + 0.6
   for (let gx = -3; gx < 3; gx += 1) {
-    for (let gz = -3; gz < 3; gz += 1) addGrassTile(gx * 8 + 4, gz * 8 + 4, 8, 30, bladeNear, true, 0, NEAR_R, 0.4, 0.85)
+    for (let gz = -3; gz < 3; gz += 1) addGrassTile(gx * 8 + 4, gz * 8 + 4, 8, 12, bladeNear, true, 0, NEAR_R, 0.25, 0.5)
   }
   for (let gx = -5; gx < 5; gx += 1) {
-    for (let gz = -5; gz < 5; gz += 1) addGrassTile(gx * 12 + 6, gz * 12 + 6, 12, 5, bladeFar, false, NEAR_R, 62, 0.7, 1.5)
+    for (let gz = -5; gz < 5; gz += 1) addGrassTile(gx * 12 + 6, gz * 12 + 6, 12, 2.5, bladeFar, false, NEAR_R, 62, 0.5, 1.0)
   }
 
   // 꽃: 무리지어 핍니다. 색마다 한 덩어리의 인스턴스로 묶습니다.
@@ -1057,7 +1073,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       const z = cz + Math.sin(a) * d
       if (Math.hypot(x, z) < FENCE_R - 0.5 && !clear(x, z, 0.1)) continue
       if (Math.hypot(x, z) >= FENCE_R - 0.5 && Math.hypot(x, z) < FENCE_R + 0.9) continue
-      flowerLists[kinds[Math.floor(rand() * kinds.length)]].push({ x, z, s: 1.5 + rand() * 1.1, rot: rand() * 6.28, y: terrainHeight(x, z) - 0.02 })
+      flowerLists[kinds[Math.floor(rand() * kinds.length)]].push({ x, z, s: 1.9 + rand() * 1.2, rot: rand() * 6.28, y: terrainHeight(x, z) - 0.02 })
     }
   }
   for (let i = 0; i < 20; i += 1) {
@@ -1565,6 +1581,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       renderer.domElement.remove()
       labelLayer.remove()
       grade.remove()
+      bendWorld(false)
     },
   }
 }
