@@ -1,18 +1,16 @@
-import { Suspense, lazy, useEffect } from 'react'
+import { useEffect } from 'react'
 import Nav from './components/Nav.jsx'
 import Home from './pages/Home.jsx'
 import Project from './pages/Project.jsx'
 import About from './pages/About.jsx'
 import Footer from './components/Footer.jsx'
 import Case from './pages/Case.jsx'
+import Desk from './pages/Desk.jsx'
 import { cases } from './data/cases.js'
 import { profile } from './data/profile.js'
 import { useHashRoute } from './lib/useHashRoute.js'
 
-// 3D는 월드를 열 때만 내려받습니다(three 포함).
-const World = lazy(() => import('./pages/World.jsx'))
-
-const TITLES = { '/world': '3D 월드', '/project': 'Project', '/about': 'About' }
+const TITLES = { '/desk': '책상', '/project': 'Project', '/about': 'About' }
 
 export default function App() {
   const { path, section } = useHashRoute()
@@ -47,10 +45,8 @@ export default function App() {
             key={current.slug}
             data={current}
           />
-        ) : path === '/world' ? (
-          <Suspense fallback={<p className="wrap world-loading">월드를 불러오는 중입니다…</p>}>
-            <World />
-          </Suspense>
+        ) : path === '/desk' ? (
+          <Desk />
         ) : path === '/project' ? (
           <Project />
         ) : path === '/about' ? (
@@ -59,7 +55,7 @@ export default function App() {
           <Home />
         )}
       </main>
-      {path !== '/world' && <Footer />}
+      {path !== '/desk' && <Footer />}
     </>
   )
 }

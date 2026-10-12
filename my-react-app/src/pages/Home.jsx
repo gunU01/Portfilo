@@ -24,8 +24,8 @@ function Hero() {
               <a className="btn btn--solid" href="#/project">
                 프로젝트 보기
               </a>
-              <a className="btn btn--3d" href="#/world">
-                3D로 감상하기
+              <a className="btn btn--3d" href="#/desk">
+                책상에서 둘러보기
               </a>
             </div>
           </div>
