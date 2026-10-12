@@ -70,7 +70,6 @@ function Overview() {
         <h2 className="ov__t" id="ov-title">
           OVERVIEW
         </h2>
-        <p className="ov__p">{profile.overview}</p>
         <div className="ov__cards">
           <a className="ov__card reveal" href="#/project">
             <span className="ov__n tnum">01</span>

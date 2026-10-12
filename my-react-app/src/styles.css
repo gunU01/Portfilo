@@ -1960,12 +1960,6 @@ h4 {
   letter-spacing: -0.04em;
   line-height: 1;
 }
-.ov__p {
-  margin-top: 28px;
-  max-width: 720px;
-  font-size: 18px;
-  color: var(--muted);
-}
 .ov__cards {
   margin-top: 44px;
   display: grid;

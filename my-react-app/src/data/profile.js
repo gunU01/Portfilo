@@ -14,9 +14,6 @@ export const profile = {
     keywords: ['PROBLEM FRAMING', 'EVIDENCE-BASED DECISIONS', 'DEV-READY SPECS'],
   },
 
-  overview:
-    '프로젝트 세 가지를 정리했습니다. 각 프로젝트에서 제가 맡은 역할과 책임, 판단의 근거와 결과를 적었습니다.',
-
   about: {
     paragraphs: [
       '처음에는 화면을 구현하는 프론트엔드 개발자였습니다. 팀 프로젝트에서 팀장과 문서 관리를 맡으며, 무엇을 만들지 정하는 일이 만드는 일만큼 프로젝트의 결과를 좌우한다는 것을 알게 됐습니다.',
