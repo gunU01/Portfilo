@@ -52,24 +52,6 @@ function Fern({ x, y, scale = 1, fronds = 11, spread = 150, len = 150, dark = '#
   return <g transform={`translate(${x} ${y}) scale(${scale})`}>{out}</g>
 }
 
-// 창 밖의 나뭇잎 그림자: 벽에 얼룩덜룩 드리웁니다.
-function Dapples() {
-  const r = rnd(11)
-  const leaves = []
-  for (let i = 0; i < 26; i += 1) {
-    const x = 380 + r() * 1180
-    const y = 20 + r() * 640
-    const s = 0.7 + r() * 1.5
-    const a = r() * 360
-    leaves.push(<path key={i} d="M0 0 Q26 -34 0 -84 Q-26 -34 0 0Z" transform={`translate(${x} ${y}) rotate(${a}) scale(${s})`} />)
-  }
-  return (
-    <g className="desk__dapples" fill="#7f9a4a" opacity="0.2">
-      {leaves}
-    </g>
-  )
-}
-
 function Hs({ id, label, active, setActive, onOpen, children }) {
   return (
     <g
@@ -255,7 +237,6 @@ export default function DeskScene({ active, setActive, onOpen, stageRef }) {
 </g>
         </Hs>
 
-        <Dapples />
       </g>
 
       {/* 바닥 */}

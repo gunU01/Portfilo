@@ -1302,6 +1302,7 @@ button {
   width: 100%;
   height: 100%;
   font-family: var(--font);
+  filter: saturate(1.35) contrast(1.03);
 }
 .desk__layer {
   transition: transform 0.25s ease-out;
@@ -1314,18 +1315,6 @@ button {
 }
 .desk__layer--front {
   transform: translate(calc(var(--px, 0) * 9px), calc(var(--py, 0) * 4px));
-}
-.desk__dapples {
-  animation: dapple 9s ease-in-out infinite alternate;
-  transform-origin: 500px 60px;
-}
-@keyframes dapple {
-  from {
-    transform: rotate(-1.2deg) translate(-4px, 0);
-  }
-  to {
-    transform: rotate(1.2deg) translate(6px, 3px);
-  }
 }
 .hs {
   cursor: pointer;
@@ -1502,7 +1491,6 @@ button {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .desk__dapples,
   .desk__panel {
     animation: none;
   }
