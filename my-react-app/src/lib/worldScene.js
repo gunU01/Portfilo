@@ -15,7 +15,6 @@ import {
   buildBushGeometry,
   buildBladeGeometry,
   buildFlowerGeometry,
-  buildButterfly,
   makeGrassMaterial,
 } from './worldNature.js'
 
@@ -565,8 +564,13 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   renderer.shadowMap.type = THREE.PCFShadowMap
   renderer.domElement.style.cssText = 'display:block;width:100%;height:100%'
   container.prepend(renderer.domElement)
+  // 여름 햇살 색보정: 캔버스 위에 부드러운 녹음빛 필터를 덮습니다.
+  const grade = document.createElement('div')
+  grade.className = 'world__grade'
+  grade.setAttribute('aria-hidden', 'true')
+  container.append(grade)
 
-  const HORIZON = new THREE.Color('#dcebff')
+  const HORIZON = new THREE.Color('#d9eee4')
   const scene = new THREE.Scene()
   scene.fog = new THREE.Fog(HORIZON, 80, 300)
 
@@ -577,7 +581,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   scene.environmentIntensity = 0.5
   roomEnv.dispose()
 
-  scene.add(new THREE.HemisphereLight(0xd3e9ff, 0xe3f0d8, 0.9))
+  scene.add(new THREE.HemisphereLight(0xdff3ea, 0xcfe8b0, 0.9))
   const sun = new THREE.DirectionalLight(0xfff0d0, 2.4)
   const sunOffset = new THREE.Vector3(-14, 24, 12)
   sun.castShadow = true
@@ -620,7 +624,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     fog: false,
     uniforms: {
       top: { value: new THREE.Color('#4f9bff') },
-      mid: { value: new THREE.Color('#d6eaff') },
+      mid: { value: new THREE.Color('#d4eee6') },
       low: { value: new THREE.Color('#eaf4ff') },
     },
     vertexShader: 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
@@ -1083,34 +1087,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     scene.add(m)
   })
 
-  // 나비: 꽃밭 위를 날며, 앞뒤 날개가 따로 펄럭입니다.
-  const butterflies = []
-  const BF = [
-    ['#ffe3b0', '#ff9a3c', '#c44a12'],
-    ['#eaf5ff', '#7fb6ff', '#2b5fc4'],
-    ['#fff6c4', '#ffd23c', '#d79a00'],
-    ['#ffe0f0', '#ff8fc0', '#c4377a'],
-    ['#f0e6ff', '#b49aff', '#6a45c4'],
-  ]
-  for (let i = 0; i < 9; i += 1) {
-    const b = buildButterfly(BF[i % BF.length])
-    const a = rand() * Math.PI * 2
-    const rr = 4 + rand() * 18
-    b.cx = Math.cos(a) * rr
-    b.cz = Math.sin(a) * rr
-    b.rad = 1.6 + rand() * 2.6
-    b.speed = 0.35 + rand() * 0.35
-    b.phase = rand() * 6
-    b.h = 1.1 + rand() * 1.6
-    b.group.scale.setScalar(0.85 + rand() * 0.5)
-    scene.add(b.group)
-    butterflies.push(b)
-  }
-  const bfPoint = (b, tt, out) => {
-    const a = tt * b.speed + b.phase
-    return out.set(b.cx + Math.cos(a) * b.rad, b.h + Math.sin(a * 2.3) * 0.35, b.cz + Math.sin(a * 1.3) * b.rad)
-  }
-
   // ---------- 물리와 슬라임 ----------
   const spawnPos = { x: 0, z: 3.4 }
   const physics = createPhysics({ columns, islandR: 1e5, bound: BOUND, ballBound: BOUND + 0.3, spawn: spawnPos })
@@ -1250,8 +1226,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   ro.observe(container)
 
   const v = new THREE.Vector3()
-  const bfA = new THREE.Vector3()
-  const bfB = new THREE.Vector3()
   const camTarget = new THREE.Vector3()
   const focus = { x: spawnPos.x, z: spawnPos.z - 2.2 }
   const kick = { y: 0, vy: 0 }
@@ -1439,20 +1413,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       l.body.rotation.x = tl.x
       l.body.rotation.z = tl.z
     }
-    butterflies.forEach((b) => {
-      bfPoint(b, t, bfA)
-      bfPoint(b, t + 0.08, bfB)
-      b.group.position.copy(bfA)
-      const heading = Math.atan2(bfB.x - bfA.x, bfB.z - bfA.z)
-      b.group.rotation.set(0, heading, Math.sin(t * 1.7 + b.phase) * 0.18)
-      const beat = Math.sin(t * 17 + b.phase)
-      const w = 0.35 + beat * 0.95
-      const wh = 0.35 + Math.sin(t * 17 + b.phase - 0.5) * 0.8
-      b.wings.fr.rotation.z = w
-      b.wings.fl.rotation.z = -w
-      b.wings.hr.rotation.z = wh
-      b.wings.hl.rotation.z = -wh
-    })
     grassU.uTime.value = t
     grassU.uSlime.value.set(pos.x, pos.y, pos.z)
 
@@ -1604,6 +1564,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       renderer.dispose()
       renderer.domElement.remove()
       labelLayer.remove()
+      grade.remove()
     },
   }
 }

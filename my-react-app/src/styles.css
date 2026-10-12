@@ -1365,6 +1365,16 @@ button {
 .world__stage:focus-visible {
   box-shadow: inset 0 0 0 3px var(--accent);
 }
+.world__grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 38%, rgba(255, 244, 200, 0.16), rgba(255, 244, 200, 0) 58%),
+    linear-gradient(rgba(150, 215, 170, 0.2), rgba(90, 175, 120, 0.22));
+  mix-blend-mode: soft-light;
+  box-shadow: inset 0 0 140px rgba(40, 110, 70, 0.28);
+}
 .world__labels {
   position: absolute;
   inset: 0;
