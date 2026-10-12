@@ -95,7 +95,7 @@ export default function World() {
         ref={hostRef}
         tabIndex={0}
         role="application"
-        aria-label="3D 월드. 방향키 또는 WASD로 이동하고, 가까운 건물에서 Enter 키로 엽니다."
+        aria-label="3D 월드. 방향키 또는 WASD로 이동하고, 스페이스바로 점프하며, 가까운 건물에서 Enter 키로 엽니다."
       />
 
       <div className="world__top">
@@ -135,6 +135,9 @@ export default function World() {
         </span>
         이동
         <span className="world__sep" />
+        <kbd className="kbd-wide">Space</kbd>
+        점프
+        <span className="world__sep" />
         <kbd>Enter</kbd>
         열기
       </p>
@@ -164,6 +167,18 @@ export default function World() {
       >
         <span />
       </div>
+
+      <button
+        className="world__jump"
+        type="button"
+        aria-label="점프"
+        onPointerDown={(e) => {
+          e.preventDefault()
+          worldRef.current?.jump()
+        }}
+      >
+        점프
+      </button>
 
       <p className="world__live" aria-live="polite">
         {near ? `${near.title}. Enter 키로 엽니다.` : ''}

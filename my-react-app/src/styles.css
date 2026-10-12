@@ -1529,6 +1529,36 @@ kbd {
   font-weight: 700;
   color: var(--accent-ink);
 }
+.kbd-wide {
+  padding: 0 10px;
+}
+.world__jump {
+  position: absolute;
+  right: 20px;
+  bottom: 28px;
+  z-index: 2;
+  display: none;
+  width: 84px;
+  height: 84px;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #bfe0ff 70%);
+  box-shadow: 0 8px 22px rgb(31 107 255 / 0.35), inset 0 -6px 12px rgb(31 107 255 / 0.18);
+  color: var(--accent-ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  touch-action: none;
+  cursor: pointer;
+}
+.world__jump:active {
+  transform: scale(0.94);
+}
+@media (pointer: coarse), (max-width: 720px) {
+  .world__jump {
+    display: block;
+  }
+}
 .world__pad {
   position: absolute;
   left: 16px;
