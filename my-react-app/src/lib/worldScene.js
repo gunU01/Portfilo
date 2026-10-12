@@ -7,25 +7,14 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 import { createPhysics, GRAVITY } from './worldPhysics.js'
 import { createSlime } from './worldSlime.js'
-import {
-  terrainHeight,
-  buildTerrain,
-  buildTreeGeometry,
-  buildRockGeometry,
-  buildBushGeometry,
-  buildBladeGeometry,
-  buildFlowerGeometry,
-  makeGrassMaterial,
-} from './worldNature.js'
 
-// 푸른 초원 한가운데 울타리로 둘러싼 장난감 같은 놀이터(어린이 게임 배경 느낌). React와 분리해 두어, 월드를 열 때만(lazy import) three가 로드됩니다.
+// 새하얀 스튜디오 같은 공간에 떠 있는 모던한 미니 전시장. React와 분리해 두어, 월드를 열 때만(lazy import) three가 로드됩니다.
 // 외부 모델 없이 기본 도형, 캔버스 텍스처, 환경광으로 질감을 내고, 화면 밖이나 탭이 숨겨지면 렌더를 멈춥니다.
 
 const ZONE_RADIUS = 12.5 // 월드 중심(광장)에서 구역 중심까지
 const ZONE_DISC = 6.2
 const NEAR = 2.9
 const BOUND = 21.5 // 걸어 다닐 수 있는 반경
-const FENCE_R = BOUND + 1.15 // 울타리 위치. 슬라임과 공은 이 안쪽에서만 움직입니다.
 const SPEED = 6.5
 const HUB_R = 3.5
 
@@ -180,16 +169,6 @@ const bookTex = () =>
     g.fillRect(28, 24, 70, 6)
   })
 
-const clearingTex = () =>
-  canvasTexture(128, 128, (g, w, h) => {
-    const r = g.createRadialGradient(w / 2, h / 2, 6, w / 2, h / 2, w / 2)
-    r.addColorStop(0, 'rgba(226,214,160,0.62)')
-    r.addColorStop(0.7, 'rgba(200,214,150,0.4)')
-    r.addColorStop(1, 'rgba(200,214,150,0)')
-    g.fillStyle = r
-    g.fillRect(0, 0, w, h)
-  })
-
 const blobTex = () =>
   canvasTexture(128, 128, (g, w, h) => {
     const r = g.createRadialGradient(w / 2, h / 2, 4, w / 2, h / 2, w / 2)
@@ -208,32 +187,6 @@ const glowTex = () =>
     r.addColorStop(1, 'rgba(255,255,255,0)')
     g.fillStyle = r
     g.fillRect(0, 0, w, h)
-  })
-
-const detailTex = (rand) =>
-  canvasTexture(256, 256, (g, w, h) => {
-    g.fillStyle = '#ffffff'
-    g.fillRect(0, 0, w, h)
-    for (let i = 0; i < 70; i += 1) {
-      const x = rand() * w
-      const y = rand() * h
-      const r = 12 + rand() * 38
-      const grad = g.createRadialGradient(x, y, 0, x, y, r)
-      grad.addColorStop(0, rand() > 0.5 ? 'rgba(40,110,60,0.16)' : 'rgba(255,255,210,0.2)')
-      grad.addColorStop(1, 'rgba(255,255,255,0)')
-      g.fillStyle = grad
-      g.fillRect(x - r, y - r, r * 2, r * 2)
-    }
-    g.lineWidth = 1
-    for (let i = 0; i < 1400; i += 1) {
-      const x = rand() * w
-      const y = rand() * h
-      g.strokeStyle = rand() > 0.5 ? 'rgba(30,100,50,0.2)' : 'rgba(240,255,190,0.28)'
-      g.beginPath()
-      g.moveTo(x, y)
-      g.lineTo(x + (rand() - 0.5) * 3, y - 2 - rand() * 5)
-      g.stroke()
-    }
   })
 
 // ---------- 구조물 ----------
@@ -515,12 +468,11 @@ function buildLandmark(shape, tint, scale = 1) {
   const g = new THREE.Group()
   const ped = new THREE.Group()
   ped.scale.setScalar(shape === 'trophy' ? 0.78 : 1)
-  const slab = new THREE.Mesh(buildRockGeometry(41, 5), std('#ffffff', { roughness: 0.93, vertexColors: true }))
-  slab.scale.set(2.0, 0.6, 2.0)
-  slab.position.y = -0.04
-  slab.castShadow = true
-  slab.receiveShadow = true
-  ped.add(slab)
+  ped.add(at(cyl(1.75, 1.75, 0.34, 96, '#eceff5', { roughness: 0.45 }), 0, 0.17, 0))
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.025, 10, 120), std(tint, { roughness: 0.4 }))
+  rim.rotation.x = Math.PI / 2
+  rim.position.y = 0.34
+  ped.add(rim)
   g.add(ped)
   const built = (SHAPES[shape] ?? SHAPES.house)(tint)
   built.group.scale.setScalar(scale)
@@ -528,38 +480,7 @@ function buildLandmark(shape, tint, scale = 1) {
   return { group: g, anim: built.anim, body: built.group }
 }
 
-function buildCloud(rand) {
-  const g = new THREE.Group()
-  const m = std('#ffffff', { roughness: 1, emissive: '#ffffff', emissiveIntensity: 0.35 })
-  const n = 5 + Math.floor(rand() * 3)
-  for (let i = 0; i < n; i += 1) {
-    const r = 2 + rand() * 2.2
-    const s = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 2), m)
-    s.position.set((i - n / 2) * 2.4 + rand() * 1.2, (rand() - 0.2) * 1.2, (rand() - 0.5) * 2.4)
-    s.scale.y = 0.62
-    g.add(s)
-  }
-  return g
-}
-
-
-// 동물의 숲처럼 먼 땅이 아래로 말려 내려가 지평선이 둥글게 보입니다. 가까운 곳(놀이터)은 그대로입니다.
-const BEND_CHUNK = THREE.ShaderChunk.project_vertex
-function bendWorld(on) {
-  THREE.ShaderChunk.project_vertex = on
-    ? BEND_CHUNK.replace(
-        'gl_Position = projectionMatrix * mvPosition;',
-        `#ifndef DEPTH_PACKING
-          float bendD = max(-mvPosition.z - 26.0, 0.0);
-          mvPosition.y -= bendD * bendD * 0.0022;
-        #endif
-        gl_Position = projectionMatrix * mvPosition;`,
-      )
-    : BEND_CHUNK
-}
-
 export function createWorld({ container, zones, onNear, onZone, onActivate }) {
-  bendWorld(true)
   const accent = css(container, '--accent', '#1f6bff')
   const coarse = window.matchMedia('(pointer: coarse)').matches
   const query = new URLSearchParams(window.location.hash.split('?')[1] || '')
@@ -580,25 +501,20 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   renderer.shadowMap.type = THREE.PCFShadowMap
   renderer.domElement.style.cssText = 'display:block;width:100%;height:100%'
   container.prepend(renderer.domElement)
-  // 여름 햇살 색보정: 캔버스 위에 부드러운 녹음빛 필터를 덮습니다.
-  const grade = document.createElement('div')
-  grade.className = 'world__grade'
-  grade.setAttribute('aria-hidden', 'true')
-  container.append(grade)
-
-  const HORIZON = new THREE.Color('#d8f1ff')
+  const HORIZON = new THREE.Color('#ffffff')
   const scene = new THREE.Scene()
-  scene.fog = new THREE.Fog(HORIZON, 90, 320)
+  scene.fog = new THREE.Fog(HORIZON, 70, 230)
+  scene.background = HORIZON
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   const roomEnv = new RoomEnvironment()
   const envTex = pmrem.fromScene(roomEnv, 0.04).texture
   scene.environment = envTex
-  scene.environmentIntensity = 0.5
+  scene.environmentIntensity = 0.6
   roomEnv.dispose()
 
-  scene.add(new THREE.HemisphereLight(0xe6f6ff, 0xd8f0a8, 1.25))
-  const sun = new THREE.DirectionalLight(0xfff4d6, 1.9)
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xeef1f6, 1.35))
+  const sun = new THREE.DirectionalLight(0xffffff, 1.7)
   const sunOffset = new THREE.Vector3(-14, 24, 12)
   sun.castShadow = true
   sun.shadow.mapSize.set(coarse ? 1536 : 2048, coarse ? 1536 : 2048)
@@ -632,77 +548,86 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   }
   if (bloomOn) makeComposer()
 
-  // ---------- 하늘 ----------
-  const sky = new THREE.Group()
-  const skyMat = new THREE.ShaderMaterial({
-    side: THREE.BackSide,
-    depthWrite: false,
-    fog: false,
-    uniforms: {
-      top: { value: new THREE.Color('#62b6ff') },
-      mid: { value: new THREE.Color('#d8f1ff') },
-      low: { value: new THREE.Color('#eaf8ff') },
-    },
-    vertexShader: 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-    fragmentShader: `
-      uniform vec3 top;
-      uniform vec3 mid;
-      uniform vec3 low;
-      varying vec3 vP;
-      void main() {
-        float h = vP.y;
-        vec3 c = h > 0.0 ? mix(mid, top, pow(clamp(h, 0.0, 1.0), 0.6)) : mix(mid, low, clamp(-h * 4.0, 0.0, 1.0));
-        gl_FragColor = vec4(c, 1.0);
-        #include <tonemapping_fragment>
-        #include <colorspace_fragment>
-      }
-    `,
-  })
-  const skyDome = new THREE.Mesh(new THREE.SphereGeometry(250, 32, 18), skyMat)
-  skyDome.renderOrder = -10
-  sky.add(skyDome)
   const glow = glowTex()
-  const sunSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0xfff3c8, fog: false, depthWrite: false, transparent: true, blending: THREE.AdditiveBlending }))
-  sunSprite.scale.set(90, 90, 1)
-  sunSprite.position.set(70, 85, -170)
-  sky.add(sunSprite)
-  scene.add(sky)
-
-  // 무지개
-  const rainbow = new THREE.Group()
-  ;['#ff6b6b', '#ffa94d', '#ffe066', '#8ce99a', '#74c0fc', '#9775fa', '#e599f7'].forEach((c, i) => {
-    const arc = new THREE.Mesh(
-      new THREE.TorusGeometry(52 - i * 1.9, 1.0, 10, 90, Math.PI),
-      new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.5, fog: false, depthWrite: false }),
-    )
-    rainbow.add(arc)
-  })
-  rainbow.position.set(0, -4, -150)
-  rainbow.scale.setScalar(1.5)
-  scene.add(rainbow)
-
-  const drifters = []
-  for (let i = 0; i < 16; i += 1) {
-    const c = buildCloud(rand)
-    const a = rand() * Math.PI * 2
-    const r = 42 + rand() * 80
-    c.position.set(Math.cos(a) * r, 20 + rand() * 18, Math.sin(a) * r - 20)
-    c.scale.setScalar(0.9 + rand() * 1.1)
-    c.userData.speed = 0.35 + rand() * 0.5
-    scene.add(c)
-    drifters.push(c)
-  }
-
   const dummy = new THREE.Object3D()
 
-  // ---------- 푸른 초원: 울타리 밖은 끝없이 이어지는 언덕입니다 ----------
-  const terrainTex = detailTex(rand)
-  terrainTex.wrapS = terrainTex.wrapT = THREE.RepeatWrapping
-  terrainTex.repeat.set(233, 233)
-  terrainTex.anisotropy = 8
-  const terrain = new THREE.Mesh(buildTerrain(rand), new THREE.MeshStandardMaterial({ vertexColors: true, map: terrainTex, roughness: 1 }))
-  terrain.receiveShadow = true
-  scene.add(terrain)
+  // ---------- 새하얀 바닥: 멀어지면 흰 안개로 사라집니다 ----------
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(700, 128), std('#f6f7f9', { roughness: 0.96 }))
+  floor.rotation.x = -Math.PI / 2
+  floor.receiveShadow = true
+  scene.add(floor)
+
+  // 경계: 바닥의 가는 선과, 위로 옅어지는 유리벽. 슬라임은 이 안에서만 움직입니다.
+  const edge = new THREE.Mesh(new THREE.RingGeometry(BOUND + 0.42, BOUND + 0.5, 192), basic(accent, { transparent: true, opacity: 0.85, side: THREE.DoubleSide }))
+  edge.rotation.x = -Math.PI / 2
+  edge.position.y = 0.02
+  scene.add(edge)
+  const wall = new THREE.Mesh(
+    new THREE.CylinderGeometry(BOUND + 0.5, BOUND + 0.5, 7, 192, 1, true),
+    new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      fog: false,
+      uniforms: { c: { value: accent.clone() } },
+      vertexShader: 'varying float vY; void main(){ vY = position.y / 7.0 + 0.5; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+      fragmentShader: `
+        uniform vec3 c;
+        varying float vY;
+        void main() {
+          gl_FragColor = vec4(c, pow(1.0 - vY, 2.4) * 0.3);
+          #include <colorspace_fragment>
+        }
+      `,
+    }),
+  )
+  wall.position.y = 3.5
+  scene.add(wall)
+
+  // 바깥의 미니멀한 조형물: 흰 구, 상자, 기둥이 안개 속으로 이어집니다.
+  const decorKinds = [
+    new THREE.SphereGeometry(0.5, 56, 40),
+    new RoundedBoxGeometry(1, 1, 1, 5, 0.1),
+    new THREE.CylinderGeometry(0.5, 0.5, 1, 72),
+  ]
+  const decorLists = [[], [], []]
+  for (let i = 0; i < 84; i += 1) {
+    const a = rand() * Math.PI * 2
+    const rr = BOUND + 5 + Math.pow(rand(), 0.85) * 120
+    const x = Math.cos(a) * rr
+    const z = Math.sin(a) * rr
+    const k = i % 3
+    const w = 2 + rand() * 6
+    const h = k === 0 ? w : k === 1 ? w * (0.5 + rand() * 1.6) : w * (1 + rand() * 3.2)
+    decorLists[k].push({ x, z, w, h, rot: rand() * 6.28 })
+  }
+  const decorMat = std('#ffffff', { roughness: 0.5 })
+  const decorColor = new THREE.Color()
+  decorKinds.forEach((geo, k) => {
+    const list = decorLists[k]
+    const m = new THREE.InstancedMesh(geo, decorMat, list.length)
+    list.forEach((d, i) => {
+      dummy.position.set(d.x, d.h / 2, d.z)
+      dummy.rotation.set(0, d.rot, 0)
+      dummy.scale.set(d.w, d.h, d.w)
+      dummy.updateMatrix()
+      m.setMatrixAt(i, dummy.matrix)
+      m.setColorAt(i, i % 9 === 0 ? decorColor.copy(accent).lerp(new THREE.Color('#ffffff'), 0.72) : decorColor.setRGB(1, 1, 1))
+    })
+    m.castShadow = true
+    m.receiveShadow = true
+    m.computeBoundingSphere()
+    scene.add(m)
+  })
+
+  // 광장: 가운데의 얇은 원
+  const hubRing = new THREE.Mesh(new THREE.RingGeometry(HUB_R - 0.05, HUB_R, 96), basic('#cfd6e2', { transparent: true, opacity: 0.9, side: THREE.DoubleSide }))
+  hubRing.rotation.x = -Math.PI / 2
+  hubRing.position.y = 0.02
+  scene.add(hubRing)
+
+  // 물리 기둥 목록(걷기, 부딪힘, 올라타기)
+  const columns = []
 
   const blob = blobTex()
   const labelLayer = document.createElement('div')
@@ -718,16 +643,11 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
   }
 
   const zoneTint = [accent, new THREE.Color('#ffab2e'), new THREE.Color('#ff6fa3')]
-  const clearing = clearingTex()
-
-  // 물리 기둥 목록(걷기, 부딪힘, 올라타기)
-  const columns = []
 
   const zoneInfo = []
   const landmarks = []
   const animators = []
   const stones = []
-  const hedges = []
 
   zones.forEach((zone, zi) => {
     const theta = -Math.PI / 2 + (zi * 2 * Math.PI) / zones.length
@@ -735,17 +655,15 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     const cz = Math.sin(theta) * ZONE_RADIUS
     const tint = zoneTint[zi % 3]
 
-    const patchMesh = new THREE.Mesh(new THREE.CircleGeometry(ZONE_DISC + 1.2, 64), new THREE.MeshBasicMaterial({ map: clearing, transparent: true, depthWrite: false }))
-    patchMesh.rotation.x = -Math.PI / 2
-    patchMesh.position.set(cx, 0.03, cz)
-    scene.add(patchMesh)
-
-    for (let k = 0; k < 40; k += 1) {
-      const a = (k / 40) * Math.PI * 2
-      const d = Math.atan2(Math.sin(a - (theta + Math.PI)), Math.cos(a - (theta + Math.PI)))
-      if (Math.abs(d) < 0.42) continue
-      hedges.push([cx + Math.cos(a) * (ZONE_DISC + 0.45), cz + Math.sin(a) * (ZONE_DISC + 0.45), 0.5 + rand() * 0.25])
-    }
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(ZONE_DISC, 96), std('#ffffff', { roughness: 0.8 }))
+    disc.rotation.x = -Math.PI / 2
+    disc.position.set(cx, 0.015, cz)
+    disc.receiveShadow = true
+    scene.add(disc)
+    const outline = new THREE.Mesh(new THREE.RingGeometry(ZONE_DISC - 0.07, ZONE_DISC, 128), basic(tint, { transparent: true, opacity: 0.55, side: THREE.DoubleSide }))
+    outline.rotation.x = -Math.PI / 2
+    outline.position.set(cx, 0.025, cz)
+    scene.add(outline)
 
     const dx = Math.cos(theta)
     const dz = Math.sin(theta)
@@ -768,19 +686,19 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       const z = cz + Math.sin(phi) * arc
       const itemTint = item.tint ? new THREE.Color(item.tint) : tint
       const built = buildLandmark(item.shape, itemTint, item.scale)
-      built.group.position.set(x, 0.12, z)
+      built.group.position.set(x, 0.02, z)
       built.group.rotation.y = -phi - Math.PI / 2
       scene.add(built.group)
 
       const ring = new THREE.Mesh(new THREE.RingGeometry(2.05, 2.3, 48), basic(itemTint, { side: THREE.DoubleSide, transparent: true, opacity: 0.9 }))
       ring.rotation.x = -Math.PI / 2
-      ring.position.set(x, 0.06, z)
+      ring.position.set(x, 0.05, z)
       ring.visible = false
       scene.add(ring)
 
       const shadowBlob = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 5.2), new THREE.MeshBasicMaterial({ map: blob, transparent: true, depthWrite: false }))
       shadowBlob.rotation.x = -Math.PI / 2
-      shadowBlob.position.set(x, 0.05, z)
+      shadowBlob.position.set(x, 0.035, z)
       scene.add(shadowBlob)
 
       const label = makeLabel(item.short ?? item.title, 'world__label')
@@ -788,7 +706,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       landmarks.push(lm)
       if (built.anim) animators.push(built.anim)
       // 받침대는 올라설 수 있고, 건물은 단단하게 막으며 부딪히면 흔들립니다.
-      columns.push({ x, z, r: item.shape === 'trophy' ? 1.38 : 1.75, top: 0.5, stand: true })
+      columns.push({ x, z, r: item.shape === 'trophy' ? 1.38 : 1.75, top: 0.36, stand: true })
       columns.push({
         x,
         z,
@@ -808,300 +726,17 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     info.az = cz - dz * 1.0
   })
 
-  // 징검돌(납작한 돌)과 덤불
-  const stoneGeo = buildRockGeometry(7, 4)
-  const stoneMesh = new THREE.InstancedMesh(stoneGeo, std('#ffffff', { roughness: 0.93, vertexColors: true }), stones.length)
+  // 길: 바닥에 놓인 납작한 흰 타일
+  const stoneMesh = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.5, 0.5, 0.05, 40), std('#e8ecf2', { roughness: 0.7 }), stones.length)
   stones.forEach(([x, z, r, s], i) => {
-    dummy.position.set(x, -0.02, z)
+    dummy.position.set(x, 0.025, z)
     dummy.rotation.set(0, r, 0)
-    dummy.scale.set(s * 0.55, 0.2, s * 0.46)
+    dummy.scale.set(s * 0.8, 1, s * 0.8)
     dummy.updateMatrix()
     stoneMesh.setMatrixAt(i, dummy.matrix)
   })
   stoneMesh.receiveShadow = true
-  stoneMesh.computeBoundingSphere()
   scene.add(stoneMesh)
-
-  const hedgeMesh = new THREE.InstancedMesh(buildBushGeometry(5), std('#ffffff', { roughness: 0.85, vertexColors: true }), hedges.length)
-  const hedgeTint = new THREE.Color()
-  hedges.forEach(([x, z, s], i) => {
-    dummy.position.set(x, s * 0.7, z)
-    dummy.rotation.set(0, rand() * 6.28, 0)
-    dummy.scale.set(s, s * 0.8, s)
-    dummy.updateMatrix()
-    hedgeMesh.setMatrixAt(i, dummy.matrix)
-    hedgeMesh.setColorAt(i, hedgeTint.setRGB(0.88 + rand() * 0.18, 0.92 + rand() * 0.1, 0.88 + rand() * 0.14))
-    columns.push({ x, z, r: s * 0.95, top: s * 1.45, stand: true })
-  })
-  hedgeMesh.castShadow = true
-  hedgeMesh.computeBoundingSphere()
-  hedgeMesh.receiveShadow = true
-  scene.add(hedgeMesh)
-
-  // ---------- 풍경 ----------
-  const clear = (x, z, pad = 0) => {
-    const r = Math.hypot(x, z)
-    if (r < HUB_R + 1.6 + pad) return false
-    for (const zi of zoneInfo) if (Math.hypot(x - zi.x, z - zi.z) < ZONE_DISC + 1.6 + pad) return false
-    for (let i = 0; i < zones.length; i += 1) {
-      const th = -Math.PI / 2 + (i * 2 * Math.PI) / zones.length
-      const along = x * Math.cos(th) + z * Math.sin(th)
-      const across = Math.abs(-x * Math.sin(th) + z * Math.cos(th))
-      if (along > 0 && along < ZONE_RADIUS && across < 2.6 + pad) return false
-    }
-    return true
-  }
-  const tint = (c, spread = 0.12) => c.setRGB(1 - rand() * spread, 1 - rand() * spread * 0.7, 1 - rand() * spread)
-
-  // 잎이 바람에 살랑이는 재질(나무 꼭대기일수록 크게 흔들립니다)
-  const swayMat = (mat, amp) => {
-    mat.onBeforeCompile = (sh) => {
-      sh.uniforms.uTime = grassU.uTime
-      sh.vertexShader = sh.vertexShader
-        .replace('#include <common>', '#include <common>\nuniform float uTime;')
-        .replace(
-          '#include <begin_vertex>',
-          `#include <begin_vertex>
-          #ifdef USE_INSTANCING
-            vec4 wp = instanceMatrix * vec4(transformed, 1.0);
-            float k = max(position.y, 0.0) * 0.2;
-            transformed.x += sin(uTime * 1.4 + wp.x * 0.4 + wp.z * 0.3) * ${amp} * k * k;
-            transformed.z += cos(uTime * 1.1 + wp.z * 0.35 + wp.x * 0.2) * ${amp * 0.7} * k * k;
-          #endif`,
-        )
-    }
-    return mat
-  }
-  const grassU = { uTime: { value: 0 }, uSlime: { value: new THREE.Vector3(0, -99, 0) } }
-
-  // ---------- 나무: 울타리 안쪽은 정교한 고폴리, 바깥 언덕은 가벼운 모델 ----------
-  const SPECIES = [['oak', 11], ['oak', 23], ['birch', 5], ['pine', 8], ['pine', 31], ['blossom', 4]]
-  const trunkMat = std('#ffffff', { roughness: 0.92, vertexColors: true })
-  const leafMat = swayMat(std('#ffffff', { roughness: 0.72, vertexColors: true }), 0.045)
-  const shadowProxyMat = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false })
-  const species = SPECIES.map(([kind, sd]) => {
-    const lo = buildTreeGeometry(kind, 1, sd)
-    return { hi: buildTreeGeometry(kind, 4, sd), mid: buildTreeGeometry(kind, 2, sd), lo, near: [], ring: [], far: [] }
-  })
-  const nearTrees = []
-  for (let tries = 0; tries < 2000 && nearTrees.length < 28; tries += 1) {
-    const a = rand() * Math.PI * 2
-    const rr = 14.5 + rand() * (BOUND - 15.2)
-    const x = Math.cos(a) * rr
-    const z = Math.sin(a) * rr
-    if (!clear(x, z, 0.4)) continue
-    if (nearTrees.some((t) => Math.hypot(t.x - x, t.z - z) < 3.1)) continue
-    const t = { x, z, s: 0.75 + rand() * 0.4, rot: rand() * 6.28 }
-    nearTrees.push(t)
-    species[nearTrees.length % species.length].near.push(t)
-    columns.push({ x, z, r: 0.34 * t.s + 0.06, top: 99, stand: false })
-  }
-  // 놀이터를 둘러싼 숲: 빽빽한 나무와 덤불이 길을 막아, 숲 밖으로 나갈 수 없다는 것을 보여 줍니다.
-  const ringTrees = []
-  for (let tries = 0; tries < 3000 && ringTrees.length < 78; tries += 1) {
-    const a = rand() * Math.PI * 2
-    const rr = BOUND + 1.0 + rand() * 4.2
-    const x = Math.cos(a) * rr
-    const z = Math.sin(a) * rr
-    if (ringTrees.some((t) => Math.hypot(t.x - x, t.z - z) < 2.5)) continue
-    const t = { x, z, s: 1.0 + rand() * 0.7, rot: rand() * 6.28 }
-    ringTrees.push(t)
-    species[ringTrees.length % species.length].ring.push(t)
-  }
-  for (let tries = 0; tries < 4000 && species.reduce((n, sp) => n + sp.far.length, 0) < 170; tries += 1) {
-    const a = rand() * Math.PI * 2
-    const rr = 28 + Math.pow(rand(), 0.8) * 130
-    const x = Math.cos(a) * rr
-    const z = Math.sin(a) * rr
-    const sp = species[Math.floor(rand() * species.length)]
-    sp.far.push({ x, z, s: 1.3 + rand() * 1.2 + rr * 0.006, rot: rand() * 6.28, y: terrainHeight(x, z) - 0.2 })
-  }
-  const treeParts = []
-  const placeTrees = (geo, list, mat, { shadow = false, proxy = false } = {}) => {
-    if (!list.length) return null
-    const m = new THREE.InstancedMesh(geo, mat, list.length)
-    const c = new THREE.Color()
-    list.forEach((t, i) => {
-      dummy.position.set(t.x, t.y ?? 0, t.z)
-      dummy.rotation.set(0, t.rot, 0)
-      dummy.scale.set(t.s * (0.92 + (i % 3) * 0.06), t.s, t.s * (0.92 + ((i + 1) % 3) * 0.05))
-      dummy.updateMatrix()
-      m.setMatrixAt(i, dummy.matrix)
-      if (mat === leafMat) m.setColorAt(i, tint(c, 0.16))
-    })
-    m.castShadow = shadow || proxy
-    m.receiveShadow = !proxy
-    m.computeBoundingSphere()
-    scene.add(m)
-    treeParts.push(m)
-    return m
-  }
-  for (const sp of species) {
-    placeTrees(sp.hi.trunk, sp.near, trunkMat, { shadow: true })
-    placeTrees(sp.hi.leaves, sp.near, leafMat)
-    placeTrees(sp.lo.leaves, sp.near, shadowProxyMat, { proxy: true })
-    placeTrees(sp.mid.trunk, sp.ring, trunkMat)
-    placeTrees(sp.mid.leaves, sp.ring, leafMat)
-    placeTrees(sp.lo.trunk, sp.far, trunkMat)
-    placeTrees(sp.lo.leaves, sp.far, leafMat)
-  }
-
-  // ---------- 바위: 이끼가 낀 고폴리 ----------
-  const rockMat = std('#ffffff', { roughness: 0.93, vertexColors: true })
-  const rockGeos = [3, 17, 29].map((sd) => buildRockGeometry(sd, 6))
-  const rockLists = rockGeos.map(() => [])
-  let nearRocks = 0
-  for (let tries = 0; tries < 600 && nearRocks < 15; tries += 1) {
-    const a = rand() * Math.PI * 2
-    const rr = 7 + rand() * (BOUND - 8)
-    const x = Math.cos(a) * rr
-    const z = Math.sin(a) * rr
-    if (!clear(x, z, 0.6)) continue
-    const sx = 0.55 + rand() * 0.6
-    const sy = sx * (0.65 + rand() * 0.35)
-    rockLists[nearRocks % 3].push({ x, z, sx, sy, rot: rand() * 6.28, y: -0.05 })
-    columns.push({ x, z, r: 0.95 * sx, top: 0.62 * sy, stand: true })
-    nearRocks += 1
-  }
-  for (let i = 0; i < 70; i += 1) {
-    const a = rand() * Math.PI * 2
-    const rr = BOUND + 0.8 + Math.pow(rand(), 0.9) * 110
-    const x = Math.cos(a) * rr
-    const z = Math.sin(a) * rr
-    const sx = 0.8 + rand() * 2.6
-    rockLists[i % 3].push({ x, z, sx, sy: sx * (0.6 + rand() * 0.4), rot: rand() * 6.28, y: terrainHeight(x, z) - 0.1 })
-  }
-  rockGeos.forEach((geo, k) => {
-    const list = rockLists[k]
-    const m = new THREE.InstancedMesh(geo, rockMat, list.length)
-    list.forEach((r, i) => {
-      dummy.position.set(r.x, r.y, r.z)
-      dummy.rotation.set(0, r.rot, 0)
-      dummy.scale.set(r.sx, r.sy, r.sx * 0.9)
-      dummy.updateMatrix()
-      m.setMatrixAt(i, dummy.matrix)
-    })
-    m.castShadow = true
-    m.receiveShadow = true
-    m.computeBoundingSphere()
-    scene.add(m)
-  })
-
-  // 덤불: 숲 바닥과 가장자리에 무리 지어 자랍니다.
-  const bushGeos = [13, 29].map((sd) => buildBushGeometry(sd))
-  const bushMat = std('#ffffff', { roughness: 0.85, vertexColors: true })
-  const bushLists = [[], []]
-  for (let tries = 0; tries < 900 && bushLists[0].length + bushLists[1].length < 120; tries += 1) {
-    const a = rand() * Math.PI * 2
-    const rr = 12 + rand() * (BOUND + 5 - 12)
-    const x = Math.cos(a) * rr
-    const z = Math.sin(a) * rr
-    if (rr < BOUND - 0.5 && !clear(x, z, 0.5)) continue
-    const sc = 0.5 + rand() * 0.8
-    bushLists[tries % 2].push({ x, z, s: sc, rot: rand() * 6.28 })
-  }
-  bushGeos.forEach((geo, k) => {
-    const list = bushLists[k]
-    const m = new THREE.InstancedMesh(geo, bushMat, list.length)
-    const c = new THREE.Color()
-    list.forEach((b, i) => {
-      dummy.position.set(b.x, b.s * 0.55, b.z)
-      dummy.rotation.set(0, b.rot, 0)
-      dummy.scale.set(b.s, b.s * 0.85, b.s)
-      dummy.updateMatrix()
-      m.setMatrixAt(i, dummy.matrix)
-      m.setColorAt(i, tint(c, 0.2))
-    })
-    m.castShadow = true
-    m.receiveShadow = true
-    m.computeBoundingSphere()
-    scene.add(m)
-  })
-
-  // ---------- 풀과 꽃: 구역 단위로 나눠 화면 밖은 그리지 않습니다 ----------
-  const grassMat = makeGrassMaterial(grassU)
-  const bladeNear = buildBladeGeometry(6)
-  const bladeFar = buildBladeGeometry(2)
-  const grassTiles = []
-  const grassTint = [new THREE.Color('#ffffff'), new THREE.Color('#e4ffb4'), new THREE.Color('#bff3e0'), new THREE.Color('#f4ffd0')]
-  const addGrassTile = (cx, cz, size, density, geo, near, rMin, rMax, hMin, hMax) => {
-    const n = Math.round(size * size * density)
-    const m = new THREE.InstancedMesh(geo, grassMat, n)
-    let k = 0
-    const c = new THREE.Color()
-    for (let i = 0; i < n; i += 1) {
-      const x = cx + (rand() - 0.5) * size
-      const z = cz + (rand() - 0.5) * size
-      const r = Math.hypot(x, z)
-      if (r < rMin || r >= rMax) continue
-      if (near && !clear(x, z, -0.1)) continue
-      const h = hMin + rand() * (hMax - hMin)
-      dummy.position.set(x, terrainHeight(x, z) - 0.04, z)
-      dummy.rotation.set(0, rand() * 6.28, 0)
-      dummy.scale.setScalar(h)
-      dummy.updateMatrix()
-      m.setMatrixAt(k, dummy.matrix)
-      m.setColorAt(k, c.copy(grassTint[Math.floor(rand() * grassTint.length)]).multiplyScalar(0.85 + rand() * 0.25))
-      k += 1
-    }
-    if (!k) {
-      m.dispose()
-      return
-    }
-    m.count = k
-    m.receiveShadow = true
-    m.computeBoundingSphere()
-    scene.add(m)
-    grassTiles.push({ m, near, full: k, x: cx, z: cz, size })
-  }
-  const NEAR_R = FENCE_R + 0.6
-  for (let gx = -3; gx < 3; gx += 1) {
-    for (let gz = -3; gz < 3; gz += 1) addGrassTile(gx * 8 + 4, gz * 8 + 4, 8, 12, bladeNear, true, 0, NEAR_R, 0.25, 0.5)
-  }
-  for (let gx = -5; gx < 5; gx += 1) {
-    for (let gz = -5; gz < 5; gz += 1) addGrassTile(gx * 12 + 6, gz * 12 + 6, 12, 2.5, bladeFar, false, NEAR_R, 62, 0.5, 1.0)
-  }
-
-  // 꽃: 무리지어 핍니다. 색마다 한 덩어리의 인스턴스로 묶습니다.
-  const FLOWERS = [['daisy', '#ffffff'], ['daisy', '#fff0a0'], ['tulip', '#ff5a72'], ['tulip', '#ffb43c'], ['tulip', '#ff8fd0'], ['wild', '#9db8ff'], ['wild', '#c9a8ff']]
-  const flowerLists = FLOWERS.map(() => [])
-  const patch = (cx, cz, n, spread, kinds) => {
-    for (let i = 0; i < n; i += 1) {
-      const a = rand() * Math.PI * 2
-      const d = Math.pow(rand(), 0.7) * spread
-      const x = cx + Math.cos(a) * d
-      const z = cz + Math.sin(a) * d
-      if (Math.hypot(x, z) < FENCE_R - 0.5 && !clear(x, z, 0.1)) continue
-      if (Math.hypot(x, z) >= FENCE_R - 0.5 && Math.hypot(x, z) < FENCE_R + 0.9) continue
-      flowerLists[kinds[Math.floor(rand() * kinds.length)]].push({ x, z, s: 1.9 + rand() * 1.2, rot: rand() * 6.28, y: terrainHeight(x, z) - 0.02 })
-    }
-  }
-  for (let i = 0; i < 20; i += 1) {
-    const a = rand() * Math.PI * 2
-    const rr = 5 + rand() * 16
-    const kinds = [[0, 1], [2, 3, 4], [5, 6], [0, 5], [1, 3]][i % 5]
-    patch(Math.cos(a) * rr, Math.sin(a) * rr, 26, 2.1, kinds)
-  }
-  for (let i = 0; i < 22; i += 1) {
-    const a = rand() * Math.PI * 2
-    const rr = 25 + rand() * 30
-    patch(Math.cos(a) * rr, Math.sin(a) * rr, 40, 3.6, [[0, 1], [2, 3, 4], [5, 6], [0, 5], [1, 3]][i % 5])
-  }
-  FLOWERS.forEach(([kind, petal], k) => {
-    const list = flowerLists[k]
-    if (!list.length) return
-    const m = new THREE.InstancedMesh(buildFlowerGeometry(kind, 3 + k, petal), grassMat, list.length)
-    list.forEach((f, i) => {
-      dummy.position.set(f.x, f.y, f.z)
-      dummy.rotation.set(0, f.rot, 0)
-      dummy.scale.setScalar(f.s)
-      dummy.updateMatrix()
-      m.setMatrixAt(i, dummy.matrix)
-    })
-    m.receiveShadow = true
-    m.computeBoundingSphere()
-    scene.add(m)
-  })
 
   // ---------- 물리와 슬라임 ----------
   const spawnPos = { x: 0, z: 3.4 }
@@ -1264,7 +899,7 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
     el.style.transform = `translate3d(${px}px, ${((1 - v.y) / 2) * h}px, 0) translate(-50%, -100%)`
   }
 
-  // 화질 단계: 2 = 블룸과 전부, 1 = 블룸 끔, 0 = 풀 절반과 그림자 끔
+  // 화질 단계: 2 = 블룸과 전부, 1 = 블룸 끔, 0 = 그림자까지 끔
   let quality = bloomOn ? 2 : 1
   const applyQuality = (q) => {
     quality = q
@@ -1274,7 +909,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       renderer.setPixelRatio(1)
     }
     if (q < 1) sun.castShadow = false
-    for (const g of grassTiles) g.m.count = q === 0 && g.near ? Math.ceil(g.full * 0.5) : g.full
     size()
   }
 
@@ -1429,19 +1063,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       l.body.rotation.x = tl.x
       l.body.rotation.z = tl.z
     }
-    grassU.uTime.value = t
-    grassU.uSlime.value.set(pos.x, pos.y, pos.z)
-
-    sky.position.set(camera.position.x, 0, camera.position.z)
-    for (const c of drifters) {
-      if (c.userData.speed) {
-        c.position.x += c.userData.speed * dt
-        if (c.position.x > 130) c.position.x = -130
-      } else if (c.userData.float !== undefined) {
-        c.position.y += Math.sin(t * 0.6 + c.userData.float) * 0.002
-      }
-    }
-
     // 가까운 랜드마크와 현재 구역 (바뀔 때만 알림)
     let best = null
     let bestD = NEAR
@@ -1511,13 +1132,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       if (frames === 150 && quality === 2) applyQuality(1)
       else if (frames === 420 && quality === 1) applyQuality(0)
     }
-    // 멀리 있는 풀 구역은 그리지 않습니다.
-    if (frames % 20 === 0) {
-      for (const g of grassTiles) {
-        const d = Math.hypot(g.x - camera.position.x, g.z - camera.position.z)
-        g.m.visible = g.near || (quality > 0 && d < 90)
-      }
-    }
   }
 
   const start0 = () => {
@@ -1580,8 +1194,6 @@ export function createWorld({ container, zones, onNear, onZone, onActivate }) {
       renderer.dispose()
       renderer.domElement.remove()
       labelLayer.remove()
-      grade.remove()
-      bendWorld(false)
     },
   }
 }
