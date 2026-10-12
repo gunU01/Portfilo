@@ -361,6 +361,7 @@ button {
   white-space: nowrap;
 }
 .tl__text {
+  white-space: pre-line;
   font-size: 15px;
   color: var(--ink);
   line-height: 1.65;
