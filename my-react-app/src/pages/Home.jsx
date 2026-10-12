@@ -75,14 +75,14 @@ function Overview() {
           <a className="ov__card reveal" href="#/project">
             <span className="ov__n tnum">01</span>
             <h3>Project</h3>
-            <p>케이스 {cases.length}개를 목표, 방식 및 결과 순서로 정리했습니다.</p>
+            <p>케이스 {cases.length}개를 판단의 근거와 결과 중심으로 정리했습니다.</p>
             <span className="ov__go">프로젝트 보기 →</span>
           </a>
           <a className="ov__card reveal" href="#/about">
             <span className="ov__n tnum">02</span>
             <h3>About</h3>
             <p>
-              경험과 생각, 기술
+              소개, 기술, 활동, 대회 참가
               {awards.length ? `, 수상 ${awards.length}건` : ''}
             </p>
             <span className="ov__go">소개 보기 →</span>

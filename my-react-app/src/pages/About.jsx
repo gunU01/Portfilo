@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { profile } from '../data/profile.js'
 import { skillGroups } from '../data/skills.js'
 import { awards } from '../data/awards.js'
+import { contests } from '../data/contests.js'
 import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { useReveal } from '../lib/useReveal.js'
 
@@ -28,6 +29,7 @@ export default function About() {
       ['intro', '소개'],
       ['skills', '기술'],
       ['history', '활동'],
+      ['contests', '대회'],
       ...(awards.length ? [['awards', '수상']] : []),
     ],
     [],
@@ -114,6 +116,20 @@ export default function About() {
             <li className="tl__item reveal" key={t.when}>
               <span className="tl__when tnum">{t.when}</span>
               <p className="tl__text">{t.text}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="wrap ab__sec" id="contests" aria-labelledby="ct-title">
+        <h2 className="ab__h" id="ct-title">
+          대회 참가
+        </h2>
+        <ol className="tl tl--wide">
+          {contests.map((c) => (
+            <li className="tl__item reveal" key={c.title}>
+              <span className="tl__when tnum">{c.when}</span>
+              <p className="tl__text">{c.title}</p>
             </li>
           ))}
         </ol>

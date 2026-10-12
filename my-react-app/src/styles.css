@@ -2355,6 +2355,14 @@ h4 {
 .ab .tl {
   margin-top: 28px;
 }
+.tl--wide .tl__item {
+  grid-template-columns: 200px 1fr;
+}
+@media (max-width: 720px) {
+  .tl--wide .tl__item {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* Footer */
 .footer {
