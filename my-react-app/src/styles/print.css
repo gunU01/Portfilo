@@ -1,0 +1,22 @@
+/* ---------- Print (PDF 제출용) ---------- */
+@media print {
+  .nav,
+  .toc,
+  .skip,
+    body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+  }
+  .section,
+  .csec {
+    break-inside: avoid-page;
+  }
+  details {
+    display: block;
+  }
+  details > * {
+    display: block !important;
+  }
+}
+

@@ -1,6 +1,6 @@
 # PM 포트폴리오
 
-프론트엔드 출신 PM 포트폴리오 사이트. React 19 + Vite, 해시 라우팅, 폰트·CDN 미사용. 글꼴은 Pretendard(SIL OFL)를 npm 패키지로 함께 배포하고, 3D 월드용 `three`는 월드를 열 때만 내려받습니다(`#/world`, 홈의 '3D로 감상하기').
+프론트엔드 출신 PM 포트폴리오 사이트. React 19 + Vite, 해시 라우팅, 폰트·CDN 미사용. 글꼴은 Pretendard(SIL OFL)를 npm 패키지로 함께 배포합니다. `#/desk` 는 SVG 로 그린 책상 위의 물건을 눌러 포트폴리오를 둘러보는 입구입니다.
 
 ```bash
 npm install
@@ -15,12 +15,12 @@ npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도
 | 파일 | 내용 |
 | --- | --- |
 | `profile.js` | 이름, 히어로 문구, 소개·타임라인, 연락처(빈 값은 자동 숨김) |
-| `eolma.js` · `valueChain.js` | 케이스 스터디 본문. `sections[].blocks[]` 의 타입(`p`, `list`, `table`, `decisions`, `stats` …)을 조합 |
+| `eolma.js` · `haemi.js` · `valueChain.js` | 케이스 스터디 본문. `sections[].blocks[]` 의 타입(`p`, `list`, `table`, `decisions`, `stats` …)을 조합 |
 | `skills.js` | 기술·도구 (어디에 어떻게 썼는지) |
-| `awards.js` | 수상 이력. 항목을 넣으면 ‘수상’ 섹션이 나타남 |
+| `awards.js` · `contests.js` | 수상 이력(항목을 넣으면 ‘수상’ 섹션이 나타남) · 대회 참가 기록 |
 | `cases.js` | 프로젝트 노출 순서 |
 | `src/assets/` | 케이스에 쓰는 화면 이미지. 개인 식별 정보(이름·얼굴·전화·계좌·영수증 상세)가 보이면 흐림 처리하거나 쓰지 않습니다 |
-| `world.js` | 3D 월드의 구역·랜드마크. 기존 `cases`·`awards`에서 가져오므로 보통 고칠 필요 없음 |
+| `desk.js` | 책상 위 물건과, 누르면 열리는 내용. 기존 `cases`·`awards`·`contests`·`profile`에서 가져오므로 보통 고칠 필요 없음 |
 
 ## 작성 원칙
 
@@ -31,3 +31,15 @@ npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도
 ## PDF로 제출하기
 
 브라우저 인쇄(Ctrl/Cmd+P) → PDF 저장. 인쇄용 스타일이 있어 메뉴가 숨겨지고 접힌 항목이 펼쳐집니다.
+
+## 코드 구조
+
+```
+src/
+  pages/        Home · Project · Case(케이스 본문) · About · Desk(책상 입구)
+  components/   Nav · Footer · Spec · Blocks(케이스 본문 블록) · CaseCover · ValueChain · DeskScene · DeskPanel
+    desk/       책상 SVG 를 이루는 조각들 (Wall · WallDecor · Desktop · Foreground · Hotspot · Tags …)
+  data/         화면에 나오는 모든 문구와 수치 (위 표)
+  lib/          useHashRoute · useReveal · useScrollSpy · useParallax · format
+  styles/       index.css 가 순서대로 불러옵니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요
+```

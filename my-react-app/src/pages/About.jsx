@@ -1,18 +1,27 @@
-import { useMemo } from 'react'
 import { profile } from '../data/profile.js'
 import { skillGroups } from '../data/skills.js'
 import { awards } from '../data/awards.js'
 import { contests } from '../data/contests.js'
 import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { useReveal } from '../lib/useReveal.js'
+import { scrollToId } from '../lib/format.js'
+import Spec from '../components/Spec.jsx'
 
-function SectionIndex({ items }) {
-  const ids = useMemo(() => items.map(([id]) => id), [items])
-  const active = useScrollSpy(ids)
+const SECTIONS = [
+  ['intro', '소개'],
+  ['skills', '기술'],
+  ['history', '활동'],
+  ['contests', '대회'],
+  ...(awards.length ? [['awards', '수상']] : []),
+]
+const SECTION_IDS = SECTIONS.map(([id]) => id)
+
+function SectionIndex() {
+  const active = useScrollSpy(SECTION_IDS, { lastAtBottom: true })
   return (
     <nav className="sidx" aria-label="섹션 이동">
-      {items.map(([id, label], i) => (
-        <button key={id} type="button" aria-current={active === id} onClick={() => document.getElementById(id)?.scrollIntoView()}>
+      {SECTIONS.map(([id, label], i) => (
+        <button key={id} type="button" aria-current={active === id} onClick={() => scrollToId(id)}>
           <span className="tnum">{String(i + 1).padStart(2, '0')}</span>
           {label}
         </button>
@@ -24,20 +33,10 @@ function SectionIndex({ items }) {
 export default function About() {
   const { about } = profile
   useReveal()
-  const items = useMemo(
-    () => [
-      ['intro', '소개'],
-      ['skills', '기술'],
-      ['history', '활동'],
-      ['contests', '대회'],
-      ...(awards.length ? [['awards', '수상']] : []),
-    ],
-    [],
-  )
 
   return (
     <div className="ab">
-      <SectionIndex items={items} />
+      <SectionIndex />
 
       <section className="wrap ab__intro" id="intro" aria-labelledby="ab-title">
         <div className="ab__introgrid">
@@ -52,33 +51,7 @@ export default function About() {
             </div>
           </div>
           <div className="ab__side">
-            <aside className="spec" aria-label="About me">
-              <p className="spec__t">About me</p>
-              <dl>
-                <div>
-                  <dt>이름</dt>
-                  <dd>{profile.name}</dd>
-                </div>
-                <div>
-                  <dt>직무</dt>
-                  <dd>{profile.roleLine}</dd>
-                </div>
-                <div>
-                  <dt>소속</dt>
-                  <dd>{profile.school}</dd>
-                </div>
-                {profile.contact.github && (
-                  <div>
-                    <dt>GitHub</dt>
-                    <dd>
-                      <a href={profile.contact.github} target="_blank" rel="noreferrer">
-                        @{profile.contact.github.replace(/\/+$/, '').split('/').pop()}
-                      </a>
-                    </dd>
-                  </div>
-                )}
-              </dl>
-            </aside>
+            <Spec />
           </div>
         </div>
       </section>

@@ -1,0 +1,336 @@
+/* ---------- Visual system: 버튼 · 라벨 · 커버 · 화면 프레임 ---------- */
+.tl__when {
+  font-family: var(--mono);
+  letter-spacing: 0.08em;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 800;
+}
+.btn {
+  border-width: 1.5px;
+  font-weight: 700;
+}
+.btn--solid {
+  background: var(--ink);
+  color: var(--bg);
+}
+.btn--solid:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn--desk {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+}
+.btn--desk::after {
+  content: '↗';
+}
+.btn--desk:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.nav__desk {
+  flex: none;
+  padding: 7px 14px;
+  border: 1.5px solid var(--accent);
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--accent-ink);
+}
+.nav__desk:hover {
+  background: var(--accent);
+  color: #fff;
+}
+.nav__in {
+  gap: 12px;
+}
+.nav__links {
+  margin-left: auto;
+}
+
+/* 케이스 커버 */
+.cover {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  isolation: isolate;
+}
+.cover--card {
+  aspect-ratio: 4 / 3;
+}
+.cover--banner {
+  height: clamp(230px, 31vw, 340px);
+}
+.cover__cap {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* 화면: 실제 앱 화면을 기기 프레임에 */
+.cover--screens {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 4%;
+  padding: 0 6%;
+  background: #a9d2ff;
+}
+.phone {
+  margin: 0;
+  flex: none;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 5px solid #14161c;
+  background: #14161c;
+  box-shadow: 0 18px 40px rgb(8 30 70 / 0.35);
+}
+.phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cover--screens .phone {
+  width: 26%;
+  transform: translateY(var(--dy, 14%)) rotate(var(--rot, 0deg));
+  transition: transform 0.3s;
+}
+.cover--screens .phone--1 {
+  --dy: 20%;
+  --rot: -5deg;
+}
+.cover--screens .phone--2 {
+  --dy: 8%;
+  z-index: 1;
+  width: 29%;
+}
+.cover--screens .phone--3 {
+  --dy: 20%;
+  --rot: 5deg;
+}
+.pcard:hover .cover--screens .phone--1 {
+  --rot: -7deg;
+}
+.pcard:hover .cover--screens .phone--3 {
+  --rot: 7deg;
+}
+.cover--banner.cover--screens .phone {
+  width: 15%;
+}
+.cover--banner.cover--screens .phone--2 {
+  width: 17%;
+}
+.phone--flat {
+  display: block;
+  box-shadow: var(--shadow);
+}
+
+.cover--screens.cover--warm {
+  background: #ffc4a8;
+}
+.cover--warm .phone {
+  box-shadow: 0 18px 40px rgb(120 40 10 / 0.35);
+}
+
+/* 막대: 실제 공시 수치. 가로 막대로 라벨, 막대, 값을 한 줄에 둡니다. */
+.cover--bars {
+  display: flex;
+  flex-direction: column;
+  padding: 22px 28px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.bars__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cover--bars .cover__cap {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+.bars__unit {
+  font-size: 12px;
+  color: var(--accent-ink);
+}
+.bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+.bars__row {
+  display: grid;
+  grid-template-columns: 5.5em minmax(0, 1fr) 3.6em;
+  align-items: center;
+  gap: 14px;
+}
+.bars__l {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.bars__l small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--accent-ink);
+}
+.bars__track {
+  height: 22px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  overflow: hidden;
+}
+.bars__bar {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--accent-ink);
+  opacity: 0.45;
+}
+.bars__bar.is-last {
+  background: var(--accent);
+  opacity: 1;
+}
+.bars__v {
+  font-size: 15px;
+  font-weight: 700;
+  text-align: right;
+  color: var(--ink);
+}
+.bars__src {
+  margin: 0;
+  font-size: 11px;
+  color: var(--accent-ink);
+}
+
+/* 전환: 해미의 목표 재정의 */
+.cover--shift {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  padding: 28px 8%;
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+.cover--shift .cover__cap {
+  color: var(--accent-ink);
+  margin-bottom: 10px;
+}
+.shift__from {
+  font-size: clamp(1.4rem, 3.4vw, 2.3rem);
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 3px;
+}
+.shift__arrow {
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--accent-ink);
+  font-weight: 800;
+}
+.shift__to {
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.case__cover {
+  margin-top: 36px;
+}
+
+/* 그림·갤러리 */
+.fig {
+  margin: 8px 0;
+}
+.fig img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+.fig--dark img {
+  border-color: #1e2a44;
+}
+.fig figcaption,
+.gallery figcaption {
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: var(--faint);
+  line-height: 1.55;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  gap: 22px;
+  margin: 8px 0;
+}
+.gallery__item {
+  margin: 0;
+  min-width: 0;
+}
+.gallery figcaption b {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--ink);
+  font-size: 14.5px;
+}
+
+@media (max-width: 900px) {
+  .ab__introgrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero__grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 680px) {
+  .hero {
+    padding: 44px 0 40px;
+  }
+  .nav__brand small {
+    display: none;
+  }
+  .nav__links a {
+    padding: 8px 8px;
+    font-size: 13.5px;
+  }
+  .nav__desk-long {
+    display: none;
+  }
+  .cover--banner.cover--screens .phone {
+    width: 24%;
+  }
+  .cover--banner.cover--screens .phone--2 {
+    width: 27%;
+  }
+}
+

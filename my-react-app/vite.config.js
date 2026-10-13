@@ -5,6 +5,4 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: './',
   plugins: [react()],
-  // 3D 월드(three)는 lazy chunk라 첫 화면 용량에 포함되지 않습니다.
-  build: { chunkSizeWarningLimit: 600 },
 })

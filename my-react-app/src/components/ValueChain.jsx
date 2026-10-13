@@ -23,20 +23,17 @@ export default function ValueChain({ stages, labels }) {
     nodes.current[i]?.focus()
   }
 
+  // 탭 목록의 방향키 이동
   const onKeyDown = (e) => {
-    if (e.key === 'ArrowRight') {
-      e.preventDefault()
-      select(index + 1)
-    } else if (e.key === 'ArrowLeft') {
-      e.preventDefault()
-      select(index - 1)
-    } else if (e.key === 'Home') {
-      e.preventDefault()
-      select(0)
-    } else if (e.key === 'End') {
-      e.preventDefault()
-      select(stages.length - 1)
-    }
+    const target = {
+      ArrowRight: index + 1,
+      ArrowLeft: index - 1,
+      Home: 0,
+      End: stages.length - 1,
+    }[e.key]
+    if (target === undefined) return
+    e.preventDefault()
+    select(target)
   }
 
   return (

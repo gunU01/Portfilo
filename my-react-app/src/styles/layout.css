@@ -1,0 +1,69 @@
+/* ---------- 구성: 큰 섹션 제목 · 우측 목차 · 등장 효과 ---------- */
+.section {
+  border-top: 1px solid var(--ink);
+}
+
+/* 우측 섹션 목차 */
+.sidx {
+  position: fixed;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+.sidx button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--faint);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.sidx button .tnum {
+  font-family: var(--mono);
+  font-size: 11px;
+}
+.sidx button:hover {
+  color: var(--ink);
+}
+.sidx button[aria-current='true'] {
+  color: var(--accent-ink);
+  font-weight: 700;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+@media (min-width: 1360px) {
+  .sidx {
+    display: flex;
+  }
+}
+
+/* 등장 효과: 자바스크립트가 켜져 있을 때만 숨김 상태로 시작 */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media print {
+  .sidx {
+    display: none;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+

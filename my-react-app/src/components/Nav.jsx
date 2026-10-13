@@ -23,8 +23,8 @@ export default function Nav({ path }) {
             </a>
           ))}
         </div>
-        <a className="nav__3d" href="#/desk">
-          책상<span className="nav__3d-long">에서 둘러보기</span>
+        <a className="nav__desk" href="#/desk">
+          책상<span className="nav__desk-long">에서 둘러보기</span>
         </a>
       </div>
     </nav>

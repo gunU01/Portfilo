@@ -1,9 +1,8 @@
 import { profile } from '../data/profile.js'
 import { cases } from '../data/cases.js'
 import { awards } from '../data/awards.js'
+import Spec from '../components/Spec.jsx'
 import { useReveal } from '../lib/useReveal.js'
-
-const githubId = (url) => url?.replace(/\/+$/, '').split('/').pop()
 
 function Hero() {
   const { hero } = profile
@@ -24,39 +23,13 @@ function Hero() {
               <a className="btn btn--solid" href="#/project">
                 프로젝트 보기
               </a>
-              <a className="btn btn--3d" href="#/desk">
+              <a className="btn btn--desk" href="#/desk">
                 책상에서 둘러보기
               </a>
             </div>
           </div>
 
-          <aside className="spec" aria-label="About me">
-            <p className="spec__t">About me</p>
-            <dl>
-              <div>
-                <dt>이름</dt>
-                <dd>{profile.name}</dd>
-              </div>
-              <div>
-                <dt>직무</dt>
-                <dd>{profile.roleLine}</dd>
-              </div>
-              <div>
-                <dt>소속</dt>
-                <dd>{profile.school}</dd>
-              </div>
-              {profile.contact.github && (
-                <div>
-                  <dt>GitHub</dt>
-                  <dd>
-                    <a href={profile.contact.github} target="_blank" rel="noreferrer">
-                      @{githubId(profile.contact.github)}
-                    </a>
-                  </dd>
-                </div>
-              )}
-            </dl>
-          </aside>
+          <Spec />
         </div>
       </div>
     </section>

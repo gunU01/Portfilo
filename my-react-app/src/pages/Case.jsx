@@ -1,23 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import Blocks from '../components/Blocks.jsx'
 import CaseCover from '../components/CaseCover.jsx'
+import { useScrollSpy } from '../lib/useScrollSpy.js'
+import { scrollToId } from '../lib/format.js'
 
 export default function Case({ data }) {
-  const [active, setActive] = useState(data.sections[0].id)
-
+  const ids = useMemo(() => data.sections.map((s) => s.id), [data])
   // 읽는 위치에 따라 목차 강조
-  useEffect(() => {
-    const els = data.sections.map((s) => document.getElementById(s.id)).filter(Boolean)
-    const io = new IntersectionObserver(
-      (entries) => {
-        const hit = entries.find((e) => e.isIntersecting)
-        if (hit) setActive(hit.target.id)
-      },
-      { rootMargin: '-18% 0px -72% 0px' },
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [data])
+  const active = useScrollSpy(ids, { rootMargin: '-18% 0px -72% 0px' })
 
   // 인쇄(PDF 저장) 시 접힌 항목을 모두 펼침
   useEffect(() => {
@@ -25,8 +15,6 @@ export default function Case({ data }) {
     window.addEventListener('beforeprint', openAll)
     return () => window.removeEventListener('beforeprint', openAll)
   }, [])
-
-  const jump = (id) => document.getElementById(id)?.scrollIntoView()
 
   return (
     <article>
@@ -75,7 +63,7 @@ export default function Case({ data }) {
       <div className="wrap case__body">
         <nav className="toc" aria-label="이 페이지의 목차">
           {data.sections.map((s) => (
-            <button key={s.id} type="button" aria-current={active === s.id} onClick={() => jump(s.id)}>
+            <button key={s.id} type="button" aria-current={active === s.id} onClick={() => scrollToId(s.id)}>
               {s.title}
             </button>
           ))}
@@ -99,7 +87,6 @@ export default function Case({ data }) {
               ))}
             </ul>
           </footer>
-
         </div>
       </div>
     </article>

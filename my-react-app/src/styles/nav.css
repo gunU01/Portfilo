@@ -1,0 +1,51 @@
+/* ---------- Nav ---------- */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.nav__in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  gap: 16px;
+}
+.nav__brand {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  white-space: nowrap;
+}
+.nav__brand small {
+  font-weight: 500;
+  color: var(--faint);
+  font-size: 13px;
+}
+.nav__links {
+  display: flex;
+  gap: 4px;
+  font-size: 15px;
+}
+.nav__links a,
+.nav__links button {
+  background: none;
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.nav__links a:hover,
+.nav__links button:hover {
+  color: var(--ink);
+  background: var(--sunken);
+}
+

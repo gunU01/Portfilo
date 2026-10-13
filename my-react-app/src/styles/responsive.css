@@ -1,0 +1,158 @@
+/* ---------- Responsive ---------- */
+@media (max-width: 560px) {
+  .stats--2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* 수치가 3개면 모바일에서 위 2개는 나란히, 아래 1개는 길게 */
+  .stats--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .stats--3 .stat:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 900px) {
+  .ba {
+    grid-template-columns: 1fr;
+  }
+  .case__body {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .toc {
+    display: none;
+  }
+  .vc__cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  body {
+    font-size: 16px;
+  }
+  .wrap {
+    padding: 0 16px;
+  }
+  .nav__brand small {
+    display: none;
+  }
+  .nav__links a,
+  .nav__links button {
+    padding: 8px 9px;
+    font-size: 14px;
+  }
+  .hero {
+    padding: 56px 0 48px;
+  }
+  .hero__lead {
+    font-size: 17px;
+  }
+  .section {
+    padding: 52px 0;
+  }
+  .tl__item {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .meta div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .awards li {
+    grid-template-columns: 56px 1fr;
+  }
+  .awards__res {
+    grid-column: 2;
+  }
+
+  .flow {
+    grid-template-columns: 1fr;
+  }
+  .flow li,
+  .flow li:first-child,
+  .flow li:last-child {
+    border-radius: 0;
+    margin-left: 0;
+    margin-top: -1px;
+  }
+  .flow li:first-child {
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .flow li:last-child {
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+
+  /* 표는 카드형으로 */
+  .tablewrap {
+    border: 0;
+    background: none;
+  }
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+  .table thead {
+    display: none;
+  }
+  .table tr {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    padding: 6px 0;
+  }
+  .table td,
+  .table tr:first-child td {
+    border-top: 1px dashed var(--line);
+    padding: 10px 16px;
+  }
+  .table td:first-child {
+    border-top: 0;
+  }
+  .table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--faint);
+    margin-bottom: 2px;
+  }
+
+  .rail {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2px;
+  }
+  .rail__dot {
+    width: 36px;
+    height: 36px;
+  }
+  .rail::before {
+    top: 18px;
+  }
+  .rail__name {
+    font-size: 12.5px;
+  }
+  .vc__panel {
+    padding: 20px 16px;
+  }
+  .vc__lens {
+    grid-template-columns: 1fr;
+  }
+  .dec summary {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .dec__body {
+    margin: 0 16px 16px;
+  }
+  .dec__body > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
+

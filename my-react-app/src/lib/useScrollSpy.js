@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
-// 화면 위쪽에 걸린 섹션의 id 를 돌려줍니다. 홈의 우측 목차와 같은 곳에서 씁니다.
-export function useScrollSpy(ids) {
+// 화면 위쪽에 걸린 섹션의 id 를 돌려줍니다. ids 는 바뀌지 않는 배열(모듈 상수나 useMemo)이어야 합니다.
+// lastAtBottom: 마지막 섹션은 짧아서 관찰 구간에 닿지 못할 수 있으니, 페이지 끝에 닿으면 마지막으로 처리합니다.
+export function useScrollSpy(ids, { rootMargin = '-30% 0px -60% 0px', lastAtBottom = false } = {}) {
   const [active, setActive] = useState(ids[0])
 
   useEffect(() => {
@@ -11,19 +12,19 @@ export function useScrollSpy(ids) {
         const hit = entries.find((e) => e.isIntersecting)
         if (hit) setActive(hit.target.id)
       },
-      { rootMargin: '-30% 0px -60% 0px' },
+      { rootMargin },
     )
     els.forEach((el) => io.observe(el))
-    // 마지막 섹션은 짧아서 관찰 구간에 닿지 못하므로, 페이지 끝에 닿으면 마지막으로 처리
+
     const onScroll = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 6) setActive(ids[ids.length - 1])
     }
-    window.addEventListener('scroll', onScroll, { passive: true })
+    if (lastAtBottom) window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       io.disconnect()
-      window.removeEventListener('scroll', onScroll)
+      if (lastAtBottom) window.removeEventListener('scroll', onScroll)
     }
-  }, [ids])
+  }, [ids, rootMargin, lastAtBottom])
 
   return active
 }

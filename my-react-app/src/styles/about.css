@@ -1,0 +1,93 @@
+/* ---------- Sections ---------- */
+.section {
+  padding: 72px 0;
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- About ---------- */
+.tl {
+  position: relative;
+  display: grid;
+  gap: 0;
+}
+.tl__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: 16px;
+  padding: 0 0 22px 22px;
+  border-left: 2px solid var(--line);
+  margin-left: 4px;
+}
+.tl__item::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+}
+.tl__when {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-ink);
+  padding-top: 2px;
+  white-space: nowrap;
+}
+.tl__text {
+  white-space: pre-line;
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.65;
+}
+.tl__title {
+  font-weight: 700;
+  font-size: 16px;
+}
+.tl__desc {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ---------- Awards / Contact ---------- */
+.awards li {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.awards b {
+  font-size: 17px;
+}
+.awards small {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+}
+.awards__res {
+  font-weight: 700;
+  color: var(--accent-ink);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.15s, color 0.15s;
+}
+.btn:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+

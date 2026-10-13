@@ -1,6 +1,26 @@
 import Rich from './Rich.jsx'
 import ValueChain from './ValueChain.jsx'
 
+const WIDE_TYPES = new Set(['valueChain', 'table', 'stats', 'figure', 'gallery'])
+
+// 문장 목록. 각 항목에 **굵게** 표기를 허용합니다.
+function RichList({ items, className }) {
+  return (
+    <ul className={className}>
+      {items.map((item) => (
+        <li key={item}>
+          <Rich text={item} />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function statsClass(block) {
+  if (block.columns === 2) return 'stats stats--2'
+  return block.items.length === 3 ? 'stats stats--3' : 'stats'
+}
+
 function Table({ head, rows }) {
   return (
     <div className="tablewrap">
@@ -75,15 +95,7 @@ function Block({ block }) {
       )
 
     case 'list':
-      return (
-        <ul className="list">
-          {block.items.map((item) => (
-            <li key={item}>
-              <Rich text={item} />
-            </li>
-          ))}
-        </ul>
-      )
+      return <RichList className="list" items={block.items} />
 
     case 'quote':
       return (
@@ -113,7 +125,7 @@ function Block({ block }) {
 
     case 'stats':
       return (
-        <div className={block.columns === 2 ? 'stats stats--2' : block.items.length === 3 ? 'stats stats--3' : 'stats'}>
+        <div className={statsClass(block)}>
           {block.items.map((s) => (
             <div className="stat" key={s.label}>
               <span className="stat__v">{s.value}</span>
@@ -132,23 +144,11 @@ function Block({ block }) {
         <div className="ba">
           <div className="ba__col">
             <h4>{block.before.title}</h4>
-            <ul>
-              {block.before.items.map((t) => (
-                <li key={t}>
-                  <Rich text={t} />
-                </li>
-              ))}
-            </ul>
+            <RichList items={block.before.items} />
           </div>
           <div className="ba__col ba__col--after">
             <h4>{block.after.title}</h4>
-            <ul>
-              {block.after.items.map((t) => (
-                <li key={t}>
-                  <Rich text={t} />
-                </li>
-              ))}
-            </ul>
+            <RichList items={block.after.items} />
           </div>
         </div>
       )
@@ -192,24 +192,12 @@ function Block({ block }) {
           </div>
           <div className="roles__card">
             <h4>Responsibility</h4>
-            <ul className="list">
-              {block.responsibilities.map((t) => (
-                <li key={t}>
-                  <Rich text={t} />
-                </li>
-              ))}
-            </ul>
+            <RichList className="list" items={block.responsibilities} />
           </div>
           {block.results?.length > 0 && (
             <div className="roles__card">
               <h4>Result</h4>
-              <ul className="list">
-                {block.results.map((t) => (
-                  <li key={t}>
-                    <Rich text={t} />
-                  </li>
-                ))}
-              </ul>
+              <RichList className="list" items={block.results} />
             </div>
           )}
         </div>
@@ -249,7 +237,7 @@ function Block({ block }) {
 }
 
 export default function Blocks({ blocks }) {
-  const wide = blocks.some((b) => ['valueChain', 'table', 'stats', 'figure', 'gallery'].includes(b.type))
+  const wide = blocks.some((b) => WIDE_TYPES.has(b.type))
   return (
     <div className={wide ? 'blocks blocks--wide' : 'blocks'}>
       {blocks.map((block, i) => (

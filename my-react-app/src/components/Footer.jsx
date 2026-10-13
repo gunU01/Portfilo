@@ -1,7 +1,5 @@
 import { profile } from '../data/profile.js'
-
-const githubId = (url) => url?.replace(/\/+$/, '').split('/').pop()
-const formatPhone = (n) => n.replace(/^(\d{3})(\d{4})(\d{4})$/, '$1-$2-$3')
+import { githubId, formatPhone } from '../lib/format.js'
 
 // 모든 페이지 하단: 연락처. 값이 비어 있는 연락처는 자동으로 숨깁니다.
 export default function Footer() {
