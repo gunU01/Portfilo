@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 
-// styles/ink.css 와 같은 목록이어야 합니다.
-const INK =
-  ".btn--solid, .btn--desk, .nav__desk, .ov__card, .nav__links a, .pj__tabs button:not([aria-pressed='true']), .xlink, .footer__rows a, .desk__list a"
+const INK = '.ink'
 
 // 번지는 원의 중심과 크기를 CSS 변수로 남깁니다. 원 안쪽 58%가 꽉 찬 색이라,
 // 중심에서 가장 먼 모서리까지의 거리가 그 반경이 되도록 지름을 잡습니다.

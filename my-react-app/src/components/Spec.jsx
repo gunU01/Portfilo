@@ -13,7 +13,7 @@ export default function Spec() {
     ['소속', profile.school],
     contact.github && [
       'GitHub',
-      <a className="xlink" href={contact.github} target="_blank" rel="noreferrer">
+      <a className="xlink ink" href={contact.github} target="_blank" rel="noreferrer">
         <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
           <path d={GITHUB_MARK} />
         </svg>

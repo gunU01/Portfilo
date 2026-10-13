@@ -34,7 +34,6 @@ export const profile = {
     github: 'https://github.com/gunU01',
     email: 'inarawa2@gmail.com',
     phone: '01079377017',
-    blog: '',
     linkedin: '',
     notion: '',
   },

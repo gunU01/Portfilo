@@ -34,7 +34,7 @@ export default function DeskPanel({ spot, onClose }) {
         <ul className="desk__list">
           {spot.items.map((it) => (
             <li key={it.title}>
-              <a href={it.href} {...linkProps(it.href)}>
+              <a className="ink" href={it.href} {...linkProps(it.href)}>
                 <b>{it.title}</b>
                 {it.sub && <span>{it.sub}</span>}
               </a>

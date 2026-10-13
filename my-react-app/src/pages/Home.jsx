@@ -33,10 +33,10 @@ function Hero() {
             </h1>
             <p className="hero__lead">{hero.lead}</p>
             <div className="hero__cta">
-              <a className="btn btn--solid" href="#/project">
+              <a className="btn btn--solid ink" href="#/project">
                 프로젝트 보기
               </a>
-              <a className="btn btn--desk" href="#/desk">
+              <a className="btn btn--desk ink" href="#/desk">
                 책상에서 둘러보기
               </a>
             </div>
@@ -57,13 +57,13 @@ function Overview() {
           OVERVIEW
         </h2>
         <div className="ov__cards">
-          <a className="ov__card reveal" href="#/project">
+          <a className="ov__card ink reveal" href="#/project">
             <span className="ov__n tnum">01</span>
             <h3>Project</h3>
             <p>케이스 {cases.length}개를 판단의 근거와 결과 중심으로 정리했습니다.</p>
             <span className="ov__go">프로젝트 보기 →</span>
           </a>
-          <a className="ov__card reveal" href="#/about">
+          <a className="ov__card ink reveal" href="#/about">
             <span className="ov__n tnum">02</span>
             <h3>About</h3>
             <p>

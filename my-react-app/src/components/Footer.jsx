@@ -23,7 +23,7 @@ export default function Footer() {
         <ul className="footer__rows">
           {rows.map(([label, value, href]) => (
             <li key={label}>
-              <a href={href} target="_blank" rel="noreferrer">
+              <a className="ink" href={href} target="_blank" rel="noreferrer">
                 <span className="footer__k">{label}</span>
                 <span className="footer__v">{value}</span>
                 <span className="footer__go" aria-hidden="true">

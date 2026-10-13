@@ -26,7 +26,7 @@ export default function Project() {
 
         <div className="pj__tabs" role="group" aria-label="분류">
           {tabs.map(([key, label]) => (
-            <button key={key} type="button" aria-pressed={group === key} onClick={() => setGroup(key)}>
+            <button key={key} className="ink" type="button" aria-pressed={group === key} onClick={() => setGroup(key)}>
               {label}
               <span className="tnum">{key === 'ALL' ? cases.length : cases.filter((c) => c.group === key).length}</span>
             </button>

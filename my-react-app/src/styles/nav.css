@@ -12,7 +12,6 @@
   align-items: center;
   justify-content: space-between;
   height: 60px;
-  gap: 16px;
 }
 .nav__brand {
   font-weight: 700;

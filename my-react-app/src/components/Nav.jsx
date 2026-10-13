@@ -18,12 +18,12 @@ export default function Nav({ path }) {
         </a>
         <div className="nav__links">
           {LINKS.map(([to, label]) => (
-            <a key={to} href={`#${to}`} aria-current={current === to ? 'page' : undefined}>
+            <a key={to} className="ink" href={`#${to}`} aria-current={current === to ? 'page' : undefined}>
               {label}
             </a>
           ))}
         </div>
-        <a className="nav__desk" href="#/desk">
+        <a className="nav__desk ink" href="#/desk">
           책상<span className="nav__desk-long">에서 둘러보기</span>
         </a>
       </div>

@@ -35,16 +35,10 @@
   .wrap {
     padding: 0 16px;
   }
-  .nav__brand small {
-    display: none;
-  }
   .nav__links a,
   .nav__links button {
     padding: 8px 9px;
     font-size: 14px;
-  }
-  .hero {
-    padding: 56px 0 48px;
   }
   .hero__lead {
     font-size: 17px;

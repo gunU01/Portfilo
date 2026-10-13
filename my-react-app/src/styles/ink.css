@@ -1,31 +1,14 @@
 /* 호버할 때 마우스가 닿은 자리에서 물감이 번지듯 색이 퍼지고, 나갈 때는 마우스가 빠져나간 자리로 걷힙니다.
-   퍼지는 원의 위치와 크기(--ix, --iy, --ir)는 lib/useInkHover.js 가 호버 순간에 정합니다.
-   대상 목록은 그 파일의 INK 와 같아야 합니다. 색은 --paint 로 정합니다. */
+   요소에 .ink 를 붙이면 적용됩니다. 번지는 원의 위치와 크기(--ix, --iy, --ir)는 lib/useInkHover.js 가
+   호버가 시작되고 끝나는 순간에 정하고, 색은 --paint 로 정합니다. */
 @media (hover: hover) {
-  .btn--solid,
-  .btn--desk,
-  .nav__desk,
-  .ov__card,
-  .nav__links a,
-  .pj__tabs button:not([aria-pressed='true']),
-  .xlink,
-  .footer__rows a,
-  .desk__list a {
+  .ink {
     position: relative;
     overflow: hidden;
     isolation: isolate;
     --paint: var(--accent-soft);
   }
-
-  .btn--solid::before,
-  .btn--desk::before,
-  .nav__desk::before,
-  .ov__card::before,
-  .nav__links a::before,
-  .pj__tabs button:not([aria-pressed='true'])::before,
-  .xlink::before,
-  .footer__rows a::before,
-  .desk__list a::before {
+  .ink::before {
     content: '';
     position: absolute;
     z-index: -1;
@@ -41,20 +24,27 @@
     transition: transform 1s cubic-bezier(0.45, 0.1, 0.3, 1);
     pointer-events: none;
   }
-
-  .btn--solid:hover::before,
-  .btn--desk:hover::before,
-  .nav__desk:hover::before,
-  .ov__card:hover::before,
-  .nav__links a:hover::before,
-  .pj__tabs button:not([aria-pressed='true']):hover::before,
-  .xlink:hover::before,
-  .footer__rows a:hover::before,
-  .desk__list a:hover::before {
+  .ink:hover::before {
     transform: scale(1);
   }
+  /* 선택된 탭은 이미 색이 차 있으니 번지지 않습니다 */
+  .ink[aria-pressed='true']::before {
+    display: none;
+  }
 
-  /* 물감이 반쯤 퍼진 뒤에 글자색이 바뀌게 해서, 번지는 도중에도 글자가 읽히게 합니다 */
+  /* 요소별 색 */
+  .nav__links .ink {
+    --paint: var(--sunken);
+  }
+  .footer__rows .ink {
+    --paint: rgb(255 255 255 / 0.8);
+  }
+  .desk__list .ink {
+    --paint: #f2f2f2;
+  }
+
+  /* 파랗게 차오르는 요소: 글자색이 번지는 속도에 맞춰 바뀝니다.
+     걸을 때는 물감이 어느 정도 걷힌 뒤에, 들어올 때는 반쯤 퍼진 뒤에 바뀌어 파란 바탕 위에서 글자가 흐려지지 않습니다. */
   .btn--solid,
   .btn--desk,
   .nav__desk,
@@ -64,7 +54,6 @@
   .ov__card .ov__n,
   .ov__card .ov__go {
     --paint: var(--accent);
-    /* 걷힐 때는 물감이 어느 정도 걷힌 뒤에 글자색이 돌아와서, 파란 바탕 위에서 글자가 흐려지지 않게 합니다 */
     transition: color 0.3s ease 0.3s, border-color 0.3s ease 0.25s, transform 0.2s;
   }
   .btn--solid:hover,
@@ -77,27 +66,10 @@
   .ov__card:hover .ov__go {
     transition: color 0.3s ease 0.22s, border-color 0.3s ease 0.15s, transform 0.2s;
   }
-  .nav__links a {
-    --paint: var(--sunken);
-  }
-  .footer__rows a {
-    --paint: rgb(255 255 255 / 0.8);
-  }
-  .desk__list a {
-    --paint: #f2f2f2;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn--solid::before,
-  .btn--desk::before,
-  .nav__desk::before,
-  .ov__card::before,
-  .nav__links a::before,
-  .pj__tabs button::before,
-  .xlink::before,
-  .footer__rows a::before,
-  .desk__list a::before {
+  .ink::before {
     transition: none;
   }
 }

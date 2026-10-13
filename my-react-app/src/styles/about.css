@@ -1,7 +1,6 @@
 /* ---------- Sections ---------- */
 .section {
   padding: 72px 0;
-  border-top: 1px solid var(--line);
 }
 
 /* ---------- About ---------- */
@@ -82,7 +81,6 @@
   border-radius: 999px;
   border: 1px solid var(--ink);
   text-decoration: none;
-  font-weight: 600;
   font-size: 15px;
   transition: background 0.15s, color 0.15s;
 }
