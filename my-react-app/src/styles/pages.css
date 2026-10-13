@@ -278,29 +278,12 @@
 
 /* Footer */
 .footer {
-  position: relative;
-  overflow: hidden;
   margin-top: 0;
   padding: 72px 0 40px;
   border-top: 4px solid transparent;
   border-image: linear-gradient(90deg, #1f6bff, #14b8c9 55%, #7c5cff) 1;
   background: linear-gradient(180deg, #f6f8fd 0%, #eaf1ff 100%);
   font-size: 14.5px;
-}
-/* 이름 뒤에 깔리는 동심원: 얇은 윤곽선만 있는 장식 */
-.footer::before {
-  content: '';
-  position: absolute;
-  left: -200px;
-  bottom: -300px;
-  width: 640px;
-  height: 640px;
-  border-radius: 50%;
-  background: repeating-radial-gradient(circle at center, rgb(31 107 255 / 0.2) 0 1px, transparent 1px 56px);
-  pointer-events: none;
-}
-.footer > * {
-  position: relative;
 }
 .footer__in {
   display: grid;
