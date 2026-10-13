@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { arrowTarget } from '../lib/arrowNav.js'
 
 const DEFAULT_LABELS = {
   tablist: '밸류체인 레일',
@@ -17,23 +18,13 @@ export default function ValueChain({ stages, labels }) {
   const nodes = useRef([])
   const stage = stages[index]
 
-  const select = (next) => {
-    const i = (next + stages.length) % stages.length
-    setIndex(i)
-    nodes.current[i]?.focus()
-  }
-
   // 탭 목록의 방향키 이동
   const onKeyDown = (e) => {
-    const target = {
-      ArrowRight: index + 1,
-      ArrowLeft: index - 1,
-      Home: 0,
-      End: stages.length - 1,
-    }[e.key]
-    if (target === undefined) return
+    const next = arrowTarget(e.key, index, stages.length)
+    if (next === undefined) return
     e.preventDefault()
-    select(target)
+    setIndex(next)
+    nodes.current[next]?.focus()
   }
 
   return (

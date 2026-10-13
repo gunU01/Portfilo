@@ -6,6 +6,7 @@ import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { useReveal } from '../lib/useReveal.js'
 import { scrollToId } from '../lib/format.js'
 import Spec from '../components/Spec.jsx'
+import SkillMap from '../components/SkillMap.jsx'
 import Rich from '../components/Rich.jsx'
 
 const SECTIONS = [
@@ -63,24 +64,7 @@ export default function About() {
         <h2 className="ab__h" id="sk-title">
           나의 기술들
         </h2>
-        <div className="skcards">
-          {skillGroups.map((g, i) => (
-            <article className="skcard reveal" key={g.title}>
-              <header>
-                <h3>{g.title}</h3>
-                <span className="skcard__n tnum">{i + 1}</span>
-              </header>
-              <ul>
-                {g.items.map((s) => (
-                  <li key={s.name}>
-                    <b>{s.name}</b>
-                    <span>{s.used}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
+        <SkillMap groups={skillGroups} />
       </section>
 
       <section className="wrap ab__sec" id="history" aria-labelledby="hi-title">

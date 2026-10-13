@@ -1,0 +1,279 @@
+/* 소개 페이지의 '나의 기술들': 일하는 순서 도식(.skflow)과 도구 칩(.skstack) */
+.skmap {
+  --c-plan: #1f6bff;
+  --c-ops: #0fa3b1;
+  --c-tool: #7c5cff;
+  --c-fe: #ff6fa3;
+  margin-top: 36px;
+  display: grid;
+  gap: 20px;
+}
+
+/* ---------- 일하는 순서 ---------- */
+.skflow {
+  --tone: var(--c-plan);
+  padding: 26px 24px 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.skflow__phases {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+}
+.skflow__phase {
+  margin-right: 8px;
+  padding-top: 8px;
+  border-top: 3px solid var(--c-plan);
+  color: var(--c-plan);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.skflow__phase:last-child {
+  margin-right: 0;
+}
+.skflow__phase--1 {
+  border-top-color: var(--c-ops);
+  color: var(--c-ops);
+}
+.skflow__steps {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+}
+.skflow__step {
+  --tone: var(--c-plan);
+  position: relative;
+}
+.skflow__step--1 {
+  --tone: var(--c-ops);
+}
+/* 마디와 마디를 잇는 선: 이 마디의 가운데에서 다음 마디의 가운데까지 */
+.skflow__step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 21px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: color-mix(in srgb, var(--tone) 35%, var(--line));
+}
+.skflow__node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.skflow__dot {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--tone);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--tone);
+  font-size: 15px;
+  font-weight: 800;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+/* 운영·검증 단계는 모서리가 둥근 네모로 구분합니다 */
+.skflow__step--1 .skflow__dot {
+  border-radius: 12px;
+}
+.skflow__node:hover .skflow__dot {
+  transform: translateY(-2px);
+}
+.skflow__node[aria-selected='true'] .skflow__dot {
+  background: var(--tone);
+  color: #fff;
+}
+.skflow__name {
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+.skflow__node[aria-selected='false'] .skflow__name {
+  color: var(--muted);
+  font-weight: 600;
+}
+.skflow__inline {
+  display: none;
+}
+.skflow__panel {
+  --tone: var(--c-plan);
+  margin-top: 24px;
+  padding: 16px 20px;
+  border-left: 4px solid var(--tone);
+  border-radius: 4px 12px 12px 4px;
+  background: #fff;
+  animation: skfade 0.3s ease;
+}
+.skflow__panel--1 {
+  --tone: var(--c-ops);
+}
+.skflow__panel small {
+  display: block;
+  color: var(--tone);
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.skflow__panel b {
+  display: block;
+  margin-top: 4px;
+  font-size: 17px;
+}
+.skflow__panel p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+@keyframes skfade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* ---------- 도구 ---------- */
+.skmap__stacks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.skstack {
+  --tone: var(--c-tool);
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.skstack--fe {
+  --tone: var(--c-fe);
+}
+.skstack h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 17px;
+}
+/* 도구는 마름모, 프론트엔드는 삼각형 */
+.skstack__mark {
+  width: 12px;
+  height: 12px;
+  background: var(--tone);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+.skstack--fe .skstack__mark {
+  transform: none;
+  border-radius: 0;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  width: 14px;
+  height: 13px;
+}
+.skstack__chips {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.skstack__chip {
+  padding: 7px 14px;
+  border: 1.5px solid color-mix(in srgb, var(--tone) 35%, var(--line));
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.skstack .skstack__chip {
+  --paint: color-mix(in srgb, var(--tone) 16%, #fff);
+}
+.skstack__chip[aria-selected='true'] {
+  border-color: var(--tone);
+  background: var(--tone);
+  color: #fff;
+}
+.skstack__chip[aria-selected='true']::before {
+  display: none;
+}
+.skstack__desc {
+  margin: 16px 0 0;
+  min-height: 5.2em;
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .skmap__stacks {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* 좁은 화면: 세로로 이어 붙이고 설명을 항상 펼쳐 둡니다(고르는 동작 없이 그대로 읽힘) */
+@media (max-width: 720px) {
+  .skflow {
+    padding: 22px 18px;
+  }
+  .skflow__phases,
+  .skflow__panel {
+    display: none;
+  }
+  .skflow__steps {
+    margin-top: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .skflow__step {
+    padding-bottom: 18px;
+  }
+  .skflow__step:not(:last-child)::before {
+    top: 44px;
+    left: 21px;
+    width: 2px;
+    height: calc(100% - 44px);
+  }
+  .skflow__node {
+    flex-direction: row;
+    gap: 14px;
+    padding: 0;
+    text-align: left;
+    pointer-events: none;
+  }
+  .skflow__node .skflow__name,
+  .skflow__node[aria-selected='false'] .skflow__name {
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .skflow__node[aria-selected='false'] .skflow__dot {
+    background: #fff;
+    color: var(--tone);
+  }
+  .skflow__inline {
+    display: block;
+    margin: 6px 0 0 58px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+}

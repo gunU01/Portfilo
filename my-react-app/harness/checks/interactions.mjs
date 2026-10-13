@@ -47,6 +47,24 @@ export default {
       await waitFor(async () => (await page.locator('.sidx button[aria-current="true"]').textContent()).replace(/^\d+/, '') === label, { timeout: 6000, message: '목차 강조가 따라오지 않았습니다' })
     })
 
+    await t('기술 도식: 마디를 고르면 설명이 바뀌고, 방향키로 이동하며 양 끝이 이어진다', async () => {
+      await page.goto(`${url}/#/about`)
+      await page.waitForSelector('.skflow__node')
+      const selected = () => page.locator('.skflow__node[aria-selected="true"] .skflow__name').textContent()
+      const panel = () => page.locator('.skflow__panel b').textContent()
+      await page.locator('.skflow__node').nth(4).click()
+      assert.equal(await panel(), await selected(), '선택한 마디와 설명 제목이 같아야 합니다')
+      await page.locator('.skflow__node').nth(0).click()
+      await page.keyboard.press('ArrowLeft')
+      assert.equal(await page.locator('.skflow__node[aria-selected="true"]').getAttribute('id'), `skflow-tab-${(await page.locator('.skflow__node').count()) - 1}`, '처음에서 왼쪽으로 가면 마지막으로')
+      await page.keyboard.press('Home')
+      assert.equal(await page.locator('.skflow__node[aria-selected="true"]').getAttribute('id'), 'skflow-tab-0')
+      const chips = page.locator('.skstack').first().locator('.skstack__chip')
+      await chips.nth(1).click()
+      assert.equal(await chips.nth(1).getAttribute('aria-selected'), 'true')
+      assert.ok((await page.locator('.skstack__desc').first().textContent()).length > 0)
+    })
+
     await t('호버 번짐: 들어온 자리에서 차오르고, 나간 자리로 걷힌다', async () => {
       await page.goto(`${url}/#/`)
       const card = page.locator('.ov__card').first()

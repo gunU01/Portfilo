@@ -216,57 +216,6 @@
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   letter-spacing: -0.04em;
 }
-.skcards {
-  margin-top: 28px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-.skcard {
-  display: flex;
-  flex-direction: column;
-  padding: 22px;
-  border-radius: 14px;
-  background: var(--accent-soft);
-  border: 1px solid transparent;
-}
-.skcard header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-.skcard h3 {
-  font-size: 1.4rem;
-  letter-spacing: -0.03em;
-}
-.skcard__n {
-  flex: none;
-  display: inline-grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border: 1.5px solid var(--ink);
-  border-radius: 50%;
-  font-size: 13px;
-  font-weight: 700;
-}
-.skcard li {
-  padding: 12px 0;
-  border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
-}
-.skcard b {
-  display: block;
-  font-size: 16px;
-}
-.skcard li span {
-  display: block;
-  margin-top: 2px;
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.65;
-}
 .ab .tl {
   margin-top: 28px;
 }
@@ -373,9 +322,6 @@
   }
   .ov__cards,
   .pj__grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .skcards {
     grid-template-columns: minmax(0, 1fr);
   }
   .footer__in {

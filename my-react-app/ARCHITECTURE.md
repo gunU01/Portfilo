@@ -31,7 +31,8 @@ main.jsx ─ App.jsx (라우팅)
 
 ## 데이터 흐름
 
-- `profile.js`(이름, 소개, 연락처), `skills.js`, `awards.js`, `contests.js` 는 홈, 소개 페이지, 푸터가 그대로 읽습니다.
+- `profile.js`(이름, 소개, 연락처), `awards.js`, `contests.js` 는 홈, 소개 페이지, 푸터가 그대로 읽습니다.
+- `skills.js` 의 묶음은 `view` 로 보여 주는 방식을 정합니다. `'process'` 는 순서대로 이어 붙인 흐름도(항목 순서가 곧 순서), `'stack'` 은 도구 칩입니다. 그리는 쪽은 `components/SkillMap.jsx`.
 - `eolma.js`, `haemi.js`, `valueChain.js` 는 케이스 한 편씩이고, `cases.js` 가 노출 순서를 정합니다. 케이스 본문은 `sections[].blocks[]` 로 구성되고 `components/Blocks.jsx` 가 블록 타입별로 그립니다.
 - `desk.js` 는 새 내용을 만들지 않고 위 데이터를 모아 책상의 물건 7개(`spots`)로 보여 줍니다. 물건의 이름표, 접근성 라벨, 패널 제목은 `spots[].title` 하나를 같이 씁니다.
 
@@ -41,7 +42,7 @@ main.jsx ─ App.jsx (라우팅)
 
 ## 스타일
 
-- `styles/index.css` 의 `@import` 순서가 곧 우선순위입니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요(`base → nav → hero → about → case → value-chain → responsive → print → desk → components → layout → pages → ink`).
+- `styles/index.css` 의 `@import` 순서가 곧 우선순위입니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요(`base → nav → hero → about → case → value-chain → responsive → print → desk → components → layout → pages → skills → ink`).
 - 색, 간격 같은 값은 `base.css` 의 `:root` 변수에 있습니다.
 - `font.css` 는 `scripts/subset-font.py` 가 만듭니다(직접 고치지 않음).
 - 호버 번짐: 요소에 `ink` 클래스를 붙이면 됩니다. 중심 위치는 `lib/useInkHover.js` 가, 모양은 `styles/ink.css` 가 맡습니다.
