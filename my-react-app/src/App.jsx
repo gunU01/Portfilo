@@ -28,7 +28,7 @@ export default function App() {
   const title = current?.title ?? page?.title
 
   useEffect(() => {
-    const base = `${profile.name} · PM 포트폴리오`
+    const base = `${profile.name} 포트폴리오 사이트`
     document.title = title ? `${title} — ${base}` : base
   }, [title])
 
