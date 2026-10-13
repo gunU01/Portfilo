@@ -34,15 +34,29 @@ npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도
 
 ## 코드 구조
 
+계층 규칙, 데이터 흐름, 자주 하는 변경은 [ARCHITECTURE.md](./ARCHITECTURE.md) 에 있습니다.
+
 ```
 src/
   pages/        Home · Project · Case(케이스 본문) · About · Desk(책상 입구)
-  components/   Nav · Footer · Spec · Blocks(케이스 본문 블록) · CaseCover · ValueChain · DeskScene · DeskPanel
+  components/   Nav · Footer · Spec · Blocks · CaseCover · ValueChain · DeskScene · DeskPanel
     desk/       책상 SVG 를 이루는 조각들 (Wall · WallDecor · Desktop · Foreground · Hotspot · Tags …)
   data/         화면에 나오는 모든 문구와 수치 (위 표)
-  lib/          useHashRoute · useReveal · useScrollSpy · useParallax · format
+  lib/          useHashRoute · useReveal · useScrollSpy · useParallax · useInkHover · format
   styles/       index.css 가 순서대로 불러옵니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요
+harness/        검증 하네스 (아키텍처 검사, 브라우저 검사, 스냅샷 비교)
+scripts/        글꼴 쪼개기
 ```
+
+## 검증
+
+```bash
+npm run verify        # lint + 아키텍처 검사 + 빌드 + 브라우저 검사를 한 번에
+npm run arch          # 계층 규칙만
+npm run e2e           # 브라우저 검사만 (먼저 npm run build)
+```
+
+처음 한 번은 `npx playwright install chromium` 으로 브라우저를 받아야 합니다. 자세한 내용은 ARCHITECTURE.md 의 '검증 하네스'.
 
 ## 글꼴 다시 만들기
 
