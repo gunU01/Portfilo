@@ -309,10 +309,14 @@
   gap: 12px;
   padding: 16px 2px;
   color: var(--ink);
+  text-decoration: none;
   transition: color 0.15s ease;
 }
 .footer__rows a:hover {
   color: var(--accent-ink);
+}
+.footer__rows a:hover .footer__go {
+  transform: translate(2px, -2px);
 }
 .footer__k {
   font-size: 12px;
@@ -328,6 +332,7 @@
 }
 .footer__go {
   color: var(--accent-ink);
+  transition: transform 0.15s ease;
 }
 .footer__bar {
   margin-top: 36px;
