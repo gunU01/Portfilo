@@ -156,3 +156,13 @@
   }
 }
 
+
+/* 모바일에서만 줄바꿈: 데스크톱에서는 숨겨 한 줄로 이어집니다 */
+.br-mobile {
+  display: none;
+}
+@media (max-width: 680px) {
+  .br-mobile {
+    display: inline;
+  }
+}

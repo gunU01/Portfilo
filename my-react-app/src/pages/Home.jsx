@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { profile } from '../data/profile.js'
 import { cases } from '../data/cases.js'
 import { awards } from '../data/awards.js'
@@ -17,7 +18,19 @@ function Hero() {
 
         <div className="hero__grid">
           <div>
-            <h1 id="hero-title">{hero.title.join(' ')}</h1>
+            <h1 id="hero-title">
+              {hero.title.map((line, i) => (
+                <Fragment key={line}>
+                  {i > 0 && (
+                    <>
+                      {' '}
+                      <br className="br-mobile" />
+                    </>
+                  )}
+                  {line}
+                </Fragment>
+              ))}
+            </h1>
             <p className="hero__lead">{hero.lead}</p>
             <div className="hero__cta">
               <a className="btn btn--solid" href="#/project">
