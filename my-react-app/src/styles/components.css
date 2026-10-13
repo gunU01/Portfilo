@@ -18,7 +18,6 @@ h4 {
   color: var(--bg);
 }
 .btn--solid:hover {
-  background: var(--accent);
   border-color: var(--accent);
   color: #fff;
 }
@@ -31,7 +30,6 @@ h4 {
   content: '↗';
 }
 .btn--desk:hover {
-  background: var(--accent);
   border-color: var(--accent);
   color: #fff;
 }
@@ -46,7 +44,6 @@ h4 {
   color: var(--accent-ink);
 }
 .nav__desk:hover {
-  background: var(--accent);
   color: #fff;
 }
 .nav__in {
@@ -356,7 +353,6 @@ h4 {
 }
 .xlink:hover {
   border-color: var(--accent);
-  background: var(--accent-soft);
 }
 .xlink:hover span {
   transform: translate(2px, -2px);

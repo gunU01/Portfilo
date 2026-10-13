@@ -6,6 +6,7 @@ import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { useReveal } from '../lib/useReveal.js'
 import { scrollToId } from '../lib/format.js'
 import Spec from '../components/Spec.jsx'
+import Rich from '../components/Rich.jsx'
 
 const SECTIONS = [
   ['intro', '소개'],
@@ -46,7 +47,9 @@ export default function About() {
             </h1>
             <div className="ab__text">
               {about.paragraphs.map((p) => (
-                <p key={p}>{p}</p>
+                <p key={p}>
+                  <Rich text={p} />
+                </p>
               ))}
             </div>
           </div>

@@ -9,6 +9,7 @@ import Desk from './pages/Desk.jsx'
 import { cases } from './data/cases.js'
 import { profile } from './data/profile.js'
 import { useHashRoute } from './lib/useHashRoute.js'
+import { useInkHover } from './lib/useInkHover.js'
 import { scrollToId } from './lib/format.js'
 
 // 해시 경로 → 페이지. 목록에 없는 경로와 케이스(/work/<slug>)는 아래에서 따로 처리합니다.
@@ -20,6 +21,7 @@ const PAGES = {
 
 export default function App() {
   const { path, section } = useHashRoute()
+  useInkHover()
   const slug = path.match(/^\/work\/([\w-]+)$/)?.[1]
   const current = cases.find((c) => c.slug === slug)
   const page = PAGES[path]

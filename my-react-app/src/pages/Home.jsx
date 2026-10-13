@@ -70,7 +70,7 @@ function Overview() {
               소개, 기술, 활동, 대회 참가
               {awards.length ? `, 수상 ${awards.length}건` : ''}
             </p>
-            <span className="ov__go">소개 보기 →</span>
+            <span className="ov__go">자기소개 보기 →</span>
           </a>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import Rich from './Rich.jsx'
 import { isExternal } from '../lib/format.js'
 
 const linkProps = (href) => (isExternal(href) ? { target: '_blank', rel: 'noreferrer' } : {})
@@ -24,7 +25,9 @@ export default function DeskPanel({ spot, onClose }) {
       <h2>{spot.title}</h2>
 
       {spot.paragraphs?.map((p) => (
-        <p key={p}>{p}</p>
+        <p key={p}>
+          <Rich text={p} />
+        </p>
       ))}
 
       {spot.items && (

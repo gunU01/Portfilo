@@ -46,6 +46,5 @@
 .nav__links a:hover,
 .nav__links button:hover {
   color: var(--ink);
-  background: var(--sunken);
 }
 
