@@ -1,6 +1,6 @@
 # PM 포트폴리오
 
-프론트엔드 출신 PM 포트폴리오 사이트. React 19 + Vite, 해시 라우팅, 폰트·CDN 미사용. 글꼴은 Pretendard(SIL OFL)를 npm 패키지로 함께 배포합니다. `#/desk` 는 SVG 로 그린 책상 위의 물건을 눌러 포트폴리오를 둘러보는 입구입니다.
+프론트엔드 출신 PM 포트폴리오 사이트. React 19 + Vite, 해시 라우팅, 폰트·CDN 미사용. 글꼴은 나눔스퀘어 네오(NAVER, SIL OFL)를 `src/assets/fonts/` 에 함께 배포합니다. `#/desk` 는 SVG 로 그린 책상 위의 물건을 눌러 포트폴리오를 둘러보는 입구입니다.
 
 ```bash
 npm install
@@ -42,4 +42,14 @@ src/
   data/         화면에 나오는 모든 문구와 수치 (위 표)
   lib/          useHashRoute · useReveal · useScrollSpy · useParallax · format
   styles/       index.css 가 순서대로 불러옵니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요
+```
+
+## 글꼴 다시 만들기
+
+나눔스퀘어 네오는 용량 때문에 두 파일로 쪼개 쓰고(`scripts/subset-font.py`), 지금 사이트에 쓰는 글자(a)만 항상 받고 나머지 완성형 한글(b)은 필요할 때만 받습니다.
+문구를 많이 바꿨다면 가변 글꼴 원본(woff2)을 구해 아래를 다시 돌리세요. 안 돌려도 b 가 대신 받아져서 글자가 깨지지는 않습니다.
+
+```bash
+pip install fonttools brotli
+python3 scripts/subset-font.py <NanumSquareNeo-Variable.woff2>
 ```
