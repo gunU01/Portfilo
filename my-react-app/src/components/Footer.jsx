@@ -17,7 +17,7 @@ export default function Footer() {
       <div className="wrap footer__in">
         <div className="footer__hero">
           <p className="footer__role">
-            {profile.name}, {profile.roleLine}
+            {profile.name}, <em>{profile.roleLine}</em>
           </p>
         </div>
         <ul className="footer__rows">
