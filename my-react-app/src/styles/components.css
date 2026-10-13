@@ -334,3 +334,30 @@ h4 {
   }
 }
 
+/* 바깥으로 나가는 링크: 밑줄 대신 알약 모양 */
+.xlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--accent-ink);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.xlink span {
+  font-size: 0.85em;
+  transition: transform 0.15s ease;
+}
+.xlink:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.xlink:hover span {
+  transform: translate(2px, -2px);
+}

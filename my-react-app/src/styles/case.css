@@ -58,10 +58,6 @@
 .meta dd {
   margin: 0;
 }
-.meta a {
-  color: var(--accent-ink);
-  font-weight: 600;
-}
 
 .case__body {
   display: grid;

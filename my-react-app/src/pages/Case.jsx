@@ -51,8 +51,9 @@ export default function Case({ data }) {
             <div key={l.href}>
               <dt>링크</dt>
               <dd>
-                <a href={l.href} target="_blank" rel="noreferrer">
-                  {l.label} ↗
+                <a className="xlink" href={l.href} target="_blank" rel="noreferrer">
+                  {l.label}
+                  <span aria-hidden="true">↗</span>
                 </a>
               </dd>
             </div>

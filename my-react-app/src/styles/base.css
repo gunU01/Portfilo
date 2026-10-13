@@ -72,6 +72,18 @@ a {
   color: inherit;
 }
 
+/* 클래스가 없는 일반 링크: 얇고 옅은 밑줄, 호버하면 진해집니다 */
+a:not([class]) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  transition: text-decoration-color 0.15s ease;
+}
+a:not([class]):hover {
+  text-decoration-color: var(--accent);
+}
+
 ul,
 ol {
   margin: 0;
