@@ -183,8 +183,8 @@
   line-height: 1.8;
 }
 .ab__text strong {
-  color: var(--accent-ink);
-  font-weight: 700;
+  color: #4a8dff;
+  font-weight: 600;
 }
 .ab__side {
   display: grid;
