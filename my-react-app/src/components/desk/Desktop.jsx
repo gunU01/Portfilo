@@ -87,7 +87,7 @@ export function DeskTop() {
   )
 }
 
-// 책 위에 널브러진 까만 덩어리 고양이. 로우폴리(각진 면)로 단순하게 그리고, 일부러 멍청한 얼굴을 했습니다.
+// 책 위에 널브러진 까만 덩어리 고양이. 로우폴리(각진 면)로 단순하게 그리고, 표정은 눈만 남겼습니다(코, 입 없음).
 // 눈동자는 마우스를 따라가고(--px/--py), 마우스를 올리면 눈을 감고 웃으며 하트를 날립니다. 꼬리는 살랑거립니다.
 const FACETS = [
   ['#2b2832', '398,450 414,462 400,490 388,468'],
@@ -131,10 +131,6 @@ function Cat() {
         <path d="M397 483 L405 476 L413 483" />
         <path d="M428 481 L435 475 L442 481" />
       </g>
-      {/* 코와 혀: 입을 헤벌리고 있습니다 */}
-      <polygon points="416,490 424,490 420,495" fill="#e0809a" />
-      <path d="M420 495 V497 M420 497 L414 498 M420 497 L426 498" fill="none" stroke="#6a657a" strokeWidth="1.6" strokeLinecap="round" />
-      <polygon className="desk__tongue" points="416.5,498 423.5,498 420,508" fill="#ff7b98" />
       <g className="desk__hearts" fill="#ff6f8f">
         <path className="desk__heart" d="M352 462 C346 456 348 451 352 454 C356 451 358 456 352 462Z" />
         <path className="desk__heart desk__heart--b" d="M492 466 C486 460 488 455 492 458 C496 455 498 460 492 466Z" />

@@ -73,16 +73,6 @@
   opacity: 0;
   transition: opacity 0.15s;
 }
-.desk__tongue {
-  transform-box: fill-box;
-  transform-origin: 50% 0;
-  animation: tongue 2.4s ease-in-out infinite;
-}
-@keyframes tongue {
-  50% {
-    transform: scaleY(1.28);
-  }
-}
 .desk__hearts {
   opacity: 0;
 }
