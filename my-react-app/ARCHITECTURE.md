@@ -27,13 +27,13 @@ main.jsx ─ App.jsx (라우팅)
 | `App.jsx`, `main.jsx` | 라우팅, 문서 제목, 전역 훅 연결 | 전부 | |
 | `styles/` | CSS. `index.css` 가 순서대로 불러옴 | `assets`(글꼴) | |
 
-그 밖에 지키는 것: 순환 의존 금지, `main.jsx` 에서 이어지지 않는 모듈 금지(쓰지 않는 코드), `react`/`react-dom` 외 패키지 금지. 규칙은 `harness/architecture.mjs` 의 `LAYERS` 한 곳에 있습니다.
+그 밖에 지키는 것: 순환 의존 금지, `main.jsx` 에서 이어지지 않는 모듈 금지(쓰지 않는 코드), `react`/`react-dom` 외 패키지 금지. 규칙은 `harness/architecture.config.mjs` 한 곳에 있고, 이 문서의 표와 같은 내용입니다. 계층을 바꿀 때는 둘을 같이 고치세요.
 
 ## 데이터 흐름
 
 - `profile.js`(이름, 소개, 연락처), `awards.js`, `contests.js` 는 홈, 소개 페이지, 푸터가 그대로 읽습니다.
 - `skills.js` 의 묶음은 `view` 로 보여 주는 방식을 정합니다. `'process'` 는 순서대로 이어 붙인 흐름도(항목 순서가 곧 순서), `'stack'` 은 도구 칩입니다. 그리는 쪽은 `components/SkillMap.jsx`.
-- `eolma.js`, `haemi.js`, `valueChain.js` 는 케이스 한 편씩이고, `cases.js` 가 노출 순서를 정합니다. 케이스 본문은 `sections[].blocks[]` 로 구성되고 `components/Blocks.jsx` 가 블록 타입별로 그립니다.
+- `eolma.js`, `haemi.js`, `toss.js` 는 케이스 한 편씩이고, `cases.js` 가 노출 순서를 정합니다. 케이스 본문은 `sections[].blocks[]` 로 구성되고 `components/Blocks.jsx` 가 블록 타입별로 그립니다.
 - `desk.js` 는 새 내용을 만들지 않고 위 데이터를 모아 책상의 물건 7개(`spots`)로 보여 줍니다. 물건의 이름표, 접근성 라벨, 패널 제목은 `spots[].title` 하나를 같이 씁니다.
 
 ## 라우팅
@@ -42,7 +42,7 @@ main.jsx ─ App.jsx (라우팅)
 
 ## 스타일
 
-- `styles/index.css` 의 `@import` 순서가 곧 우선순위입니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요(`base → nav → hero → about → case → value-chain → responsive → print → desk → components → layout → pages → skills → ink`).
+- `styles/index.css` 의 `@import` 순서가 곧 우선순위입니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요(`base → nav → hero → about → case → responsive → print → desk → components → layout → pages → skills → ink`).
 - 색, 간격 같은 값은 `base.css` 의 `:root` 변수에 있습니다.
 - `font.css` 는 `scripts/subset-font.py` 가 만듭니다(직접 고치지 않음).
 - 호버 번짐: 요소에 `ink` 클래스를 붙이면 됩니다. 중심 위치는 `lib/useInkHover.js` 가, 모양은 `styles/ink.css` 가 맡습니다.
@@ -73,15 +73,20 @@ main.jsx ─ App.jsx (라우팅)
 | `npm run build` | 빌드가 되는지 |
 | `npm run e2e` | 빌드 결과를 실제 브라우저로 열어 확인 (아래) |
 
-`e2e` 는 `harness/checks/` 의 검사를 돌립니다.
+`e2e` 는 `harness/checks/` 의 검사를 돌립니다. 검사 파일을 하나 더 넣으면 자동으로 포함됩니다.
 
 | 검사 | 확인하는 것 |
 | --- | --- |
 | `routes` | 모든 라우트(케이스는 목록에서 자동 발견)가 PC·모바일에서 오류 없이 열리고, 제목과 푸터가 맞고, 가로로 넘치지 않고, 글꼴이 로드됨 |
 | `links` | 사이트의 모든 내부 링크(책상 패널 안 포함)가 실제 페이지와 `?s=` 섹션으로 이어짐. 바깥 링크는 새 탭 + `rel=noreferrer` |
 | `desk` | 물건 7개를 키보드와 마우스로 열고 닫음, 포커스 이동, 이름표, 시차 효과, 모바일 가운데 스크롤 |
-| `interactions` | 메뉴 강조, 프로젝트 탭 필터, 목차 이동과 강조, 호버 번짐(들어온 자리, 나간 자리), 모션 줄이기 |
+| `navigation` | 메뉴 강조, 프로젝트 탭 필터, 케이스 목차와 소개 페이지 목차 이동 |
+| `skills` | 기술 도식의 마디와 칩 선택, 방향키 이동, 모바일에서 설명이 항상 펼쳐짐 |
+| `ink` | 호버 번짐(들어온 자리, 나간 자리, 도중에 나갈 때), 모션 줄이기 |
+| `a11y` | 글자와 배경의 대비(일반 4.5, 큰 글씨 3), 이미지 대체 텍스트, 버튼 이름. 대비를 일부러 낮춘 곳은 `checks/a11y.mjs` 의 `EXEMPT` 에 이유와 함께 적음 |
 | `seo` | `index.html` 의 제목, 설명, `og:*` 가 맞고 길이가 적당함, 외부 CDN 없음 |
+
+검사들이 같이 쓰는 도구는 `harness/lib/` 에 있습니다(`site.mjs`: 케이스·책상 물건 자동 발견과 사이트 이름 읽기, `browser.mjs`: 브라우저 열기, `server.mjs`: 미리보기 서버, `args.mjs`). 기대하는 제목처럼 사이트 문구에 걸린 값은 검사 안에 적지 않고 빌드 결과(`dist/index.html`)에서 읽습니다.
 
 리팩터링 전후 화면을 비교할 때:
 

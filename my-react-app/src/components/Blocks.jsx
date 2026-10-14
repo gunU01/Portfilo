@@ -1,7 +1,6 @@
 import Rich from './Rich.jsx'
-import ValueChain from './ValueChain.jsx'
 
-const WIDE_TYPES = new Set(['valueChain', 'table', 'stats', 'figure', 'gallery'])
+const WIDE_TYPES = new Set(['table', 'stats', 'figure', 'gallery'])
 
 // 문장 목록. 각 항목에 **굵게** 표기를 허용합니다.
 function RichList({ items, className }) {
@@ -202,9 +201,6 @@ function Block({ block }) {
           )}
         </div>
       )
-
-    case 'valueChain':
-      return <ValueChain stages={block.stages} labels={block.labels} />
 
     case 'figure':
       return (

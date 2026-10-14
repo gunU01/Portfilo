@@ -23,9 +23,6 @@
   .toc {
     display: none;
   }
-  .vc__cols {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 680px) {
@@ -115,27 +112,6 @@
     font-weight: 700;
     color: var(--faint);
     margin-bottom: 2px;
-  }
-
-  .rail {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 2px;
-  }
-  .rail__dot {
-    width: 36px;
-    height: 36px;
-  }
-  .rail::before {
-    top: 18px;
-  }
-  .rail__name {
-    font-size: 12.5px;
-  }
-  .vc__panel {
-    padding: 20px 16px;
-  }
-  .vc__lens {
-    grid-template-columns: 1fr;
   }
   .dec summary {
     padding: 14px 16px;

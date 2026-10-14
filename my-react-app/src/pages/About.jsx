@@ -108,7 +108,7 @@ export default function About() {
                 </span>
                 <div>
                   <b>{a.title}</b>
-                  <small>{[a.org, a.note].filter(Boolean).join(' · ')}</small>
+                  {(a.org || a.note) && <small>{[a.org, a.note].filter(Boolean).join(' · ')}</small>}
                 </div>
                 <span className="awards__res">{a.result}</span>
               </li>

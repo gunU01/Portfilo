@@ -15,7 +15,7 @@ npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도
 | 파일 | 내용 |
 | --- | --- |
 | `profile.js` | 이름, 히어로 문구, 소개·타임라인, 연락처(빈 값은 자동 숨김) |
-| `eolma.js` · `haemi.js` · `valueChain.js` | 케이스 스터디 본문. `sections[].blocks[]` 의 타입(`p`, `list`, `table`, `decisions`, `stats` …)을 조합 |
+| `eolma.js` · `haemi.js` · `toss.js` | 케이스 스터디 본문. `sections[].blocks[]` 의 타입(`p`, `list`, `table`, `decisions`, `stats` …)을 조합 |
 | `skills.js` | 기술·도구 (어디에 어떻게 썼는지). 묶음의 `view` 가 도식('process', 순서가 곧 항목 순서)인지 칩('stack')인지 정함 |
 | `awards.js` · `contests.js` | 수상 이력(항목을 넣으면 ‘수상’ 섹션이 나타남) · 대회 참가 기록 |
 | `cases.js` | 프로젝트 노출 순서 |
@@ -39,12 +39,12 @@ npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도
 ```
 src/
   pages/        Home · Project · Case(케이스 본문) · About · Desk(책상 입구)
-  components/   Nav · Footer · Spec · SkillMap · Blocks · CaseCover · ValueChain · DeskScene · DeskPanel
+  components/   Nav · Footer · Spec · SkillMap · Blocks · CaseCover · DeskScene · DeskPanel
     desk/       책상 SVG 를 이루는 조각들 (Wall · WallDecor · Desktop · Foreground · Hotspot · Tags …)
   data/         화면에 나오는 모든 문구와 수치 (위 표)
   lib/          useHashRoute · useReveal · useScrollSpy · useParallax · useInkHover · arrowNav · format
   styles/       index.css 가 순서대로 불러옵니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요
-harness/        검증 하네스 (아키텍처 검사, 브라우저 검사, 스냅샷 비교)
+harness/        검증 하네스 (아키텍처 검사, 브라우저 검사 checks/, 스냅샷 비교)
 scripts/        글꼴 쪼개기
 ```
 

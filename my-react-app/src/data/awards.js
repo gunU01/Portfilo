@@ -4,7 +4,6 @@ export const awards = [
     year: '2025',
     title: '교내 노벨 엔지니어링 바이브 코딩 해커톤 (1학년)',
     result: '장려상',
-    note: '4위',
   },
   {
     year: '2025',
@@ -20,6 +19,5 @@ export const awards = [
     year: '2026',
     title: '글로벌 피우다 프로젝트 동북권',
     result: '우수상',
-    org: '해미',
   },
 ]
