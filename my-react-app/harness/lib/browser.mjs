@@ -16,8 +16,8 @@ export const VIEWPORTS = {
 }
 
 // 페이지를 열고, 콘솔 오류와 예외를 모아 둡니다. 모션 줄이기를 켜서 화면이 흔들리지 않게 할 수 있습니다.
-export async function openPage(browser, { viewport = VIEWPORTS.desktop, reducedMotion = 'no-preference' } = {}) {
-  const context = await browser.newContext({ viewport, reducedMotion })
+export async function openPage(browser, { viewport = VIEWPORTS.desktop, reducedMotion = 'no-preference', permissions = [] } = {}) {
+  const context = await browser.newContext({ viewport, reducedMotion, permissions })
   const page = await context.newPage()
   const errors = []
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`))

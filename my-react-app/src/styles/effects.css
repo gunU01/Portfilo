@@ -1,0 +1,150 @@
+/* 사이트 전체의 움직임: 페이지 전환, 스크롤 진행 막대, 메뉴 알약, 첫 화면 글자, 카드 기울기, 버튼 끌림, 활동 기록 선, 복사 버튼.
+   움직임은 모두 이 파일에 모으고, 모션 줄이기 설정에서는 맨 아래에서 한꺼번에 끕니다.
+   마우스를 따르는 값(--px/--py, --fx/--fy)과 스크롤 값(--scroll)은 lib/ 의 훅이 정합니다. */
+
+/* ---------- 페이지가 바뀔 때 ---------- */
+.page-in {
+  animation: page-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* ---------- 위쪽 스크롤 진행 막대 ---------- */
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #14b8a6 55%, #8b5cf6);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--scroll, 0));
+  pointer-events: none;
+}
+
+/* ---------- 메뉴: 현재 메뉴 뒤의 알약이 옮겨 다님 ---------- */
+.nav__links {
+  position: relative;
+}
+.nav__pill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  width: var(--w, 0);
+  height: var(--h, 0);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  transform: translate(var(--x, 0), var(--y, 0));
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.3, 1.35, 0.5, 1), width 0.3s ease, height 0.3s ease, opacity 0.2s;
+  pointer-events: none;
+}
+.nav__pill.is-on {
+  opacity: 1;
+}
+.nav__links a {
+  z-index: 1;
+}
+
+/* ---------- 홈 첫 화면: 큰 글자가 차례로 올라오고, 마우스를 따라 줄마다 다르게 움직임 ---------- */
+.kw span {
+  display: block;
+  animation: kw-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 120ms);
+  transition: transform 0.35s ease-out;
+}
+/* .kw 는 가로로 넘치는 글자를 잘라 내므로(overflow: hidden), 글자가 줄의 끝 쪽으로는 움직이지 않고 안쪽으로만 움직입니다 */
+.kw span:nth-child(1) {
+  transform: translateX(max(0px, calc(var(--px, 0) * 16px)));
+}
+.kw span:nth-child(2) {
+  transform: translateX(calc(var(--px, 0) * -8px));
+}
+.kw span:nth-child(3) {
+  transform: translateX(min(0px, calc(var(--px, 0) * 16px)));
+}
+@keyframes kw-in {
+  from {
+    opacity: 0;
+    transform: translateY(45%);
+  }
+}
+
+/* ---------- 프로젝트 카드: 마우스 쪽으로 살짝 기울어짐 ---------- */
+.pcard.follow:hover .cover {
+  transform: perspective(900px) translateY(-4px) rotateX(calc(var(--fy, 0) * -4deg)) rotateY(calc(var(--fx, 0) * 5deg));
+}
+.pcard.follow .cover {
+  transition: transform 0.2s ease-out, box-shadow 0.25s ease;
+}
+
+/* ---------- 버튼: 마우스 쪽으로 살짝 끌려옴 ---------- */
+.magnet {
+  translate: calc(var(--fx, 0) * 7px) calc(var(--fy, 0) * 5px);
+}
+
+/* ---------- 활동 기록: 지나온 항목의 선과 점이 차오름 ---------- */
+.tl--live .tl__item {
+  transition: border-color 0.45s ease;
+}
+.tl--live .tl__item::before {
+  transition: background 0.45s ease, transform 0.45s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.tl--live .tl__item.is-passed {
+  border-left-color: var(--accent);
+}
+.tl--live .tl__item.is-passed::before {
+  background: var(--accent);
+  transform: scale(1.2);
+}
+
+/* ---------- 푸터: 복사 버튼 ---------- */
+.footer__rows li {
+  position: relative;
+}
+.footer__copy {
+  position: absolute;
+  top: 50%;
+  right: 40px;
+  transform: translateY(-50%);
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--accent-ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.footer__copy:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ---------- 모션 줄이기 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .page-in,
+  .kw span {
+    animation: none;
+  }
+  .kw span,
+  .nav__pill,
+  .tl--live .tl__item,
+  .tl--live .tl__item::before {
+    transition: none;
+  }
+  .pcard.follow:hover .cover {
+    transform: translateY(-4px);
+  }
+  .magnet {
+    translate: none;
+  }
+}

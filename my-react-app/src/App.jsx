@@ -10,6 +10,8 @@ import { cases } from './data/cases.js'
 import { profile } from './data/profile.js'
 import { useHashRoute } from './lib/useHashRoute.js'
 import { useInkHover } from './lib/useInkHover.js'
+import { useFollow } from './lib/useFollow.js'
+import { useScrollProgress } from './lib/useScrollProgress.js'
 import { scrollToId } from './lib/format.js'
 
 // 해시 경로 → 페이지. 목록에 없는 경로와 케이스(/work/<slug>)는 아래에서 따로 처리합니다.
@@ -22,6 +24,8 @@ const PAGES = {
 export default function App() {
   const { path, section } = useHashRoute()
   useInkHover()
+  useFollow()
+  useScrollProgress()
   const slug = path.match(/^\/work\/([\w-]+)$/)?.[1]
   const current = cases.find((c) => c.slug === slug)
   const page = PAGES[path]
@@ -43,14 +47,19 @@ export default function App() {
   }, [path, section])
 
   const Page = page?.Page ?? Home
+  // 페이지가 바뀔 때마다 main 을 새로 만들어 들어오는 효과(page-in)가 다시 시작되게 합니다.
+  const pageKey = current?.slug ?? path
 
   return (
     <>
       <a className="skip" href="#main">
         본문으로 건너뛰기
       </a>
+      {page?.footer !== false && <div className="progress" aria-hidden="true" />}
       <Nav path={path} />
-      <main id="main">{current ? <Case key={current.slug} data={current} /> : <Page />}</main>
+      <main id="main" key={pageKey} className="page-in">
+        {current ? <Case data={current} /> : <Page />}
+      </main>
       {page?.footer !== false && <Footer />}
     </>
   )

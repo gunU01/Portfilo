@@ -2,15 +2,19 @@ import { Fragment } from 'react'
 import { profile } from '../data/profile.js'
 import Spec from '../components/Spec.jsx'
 import { useReveal } from '../lib/useReveal.js'
+import { usePointerVars } from '../lib/usePointerVars.js'
 
 function Hero() {
   const { hero } = profile
+  const ref = usePointerVars() // 마우스를 따라 큰 글자가 줄마다 다르게 살짝 움직입니다
   return (
-    <section className="hero" aria-labelledby="hero-title">
+    <section className="hero" aria-labelledby="hero-title" ref={ref}>
       <div className="wrap">
         <p className="kw" aria-hidden="true">
-          {hero.keywords.map((k) => (
-            <span key={k}>{k}</span>
+          {hero.keywords.map((k, i) => (
+            <span key={k} style={{ '--i': i }}>
+              {k}
+            </span>
           ))}
         </p>
 
@@ -31,10 +35,10 @@ function Hero() {
             </h1>
             <p className="hero__lead">{hero.lead}</p>
             <div className="hero__cta">
-              <a className="btn btn--solid ink" href="#/project">
+              <a className="btn btn--solid ink follow magnet" href="#/project">
                 프로젝트 보기
               </a>
-              <a className="btn btn--desk ink" href="#/desk">
+              <a className="btn btn--desk ink follow magnet" href="#/desk">
                 책상에서 둘러보기
               </a>
             </div>

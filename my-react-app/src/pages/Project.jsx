@@ -35,7 +35,7 @@ export default function Project() {
 
         <div className="pj__grid">
           {shown.map((c) => (
-            <a className="pcard reveal is-in" key={c.slug} href={`#/work/${c.slug}`}>
+            <a className="pcard follow reveal is-in" key={c.slug} href={`#/work/${c.slug}`}>
               <CaseCover cover={c.cover} size="card" />
               <div className="pcard__text">
                 <h2 className="pcard__t">{c.title}</h2>

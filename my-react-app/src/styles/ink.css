@@ -54,7 +54,7 @@
   .ov__card .ov__n,
   .ov__card .ov__go {
     --paint: var(--accent);
-    transition: color 0.3s ease 0.3s, border-color 0.3s ease 0.25s, transform 0.2s;
+    transition: color 0.3s ease 0.3s, border-color 0.3s ease 0.25s, transform 0.2s, translate 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   .btn--solid:hover,
   .btn--desk:hover,
@@ -64,7 +64,7 @@
   .ov__card:hover p,
   .ov__card:hover .ov__n,
   .ov__card:hover .ov__go {
-    transition: color 0.3s ease 0.22s, border-color 0.3s ease 0.15s, transform 0.2s;
+    transition: color 0.3s ease 0.22s, border-color 0.3s ease 0.15s, transform 0.2s, translate 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 }
 

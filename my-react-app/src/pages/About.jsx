@@ -3,6 +3,7 @@ import { skillGroups } from '../data/skills.js'
 import { awards } from '../data/awards.js'
 import { contests } from '../data/contests.js'
 import { useScrollSpy } from '../lib/useScrollSpy.js'
+import { useScrollPassed } from '../lib/useScrollPassed.js'
 import { useReveal } from '../lib/useReveal.js'
 import { scrollToId } from '../lib/format.js'
 import Spec from '../components/Spec.jsx'
@@ -35,6 +36,7 @@ function SectionIndex() {
 export default function About() {
   const { about } = profile
   useReveal()
+  const timelineRef = useScrollPassed('.tl__item') // 지나온 활동의 선과 점이 스크롤에 맞춰 차오릅니다
 
   return (
     <div className="ab">
@@ -71,7 +73,7 @@ export default function About() {
         <h2 className="ab__h" id="hi-title">
           활동 기록
         </h2>
-        <ol className="tl">
+        <ol className="tl tl--live" ref={timelineRef}>
           {about.timeline.map((t) => (
             <li className="tl__item reveal" key={t.when}>
               <span className="tl__when tnum">{t.when}</span>
