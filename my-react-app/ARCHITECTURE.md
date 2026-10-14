@@ -43,7 +43,7 @@ main.jsx ─ App.jsx (라우팅)
 ## 스타일
 
 - `styles/index.css` 의 `@import` 순서가 곧 우선순위입니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요(`base → nav → hero → about → case → responsive → print → desk → components → layout → pages → skills → ink`).
-- 색, 간격 같은 값은 `base.css` 의 `:root` 변수에 있습니다.
+- 색, 간격 같은 값은 `base.css` 의 `:root` 변수에 있습니다. 색 원칙: 글씨는 중립 회색(`--ink`, `--muted`, `--faint`), 파랑(`--accent`)은 링크, 버튼, 강조에만 씁니다. 새 색을 넣을 때는 흰색이나 `--surface` 위에서 대비 4.5 이상인지 `npm run e2e -- --only a11y` 로 확인하세요.
 - `font.css` 는 `scripts/subset-font.py` 가 만듭니다(직접 고치지 않음).
 - 호버 번짐: 요소에 `ink` 클래스를 붙이면 됩니다. 중심 위치는 `lib/useInkHover.js` 가, 모양은 `styles/ink.css` 가 맡습니다.
 

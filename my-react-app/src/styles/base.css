@@ -1,17 +1,17 @@
-/* 흰 바탕 + 파란 계열. 라이트 모드만 지원합니다. */
+/* 흰 바탕 + 중립 회색 글씨 + 파랑은 링크, 버튼, 강조에만. 라이트 모드만 지원합니다. */
 :root {
   --bg: #ffffff;
-  --surface: #f6f8fd;
-  --sunken: #edf1fa;
-  --ink: #101828;
-  --muted: #1d2a44;
-  --faint: #0f4fd1;
-  --line: #dbe3f0;
-  --accent: #1f6bff;
-  --accent-ink: #0f4fd1;
-  --accent-soft: #e6efff;
+  --surface: #f6f7fa;
+  --sunken: #eceff4;
+  --ink: #111827;
+  --muted: #374151;
+  --faint: #5b6577;
+  --line: #e1e5ec;
+  --accent: #2563eb;
+  --accent-ink: #1d4ed8;
+  --accent-soft: #e8efff;
   --radius: 10px;
-  --shadow: 0 1px 2px rgb(16 24 40 / 0.05), 0 12px 30px rgb(31 107 255 / 0.1);
+  --shadow: 0 1px 2px rgb(16 24 40 / 0.05), 0 12px 30px rgb(37 99 235 / 0.1);
   --font: 'NanumSquareNeo', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
     'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
   --mono: var(--font); /* 라벨도 같은 글꼴로 */

@@ -233,8 +233,8 @@
   margin-top: 0;
   padding: 72px 0 40px;
   border-top: 4px solid transparent;
-  border-image: linear-gradient(90deg, #1f6bff, #14b8c9 55%, #7c5cff) 1;
-  background: linear-gradient(180deg, #f6f8fd 0%, #eaf1ff 100%);
+  border-image: linear-gradient(90deg, #2563eb, #14b8c9 55%, #7c5cff) 1;
+  background: linear-gradient(180deg, #f6f7fa 0%, #e8efff 100%);
   font-size: 14.5px;
 }
 .footer__in {
@@ -254,7 +254,7 @@
   display: block;
   font-style: normal;
   /* 큰 글씨라 대비 3 이상이면 되지만, 옅은 배경 위에서 읽히도록 중간색을 어둡게 잡았습니다 */
-  background: linear-gradient(90deg, #1f6bff, #0b8794 60%, #6d4af0);
+  background: linear-gradient(90deg, #2563eb, #0b8794 60%, #6d4af0);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
