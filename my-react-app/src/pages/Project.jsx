@@ -22,7 +22,7 @@ export default function Project() {
     <section className="pj">
       <div className="wrap">
         <h1 className="pj__t">MY PROJECT</h1>
-        <p className="pj__lead">참여한 프로젝트입니다.</p>
+        <p className="pj__lead">기획한 서비스와 분석 사례를 담았습니다.</p>
 
         <div className="pj__tabs" role="group" aria-label="분류">
           {tabs.map(([key, label]) => (

@@ -253,7 +253,8 @@
 .footer__role em {
   display: block;
   font-style: normal;
-  background: linear-gradient(90deg, #1f6bff, #14b8c9 60%, #7c5cff);
+  /* 큰 글씨라 대비 3 이상이면 되지만, 옅은 배경 위에서 읽히도록 중간색을 어둡게 잡았습니다 */
+  background: linear-gradient(90deg, #1f6bff, #0b8794 60%, #6d4af0);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
