@@ -105,14 +105,19 @@
 }
 
 /* ---------- 푸터: 복사 버튼 ---------- */
+/* 복사 아이콘 자리를 줄 안에 따로 잡아 둬서(맨 오른쪽 36px), 값이 길어도 아이콘과 겹치지 않고 줄이 바뀝니다.
+   복사 아이콘이 없는 줄도 같은 자리를 비워 두어 화살표가 줄마다 같은 위치에 맞습니다. */
 .footer__rows li {
-  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px;
+  align-items: center;
+}
+.footer__rows li > a {
+  grid-column: 1;
 }
 .footer__copy {
-  position: absolute;
-  top: 50%;
-  right: 34px;
-  transform: translateY(-50%);
+  grid-column: 2;
+  justify-self: end;
   display: grid;
   place-items: center;
   width: 28px;

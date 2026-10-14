@@ -136,3 +136,10 @@
     display: inline;
   }
 }
+
+/* 아주 좁은 화면(320px 안팎): 여백을 줄입니다. 메뉴 간격은 뒤에 오는 components.css 의 .nav__desk 규칙을 덮어써야 해서 그쪽 맨 아래에 있습니다 */
+@media (max-width: 360px) {
+  .wrap {
+    padding-inline: 16px;
+  }
+}

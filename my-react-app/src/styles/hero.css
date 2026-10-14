@@ -105,6 +105,7 @@
 }
 .spec dd {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 .chip {
   display: inline-flex;
