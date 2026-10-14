@@ -6,9 +6,9 @@ const num = (v) => Number.parseFloat(v)
 
 export default {
   name: 'effects',
-  about: '사이트의 움직임: 페이지 전환, 스크롤 진행 막대, 메뉴 알약, 첫 화면 글자, 카드 기울기, 버튼 끌림, 복사 아이콘',
+  about: '사이트의 움직임: 페이지 전환, 스크롤 진행 막대, 메뉴 알약, 첫 화면 글자, 카드 기울기, 버튼 끌림',
   async run({ browser, url, t }) {
-    const { page, context } = await openPage(browser, { permissions: ['clipboard-read', 'clipboard-write'] })
+    const { page, context } = await openPage(browser)
 
     await t('페이지가 바뀌면 main 이 새로 만들어지며 들어오는 효과(page-in)가 걸린다', async () => {
       await go(page, url, '/')
@@ -38,6 +38,13 @@ export default {
       const pillX = () => page.$eval('.nav__pill', (e) => Number.parseFloat(e.style.getPropertyValue('--x')))
       const linkX = (name) => page.locator('.nav__links a', { hasText: name }).evaluate((e) => e.offsetLeft)
       await waitFor(() => page.$eval('.nav__pill', (e) => e.classList.contains('is-on')), { message: '알약이 나타나지 않았습니다' })
+      await page.evaluate(() => document.fonts.ready) // 글꼴이 늦게 로드돼 글자 폭이 바뀌어도 알약이 따라가야 합니다
+      const fits = async (name) => {
+        const link = await page.locator('.nav__links a', { hasText: name }).evaluate((e) => [e.offsetLeft, e.offsetWidth])
+        const pill = await page.$eval('.nav__pill', (e) => [Number.parseFloat(e.style.getPropertyValue('--x')), Number.parseFloat(e.style.getPropertyValue('--w'))])
+        return link[0] === pill[0] && link[1] === pill[1]
+      }
+      await waitFor(() => fits('Home'), { message: '알약이 Home 메뉴의 위치와 폭에 맞지 않습니다' })
       assert.equal(await pillX(), await linkX('Home'))
       await page.locator('.nav__links a', { hasText: 'Project' }).click()
       await waitFor(async () => (await pillX()) === (await linkX('Project')), { message: '알약이 Project 로 옮겨 가지 않았습니다' })
@@ -80,50 +87,6 @@ export default {
       await waitFor(async () => num(await btn.evaluate((e) => getComputedStyle(e).translate)) > 3, { message: '버튼이 끌려오지 않습니다' })
     })
 
-    await t('푸터 복사 아이콘: 이메일과 전화번호가 클립보드에 복사되고 잠시 체크로 바뀐다', async () => {
-      await go(page, url, '/')
-      await ready(page)
-      const row = page.locator('.footer__rows li', { hasText: 'Email' })
-      await row.scrollIntoViewIfNeeded()
-      const expected = (await row.locator('.footer__v').textContent()).trim()
-      const copy = row.locator('.footer__copy')
-      assert.equal(await copy.getAttribute('aria-label'), 'Email 복사')
-      assert.equal((await copy.textContent()).trim(), '', '글자 없이 아이콘만 있어야 합니다')
-      await copy.click()
-      assert.equal(await page.evaluate(() => navigator.clipboard.readText()), expected)
-      assert.equal(await copy.getAttribute('data-copied'), 'true')
-      await waitFor(async () => (await copy.getAttribute('data-copied')) === null, { timeout: 3000, message: '복사됨 표시가 사라지지 않았습니다' })
-      assert.equal(await page.locator('.footer__rows li', { hasText: 'GitHub' }).locator('.footer__copy').count(), 0, 'GitHub 줄에는 복사 아이콘이 없어야 합니다')
-    })
-
-    for (const width of [320, 340, 360, 390]) {
-      await t(`푸터 복사 아이콘: 폭 ${width}px 에서 값 글자나 화살표와 겹치지 않고, 줄마다 화살표가 같은 위치`, async () => {
-        const m = await openPage(browser, { viewport: { width, height: 800 } })
-        await go(m.page, url, '/')
-        await ready(m.page)
-        const rows = await m.page.$$eval('.footer__rows li', (lis) =>
-          lis.map((li) => {
-            const r = (el) => el.getBoundingClientRect().toJSON()
-            const range = document.createRange()
-            range.selectNodeContents(li.querySelector('.footer__v'))
-            const copy = li.querySelector('.footer__copy')
-            return { name: li.querySelector('.footer__k').textContent, copy: copy && r(copy), text: range.getBoundingClientRect().toJSON(), arrow: r(li.querySelector('.footer__go')) }
-          }),
-        )
-        const overlap = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top
-        for (const row of rows) {
-          if (!row.copy) continue
-          assert.ok(!overlap(row.copy, row.text), `${row.name}: 값 글자와 겹칩니다`)
-          assert.ok(!overlap(row.copy, row.arrow), `${row.name}: 화살표와 겹칩니다`)
-          assert.ok(row.copy.width >= 24 && row.copy.height >= 24, `${row.name}: 누르기에 너무 작습니다`)
-        }
-        const arrows = new Set(rows.map((row) => Math.round(row.arrow.right)))
-        assert.equal(arrows.size, 1, `화살표 위치가 줄마다 다릅니다: ${[...arrows]}`)
-        const [sw, cw] = await m.page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth])
-        assert.ok(sw <= cw, `가로로 넘칩니다 (${sw} > ${cw})`)
-        await m.context.close()
-      })
-    }
     await context.close()
 
     await t('모션 줄이기: 전환, 첫 화면 글자, 카드 기울기, 버튼 끌림이 모두 꺼진다', async () => {

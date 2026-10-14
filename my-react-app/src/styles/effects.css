@@ -91,7 +91,7 @@
 
 /* ---------- 활동 기록: 읽는 위치를 따라 진행선이 차오름 ----------
    항목마다 따로 있던 왼쪽 선을 없애고, 하나로 이어진 바탕선(::before) 위에 진행선(::after)이 --fill 만큼 채워집니다.
-   점은 지나가면 파랗게 되고, 지금 읽는 항목의 점은 부드러운 고리로 숨 쉬며, 아직 안 온 항목은 흐려집니다. */
+   점은 지나가면 파랗게 되고, 지금 읽는 항목의 점은 부드러운 고리로 숨 쉬며, 아직 안 온 항목은 회색이 됩니다. */
 .tl--live .tl__item {
   z-index: 1; /* 진행선(::after)보다 위에 있어야 점이 가려지지 않습니다 */
   border-left-color: transparent;
@@ -119,11 +119,12 @@
 }
 .tl--live .tl__when,
 .tl--live .tl__text {
-  transition: opacity 0.4s ease;
+  transition: color 0.4s ease;
 }
+/* 아직 안 온 항목은 흐린 회색으로. 투명도를 낮추지 않고 색을 바꿔서 글자 대비(4.5 이상)를 지킵니다 */
 .tl--live .tl__item:not(.is-passed) .tl__when,
 .tl--live .tl__item:not(.is-passed) .tl__text {
-  opacity: 0.42;
+  color: #6b7280;
 }
 .tl--live .tl__item.is-passed::before {
   background: var(--accent);

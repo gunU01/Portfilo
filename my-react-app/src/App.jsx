@@ -12,7 +12,7 @@ import { useHashRoute } from './lib/useHashRoute.js'
 import { useInkHover } from './lib/useInkHover.js'
 import { useFollow } from './lib/useFollow.js'
 import { useScrollProgress } from './lib/useScrollProgress.js'
-import { scrollToId } from './lib/format.js'
+import { scrollToId } from './lib/dom.js'
 
 // 해시 경로 → 페이지. 목록에 없는 경로와 케이스(/work/<slug>)는 아래에서 따로 처리합니다.
 const PAGES = {

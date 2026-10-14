@@ -1,26 +1,11 @@
-import { useEffect, useState } from 'react'
 import { profile } from '../data/profile.js'
 import { githubId, formatPhone } from '../lib/format.js'
+import { useCopy } from '../lib/useCopy.js'
 
 // 모든 페이지 하단: 연락처. 값이 비어 있는 연락처는 자동으로 숨깁니다.
 export default function Footer() {
   const { contact } = profile
-  const [copied, setCopied] = useState(null) // 방금 복사한 줄의 이름. 잠시 뒤 사라집니다.
-
-  useEffect(() => {
-    if (!copied) return undefined
-    const id = setTimeout(() => setCopied(null), 1600)
-    return () => clearTimeout(id)
-  }, [copied])
-
-  const copy = async (label, text) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopied(label)
-    } catch {
-      setCopied(`${label}:fail`)
-    }
-  }
+  const { copied, copy } = useCopy()
   const rows = [
     contact.github && ['GitHub', `@${githubId(contact.github)}`, contact.github],
     contact.email && ['Email', contact.email, `mailto:${contact.email}`, contact.email],

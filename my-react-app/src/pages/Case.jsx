@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import Blocks from '../components/Blocks.jsx'
 import CaseCover from '../components/CaseCover.jsx'
 import { useScrollSpy } from '../lib/useScrollSpy.js'
-import { scrollToId } from '../lib/format.js'
+import { scrollToId } from '../lib/dom.js'
 
 export default function Case({ data }) {
   const ids = useMemo(() => data.sections.map((s) => s.id), [data])
