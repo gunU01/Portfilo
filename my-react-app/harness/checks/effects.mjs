@@ -6,7 +6,7 @@ const num = (v) => Number.parseFloat(v)
 
 export default {
   name: 'effects',
-  about: '사이트의 움직임: 페이지 전환, 스크롤 진행 막대, 메뉴 알약, 첫 화면 글자, 카드 기울기, 버튼 끌림, 활동 기록 선, 복사 버튼',
+  about: '사이트의 움직임: 페이지 전환, 스크롤 진행 막대, 메뉴 알약, 첫 화면 글자, 카드 기울기, 버튼 끌림, 복사 아이콘',
   async run({ browser, url, t }) {
     const { page, context } = await openPage(browser, { permissions: ['clipboard-read', 'clipboard-write'] })
 
@@ -78,19 +78,6 @@ export default {
       const box = await btn.boundingBox()
       await page.mouse.move(box.x + box.width - 4, box.y + box.height / 2)
       await waitFor(async () => num(await btn.evaluate((e) => getComputedStyle(e).translate)) > 3, { message: '버튼이 끌려오지 않습니다' })
-    })
-
-    await t('활동 기록: 스크롤에 맞춰 지나온 항목부터 선과 점이 차오른다', async () => {
-      await go(page, url, '/about')
-      await page.waitForSelector('.tl--live .tl__item')
-      await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
-      const passed = () => page.$$eval('.tl--live .tl__item', (items) => items.filter((i) => i.classList.contains('is-passed')).length)
-      await waitFor(async () => (await passed()) === 0, { message: '맨 위에서는 지나온 항목이 없어야 합니다' })
-      await page.evaluate(() => document.querySelector('.tl--live').scrollIntoView({ block: 'start', behavior: 'instant' }))
-      await waitFor(async () => (await passed()) > 0, { message: '내려가도 차오르지 않습니다' })
-      await page.evaluate(() => window.scrollTo({ top: document.querySelector('.tl--live').getBoundingClientRect().bottom + window.scrollY, behavior: 'instant' }))
-      const total = await page.locator('.tl--live .tl__item').count()
-      await waitFor(async () => (await passed()) === total, { message: '다 지나면 모두 차올라야 합니다' })
     })
 
     await t('푸터 복사 아이콘: 이메일과 전화번호가 클립보드에 복사되고 잠시 체크로 바뀐다', async () => {

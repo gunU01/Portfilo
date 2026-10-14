@@ -42,7 +42,7 @@ src/
   components/   Nav · Footer · Spec · SkillMap · Blocks · CaseCover · DeskScene · DeskPanel
     desk/       책상 SVG 를 이루는 조각들 (Wall · WallDecor · Desktop · Foreground · Hotspot · Tags …)
   data/         화면에 나오는 모든 문구와 수치 (위 표)
-  lib/          useHashRoute · useReveal · useScrollSpy · useParallax · usePointerVars · useFollow · useScrollProgress · useScrollPassed · useInkHover · arrowNav · format
+  lib/          useHashRoute · useReveal · useScrollSpy · useParallax · usePointerVars · useFollow · useScrollProgress · useTimelineProgress · onScrollFrame · useInkHover · arrowNav · format
   styles/       index.css 가 순서대로 불러옵니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요
 harness/        검증 하네스 (아키텍처 검사, 브라우저 검사 checks/, 스냅샷 비교)
 scripts/        글꼴 쪼개기
