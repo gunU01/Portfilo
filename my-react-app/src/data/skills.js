@@ -25,7 +25,7 @@ export const skillGroups = [
     view: 'stack',
     items: [
       { name: 'Notion', used: '문서 허브와 스프린트 보드(보드 및 캘린더)를 구성해 운영할 수 있습니다.' },
-      { name: 'Figma', used: '화면 정의를 검토하고 포트폴리오 화면을 작업할 수 있습니다.' },
+      { name: 'Figma', used: '화면 정의서를 보며 기능 명세와 화면이 서로 맞는지 검토할 수 있습니다.' },
       { name: 'Jira · GitHub · Vercel', used: 'Git 및 GitHub로 협업하고 Vercel로 웹 서비스를 배포할 수 있으며, Jira를 사용해 본 경험이 있습니다.' },
     ],
   },
