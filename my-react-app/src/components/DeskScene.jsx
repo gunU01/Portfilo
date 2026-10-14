@@ -11,7 +11,7 @@ import { Rug, Chair, FloorPlant } from './desk/Foreground.jsx'
 // 층(back/mid/front)마다 마우스에 다르게 반응합니다(CSS 변수 --px/--py, 스타일은 desk.css).
 
 // 바닥 판자의 이음선
-const PLANKS = Array.from({ length: 9 }, (_, i) => <line key={i} x1={-200 + i * 230} y1="812" x2={-260 + i * 250} y2="900" stroke="#6f5036" strokeWidth="2" opacity="0.5" />)
+const PLANKS = Array.from({ length: 9 }, (_, i) => <line key={i} x1={-200 + i * 230} y1="812" x2={-260 + i * 250} y2="900" stroke="#b48258" strokeWidth="2" opacity="0.5" />)
 
 export default function DeskScene({ active, setActive, onOpen }) {
   return (
@@ -35,8 +35,8 @@ export default function DeskScene({ active, setActive, onOpen }) {
         </g>
 
         {/* 바닥 */}
-        <rect x="0" y="796" width="1600" height="104" fill="#c2a074" />
-        <rect x="0" y="786" width="1600" height="14" fill="#faf2dc" />
+        <rect x="0" y="796" width="1600" height="104" fill="#d8a776" />
+        <rect x="0" y="786" width="1600" height="14" fill="#fff6e3" />
         {PLANKS}
 
         {/* 책상 */}

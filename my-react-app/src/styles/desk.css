@@ -64,24 +64,171 @@
     transform: scale(1.03, 1.07);
   }
 }
-.desk__zzz {
-  font: 800 20px var(--font);
-  fill: #8a7ab8;
-  animation: zzz 3s ease-in-out infinite;
+/* ---- 고양이: 눈동자가 마우스를 따라가고, 마우스를 올리면 눈을 감고 웃으며 하트를 날립니다 ---- */
+.desk__look {
+  transform: translate(calc(var(--px, 0) * 2.4px), calc(var(--py, 0) * 1.8px));
+  transition: transform 0.25s ease-out;
 }
-.desk__zzz--b {
-  font-size: 15px;
-  animation-delay: 1.2s;
+.desk__happy {
+  opacity: 0;
+  transition: opacity 0.15s;
 }
-@keyframes zzz {
-  0%,
+.desk__tongue {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: tongue 2.4s ease-in-out infinite;
+}
+@keyframes tongue {
+  50% {
+    transform: scaleY(1.28);
+  }
+}
+.desk__hearts {
+  opacity: 0;
+}
+.desk__heart {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.hs.is-on .desk__blink {
+  opacity: 0;
+}
+.hs.is-on .desk__happy,
+.hs.is-on .desk__hearts {
+  opacity: 1;
+}
+.hs.is-on .desk__tail {
+  animation-duration: 0.7s;
+}
+.hs.is-on .desk__heart {
+  animation: heart 1.4s ease-out infinite;
+}
+.hs.is-on .desk__heart--b {
+  animation-delay: 0.35s;
+}
+.hs.is-on .desk__heart--c {
+  animation-delay: 0.7s;
+}
+@keyframes heart {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.6);
+  }
+  25% {
+    opacity: 1;
+  }
   100% {
-    opacity: 0.15;
-    transform: translateY(4px);
+    opacity: 0;
+    transform: translateY(-22px) scale(1.1);
+  }
+}
+
+/* ---- 물건마다 호버하면 살짝 반응합니다 ---- */
+.desk__card,
+.desk__frame,
+.desk__pencil,
+.desk__mark,
+.desk__mug {
+  transform-box: fill-box;
+}
+.hs.is-on .desk__card {
+  animation: cardpop 0.55s ease-out both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+@keyframes cardpop {
+  40% {
+    transform: translateY(-6px);
+  }
+}
+.hs.is-on .desk__pencil {
+  animation: write 0.7s ease-in-out infinite;
+}
+@keyframes write {
+  50% {
+    transform: translate(-18px, 3px) rotate(-3deg);
+  }
+}
+.desk__drawer {
+  transition: transform 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.hs.is-on .desk__drawer {
+  transform: translateY(6px);
+}
+.desk__frame {
+  transform-origin: 50% 0;
+}
+.hs.is-on .desk__frame {
+  animation: frame-sway 0.9s ease-in-out;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+@keyframes frame-sway {
+  25% {
+    transform: rotate(2.2deg);
+  }
+  60% {
+    transform: rotate(-1.6deg);
+  }
+}
+.hs.is-on .desk__mark {
+  animation: pulse 1s ease-in-out infinite;
+}
+@keyframes pulse {
+  50% {
+    transform: scale(1.35);
+  }
+}
+.desk__mug {
+  transform-origin: 50% 100%;
+}
+.desk__mug:hover {
+  animation: wobble 0.6s ease-in-out;
+}
+@keyframes wobble {
+  20% {
+    transform: rotate(-5deg);
   }
   50% {
-    opacity: 1;
-    transform: translateY(-4px);
+    transform: rotate(4deg);
+  }
+  80% {
+    transform: rotate(-2deg);
+  }
+}
+.desk__cloud {
+  animation: drift 16s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  to {
+    transform: translateX(26px);
+  }
+}
+.hs:active .hs__body {
+  transform: translateY(-2px) scale(0.985);
+}
+
+.desk__tail {
+  transform-box: fill-box;
+  transform-origin: 100% 100%;
+  animation: tail 3.6s ease-in-out infinite;
+}
+@keyframes tail {
+  50% {
+    transform: rotate(-9deg);
+  }
+}
+.desk__blink {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: blink 5.5s infinite;
+}
+@keyframes blink {
+  0%,
+  93%,
+  100% {
+    transform: scaleY(1);
+  }
+  96% {
+    transform: scaleY(0.08);
   }
 }
 .desk__steam path {
@@ -260,12 +407,10 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .desk__sway,
-  .desk__breathe,
-  .desk__zzz,
-  .desk__steam path,
-  .desk__panel {
-    animation: none;
+  .desk__panel,
+  .desk__svg * {
+    animation: none !important;
+    transition: none !important;
   }
 }
 @media print {

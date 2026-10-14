@@ -1,10 +1,15 @@
 /* 소개 페이지의 '나의 기술들': 일하는 순서 도식(.skflow)과 도구 칩(.skstack) */
 .skmap {
-  /* 글자와 흰 글씨를 얹는 배경으로 모두 쓰이므로, 흰색/옅은 배경 위에서 대비 4.5 이상이 되는 색만 씁니다 */
-  --c-plan: #1d4ed8;
-  --c-ops: #0a7683;
-  --c-tool: #6d4af0;
-  --c-fe: #c92a78;
+  /* 모양과 테두리에는 맑고 선명한 색(--c-*)을, 글자에는 같은 계열의 진한 색(--i-*)을 씁니다.
+     글자는 흰색/옅은 배경 위에서 대비 4.5 이상이어야 해서, 선명한 색을 글자에 그대로 쓰지 않습니다. */
+  --c-plan: #3b82f6;
+  --i-plan: #1d4ed8;
+  --c-ops: #14b8a6;
+  --i-ops: #0f766e;
+  --c-tool: #8b5cf6;
+  --i-tool: #6d28d9;
+  --c-fe: #ec4899;
+  --i-fe: #be185d;
   margin-top: 36px;
   display: grid;
   gap: 20px;
@@ -13,6 +18,7 @@
 /* ---------- 일하는 순서 ---------- */
 .skflow {
   --tone: var(--c-plan);
+  --tone-ink: var(--i-plan);
   padding: 26px 24px 24px;
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -26,7 +32,7 @@
   margin-right: 8px;
   padding-top: 8px;
   border-top: 3px solid var(--c-plan);
-  color: var(--c-plan);
+  color: var(--i-plan);
   font-size: 12.5px;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -36,7 +42,7 @@
 }
 .skflow__phase--1 {
   border-top-color: var(--c-ops);
-  color: var(--c-ops);
+  color: var(--i-ops);
 }
 .skflow__steps {
   list-style: none;
@@ -47,10 +53,12 @@
 }
 .skflow__step {
   --tone: var(--c-plan);
+  --tone-ink: var(--i-plan);
   position: relative;
 }
 .skflow__step--1 {
   --tone: var(--c-ops);
+  --tone-ink: var(--i-ops);
 }
 /* 마디와 마디를 잇는 선: 이 마디의 가운데에서 다음 마디의 가운데까지 */
 .skflow__step:not(:last-child)::before {
@@ -85,10 +93,10 @@
   border: 2px solid var(--tone);
   border-radius: 50%;
   background: #fff;
-  color: var(--tone);
+  color: var(--tone-ink);
   font-size: 15px;
   font-weight: 800;
-  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 /* 운영·검증 단계는 모서리가 둥근 네모로 구분합니다 */
 .skflow__step--1 .skflow__dot {
@@ -98,8 +106,8 @@
   transform: translateY(-2px);
 }
 .skflow__node[aria-selected='true'] .skflow__dot {
-  background: var(--tone);
-  color: #fff;
+  background: color-mix(in srgb, var(--tone) 22%, #fff);
+  box-shadow: inset 0 0 0 1.5px var(--tone);
 }
 .skflow__name {
   font-size: 13.5px;
@@ -116,6 +124,7 @@
 }
 .skflow__panel {
   --tone: var(--c-plan);
+  --tone-ink: var(--i-plan);
   margin-top: 24px;
   padding: 16px 20px;
   border-left: 4px solid var(--tone);
@@ -125,10 +134,11 @@
 }
 .skflow__panel--1 {
   --tone: var(--c-ops);
+  --tone-ink: var(--i-ops);
 }
 .skflow__panel small {
   display: block;
-  color: var(--tone);
+  color: var(--tone-ink);
   font-size: 12.5px;
   font-weight: 800;
 }
@@ -158,6 +168,7 @@
 }
 .skstack {
   --tone: var(--c-tool);
+  --tone-ink: var(--i-tool);
   padding: 22px 24px;
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -165,6 +176,7 @@
 }
 .skstack--fe {
   --tone: var(--c-fe);
+  --tone-ink: var(--i-fe);
 }
 .skstack h3 {
   display: flex;
@@ -196,7 +208,7 @@
 }
 .skstack__chip {
   padding: 7px 14px;
-  border: 1.5px solid color-mix(in srgb, var(--tone) 35%, var(--line));
+  border: 1.5px solid color-mix(in srgb, var(--tone) 55%, #fff);
   border-radius: 999px;
   background: #fff;
   color: var(--ink);
@@ -211,8 +223,8 @@
 }
 .skstack__chip[aria-selected='true'] {
   border-color: var(--tone);
-  background: var(--tone);
-  color: #fff;
+  background: color-mix(in srgb, var(--tone) 22%, #fff);
+  color: var(--tone-ink);
 }
 .skstack__chip[aria-selected='true']::before {
   display: none;
@@ -268,7 +280,6 @@
   }
   .skflow__node[aria-selected='false'] .skflow__dot {
     background: #fff;
-    color: var(--tone);
   }
   .skflow__inline {
     display: block;

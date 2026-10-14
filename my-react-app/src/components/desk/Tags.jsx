@@ -9,7 +9,7 @@ const POSITIONS = {
   drawerR: [1085, 664],
   calendar: [1455, 112],
   laptop: [712, 438],
-  books: [414, 436],
+  books: [420, 414],
   notebook: [1070, 584],
 }
 

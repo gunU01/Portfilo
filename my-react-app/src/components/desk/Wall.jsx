@@ -1,46 +1,97 @@
 import { awards } from '../../data/awards.js'
 import Hotspot from './Hotspot.jsx'
+import { OUT } from './outline.js'
 
 const MEDAL = { 금상: '#f2c14e', 우수상: '#c9ced8', 동상: '#cd7f32', 장려상: '#3fb68b' }
 const medalColor = (award) => MEDAL[award?.result] ?? '#c9ced8'
 
-function Frame({ x, y, w, h, color, tilt = 0 }) {
+function Frame({ x, y, w, h, color, tilt = 0, i = 0 }) {
   const cx = x + w / 2
   const cy = y + h / 2
   return (
     <g transform={`rotate(${tilt} ${cx} ${cy})`}>
-      <rect x={x + 6} y={y + 8} width={w} height={h} rx="3" fill="#8b6a2c" opacity="0.22" />
-      <rect x={x} y={y} width={w} height={h} rx="3" fill="#c29463" />
-      <rect x={x + 7} y={y + 7} width={w - 14} height={h - 14} fill="#fbf3df" />
-      <rect x={x + 7} y={y + 7} width={w - 14} height={h - 14} fill="none" stroke="#e6d6b0" strokeWidth="2" />
-      <g transform={`translate(${cx} ${cy + 4})`}>
-        <path d="M-12 -30 L-20 6 L-4 -2 L0 6 L4 -2 L20 6 L12 -30Z" fill={color} opacity="0.55" transform="translate(0 6)" />
-        <circle r={Math.min(w, h) * 0.2} fill={color} />
-        <circle r={Math.min(w, h) * 0.2 - 6} fill="none" stroke="#ffffff" strokeOpacity="0.55" strokeWidth="2.5" />
-        <path d="M-6 -2 L0 -10 L6 -2 L3 6 L-3 6Z" fill="#ffffff" opacity="0.6" />
+      <g className="desk__frame" style={{ '--i': i }}>
+        <rect x={x + 6} y={y + 8} width={w} height={h} rx="3" fill="#8b6a2c" opacity="0.22" />
+        <rect x={x} y={y} width={w} height={h} rx="4" fill="#d0a06a" {...OUT} />
+        <rect x={x + 7} y={y + 7} width={w - 14} height={h - 14} rx="1" fill="#fbf3df" stroke="#d9c79c" strokeWidth="2" />
+        <g transform={`translate(${cx} ${cy + 4})`}>
+          <path d="M-12 -30 L-20 6 L-4 -2 L0 6 L4 -2 L20 6 L12 -30Z" fill={color} opacity="0.55" transform="translate(0 6)" />
+          <circle r={Math.min(w, h) * 0.2} fill={color} />
+          <circle r={Math.min(w, h) * 0.2 - 6} fill="none" stroke="#ffffff" strokeOpacity="0.55" strokeWidth="2.5" />
+          <path d="M-6 -2 L0 -10 L6 -2 L3 6 L-3 6Z" fill="#ffffff" opacity="0.6" />
+        </g>
+        <polygon points={`${x + 9},${y + 9} ${x + 9 + (w - 18) * 0.5},${y + 9} ${x + 9},${y + 9 + (h - 18) * 0.42}`} fill="#fff" opacity="0.45" />
+        <polygon points={`${x + 9 + (w - 18) * 0.56},${y + 9} ${x + 9 + (w - 18) * 0.66},${y + 9} ${x + 9},${y + 9 + (h - 18) * 0.62} ${x + 9},${y + 9 + (h - 18) * 0.52}`} fill="#fff" opacity="0.3" />
       </g>
     </g>
   )
 }
 
-// 창문, 얇은 커튼, 바닥으로 드리우는 햇빛
+// 창문: 납작한 하늘과 언덕과 나무, 양쪽에 묶어 둔 커튼, 바닥으로 드리우는 햇빛
+function Cloud({ x, y, s = 1, delay = 0 }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${s})`} fill="#fff">
+      <g className="desk__cloud" style={{ animationDelay: `${delay}s` }}>
+        <rect x="-34" y="-8" width="68" height="22" rx="11" />
+        <circle cx="-12" cy="-10" r="14" />
+        <circle cx="8" cy="-14" r="17" />
+      </g>
+    </g>
+  )
+}
+
+function Tree({ x, y, s = 1 }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${s})`}>
+      <rect x="-5" y="-8" width="10" height="36" rx="3" fill="#a56d3f" />
+      <circle cx="0" cy="-26" r="26" fill="#47a653" />
+      <circle cx="-17" cy="-12" r="16" fill="#47a653" />
+      <circle cx="17" cy="-12" r="16" fill="#47a653" />
+      <circle cx="-6" cy="-32" r="9" fill="#62bd68" opacity="0.7" />
+    </g>
+  )
+}
+
+function Curtain({ side }) {
+  // side: -1 왼쪽, 1 오른쪽. 오른쪽은 가운데(x=282)를 기준으로 좌우를 뒤집습니다.
+  return (
+    <g transform={side > 0 ? 'translate(564 0) scale(-1 1)' : undefined}>
+      <path d="M104 86 H156 C160 150 154 214 136 268 C130 286 118 298 104 304Z" fill="#ffcfe0" {...OUT} />
+      <path d="M126 90 C130 150 124 210 112 262 M144 90 C148 150 144 206 132 258" fill="none" stroke="#f59cbb" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M136 268 C150 282 150 316 126 332 C118 322 112 312 104 304 C118 298 130 286 136 268Z" fill="#ffb7d0" {...OUT} />
+      <rect x="104" y="246" width="48" height="12" rx="6" fill="#ff8fb3" {...OUT} />
+    </g>
+  )
+}
+
 export function Window() {
   return (
     <>
-      <rect x="86" y="66" width="392" height="352" rx="8" fill="#fffaf0" />
-      <rect x="104" y="84" width="356" height="316" fill="url(#d-win)" />
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-        <circle key={i} cx={130 + ((i * 97) % 320)} cy={140 + ((i * 61) % 230)} r={46 + (i % 3) * 14} fill={['#7fb35c', '#a3cf7d', '#5b9444'][i % 3]} opacity="0.7" filter="url(#d-soft)" />
-      ))}
-      <rect x="276" y="84" width="10" height="316" fill="#fffaf0" />
-      <rect x="104" y="236" width="356" height="9" fill="#fffaf0" />
-      <rect x="76" y="406" width="412" height="16" rx="4" fill="#efe4c9" />
-      {/* 얇은 커튼 */}
-      <path d="M104 84 H460 V196 C430 214 410 190 380 208 C350 226 320 196 290 212 C260 228 230 196 200 210 C170 224 140 198 104 206Z" fill="#e3f2ec" opacity="0.88" />
-      {[130, 170, 210, 250, 290, 330, 370, 410, 440].map((x) => (
-        <line key={x} x1={x} y1="88" x2={x + (x % 3) - 1} y2="198" stroke="#c9e2d9" strokeWidth="3" opacity="0.8" />
-      ))}
-      <rect x="98" y="76" width="370" height="8" rx="4" fill="#cfb27a" />
+      <rect x="86" y="66" width="392" height="352" rx="10" fill="#fffaf0" {...OUT} />
+      <g clipPath="url(#d-view)">
+        <rect x="104" y="84" width="356" height="316" fill="url(#d-sky)" />
+        <circle cx="352" cy="128" r="26" fill="#ffd95e" />
+        <Cloud x={196} y={134} />
+        <Cloud x={388} y={196} s={0.7} delay={-5} />
+        <path d="M104 268 C160 226 230 238 290 262 C350 286 410 246 460 256 V400 H104Z" fill="#9ad86f" />
+        <Tree x={178} y={262} s={0.9} />
+        <Tree x={392} y={274} s={0.62} />
+        <path d="M104 322 C170 292 250 300 320 322 C380 340 430 318 460 326 V400 H104Z" fill="#68c053" />
+        {[[150, 350, '#ff8fb3'], [214, 366, '#fff'], [272, 344, '#ffd95e'], [338, 362, '#ff8fb3'], [408, 350, '#fff']].map(([x, y, c]) => (
+          <g key={x}>
+            <circle cx={x} cy={y} r="5.5" fill={c} />
+            <circle cx={x} cy={y} r="2" fill="#f5b800" />
+          </g>
+        ))}
+      </g>
+      <rect x="276" y="84" width="10" height="316" fill="#fffaf0" {...OUT} />
+      <rect x="104" y="236" width="356" height="9" fill="#fffaf0" {...OUT} />
+      <rect x="76" y="406" width="412" height="16" rx="5" fill="#f1e2c0" {...OUT} />
+      <Curtain side={-1} />
+      <Curtain side={1} />
+      <rect x="94" y="74" width="376" height="10" rx="5" fill="#c9965e" {...OUT} />
+      <circle cx="94" cy="79" r="7" fill="#e0b27a" {...OUT} />
+      <circle cx="470" cy="79" r="7" fill="#e0b27a" {...OUT} />
       <polygon points="110,424 470,424 840,740 300,740" fill="url(#d-beam)" />
     </>
   )
@@ -59,7 +110,7 @@ export function Frames() {
     <Hotspot id="frames">
       <rect x="500" y="56" width="470" height="270" fill="transparent" />
       {FRAMES.map((f, i) => (
-        <Frame key={f.x + f.y} {...f} color={medalColor(awards[i])} />
+        <Frame key={f.x + f.y} {...f} i={i} color={medalColor(awards[i])} />
       ))}
     </Hotspot>
   )
@@ -110,14 +161,14 @@ export function Calendar() {
     const cx = 1396 + (i % 7) * 20.5
     const cy = 150 + Math.floor(i / 7) * 32
     const marked = MARKED_DAYS.includes(i)
-    days.push(<circle key={i} cx={cx} cy={cy} r={marked ? 7.5 : 2.2} fill={marked ? '#e3685a' : '#c8b88f'} />)
+    days.push(<circle key={i} className={marked ? 'desk__mark' : undefined} cx={cx} cy={cy} r={marked ? 7.5 : 2.2} fill={marked ? '#e3685a' : '#c8b88f'} />)
   }
   return (
     <Hotspot id="calendar">
       <g transform="translate(0 66)">
         <rect x="1368" y="60" width="188" height="290" fill="transparent" />
         <rect x="1376" y="70" width="170" height="284" rx="4" fill="#8b6a2c" opacity="0.2" />
-        <rect x="1370" y="62" width="170" height="284" rx="4" fill="#fbf7ea" />
+        <rect x="1370" y="62" width="170" height="284" rx="6" fill="#fbf7ea" {...OUT} />
         <rect x="1370" y="62" width="170" height="54" rx="4" fill="#6bb27a" />
         <rect x="1370" y="96" width="170" height="20" fill="#6bb27a" />
         <text x="1455" y="102" textAnchor="middle" className="desk__cal">

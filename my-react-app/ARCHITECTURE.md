@@ -49,7 +49,7 @@ main.jsx ─ App.jsx (라우팅)
 
 ## 책상 장면
 
-`pages/Desk.jsx` 가 상태(`active`, `openId`)를 갖고, `DeskScene` 이 조각들을 레이어(`back`, `mid`, `front`) 순서로 조립합니다. 조각 안의 핫스팟(`Hotspot`)은 context(`deskContext.js`)로 `active`, `setActive`, `onOpen` 을 받으므로 props 를 내려보낼 필요가 없습니다. 마우스를 따라 층이 움직이는 효과는 `lib/useParallax.js` 입니다.
+`pages/Desk.jsx` 가 상태(`active`, `openId`)를 갖고, `DeskScene` 이 조각들을 레이어(`back`, `mid`, `front`) 순서로 조립합니다. 조각 안의 핫스팟(`Hotspot`)은 context(`deskContext.js`)로 `active`, `setActive`, `onOpen` 을 받으므로 props 를 내려보낼 필요가 없습니다. 마우스를 따라 층이 움직이는 효과는 `lib/useParallax.js` 입니다. 물건마다의 반응(서랍이 열림, 연필이 움직임, 고양이가 웃으며 하트를 날림 등)은 JS 없이 `desk.css` 가 `.hs.is-on`(호버나 포커스) 상태를 보고 처리하고, 고양이 눈동자는 `useParallax` 가 정하는 `--px`/`--py` 를 그대로 씁니다. 모든 장면 애니메이션은 모션 줄이기 설정에서 멈춥니다. 그림체는 `desk/outline.js` 의 갈색 윤곽선으로 통일합니다.
 
 ## 자주 하는 변경
 

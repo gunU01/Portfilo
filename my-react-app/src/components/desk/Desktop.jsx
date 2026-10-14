@@ -1,5 +1,6 @@
 import Fern from './Fern.jsx'
 import Hotspot from './Hotspot.jsx'
+import { OUT, OUT_DARK } from './outline.js'
 
 const rnd = (seed) => {
   let a = seed
@@ -17,15 +18,15 @@ export function DeskBase() {
       {/* 다리 */}
       {[140, 1385].map((x) => (
         <g key={x}>
-          <rect x={x} y="676" width="78" height="210" fill="#ecc088" />
+          <rect x={x} y="676" width="78" height="210" rx="7" fill="#f3cc94" {...OUT} />
           {[0, 1, 2].map((i) => (
-            <rect key={i} x={x + 12 + i * 22} y="700" width="12" height="170" rx="3" fill="#d9a66a" />
+            <rect key={i} x={x + 12 + i * 22} y="700" width="12" height="170" rx="5" fill="#e6b479" />
           ))}
         </g>
       ))}
       {/* 앞면 */}
-      <rect x="200" y="676" width="1200" height="92" fill="#f0c994" />
-      <rect x="200" y="676" width="1200" height="8" fill="#dba96c" opacity="0.6" />
+      <rect x="200" y="676" width="1200" height="92" rx="4" fill="#f7d4a2" {...OUT} />
+      <rect x="204" y="680" width="1192" height="7" rx="3" fill="#e9bb80" opacity="0.7" />
     </>
   )
 }
@@ -42,11 +43,15 @@ export function Drawer({ id, dx = 0, mark }) {
     <Hotspot id={id}>
       <g transform={`translate(${dx} 0)`}>
         <rect x="300" y="690" width="430" height="68" fill="transparent" />
-        <rect x="304" y="694" width="422" height="60" rx="4" fill="#f6d9a8" stroke="#dba96c" strokeWidth="3" />
-        <rect x="486" y="700" width="60" height="16" rx="3" fill="#fffdf6" stroke="#d9b98a" strokeWidth="1.6" />
-        {MARKS[mark]}
-        <rect x="478" y="722" width="76" height="16" rx="8" fill="#b9884f" />
-        <rect x="482" y="724" width="68" height="5" rx="2.5" fill="#cf9d62" />
+        {/* 마우스를 올리면 서랍이 살짝 열립니다 */}
+        <g className="desk__drawer">
+          <rect x="304" y="694" width="422" height="60" rx="8" fill="#fbe1b6" {...OUT} />
+          <rect x="314" y="702" width="402" height="44" rx="5" fill="#f6d5a1" stroke="#e3b678" strokeWidth="1.8" />
+          <rect x="486" y="700" width="60" height="17" rx="4" fill="#fffdf6" stroke="#cda878" strokeWidth="1.8" />
+          {MARKS[mark]}
+          <rect x="478" y="722" width="76" height="17" rx="8.5" fill="#dc9a45" {...OUT} />
+          <rect x="486" y="725" width="60" height="4" rx="2" fill="#f4c986" />
+        </g>
       </g>
     </Hotspot>
   )
@@ -63,8 +68,9 @@ export function DeskTop() {
   }
   return (
     <>
-      <polygon points="150,630 1450,630 1500,664 100,664" fill="url(#d-top)" />
-      <rect x="100" y="664" width="1400" height="18" rx="4" fill="#e4b57a" />
+      <polygon points="150,630 1450,630 1500,664 100,664" fill="url(#d-top)" {...OUT} />
+      <rect x="100" y="664" width="1400" height="18" rx="6" fill="#efc189" {...OUT} />
+      <line x1="170" y1="636" x2="1430" y2="636" stroke="#fff" strokeWidth="3" opacity="0.35" strokeLinecap="round" />
       {grain}
 
       {/* 상판 위 그림자 */}
@@ -75,64 +81,90 @@ export function DeskTop() {
 
       {/* 화분 */}
       <Fern x={250} y={606} scale={0.62} fronds={9} spread={140} len={130} />
-      <path d="M222 600 H278 L272 644 H228Z" fill="#e49a73" />
-      <rect x="218" y="594" width="64" height="10" rx="3" fill="#efae88" />
+      <path d="M222 600 H278 L272 644 H228Z" fill="#ee9b76" {...OUT} />
+      <rect x="216" y="592" width="68" height="12" rx="4" fill="#f6b48f" {...OUT} />
     </>
   )
 }
 
-// 책 위에서 낮잠 자는 고양이
+// 책 위에 널브러진 까만 덩어리 고양이. 로우폴리(각진 면)로 단순하게 그리고, 일부러 멍청한 얼굴을 했습니다.
+// 눈동자는 마우스를 따라가고(--px/--py), 마우스를 올리면 눈을 감고 웃으며 하트를 날립니다. 꼬리는 살랑거립니다.
+const FACETS = [
+  ['#2b2832', '398,450 414,462 400,490 388,468'],
+  ['#19171d', '442,450 426,462 440,490 452,468'],
+  ['#27242e', '414,462 426,462 440,490 400,490'],
+  ['#24212a', '372,486 388,468 400,490 392,520 366,532 360,508'],
+  ['#1a181f', '468,486 452,468 440,490 450,520 474,532 480,508'],
+  ['#2e2b37', '400,490 440,490 450,520 392,520'],
+  ['#1d1b22', '392,520 450,520 474,532 366,532'],
+]
+
 function Cat() {
   return (
     <g>
+      <g className="desk__tail">
+        <polygon points="366,526 352,521 343,505 349,494 358,498 358,512 369,516" fill="#1e1c23" />
+        <polygon points="349,494 358,498 358,512 352,521 343,505" fill="#2a2731" />
+      </g>
       <g className="desk__breathe">
-        <path d="M366 524 C340 524 334 494 356 490" fill="none" stroke="#f0b27a" strokeWidth="11" strokeLinecap="round" />
-        <ellipse cx="418" cy="514" rx="58" ry="26" fill="#f6efe3" />
-        <path d="M376 500 C390 486 410 488 414 500 C402 504 388 506 376 500Z" fill="#f0b27a" />
-        <ellipse cx="438" cy="522" rx="26" ry="8" fill="#ffffff" opacity="0.7" />
+        {/* 덩어리: 윤곽 위에 면을 겹쳐 깎은 느낌을 냅니다 */}
+        <polygon points="366,532 360,508 372,486 388,468 398,448 414,462 426,462 442,448 452,468 468,486 480,508 474,532" fill="#211e27" />
+        {FACETS.map(([c, pts]) => (
+          <polygon key={pts} points={pts} fill={c} />
+        ))}
+        <polygon points="399,455 408,464 394,466" fill="#c4607a" />
+        <polygon points="441,455 432,464 446,466" fill="#c4607a" />
+        {/* 앞발은 그냥 납작한 조각 */}
+        <polygon points="394,532 398,524 410,524 414,532" fill="#34303d" />
+        <polygon points="426,532 430,524 442,524 446,532" fill="#34303d" />
       </g>
-      <g transform="translate(466 496)">
-        <path d="M-20 -8 L-17 -30 L-4 -16Z" fill="#f6efe3" />
-        <path d="M20 -8 L17 -30 L4 -16Z" fill="#f0b27a" />
-        <path d="M-16 -10 L-15 -24 L-8 -16Z" fill="#ffb8c4" />
-        <ellipse rx="24" ry="20" fill="#f6efe3" />
-        <path d="M2 -20 C14 -20 22 -10 20 0 C12 -2 6 -8 2 -20Z" fill="#f0b27a" />
-        <path d="M-13 -2 Q-8 3 -3 -2 M5 -2 Q10 3 15 -2" fill="none" stroke="#5a3b2a" strokeWidth="2.2" strokeLinecap="round" />
-        <path d="M-2.5 5 H3.5 L0.5 9Z" fill="#ff8fa3" />
-        <ellipse cx="-14" cy="6" rx="4.5" ry="3" fill="#ffb8c4" opacity="0.8" />
-        <ellipse cx="18" cy="6" rx="4.5" ry="3" fill="#ffb8c4" opacity="0.8" />
-        <path d="M-26 4 H-16 M-26 9 L-16 8 M26 4 H16 M26 9 L16 8" stroke="#c9b9a4" strokeWidth="1.4" />
+      {/* 눈은 크기가 다르고 서로 다른 데를 봅니다 */}
+      <g className="desk__blink">
+        <circle cx="405" cy="480" r="9.5" fill="#fff" />
+        <circle cx="435" cy="478" r="6.5" fill="#fff" />
+        <g className="desk__look">
+          <circle cx="408" cy="484" r="3.6" fill="#0d0c10" />
+          <circle cx="433" cy="480" r="2.6" fill="#0d0c10" />
+        </g>
       </g>
-      <text x="498" y="472" className="desk__zzz">
-        z
-      </text>
-      <text x="514" y="454" className="desk__zzz desk__zzz--b">
-        z
-      </text>
+      <g className="desk__happy" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M397 483 L405 476 L413 483" />
+        <path d="M428 481 L435 475 L442 481" />
+      </g>
+      {/* 코와 혀: 입을 헤벌리고 있습니다 */}
+      <polygon points="416,490 424,490 420,495" fill="#e0809a" />
+      <path d="M420 495 V497 M420 497 L414 498 M420 497 L426 498" fill="none" stroke="#6a657a" strokeWidth="1.6" strokeLinecap="round" />
+      <polygon className="desk__tongue" points="416.5,498 423.5,498 420,508" fill="#ff7b98" />
+      <g className="desk__hearts" fill="#ff6f8f">
+        <path className="desk__heart" d="M352 462 C346 456 348 451 352 454 C356 451 358 456 352 462Z" />
+        <path className="desk__heart desk__heart--b" d="M492 466 C486 460 488 455 492 458 C496 455 498 460 492 466Z" />
+        <path className="desk__heart desk__heart--c" d="M376 440 C371 435 373 431 376 433 C379 431 381 435 376 440Z" />
+      </g>
     </g>
   )
 }
 
-// 책 더미(기획 작업물). 맨 위에서 고양이가 낮잠을 자고 있습니다.
+// 책 더미(기획 작업물). 맨 위에서 까만 고양이가 앉아 있습니다.
+const BOOKS = [
+  { x: 330, y: 614, w: 172, h: 30, c: '#4f8f7e', band: '#86b9a8' },
+  { x: 340, y: 586, w: 152, h: 28, c: '#f08a6b', band: '#f7b49b', rot: [-2, 415, 600] },
+  { x: 334, y: 558, w: 164, h: 28, c: '#f4d77a', band: '#faeaa8', rot: [1.5, 415, 574] },
+  { x: 346, y: 532, w: 142, h: 26, c: '#7bb88a', band: '#a9d6b4', rot: [-3, 415, 546] },
+]
+
 export function BookStack() {
   return (
     <Hotspot id="books">
       <rect x="326" y="446" width="200" height="200" fill="transparent" />
+      {BOOKS.map(({ x, y, w, h, c, band, rot }) => (
+        <g key={y} transform={rot ? `rotate(${rot.join(' ')})` : undefined}>
+          <rect x={x} y={y} width={w} height={h} rx="5" fill={c} {...OUT} />
+          <rect x={x + w - 13} y={y + 4} width="9" height={h - 8} rx="2" fill="#fff6e0" />
+          <rect x={x + 10} y={y + h / 2 - 1.5} width={w * 0.42} height="3" rx="1.5" fill={band} />
+          <rect x={x + 6} y={y + 4} width="3" height={h - 8} rx="1.5" fill="#000" opacity="0.12" />
+        </g>
+      ))}
       <Cat />
-      <rect x="330" y="614" width="172" height="30" rx="3" fill="#4f8f7e" />
-      <rect x="340" y="618" width="150" height="3" fill="#86b9a8" />
-      <g transform="rotate(-2 415 600)">
-        <rect x="340" y="586" width="152" height="28" rx="3" fill="#f08a6b" />
-        <rect x="350" y="591" width="110" height="3" fill="#f7b49b" />
-      </g>
-      <g transform="rotate(1.5 415 574)">
-        <rect x="334" y="558" width="164" height="28" rx="3" fill="#f4d77a" />
-        <rect x="346" y="564" width="96" height="3" fill="#faeaa8" />
-      </g>
-      <g transform="rotate(-3 415 546)">
-        <rect x="346" y="532" width="142" height="26" rx="3" fill="#7bb88a" />
-        <rect x="356" y="537" width="80" height="3" fill="#a9d6b4" />
-      </g>
     </Hotspot>
   )
 }
@@ -142,47 +174,57 @@ export function Laptop() {
   return (
     <Hotspot id="laptop">
       <rect x="524" y="456" width="376" height="204" fill="transparent" />
-      <rect x="560" y="464" width="304" height="176" rx="10" fill="#2a2c33" />
-      <rect x="570" y="474" width="284" height="156" rx="3" fill="#f7f9fd" />
-      <rect x="570" y="474" width="284" height="26" fill="#eaf0fb" />
-      <circle cx="584" cy="487" r="4" fill="#ef7a6c" />
-      <circle cx="598" cy="487" r="4" fill="#f2c14e" />
-      <circle cx="612" cy="487" r="4" fill="#6cc48a" />
+      <rect x="560" y="464" width="304" height="176" rx="12" fill="#363842" {...OUT_DARK} />
+      <rect x="572" y="476" width="280" height="152" rx="4" fill="#f7f9fd" />
+      <rect x="572" y="476" width="280" height="26" rx="4" fill="#eaf0fb" />
+      <circle cx="712" cy="470" r="2.2" fill="#6b6e7a" />
+      <circle cx="586" cy="489" r="4" fill="#ef7a6c" />
+      <circle cx="600" cy="489" r="4" fill="#f2c14e" />
+      <circle cx="614" cy="489" r="4" fill="#6cc48a" />
       {[
         ['#1f6bff', '얼마'],
         ['#ff9f43', '해미'],
         ['#ff6fa3', '토스'],
       ].map(([c, t], i) => (
-        <g key={t} transform={`translate(${584 + i * 90} 512)`}>
+        <g key={t} transform={`translate(${584 + i * 90} 514)`}>
+          <g className="desk__card" style={{ '--i': i }}>
           <rect width="80" height="104" rx="8" fill="#ffffff" stroke="#e1e8f5" strokeWidth="2" />
           <rect x="8" y="8" width="64" height="44" rx="5" fill={c} opacity="0.9" />
           <rect x="8" y="62" width="50" height="6" rx="3" fill="#cfd9ec" />
           <rect x="8" y="76" width="34" height="6" rx="3" fill="#dfe6f3" />
           <circle cx="22" cy="30" r="9" fill="#ffffff" opacity="0.55" />
+          </g>
         </g>
       ))}
-      <path d="M522 640 H902 L914 658 H510Z" fill="#c9ccd4" />
-      <rect x="682" y="640" width="60" height="6" rx="3" fill="#aeb2bb" />
-      <path d="M510 658 H914 V662 H510Z" fill="#9ea2ab" />
+      <path d="M522 640 H902 L914 658 H510Z" fill="#d6d9e1" {...OUT_DARK} />
+      <rect x="682" y="640" width="60" height="6" rx="3" fill="#b1b5bf" />
+      <path d="M510 658 H914 V662 H510Z" fill="#a4a8b2" />
+      <path d="M846 631 C838 625 840 620 846 622 C852 620 854 625 846 631Z" fill="#ff7aa8" />
     </Hotspot>
   )
 }
 
-// 김이 오르는 머그컵
+// 김이 오르는 머그컵 (얼굴이 있습니다). 마우스를 올리면 흔들립니다.
 export function Mug() {
   return (
-    <>
-      <g>
-        <rect x="934" y="614" width="40" height="34" rx="8" fill="#fbf6ea" />
-        <rect x="934" y="624" width="40" height="8" fill="#6bb27a" />
-        <path d="M974 622 C992 622 992 642 974 642" fill="none" stroke="#fbf6ea" strokeWidth="6" />
-      </g>
+    <g className="desk__mug">
+      <ellipse cx="956" cy="648" rx="30" ry="5.5" fill="#f4ebd8" {...OUT} strokeWidth="2" />
+      <path d="M974 622 C994 620 994 644 974 642" fill="none" stroke="#9a6a45" strokeWidth="9.4" strokeLinecap="round" />
+      <path d="M974 622 C994 620 994 644 974 642" fill="none" stroke="#fffaf0" strokeWidth="5" strokeLinecap="round" />
+      <rect x="934" y="614" width="40" height="34" rx="9" fill="#fffaf0" />
+      <rect x="934" y="618" width="40" height="7" fill="#6bb27a" />
+      <rect x="934" y="614" width="40" height="34" rx="9" fill="none" {...OUT} />
+      <circle cx="946" cy="635" r="2" fill="#5a3b2a" />
+      <circle cx="962" cy="635" r="2" fill="#5a3b2a" />
+      <path d="M950 639 Q954 643 958 639" fill="none" stroke="#5a3b2a" strokeWidth="1.8" strokeLinecap="round" />
+      <ellipse cx="941" cy="639" rx="3" ry="2" fill="#ff9fb4" opacity="0.7" />
+      <ellipse cx="967" cy="639" rx="3" ry="2" fill="#ff9fb4" opacity="0.7" />
 
-      <g className="desk__steam" fill="none" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" opacity="0.8">
+      <g className="desk__steam" fill="none" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" opacity="0.85">
         <path d="M946 606 C940 594 954 588 948 574" />
         <path d="M962 606 C956 596 968 590 963 578" className="desk__steam--b" />
       </g>
-    </>
+    </g>
   )
 }
 
@@ -191,21 +233,24 @@ export function Notebook() {
   return (
     <Hotspot id="notebook">
       <rect x="990" y="596" width="240" height="68" fill="transparent" />
-      <path d="M1000 636 L1112 628 L1112 652 L1000 662Z" fill="#fffaf0" stroke="#e6dcc0" strokeWidth="2" />
-      <path d="M1116 628 L1228 636 L1228 662 L1116 652Z" fill="#fffdf6" stroke="#e6dcc0" strokeWidth="2" />
-      <path d="M1112 628 V652" stroke="#d4c8a4" strokeWidth="3" />
+      <path d="M1000 636 L1112 628 L1112 652 L1000 662Z" fill="#fffaf0" {...OUT} strokeWidth="2" />
+      <path d="M1116 628 L1228 636 L1228 662 L1116 652Z" fill="#fffdf6" {...OUT} strokeWidth="2" />
+      <path d="M1112 628 V652" stroke="#d4b98a" strokeWidth="3" />
       {[0, 1, 2].map((i) => (
-        <g key={i} stroke="#cdbf96" strokeWidth="2" strokeLinecap="round">
+        <g key={i} stroke="#d8c9a0" strokeWidth="2" strokeLinecap="round">
           <line x1="1014" y1={640 + i * 6} x2="1098" y2={634 + i * 6} />
           <line x1="1130" y1={634 + i * 6} x2="1210" y2={640 + i * 6} />
         </g>
       ))}
       <rect x="1030" y="630" width="30" height="3" fill="#e08a4f" transform="rotate(-4 1045 631)" />
       <g transform="rotate(-6 1180 624)">
-        <rect x="1150" y="620" width="104" height="8" rx="2" fill="#f2c14e" />
-        <polygon points="1254,620 1272,624 1254,628" fill="#f1dcb2" />
-        <polygon points="1266,623 1272,624 1266,625" fill="#3a2c2a" />
-        <rect x="1150" y="620" width="10" height="8" rx="2" fill="#f19aa8" />
+        {/* 마우스를 올리면 연필이 글씨를 쓰듯 움직입니다 */}
+        <g className="desk__pencil">
+          <rect x="1150" y="620" width="104" height="9" rx="2.5" fill="#f2c14e" {...OUT} strokeWidth="1.8" />
+          <polygon points="1254,620 1273,624.5 1254,629" fill="#f6e2bb" {...OUT} strokeWidth="1.6" />
+          <polygon points="1267,623 1273,624.5 1267,626" fill="#3a2c2a" />
+          <rect x="1150" y="620" width="11" height="9" rx="2.5" fill="#f19aa8" {...OUT} strokeWidth="1.8" />
+        </g>
       </g>
     </Hotspot>
   )
@@ -213,26 +258,28 @@ export function Notebook() {
 
 export function PencilCup() {
   return (
-      <g>
-        <path d="M1258 604 L1262 590 M1268 604 L1276 586 M1278 604 L1282 592" stroke="#e08a4f" strokeWidth="4" strokeLinecap="round" />
-        <rect x="1252" y="600" width="42" height="46" rx="7" fill="#d6ebee" opacity="0.8" stroke="#b5d3d8" strokeWidth="2" />
-      </g>
+    <g>
+      <path d="M1258 604 L1260 588 M1268 604 L1276 584 M1278 604 L1284 592" stroke="#e08a4f" strokeWidth="5" strokeLinecap="round" />
+      <path d="M1268 604 L1276 584" stroke="#7bb88a" strokeWidth="5" strokeLinecap="round" />
+      <path d="M1260 589 L1260 586 M1275 586 L1276 583" stroke="#3a2c2a" strokeWidth="5" strokeLinecap="round" />
+      <rect x="1252" y="600" width="42" height="46" rx="8" fill="#d9eef1" opacity="0.92" stroke="#8fbac1" strokeWidth="2.4" />
+      <path d="M1259 608 V636" stroke="#fff" strokeWidth="3" strokeLinecap="round" opacity="0.8" />
+    </g>
   )
 }
 
 // 스탠드
 export function Lamp() {
   return (
-      <g>
-        <ellipse cx="1356" cy="646" rx="42" ry="9" fill="#b98a58" />
-        <rect x="1348" y="548" width="16" height="96" rx="4" fill="#cf9d62" />
-        <ellipse cx="1356" cy="548" rx="8" ry="6" fill="#b98a58" />
-        <path d="M1306 458 H1406 L1436 550 H1276Z" fill="url(#d-shade)" />
-        {[1316, 1332, 1348, 1364, 1380, 1396, 1412, 1428].map((x, i) => (
-          <line key={x} x1={1310 + i * 14 * 0.9} y1="460" x2={x - 6 + (i - 3.5) * 2} y2="548" stroke="#86b36f" strokeWidth="2.4" opacity="0.7" />
-        ))}
-        <ellipse cx="1356" cy="458" rx="50" ry="8" fill="#cfe6ba" />
-        <ellipse cx="1356" cy="458" rx="40" ry="5" fill="#d6e6c4" opacity="0.6" />
-      </g>
+    <g>
+      <ellipse cx="1356" cy="646" rx="42" ry="9" fill="#c99a62" {...OUT} />
+      <rect x="1348" y="548" width="16" height="96" rx="5" fill="#d8a76b" {...OUT} />
+      <ellipse cx="1356" cy="548" rx="9" ry="6" fill="#c99a62" {...OUT} />
+      <path d="M1306 458 H1406 L1436 550 H1276Z" fill="url(#d-shade)" stroke="#6f9a5e" strokeWidth="2.4" strokeLinejoin="round" />
+      {[1316, 1332, 1348, 1364, 1380, 1396, 1412, 1428].map((x, i) => (
+        <line key={x} x1={1310 + i * 14 * 0.9} y1="460" x2={x - 6 + (i - 3.5) * 2} y2="548" stroke="#86b36f" strokeWidth="2.4" opacity="0.6" />
+      ))}
+      <ellipse cx="1356" cy="458" rx="50" ry="8" fill="#d3e9bf" stroke="#6f9a5e" strokeWidth="2.4" />
+    </g>
   )
 }
