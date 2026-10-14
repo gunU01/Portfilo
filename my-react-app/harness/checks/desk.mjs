@@ -1,14 +1,13 @@
 import assert from 'node:assert/strict'
 import { openPage, VIEWPORTS, waitFor } from '../lib/browser.mjs'
+import { deskLabels } from '../lib/site.mjs'
 
 export default {
   name: 'desk',
   about: '책상의 물건 7개를 키보드와 마우스로 열고 닫을 수 있고, 모바일에서는 가운데가 먼저 보인다',
   async run({ browser, url, t }) {
     const { page, context, errors } = await openPage(browser)
-    await page.goto(`${url}/#/desk`)
-    await page.waitForSelector('.hs')
-    const labels = await page.$$eval('.hs', (els) => els.map((e) => e.getAttribute('aria-label')))
+    const labels = await deskLabels(page, url)
 
     await t('핫스팟 7개', async () => assert.equal(labels.length, 7))
 
@@ -47,8 +46,7 @@ export default {
     await context.close()
 
     const mobile = await openPage(browser, { viewport: VIEWPORTS.mobile })
-    await mobile.page.goto(`${url}/#/desk`)
-    await mobile.page.waitForSelector('.hs')
+    await deskLabels(mobile.page, url)
     await t('모바일: 장면 가운데가 먼저 보인다', async () => {
       const [left, sw, cw] = await mobile.page.$eval('.desk__stage', (e) => [e.scrollLeft, e.scrollWidth, e.clientWidth])
       assert.ok(sw > cw, '모바일에서는 장면이 화면보다 넓어야 합니다')

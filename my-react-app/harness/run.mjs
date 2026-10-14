@@ -6,15 +6,13 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { launch } from './lib/browser.mjs'
+import { parseArgs } from './lib/args.mjs'
 import { startPreview } from './lib/server.mjs'
+import { DIST, siteTitle } from './lib/site.mjs'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
-const args = process.argv.slice(2)
-const opt = (name) => {
-  const i = args.indexOf(`--${name}`)
-  return i >= 0 ? args[i + 1] : undefined
-}
-const only = opt('only')
+const { flags } = parseArgs()
+const only = flags.only
 
 const files = fs.readdirSync(path.join(HERE, 'checks')).filter((f) => f.endsWith('.mjs')).sort()
 const checks = []
@@ -28,9 +26,9 @@ if (!checks.length) {
 }
 
 let server
-let url = opt('url')
+let url = flags.url
 if (!url) {
-  if (!fs.existsSync(path.join(HERE, '..', 'dist'))) {
+  if (!fs.existsSync(DIST)) {
     console.error('dist 가 없습니다. 먼저 npm run build 를 실행하세요.')
     process.exit(2)
   }
@@ -55,7 +53,7 @@ for (const check of checks) {
     }
   }
   try {
-    await check.run({ browser, url, t })
+    await check.run({ browser, url, t, base: siteTitle() })
   } catch (e) {
     failed.push(`${check.name}: ${e.message}`)
     console.log(`  ✗ (검사 자체가 중단됨) ${e.message}`)

@@ -3,11 +3,11 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import pixelmatch from 'pixelmatch'
+import { parseArgs } from './lib/args.mjs'
 import { PNG } from 'pngjs'
 
-const [a, b] = process.argv.slice(2).filter((x) => !x.startsWith('--'))
-const maxIdx = process.argv.indexOf('--max')
-const max = maxIdx >= 0 ? Number(process.argv[maxIdx + 1]) : 0.0005
+const { flags, positional: [a, b] } = parseArgs()
+const max = flags.max ? Number(flags.max) : 0.0005
 if (!a || !b) {
   console.error('사용법: npm run snap:diff -- <before 폴더> <after 폴더>')
   process.exit(2)

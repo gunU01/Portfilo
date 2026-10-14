@@ -1,12 +1,11 @@
 import assert from 'node:assert/strict'
 import { openPage, waitFor } from '../lib/browser.mjs'
-
-const BASE = '문채원 포트폴리오 사이트'
+import { deskLabels, discoverCases, go, ready } from '../lib/site.mjs'
 
 export default {
   name: 'links',
   about: '사이트 안의 모든 내부 링크가 실제 페이지와 섹션으로 이어지고, 바깥 링크는 안전하게 열린다',
-  async run({ browser, url, t }) {
+  async run({ browser, url, t, base }) {
     const { page, context } = await openPage(browser)
     const internal = new Map() // href → 어디서 발견했는지
     const external = []
@@ -19,19 +18,14 @@ export default {
       }
     }
 
-    await page.goto(`${url}/#/project`)
-    await page.waitForSelector('.pcard')
-    const caseRoutes = await page.$$eval('.pcard', (cards) => cards.map((c) => c.getAttribute('href')))
-    for (const route of ['#/', '#/project', '#/about', ...caseRoutes]) {
-      await page.goto(`${url}/${route}`)
-      await page.waitForSelector('main#main *')
+    const cases = await discoverCases(page, url)
+    for (const route of ['/', '/project', '/about', ...cases.map((c) => c.route)]) {
+      await go(page, url, route)
+      await ready(page)
       await collect(route)
     }
     // 책상: 물건마다 패널을 열어 안의 링크를 모읍니다.
-    await page.goto(`${url}/#/desk`)
-    await page.waitForSelector('.hs')
-    const labels = await page.$$eval('.hs', (els) => els.map((e) => e.getAttribute('aria-label')))
-    for (const label of labels) {
+    for (const label of await deskLabels(page, url)) {
       await page.click(`[aria-label="${label}"]`, { force: true })
       await page.waitForSelector('.desk__panel')
       await collect(`책상 / ${label}`)
@@ -42,12 +36,12 @@ export default {
     for (const [href, where] of internal) {
       await t(`내부 링크 ${href}  (${where})`, async () => {
         await page.goto(`${url}/${href}`)
-        await page.waitForSelector('main#main *')
+        await ready(page)
         const [route, query = ''] = href.slice(1).split('?')
         if (route.startsWith('/work/')) assert.ok((await page.title()).includes(' — '), '존재하지 않는 케이스입니다(홈으로 빠짐)')
         const section = new URLSearchParams(query).get('s')
         if (section) await waitFor(() => page.locator(`#${section}`).count(), { message: `#${section} 섹션이 없습니다` })
-        assert.ok((await page.title()).includes(BASE))
+        assert.ok((await page.title()).includes(base))
       })
     }
 

@@ -5,9 +5,11 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { launch, openPage, VIEWPORTS } from './lib/browser.mjs'
+import { parseArgs } from './lib/args.mjs'
 import { startPreview } from './lib/server.mjs'
+import { deskLabels, discoverCases, go } from './lib/site.mjs'
 
-const out = process.argv[2]
+const { positional: [out] } = parseArgs()
 if (!out) {
   console.error('사용법: npm run snap -- <저장할 폴더>')
   process.exit(2)
@@ -20,19 +22,15 @@ const name = (s) => s.replace(/[^\w가-힣-]+/g, '_').replace(/^_|_$/g, '') || '
 
 for (const [vp, viewport] of Object.entries(VIEWPORTS)) {
   const { page, context } = await openPage(browser, { viewport, reducedMotion: 'reduce' })
-  await page.goto(`${server.url}/#/project`)
-  await page.waitForSelector('.pcard')
-  const cases = await page.$$eval('.pcard', (cs) => cs.map((c) => c.getAttribute('href').slice(1)))
+  const cases = (await discoverCases(page, server.url)).map((c) => c.route)
   for (const route of ['/', '/project', '/about', '/desk', ...cases]) {
-    await page.goto(`${server.url}/#${route}`)
+    await go(page, server.url, route)
     await page.reload()
     await page.waitForTimeout(1200)
     await page.screenshot({ path: path.join(out, `${vp}-${name(route)}.png`), fullPage: true })
   }
-  await page.goto(`${server.url}/#/desk`)
-  await page.reload()
-  await page.waitForSelector('.hs')
-  for (const label of await page.$$eval('.hs', (els) => els.map((e) => e.getAttribute('aria-label')))) {
+  for (const label of await deskLabels(page, server.url)) {
+    await page.reload()
     await page.click(`[aria-label="${label}"]`, { force: true })
     await page.waitForTimeout(1200) // 호버 전환이 끝나기를 기다립니다
     await page.screenshot({ path: path.join(out, `${vp}-desk-${name(label)}.png`) })

@@ -1,29 +1,13 @@
-// 아키텍처 검사: src 의 import 그래프가 ARCHITECTURE.md 의 계층 규칙을 지키는지 확인합니다.
+// 아키텍처 검사: src 의 import 그래프가 계층 규칙(architecture.config.mjs, ARCHITECTURE.md)을 지키는지 확인합니다.
 // 의존 없이 돌아가며(정규식으로 import 를 읽음), 위반이 있으면 종료 코드 1 로 끝납니다.
 //   node harness/architecture.mjs
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { ENTRY, LAYERS, NO_SIBLINGS, PRIVATE } from './architecture.config.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const SRC = path.join(ROOT, 'src')
-const ENTRY = 'main.jsx'
-
-// 계층: 파일이 속한 곳 → 가져와도 되는 곳. 목록에 없으면 가져올 수 없습니다. (자기 계층 안에서는 항상 가능)
-// 패키지는 허용 목록(PACKAGES)에 있는 것만 가져올 수 있습니다.
-export const LAYERS = {
-  data: { dir: 'data/', may: ['assets'], packages: [] },
-  lib: { dir: 'lib/', may: [], packages: ['react'] },
-  'components/desk': { dir: 'components/desk/', may: ['data', 'lib', 'components'], packages: ['react'] },
-  components: { dir: 'components/', may: ['data', 'lib', 'components/desk', 'assets'], packages: ['react'] },
-  pages: { dir: 'pages/', may: ['components', 'data', 'lib'], packages: ['react'] },
-  styles: { dir: 'styles/', may: ['assets'], packages: [] },
-  root: { dir: '', may: ['pages', 'components', 'data', 'lib', 'styles', 'assets'], packages: ['react', 'react-dom'] },
-}
-// 같은 계층 안에서도 서로 가져오면 안 되는 곳: pages 는 페이지끼리 독립입니다.
-const NO_SIBLINGS = new Set(['pages'])
-// components/desk 는 DeskScene.jsx 만 가져올 수 있습니다(장면을 이루는 조각이라서).
-const PRIVATE = { 'components/desk': ['components/DeskScene.jsx'] }
 
 const exists = (f) => fs.existsSync(f) && fs.statSync(f).isFile()
 const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]))

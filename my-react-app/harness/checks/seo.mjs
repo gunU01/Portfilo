@@ -1,16 +1,14 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-const DIST = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'dist')
+import { DIST, readIndexHtml } from '../lib/site.mjs'
 
 // 링크 미리보기(카카오톡, 슬랙 등)는 자바스크립트를 실행하지 않고 이 index.html 만 읽습니다.
 export default {
   name: 'seo',
   about: '링크 미리보기에 쓰이는 정보가 index.html 에 있고, 외부 CDN 을 쓰지 않는다',
   async run({ t }) {
-    const html = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8')
+    const html = readIndexHtml()
     const meta = (attr, key) => html.match(new RegExp(`<meta[^>]*${attr}="${key}"[^>]*content="([^"]*)"`))?.[1]
 
     await t('언어가 ko', async () => assert.match(html, /<html[^>]*lang="ko"/))
