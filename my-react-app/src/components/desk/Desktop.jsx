@@ -118,18 +118,18 @@ function Cat() {
         <polygon points="394,532 398,524 410,524 414,532" fill="#34303d" />
         <polygon points="426,532 430,524 442,524 446,532" fill="#34303d" />
       </g>
-      {/* 눈은 크기가 다르고 서로 다른 데를 봅니다 */}
+      {/* 노란 눈 두 개(같은 크기). 진한 노랑 동공이 마우스를 따라갑니다 */}
       <g className="desk__blink">
-        <circle cx="405" cy="480" r="9.5" fill="#fff" />
-        <circle cx="435" cy="478" r="6.5" fill="#fff" />
+        <circle cx="405" cy="480" r="10.5" fill="#ffd84a" />
+        <circle cx="435" cy="480" r="10.5" fill="#ffd84a" />
         <g className="desk__look">
-          <circle cx="408" cy="484" r="3.6" fill="#0d0c10" />
-          <circle cx="433" cy="480" r="2.6" fill="#0d0c10" />
+          <circle cx="407" cy="482" r="5.6" fill="#f2a900" />
+          <circle cx="433" cy="482" r="5.6" fill="#f2a900" />
         </g>
       </g>
       <g className="desk__happy" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M397 483 L405 476 L413 483" />
-        <path d="M428 481 L435 475 L442 481" />
+        <path d="M396 485 L405 476 L414 485" />
+        <path d="M426 485 L435 476 L444 485" />
       </g>
       <g className="desk__hearts" fill="#ff6f8f">
         <path className="desk__heart" d="M352 462 C346 456 348 451 352 454 C356 451 358 456 352 462Z" />
