@@ -36,7 +36,9 @@ function SectionIndex() {
 export default function About() {
   const { about } = profile
   useReveal()
-  const timelineRef = useTimelineProgress() // 읽는 위치에 맞춰 활동 기록의 진행선이 차오릅니다
+  // 읽는 위치에 맞춰 활동 기록과 대회 참가의 진행선이 차오릅니다(목록마다 따로)
+  const historyRef = useTimelineProgress()
+  const contestsRef = useTimelineProgress()
 
   return (
     <div className="ab">
@@ -73,7 +75,7 @@ export default function About() {
         <h2 className="ab__h" id="hi-title">
           활동 기록
         </h2>
-        <ol className="tl tl--live" ref={timelineRef}>
+        <ol className="tl tl--live" ref={historyRef}>
           {about.timeline.map((t) => (
             <li className="tl__item reveal" key={t.when}>
               <span className="tl__when tnum">{t.when}</span>
@@ -87,7 +89,7 @@ export default function About() {
         <h2 className="ab__h" id="ct-title">
           대회 참가
         </h2>
-        <ol className="tl tl--wide">
+        <ol className="tl tl--wide tl--live" ref={contestsRef}>
           {contests.map((c) => (
             <li className="tl__item reveal" key={c.title}>
               <span className="tl__when tnum">{c.when}</span>
