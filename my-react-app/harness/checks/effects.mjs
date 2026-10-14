@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { openPage, waitFor } from '../lib/browser.mjs'
+import { openPage, VIEWPORTS, waitFor } from '../lib/browser.mjs'
 import { go, ready } from '../lib/site.mjs'
 
 const num = (v) => Number.parseFloat(v)
@@ -93,17 +93,41 @@ export default {
       await waitFor(async () => (await passed()) === total, { message: '다 지나면 모두 차올라야 합니다' })
     })
 
-    await t('푸터 복사 버튼: 이메일과 전화번호가 클립보드에 복사되고 잠시 복사됨으로 바뀐다', async () => {
+    await t('푸터 복사 아이콘: 이메일과 전화번호가 클립보드에 복사되고 잠시 체크로 바뀐다', async () => {
       await go(page, url, '/')
       await ready(page)
       const row = page.locator('.footer__rows li', { hasText: 'Email' })
       await row.scrollIntoViewIfNeeded()
       const expected = (await row.locator('.footer__v').textContent()).trim()
-      await row.locator('.footer__copy').click()
+      const copy = row.locator('.footer__copy')
+      assert.equal(await copy.getAttribute('aria-label'), 'Email 복사')
+      assert.equal((await copy.textContent()).trim(), '', '글자 없이 아이콘만 있어야 합니다')
+      await copy.click()
       assert.equal(await page.evaluate(() => navigator.clipboard.readText()), expected)
-      assert.equal(await row.locator('.footer__copy').textContent(), '복사됨')
-      await waitFor(async () => (await row.locator('.footer__copy').textContent()) === '복사', { timeout: 3000, message: '복사됨이 사라지지 않았습니다' })
-      assert.equal(await page.locator('.footer__rows li', { hasText: 'GitHub' }).locator('.footer__copy').count(), 0, 'GitHub 줄에는 복사 버튼이 없어야 합니다')
+      assert.equal(await copy.getAttribute('data-copied'), 'true')
+      await waitFor(async () => (await copy.getAttribute('data-copied')) === null, { timeout: 3000, message: '복사됨 표시가 사라지지 않았습니다' })
+      assert.equal(await page.locator('.footer__rows li', { hasText: 'GitHub' }).locator('.footer__copy').count(), 0, 'GitHub 줄에는 복사 아이콘이 없어야 합니다')
+    })
+
+    await t('푸터 복사 아이콘: 모바일에서 값 글자나 화살표와 겹치지 않는다', async () => {
+      const m = await openPage(browser, { viewport: VIEWPORTS.mobile })
+      await go(m.page, url, '/')
+      await ready(m.page)
+      for (const name of ['Email', 'Phone']) {
+        const row = m.page.locator('.footer__rows li', { hasText: name })
+        await row.scrollIntoViewIfNeeded()
+        const rects = await row.evaluate((li) => {
+          const r = (el) => el.getBoundingClientRect().toJSON()
+          const range = document.createRange()
+          range.selectNodeContents(li.querySelector('.footer__v'))
+          return { copy: r(li.querySelector('.footer__copy')), text: range.getBoundingClientRect().toJSON(), arrow: r(li.querySelector('.footer__go')) }
+        })
+        const overlap = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top
+        assert.ok(!overlap(rects.copy, rects.text), `${name}: 값 글자와 겹칩니다`)
+        assert.ok(!overlap(rects.copy, rects.arrow), `${name}: 화살표와 겹칩니다`)
+        assert.ok(rects.copy.width >= 24 && rects.copy.height >= 24, `${name}: 누르기에 너무 작습니다`)
+      }
+      await m.context.close()
     })
     await context.close()
 

@@ -48,8 +48,17 @@ export default function Footer() {
                 </span>
               </a>
               {copyText && (
-                <button className="footer__copy" type="button" onClick={() => copy(label, copyText)} aria-label={`${label} 복사`}>
-                  {copied === label ? '복사됨' : copied === `${label}:fail` ? '복사 실패' : '복사'}
+                <button className="footer__copy" type="button" onClick={() => copy(label, copyText)} aria-label={`${label} 복사`} data-copied={copied === label ? 'true' : copied === `${label}:fail` ? 'fail' : undefined}>
+                  <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    {copied === label ? (
+                      <path d="M3 8.5 6.5 12 13 4.5" />
+                    ) : (
+                      <>
+                        <rect x="5.5" y="5.5" width="8" height="8" rx="1.8" />
+                        <path d="M10.5 3.5v-.2A1.8 1.8 0 0 0 8.7 1.5H3.8A1.8 1.8 0 0 0 2 3.3v4.9a1.8 1.8 0 0 0 1.8 1.8h.2" />
+                      </>
+                    )}
+                  </svg>
                 </button>
               )}
             </li>
