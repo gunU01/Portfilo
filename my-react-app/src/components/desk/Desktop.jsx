@@ -14,11 +14,12 @@ const rnd = (seed) => {
 export function DeskBase() {
   return (
     <>
-      <rect x="190" y="760" width="1220" height="120" fill="url(#d-under)" />
       {/* 다리 */}
       {[140, 1385].map((x) => (
         <g key={x}>
+          <ellipse cx={x + 39} cy="888" rx="62" ry="9" fill="#5a3b24" opacity="0.28" />
           <rect x={x} y="676" width="78" height="210" rx="7" fill="#f3cc94" {...OUT} />
+          <rect x={x - 3} y="862" width="84" height="24" rx="6" fill="#e0aa6c" {...OUT} />
           {[0, 1, 2].map((i) => (
             <rect key={i} x={x + 12 + i * 22} y="700" width="12" height="170" rx="5" fill="#e6b479" />
           ))}
@@ -27,6 +28,8 @@ export function DeskBase() {
       {/* 앞면 */}
       <rect x="200" y="676" width="1200" height="92" rx="4" fill="#f7d4a2" {...OUT} />
       <rect x="204" y="680" width="1192" height="7" rx="3" fill="#e9bb80" opacity="0.7" />
+      <rect x="202" y="682" width="1196" height="30" fill="url(#d-apron)" />
+      <rect x="200" y="762" width="1200" height="6" rx="2" fill="#e2b078" opacity="0.8" />
     </>
   )
 }

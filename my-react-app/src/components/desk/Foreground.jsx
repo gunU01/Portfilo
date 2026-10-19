@@ -6,13 +6,13 @@ import { OUT } from './outline.js'
 export function Rug() {
   return (
     <g>
-      <ellipse cx="800" cy="884" rx="400" ry="40" fill="#ee9c78" stroke="#c9704c" strokeWidth="2.4" />
-      <ellipse cx="800" cy="884" rx="352" ry="32" fill="#fdf0d6" />
-      <ellipse cx="800" cy="884" rx="304" ry="26" fill="#7fc9a6" />
-      <ellipse cx="800" cy="884" rx="256" ry="20" fill="#fdf0d6" />
-      <ellipse cx="800" cy="884" rx="208" ry="15" fill="#ffd27a" />
+      <ellipse cx="810" cy="862" rx="380" ry="40" fill="#ee9c78" stroke="#c9704c" strokeWidth="2.4" />
+      <ellipse cx="810" cy="862" rx="336" ry="34" fill="#fdf0d6" />
+      <ellipse cx="810" cy="862" rx="292" ry="28" fill="#7fc9a6" />
+      <ellipse cx="810" cy="862" rx="248" ry="22" fill="#fdf0d6" />
+      <ellipse cx="810" cy="862" rx="204" ry="15" fill="#ffd27a" />
       {/* 러그 가장자리의 술 무늬: 점선 고리 */}
-      <ellipse cx="800" cy="884" rx="376" ry="36" fill="none" stroke="#fff4e3" strokeWidth="3" strokeDasharray="2 12" strokeLinecap="round" />
+      <ellipse cx="810" cy="862" rx="358" ry="37" fill="none" stroke="#fff4e3" strokeWidth="3" strokeDasharray="2 12" strokeLinecap="round" />
     </g>
   )
 }

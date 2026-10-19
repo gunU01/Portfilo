@@ -40,7 +40,7 @@ npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도
 src/
   pages/        Home · Project · Case(케이스 본문) · About · Desk(책상 입구)
   components/   Nav · Footer · Spec · SkillMap · Blocks · CaseCover · DeskScene · DeskPanel
-    desk/       책상 SVG 를 이루는 조각들 (Wall · WallDecor · Desktop · Foreground · Hotspot · Tags …)
+    desk/       책상 SVG 를 이루는 조각들 (Wall · WallDecor · Desktop · Floor · Foreground · Hotspot · Tags …)
   data/         화면에 나오는 모든 문구와 수치 (위 표)
   lib/          useHashRoute · useReveal · useScrollSpy · useParallax · usePointerVars · useFollow · useScrollProgress · useTimelineProgress · onScrollFrame · useActivePill · useCopy · useInkHover · arrowNav · format · dom
   styles/       index.css 가 순서대로 불러옵니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요

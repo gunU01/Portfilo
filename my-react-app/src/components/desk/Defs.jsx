@@ -14,9 +14,13 @@ export default function Defs() {
         <stop offset="0" stopColor="#f2cf98" />
         <stop offset="1" stopColor="#ebbd7e" />
       </linearGradient>
-      <linearGradient id="d-under" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stopColor="#7d5232" />
-        <stop offset="1" stopColor="#a67a4e" />
+      <linearGradient id="d-floor" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#dcaf7c" />
+        <stop offset="1" stopColor="#cf9a66" />
+      </linearGradient>
+      <linearGradient id="d-apron" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#8a5a30" stopOpacity="0.28" />
+        <stop offset="1" stopColor="#8a5a30" stopOpacity="0" />
       </linearGradient>
       <linearGradient id="d-beam" x1="0" y1="0" x2="0.4" y2="1">
         <stop offset="0" stopColor="#fff6cf" stopOpacity="0.34" />
