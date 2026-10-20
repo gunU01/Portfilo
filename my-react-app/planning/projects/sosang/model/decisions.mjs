@@ -1,9 +1,12 @@
-// status 가 proposed 인 항목은 제안일 뿐입니다. 문채원 님이 accepted 로 바꾸기 전에는 확정된 것으로 쓰지 않습니다.
+// status: proposed = 제안(확정 아님), accepted = 확정. D-01~D-08 은 2026-10-20 에 문채원 님이 '일단 지금 이대로 시작하자'고 하여 확정했다.
+// 확정은 되돌릴 수 있다. 근거(E-xx)가 바뀌면 이 결정도 다시 본다.
 export const decisions = [
   {
     id: 'D-01',
     title: '첫 대상을 요식업 사장님 하나로 좁힌다',
-    status: 'proposed',
+    status: 'accepted',
+    decidedBy: '문채원',
+    decidedAt: '2026-10-20',
     context: '노션 문서는 요식업, 예약 기반 뷰티, 학원, 생활서비스, 신규 오픈 매장까지 세그먼트마다 문제의 결이 다르다고 정리한다.',
     options: [
       { name: '요식업만', pro: '재방문 주기가 짧아 효과를 빨리 볼 수 있다. 주제 이름과 일치한다', con: '회전율이 높아 사장님이 시간을 내기 어렵다' },
@@ -17,7 +20,9 @@ export const decisions = [
   {
     id: 'D-02',
     title: '도구를 주는 방식이 아니라 대신 해 주는 실행형으로 간다',
-    status: 'proposed',
+    status: 'accepted',
+    decidedBy: '문채원',
+    decidedAt: '2026-10-20',
     context: '경쟁 서비스 대부분이 도구와 대시보드를 주고 사장님이 쓰기를 기대한다(E-01). 국내외 사례 분석은 대행형 흐름과, 자동 발행 비율 50% 미만이면 대행 모델로 전환하라는 기준을 제시한다(E-02).',
     options: [
       { name: '도구형', pro: '만들기 쉽다', con: '사장님이 시간이 없어 방치한다(P-01)' },
@@ -31,7 +36,9 @@ export const decisions = [
   {
     id: 'D-03',
     title: 'MVP 는 다섯 기능으로 한정한다',
-    status: 'proposed',
+    status: 'accepted',
+    decidedBy: '문채원',
+    decidedAt: '2026-10-20',
     context: '노션 기획안은 핵심 기능 6가지를 모두 담는다. 이 중 밈 설명과 원클릭 동시 발행은 검증되지 않은 가정에 기대고 있다(X-04, X-06).',
     options: [
       { name: '6가지 전부', pro: '기획안과 같다', con: '밈 가치와 연동 가능 범위가 확인되지 않은 채 만들게 된다' },
@@ -45,7 +52,9 @@ export const decisions = [
   {
     id: 'D-04',
     title: '검증은 인터뷰, 컨시어지, 랜딩·가격 순으로 한다',
-    status: 'proposed',
+    status: 'accepted',
+    decidedBy: '문채원',
+    decidedAt: '2026-10-20',
     context: '노션의 검증 틀(E-05)은 인터뷰와 가짜 문 랜딩을 제안하고, 문제 분해 문서(E-03)는 행동 기반 질문을 제안한다.',
     options: [
       { name: '바로 개발', pro: '결과물이 빨리 나온다', con: '문제가 없다면 전부 낭비다' },
@@ -58,7 +67,9 @@ export const decisions = [
   {
     id: 'D-05',
     title: '가격 시안은 검증 전 값으로만 쓴다',
-    status: 'proposed',
+    status: 'accepted',
+    decidedBy: '문채원',
+    decidedAt: '2026-10-20',
     context: '노션 기획안의 가격은 무료 / 월 19,000원 / 월 39,000원이다(E-04). 경쟁사 요금은 아직 확인하지 못했다(E-10).',
     options: [
       { name: '시안을 확정가로 사용', pro: '문서가 단순해진다', con: '근거가 없다' },
@@ -71,7 +82,9 @@ export const decisions = [
   {
     id: 'D-06',
     title: 'MVP 에서는 자동 발행 대신 복사·공유로 시작한다',
-    status: 'proposed',
+    status: 'accepted',
+    decidedBy: '문채원',
+    decidedAt: '2026-10-20',
     context: '채널 연동 가능 범위와 정책을 확인하지 못했고(X-04), 자동 생성 콘텐츠는 승인 단계에서 방치될 수 있다(E-02).',
     options: [
       { name: '자동 동시 발행', pro: '사장님 수고가 가장 적다', con: '연동 범위가 불확실하고, 잘못 올라가면 되돌리기 어렵다' },
@@ -84,7 +97,9 @@ export const decisions = [
   {
     id: 'D-07',
     title: '이번 프로젝트는 출시가 아니라 기획과 검증까지로 한정한다',
-    status: 'proposed',
+    status: 'accepted',
+    decidedBy: '문채원',
+    decidedAt: '2026-10-20',
     context: '학생 개인이 유료 서비스를 운영할 때의 사업자 등록·약관·개인정보 책임을 아직 확인하지 못했다(X-08).',
     options: [
       { name: '실제 유료 출시', pro: '가장 현실적인 검증이다', con: '확인하지 못한 책임이 생긴다' },
@@ -98,7 +113,9 @@ export const decisions = [
   {
     id: 'D-08',
     title: '포트폴리오에는 확인된 것만 사실처럼 쓴다',
-    status: 'proposed',
+    status: 'accepted',
+    decidedBy: '문채원',
+    decidedAt: '2026-10-20',
     context: '지금 모든 문제는 가설이고, 근거는 2차 자료와 검색 요약뿐이다.',
     options: [
       { name: '완성된 서비스처럼 서술', pro: '보기 좋다', con: '확인하지 않은 것을 사실처럼 말하게 된다' },

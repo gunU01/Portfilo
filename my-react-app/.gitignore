@@ -25,3 +25,7 @@ dist-ssr
 
 # 검증 하네스가 만드는 스냅샷
 harness/out
+
+# 인터뷰 원자료(사람 정보가 들어갈 수 있어 올리지 않음)
+planning/projects/*/field/data/*
+!planning/projects/*/field/data/.gitkeep

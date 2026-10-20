@@ -1,6 +1,8 @@
 // 합격선(threshold)의 thresholdBasis:
 //   notion   : 팀 노션 문서에 이미 적혀 있는 기준
-//   proposal : 이번에 새로 제안한 기준(문채원 님이 확인·수정해야 확정됨)
+//   proposal : 새로 제안했고 아직 확인받지 않은 기준
+//   owner    : 문채원 님이 확인하고 확정한 기준(2026-10-20 '일단 지금 이대로 시작하자')
+// passRule 은 인터뷰 집계(tally.mjs)가 읽는 기계용 합격선이다. 사람이 읽는 threshold 와 같은 뜻이어야 한다.
 export const hypotheses = [
   {
     id: 'H-01',
@@ -9,7 +11,8 @@ export const hypotheses = [
     statement: '사장님은 지난 한 달 동안 홍보를 거의 하지 못했고, 그 이유로 도구 부족보다 시간·판단 부족을 든다.',
     metric: "인터뷰 응답자 중 '지난 한 달 홍보 실행 0~1회'이면서 이유로 시간·판단 부족을 든 사람의 비율",
     threshold: '10명 중 6명 이상',
-    thresholdBasis: 'proposal',
+    thresholdBasis: 'owner',
+    passRule: { min: 0.6, base: 'interviews', field: 'promo_low_and_reason_time_or_judgment' },
     status: 'untested',
   },
   {
@@ -19,7 +22,8 @@ export const hypotheses = [
     statement: '사장님은 무료 채널(카카오 채널·인스타그램 등)을 만들어 두고 방치한 경험이 있다.',
     metric: '방치한 채널이 있다고 답한 응답자의 비율과, 멈춘 이유(시간·소재·효과 불명 등)의 분포',
     threshold: '10명 중 5명 이상',
-    thresholdBasis: 'proposal',
+    thresholdBasis: 'owner',
+    passRule: { min: 0.5, base: 'interviews', field: 'abandoned_free_channel' },
     status: 'untested',
   },
   {
@@ -29,7 +33,8 @@ export const hypotheses = [
     statement: '사장님은 최근 오지 않는 단골을 구체적으로 말하지 못하거나, 알아도 대응한 적이 없다.',
     metric: "'최근 한 달 오지 않은 단골을 이름이나 특징으로 말할 수 있는가'와 '그 단골에게 무엇을 했는가' 응답",
     threshold: '10명 중 6명 이상이 말하지 못하거나 대응한 적이 없음',
-    thresholdBasis: 'proposal',
+    thresholdBasis: 'owner',
+    passRule: { min: 0.6, base: 'interviews', field: 'lapsed_regular_unknown_or_no_action' },
     status: 'untested',
   },
   {
@@ -49,7 +54,8 @@ export const hypotheses = [
     statement: '유행 밈을 이해하지 못해 홍보 문구에 쓰지 못하는 사장님이 있고, 쉬운 설명이 있으면 실제로 쓴다.',
     metric: '밈 설명을 본 사장님 중 실제 홍보 문구에 그 밈을 쓴 사람의 비율',
     threshold: '5명 중 2명 이상',
-    thresholdBasis: 'proposal',
+    thresholdBasis: 'owner',
+    passRule: { min: 0.4, base: 'meme_shown', field: 'meme_would_use' },
     status: 'untested',
   },
   {
@@ -59,7 +65,7 @@ export const hypotheses = [
     statement: '사장님은 말로만이 아니라 행동으로(선결제·신청) 월 이용료를 낼 의사를 보인다.',
     metric: '컨시어지 참여 가게 중 2주 뒤 유료 전환을 행동(입금·신청)으로 표시한 비율, 랜딩 방문 대비 사전 신청 비율',
     threshold: '5곳 중 2곳 이상, 랜딩 전환율 10% 이상',
-    thresholdBasis: 'proposal',
+    thresholdBasis: 'owner',
     status: 'untested',
   },
   {
@@ -70,6 +76,7 @@ export const hypotheses = [
     metric: '인터뷰 요청 대비 수락률',
     threshold: '20% 이상',
     thresholdBasis: 'notion',
+    passRule: { min: 0.2, base: 'contacts', field: 'accepted' },
     status: 'untested',
   },
 ]

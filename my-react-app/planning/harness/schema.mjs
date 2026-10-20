@@ -31,7 +31,7 @@ export const ENTITIES = {
     prefix: 'H',
     label: '가설',
     required: ['problem', 'type', 'statement', 'metric', 'threshold', 'thresholdBasis', 'status'],
-    enums: { type: ['problem', 'solution', 'value'], thresholdBasis: ['notion', 'proposal'], status: STATUS.hypothesis },
+    enums: { type: ['problem', 'solution', 'value'], thresholdBasis: ['notion', 'proposal', 'owner'], status: STATUS.hypothesis },
     refs: { problem: 'problems' },
   },
   experiments: {

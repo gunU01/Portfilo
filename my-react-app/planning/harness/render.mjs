@@ -13,7 +13,7 @@ const PROBLEM_LABEL = { hypothesis: '가설(검증 전)', validated: '검증됨'
 const HYP_LABEL = { untested: '검증 전', supported: '지지됨', refuted: '기각됨' }
 const EXP_LABEL = { planned: '계획', running: '진행 중', done: '완료' }
 const DEC_LABEL = { proposed: '제안(승인 대기)', accepted: '확정', rejected: '기각' }
-const BASIS_LABEL = { notion: '노션 기준', proposal: '제안(확인 필요)' }
+const BASIS_LABEL = { notion: '노션 기준', proposal: '제안(확인 필요)', owner: '문채원 확정' }
 const KPI_BASIS = { benchmark: '벤치마크', assumption: '가정', tbd: '미정' }
 const REL_LABEL = { mvp: 'MVP', next: '다음', later: '나중' }
 const PRIO_LABEL = { must: '반드시', should: '가능하면', could: '여유가 되면' }
@@ -41,7 +41,7 @@ function problemsDoc(model) {
 function hypothesesDoc(model) {
   const hy = table(['ID', '문제', '종류', '가설', '재는 방법', '합격선', '합격선 출처', '상태'], model.hypotheses.map((h) => [h.id, h.problem, TYPE_LABEL[h.type], h.statement, h.metric, h.threshold, BASIS_LABEL[h.thresholdBasis], HYP_LABEL[h.status]]))
   const ex = model.experiments.map((t) => `### ${t.id} ${METHOD_LABEL[t.method]} — ${EXP_LABEL[t.status]}\n\n- **검증하는 가설**: ${asArray(t.hypotheses).join(', ')}\n- **표본 목표**: ${t.sampleTarget}\n- **방법**: ${t.design}\n- **합격 기준**: ${t.successCriteria}${t.result ? `\n- **결과**: ${t.result}` : ''}`)
-  return `# 가설과 검증 계획\n\n${NOTICE}\n합격선 중 '제안(확인 필요)'은 이번에 새로 제안한 값입니다. 문채원 님이 확인하거나 수정해야 확정됩니다.\n\n## 가설\n\n${hy}\n## 실험(모두 아직 하지 않음)\n\n${ex.join('\n\n')}\n\n## 순서\n\n인터뷰(T-01)와 자료 조사(T-04, T-05)를 먼저 하고, 문제가 확인되면 컨시어지(T-02)와 랜딩(T-03)으로 간다(D-04).\n`
+  return `# 가설과 검증 계획\n\n${NOTICE}\n합격선의 출처: '노션 기준'은 팀 노션 문서의 값, '문채원 확정'은 문채원 님이 확인한 값, '제안(확인 필요)'은 아직 확인받지 않은 값입니다.\n\n## 가설\n\n${hy}\n## 실험(모두 아직 하지 않음)\n\n${ex.join('\n\n')}\n\n## 순서\n\n인터뷰(T-01)와 자료 조사(T-04, T-05)를 먼저 하고, 문제가 확인되면 컨시어지(T-02)와 랜딩(T-03)으로 간다(D-04).\n`
 }
 
 function evidenceDoc(model) {
@@ -98,7 +98,7 @@ function risksDoc(model) {
 }
 
 function decisionsDoc(model) {
-  const blocks = model.decisions.map((d) => `## ${d.id} ${d.title} — ${DEC_LABEL[d.status]}\n\n- **배경**: ${d.context}\n- **선택지**\n${d.options.map((o) => `  - ${o.name}: 장점 ${o.pro} / 단점 ${o.con}`).join('\n')}\n- **선택**: ${d.choice}\n- **이유**: ${d.rationale}\n- **근거**: ${asArray(d.evidence).length ? evRef(model, d.evidence) : d.basis ?? '-'}`)
+  const blocks = model.decisions.map((d) => `## ${d.id} ${d.title} — ${DEC_LABEL[d.status]}\n\n- **배경**: ${d.context}\n- **선택지**\n${d.options.map((o) => `  - ${o.name}: 장점 ${o.pro} / 단점 ${o.con}`).join('\n')}\n- **상태**: ${DEC_LABEL[d.status]}${d.decidedBy ? ` (${d.decidedBy}, ${d.decidedAt})` : ''}\n- **선택**: ${d.choice}\n- **이유**: ${d.rationale}\n- **근거**: ${asArray(d.evidence).length ? evRef(model, d.evidence) : d.basis ?? '-'}`)
   return `# 의사결정 로그\n\n${NOTICE}\n'제안(승인 대기)'은 Claude 가 문서를 바탕으로 낸 제안입니다. 문채원 님이 \`model/decisions.mjs\` 에서 status 를 accepted 로 바꾸기 전에는 확정으로 쓰지 않습니다.\n\n${blocks.join('\n\n')}\n`
 }
 
@@ -121,14 +121,15 @@ export function statusReport(model) {
   const o = r.open
   const mark = { fail: '실패', pending: '문서 통과 · 현장 확인 대기', pass: '통과' }
   const gate = table(['단계', '상태'], r.gates.map((g) => [`${g.id} ${g.title}`, mark[g.state]]))
-  const todo = [
-    ['1', '제안된 의사결정 검토', `${o.decisionsProposed.join(', ')} 를 읽고 accepted 또는 rejected 로 정한다`],
-    ['2', '제안 상태 합격선 확인', `${o.thresholdProposals.join(', ')} 의 합격선(threshold)이 맞는지 정한다`],
-    ['3', '자료 조사 (T-04)', 'E-06~E-10 을 공식 원문·요금 페이지로 확인한다. 이 환경에서는 외부 사이트에 직접 접속할 수 없어(2026-10-20 재시도 포함) 확인하지 못했다'],
-    ['4', '인터뷰 경로 확보 (T-05)', '사장님 10명에게 닿을 경로 2개 이상을 정한다(A-01)'],
-    ['5', '인터뷰 실행 (T-01)', '결과는 근거 장부에 kind: interview, n, date 와 함께 적는다'],
-    ['6', '컨시어지 (T-02), 랜딩 (T-03)', 'T-01 에서 문제가 확인된 뒤에 한다'],
-  ]
+  const steps = [
+    [o.decisionsProposed.length > 0, '제안된 의사결정 검토', `${o.decisionsProposed.join(', ')} 를 읽고 accepted 또는 rejected 로 정한다`],
+    [o.thresholdProposals.length > 0, '제안 상태 합격선 확인', `${o.thresholdProposals.join(', ')} 의 합격선(threshold)이 맞는지 정한다`],
+    [true, '자료 조사 (T-04)', 'E-08, E-09, E-10, E-15 를 공식 원문·요금 페이지로 확인한다(E-09 는 기사와 보고서 표가 10배 다르다)'],
+    [true, '인터뷰 경로 확보 (T-05)', '사장님 10명에게 닿을 경로 2개 이상을 정한다(A-01). 요청 메시지는 field/interview-guide.md 에 있다'],
+    [true, '인터뷰 실행 (T-01)', '기록은 field/data/ 의 두 CSV 에 남기고 `npm run plan:tally` 로 집계한다. 집계 결과를 근거 장부에 kind: interview, n, date 와 함께 옮긴다'],
+    [true, '컨시어지 (T-02), 랜딩 (T-03)', 'T-01 에서 문제가 확인된 뒤에 한다'],
+  ].filter(([on]) => on)
+  const todo = steps.map(([, a, b], i) => [String(i + 1), a, b])
   return `# 현황 보고서\n\n${NOTICE}\n## 단계\n\n${gate}\n## 규칙 결과\n\n규칙 ${r.ruleCount}개 · 오류 ${r.errorCount}건 · 경고 ${r.warnCount}건\n\n## 확인 상태\n\n${bullets([`근거: ${o.evidenceByStatus.map(([s, n]) => `${EVIDENCE_LABEL[s]} ${n}건`).join(', ')}`, `직접 확인한 인터뷰·설문·실험 근거: ${o.humanEvidenceCount}건`, `검증 전 문제 ${o.problemsUnvalidated.length}개 / 검증 전 가설 ${o.hypothesesUntested.length}개 / 끝나지 않은 실험 ${o.experimentsNotDone.length}개`, `열린 가정 ${o.assumptionsOpen.length}개: ${o.assumptionsOpen.join(', ')}`, `기준이 확정되지 않은 지표 목표: ${o.kpiTargetsOpen.join(', ')}`, `검증 전 수익 가정값: ${o.economicsAssumptions.join(', ')}`])}\n\n## 다음에 할 일(사람이 해야 하는 일)\n\n${table(['순서', '할 일', '내용'], todo)}`
 }
 

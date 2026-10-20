@@ -16,7 +16,8 @@
     "plan:check": "node planning/harness/check.mjs",
     "plan:build": "node planning/harness/build.mjs",
     "plan:test": "node planning/harness/selftest.mjs",
-    "plan": "npm run plan:test && npm run plan:check && node planning/harness/build.mjs --check"
+    "plan": "npm run plan:test && npm run plan:check && node planning/harness/build.mjs --check",
+    "plan:tally": "node planning/harness/tally.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",

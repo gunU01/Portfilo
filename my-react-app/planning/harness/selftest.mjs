@@ -3,6 +3,7 @@
 import { evaluate, GATES } from './gates.mjs'
 import { loadModel } from './lib.mjs'
 import { rules } from './rules.mjs'
+import { BASES, DERIVED, parseCsv, tally } from './tally.mjs'
 
 const base = await loadModel('sosang')
 const clone = () => structuredClone(base)
@@ -60,5 +61,33 @@ const clean = evaluate(clone(), { today: '2026-10-20' })
 console.log(`${clean.errorCount === 0 ? '✓' : '✗'} 원본 모델은 오류 0건 (${clean.errorCount}건)`)
 if (clean.errorCount !== 0) failed += 1
 
-console.log(failed === 0 ? `\n하네스 자체 시험 통과 (${breakers.length}개 규칙 + 원본)` : `\n하네스 자체 시험 실패 ${failed}건`)
+// 5) 집계(tally)가 합격선 설정과 맞물린다: passRule 이 가리키는 모집단·항목이 실제로 있어야 한다.
+for (const h of base.hypotheses.filter((x) => x.passRule)) {
+  const ok = BASES[h.passRule.base] && DERIVED[h.passRule.field]
+  console.log(`${ok ? '✓' : '✗'} ${h.id} passRule(${h.passRule.base}, ${h.passRule.field}) 이 집계 코드와 연결된다`)
+  if (!ok) failed += 1
+}
+
+// 6) 집계 계산 시험: 가짜 기록(시험용, 실제 인터뷰가 아님)으로 비율과 판정을 확인한다.
+{
+  const row = (i, o) => ({ id: `T-${i}`, date: '2000-01-01', channel: 'visit', promo_actions_last_month: '0', reason_main: 'time', abandoned_free_channel: 'Y', can_name_lapsed_regular: 'N', acted_on_lapsed_regular: '', meme_shown: 'Y', meme_would_use: 'N', ...o })
+  const interviews = Array.from({ length: 10 }, (_, i) => row(i, i < 7 ? {} : { promo_actions_last_month: '5', reason_main: 'cost', abandoned_free_channel: 'N', can_name_lapsed_regular: 'Y', acted_on_lapsed_regular: 'Y' }))
+  interviews.slice(0, 2).forEach((r) => { r.meme_would_use = 'Y' })
+  const contacts = Array.from({ length: 10 }, (_, i) => ({ id: `C-${i}`, date: '2000-01-01', channel: 'visit', accepted: i < 3 ? 'Y' : 'N' }))
+  const r = tally(base, contacts, interviews)
+  const get = (id) => r.results.find((x) => x.id === id)
+  const checks = [
+    ['H-01 은 7/10 이고 합격(60%)', get('H-01').hits === 7 && get('H-01').pass && get('H-01').enough],
+    ['H-02 는 7/10 이고 합격(50%)', get('H-02').hits === 7 && get('H-02').pass],
+    ['H-03 은 7/10 이고 합격(60%)', get('H-03').hits === 7 && get('H-03').pass],
+    ['H-05 는 밈을 본 10명 중 2명이라 미달(40%)', get('H-05').hits === 2 && !get('H-05').pass],
+    ['H-07 은 요청 10건 중 3건 수락이라 합격(20%)', get('H-07').hits === 3 && get('H-07').pass],
+    ['표본이 목표보다 적으면 enough 가 false', !tally(base, contacts, interviews.slice(0, 4)).results.find((x) => x.id === 'H-01').enough],
+    ['잘못된 reason_main 값은 오류로 잡는다', tally(base, contacts, [row(99, { reason_main: '시간' })]).errors.length > 0],
+    ['CSV 는 따옴표 안의 쉼표를 처리한다', parseCsv('a,b\n"x,y",z\n')[0].a === 'x,y'],
+  ]
+  for (const [name, ok] of checks) { console.log(`${ok ? '✓' : '✗'} 집계: ${name}`); if (!ok) failed += 1 }
+}
+
+console.log(failed === 0 ? `\n하네스 자체 시험 통과 (${breakers.length}개 규칙 + 게이트·집계 점검)` : `\n하네스 자체 시험 실패 ${failed}건`)
 process.exit(failed === 0 ? 0 : 1)
