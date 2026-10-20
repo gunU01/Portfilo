@@ -10,6 +10,7 @@ export const haemi = {
   summary:
     '치매 어르신과 멀리 사는 가족을 사진 및 음성 기반 회상 콘텐츠로 잇는 앱입니다.',
   group: 'TEAM',
+  accent: 'orange', // 이 케이스의 포인트 색(주황). 없으면 기본 파랑
   tags: ['기획 전담', 'FE', '우수상'],
   period: '2026.05 – 08',
   status: '2026 글로벌 피우다 프로젝트 동북권 우수상',

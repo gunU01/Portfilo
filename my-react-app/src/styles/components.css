@@ -139,6 +139,13 @@ h4 {
   box-shadow: 0 18px 40px rgb(120 40 10 / 0.35);
 }
 
+.cover--screens.cover--lime {
+  background: #d6ec9f;
+}
+.cover--lime .phone {
+  box-shadow: 0 18px 40px rgb(50 90 10 / 0.3);
+}
+
 /* 막대: 실제 공시 수치. 가로 막대로 라벨, 막대, 값을 한 줄에 둡니다. */
 .cover--bars {
   display: flex;

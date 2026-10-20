@@ -47,6 +47,7 @@ main.jsx ─ App.jsx (라우팅)
 - `font.css` 는 `scripts/subset-font.py` 가 만듭니다(직접 고치지 않음).
 - 호버 번짐: 요소에 `ink` 클래스를 붙이면 됩니다. 중심 위치는 `lib/useInkHover.js` 가, 모양은 `styles/ink.css` 가 맡습니다.
 - 사이트의 나머지 움직임은 `styles/effects.css` 한 파일에 모았고, 모션 줄이기 설정에서 그 파일 맨 아래가 한꺼번에 끕니다. 값을 정하는 일은 `lib/` 의 훅이 하고 CSS 는 값만 읽습니다: 마우스 위치 `--px/--py`(`usePointerVars`), 요소 안 마우스 위치 `--fx/--fy`(`useFollow`, `.follow` 요소: 카드 기울기, `.magnet` 버튼), 스크롤 `--scroll`(`useScrollProgress`), 활동 기록과 대회 참가의 진행선 `--fill`과 항목 상태 `is-passed`/`is-current`(`useTimelineProgress`). 스크롤에 맞춰 값을 갱신하는 훅은 `onScrollFrame` 으로 프레임당 한 번만 계산합니다.
+- 케이스마다 포인트 색이 다릅니다(해미 주황, 동네 사장님 5분 홍보 연두, 나머지 파랑). 케이스 데이터의 `accent` 값을 `useAccent` 가 `<html data-accent>` 로 옮기고, `styles/base.css` 의 `[data-accent]` 규칙이 `--accent` 계열 변수를 덮어씁니다. 프로젝트 카드는 같은 속성을 자기 요소에 달아 카드 안에서만 그 색이 됩니다.
 
 ## 책상 장면
 

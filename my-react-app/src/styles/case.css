@@ -260,6 +260,9 @@
 .table td:first-child {
   font-weight: 600;
 }
+.table--id td:first-child {
+  white-space: nowrap;
+}
 
 .ba {
   display: grid;

@@ -20,10 +20,11 @@ function statsClass(block) {
   return block.items.length === 3 ? 'stats stats--3' : 'stats'
 }
 
-function Table({ head, rows }) {
+// idColumn: 첫 열이 H-01 같은 짧은 ID 일 때 하이픈에서 줄이 꺾이지 않게 합니다.
+function Table({ head, rows, idColumn }) {
   return (
     <div className="tablewrap">
-      <table className="table">
+      <table className={idColumn ? 'table table--id' : 'table'}>
         <thead>
           <tr>
             {head.map((h) => (
@@ -136,7 +137,7 @@ function Block({ block }) {
       )
 
     case 'table':
-      return <Table head={block.head} rows={block.rows} />
+      return <Table head={block.head} rows={block.rows} idColumn={block.idColumn} />
 
     case 'beforeAfter':
       return (
