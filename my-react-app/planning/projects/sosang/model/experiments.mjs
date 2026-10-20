@@ -45,7 +45,7 @@ export const experiments = [
     hypotheses: ['H-07'],
     method: 'desk-research',
     design:
-      "사장님에게 닿는 경로를 정한다: 동네 가게 직접 방문, 지인 소개, 사장님 커뮤니티. 채널마다 인터뷰 요청 수와 수락 수를 기록한다. 가져온 틀(E-05)의 X·Threads·LinkedIn 채널은 사장님 대상에 맞지 않으므로 쓰지 않는다.",
+      "사장님에게 닿는 경로를 정한다: 동네 가게 직접 방문, 지인 소개, 사장님 커뮤니티. 채널마다 인터뷰 요청 수와 수락 수를 기록한다. 가져온 틀(E-05)의 X·Threads·LinkedIn 채널은 사장님 대상에 맞지 않으므로 쓰지 않는다. 업종 구성(E-15, 출처 확인 전)을 참고해 한식·커피 전문점처럼 비중이 큰 업종을 섞어 모집할지 정한다.",
     sampleTarget: 3,
     successCriteria: '인터뷰 10명을 모을 수 있는 경로 2개 이상 확보',
     status: 'planned',
