@@ -1,0 +1,17 @@
+import { meta } from './meta.mjs'
+import { evidence } from './evidence.mjs'
+import { problems } from './problems.mjs'
+import { hypotheses } from './hypotheses.mjs'
+import { experiments } from './experiments.mjs'
+import { requirements } from './requirements.mjs'
+import { features } from './features.mjs'
+import { screens } from './screens.mjs'
+import { kpis } from './kpis.mjs'
+import { risks } from './risks.mjs'
+import { decisions } from './decisions.mjs'
+import { assumptions } from './assumptions.mjs'
+import { competitors } from './competitors.mjs'
+import { outOfScope } from './scope.mjs'
+import { economics } from './economics.mjs'
+
+export const model = { meta, evidence, problems, hypotheses, experiments, requirements, features, screens, kpis, risks, decisions, assumptions, competitors, outOfScope, economics }
