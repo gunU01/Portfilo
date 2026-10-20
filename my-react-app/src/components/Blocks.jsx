@@ -1,6 +1,6 @@
 import Rich from './Rich.jsx'
 
-const WIDE_TYPES = new Set(['table', 'stats', 'figure', 'gallery'])
+const WIDE_TYPES = new Set(['table', 'stats', 'chart', 'figure', 'gallery'])
 
 // 문장 목록. 각 항목에 **굵게** 표기를 허용합니다.
 function RichList({ items, className }) {
@@ -47,6 +47,38 @@ function Table({ head, rows, idColumn }) {
         </tbody>
       </table>
     </div>
+  )
+}
+
+// 가로 막대 도식. groups 마다 제목과 막대 목록이 있고, hl 이 true 인 막대만 진하게 보여 줍니다.
+function Chart({ groups, unit, source }) {
+  return (
+    <figure className="chart">
+      <div className="chart__groups">
+        {groups.map((g) => (
+          <div className="chart__group" key={g.title}>
+            <p className="chart__t">{g.title}</p>
+            <div className="bars">
+              {g.items.map((b) => (
+                <div className="bars__row" key={b.label}>
+                  <span className="bars__l">{b.label}</span>
+                  <span className="bars__track">
+                    <span className={b.hl ? 'bars__bar is-last' : 'bars__bar'} style={{ width: `${(b.value / (g.max ?? 100)) * 100}%` }} />
+                  </span>
+                  <span className="bars__v tnum">{b.display}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      {(unit || source) && (
+        <figcaption className="chart__src">
+          {unit && <span>{unit}</span>}
+          {source && <span>{source}</span>}
+        </figcaption>
+      )}
+    </figure>
   )
 }
 
@@ -135,6 +167,9 @@ function Block({ block }) {
           ))}
         </div>
       )
+
+    case 'chart':
+      return <Chart groups={block.groups} unit={block.unit} source={block.source} />
 
     case 'table':
       return <Table head={block.head} rows={block.rows} idColumn={block.idColumn} />

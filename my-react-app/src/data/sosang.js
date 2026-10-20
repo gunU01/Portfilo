@@ -73,6 +73,43 @@ export const sosang = {
           ],
         },
         {
+          type: 'chart',
+          unit: '단위: %',
+          source: '출처: 중소벤처기업부 「2024년 기준 소상공인실태조사」, 숙박·음식점업',
+          groups: [
+            {
+              title: '운영 활동사항(판로 개척, 브랜드 마케팅 등)',
+              items: [
+                { label: '있음', value: 25.7, display: '25.7%' },
+                { label: '없음', value: 74.3, display: '74.3%', hl: true },
+              ],
+            },
+            {
+              title: '디지털·스마트 기술 활용',
+              items: [
+                { label: '활용', value: 38.6, display: '38.6%' },
+                { label: '미활용', value: 61.4, display: '61.4%', hl: true },
+              ],
+            },
+            {
+              title: '활용 기업이 쓰는 기술(복수응답)',
+              max: 50,
+              items: [
+                { label: '매장관리', value: 46.7, display: '46.7%' },
+                { label: '주문·결제', value: 43.3, display: '43.3%' },
+                { label: '온라인 판로', value: 25.9, display: '25.9%' },
+                { label: '경영관리 소프트웨어', value: 5.1, display: '5.1%' },
+                { label: '디지털 광고', value: 1.6, display: '1.6%', hl: true },
+                { label: '자동화', value: 0.3, display: '0.3%' },
+              ],
+            },
+            {
+              title: '기술을 쓰지 않는 사업장의 3년 내 도입 의향',
+              items: [{ label: '도입 의향 있음', value: 11.3, display: '11.3%', hl: true }],
+            },
+          ],
+        },
+        {
           type: 'table',
           head: ['항목', '수치'],
           rows: [
@@ -168,12 +205,6 @@ export const sosang = {
             ['H-06', '말이 아니라 행동으로 이용료를 낸다', '유료 전환 행동(입금·신청) 비율, 랜딩 사전 신청 비율', '5곳 중 2곳 이상, 랜딩 10% 이상', '직접 설정'],
             ['H-07', '문제가 깊으면 인터뷰 요청에 응한다', '인터뷰 요청 대비 수락률', '20% 이상', '참고 기준'],
           ],
-        },
-        {
-          type: 'callout',
-          tone: 'note',
-          title: '상태',
-          text: '7개 모두 **검증 전**입니다. ‘직접 설정’은 이번 기획에서 정한 값이고, ‘참고 기준’은 참고한 자료의 값을 가져온 것이며 원출처를 확인하지 못했습니다.',
         },
       ],
     },
