@@ -7,4 +7,5 @@ export const risks = [
   { id: 'X-06', statement: "밈 쉬운말 설명이 핵심 차별점으로 적혀 있지만, 실제로 사장님이 원하는지는 확인된 바가 없다.", likelihood: 'mid', impact: 'mid', mitigation: 'MVP 에서 뺀다(D-03). T-01 과 T-02 에서 H-05 가 지지될 때만 F-06 을 만든다.', hypotheses: ['H-05'], evidence: ['E-02'] },
   { id: 'X-07', statement: '인터뷰할 사장님에게 닿지 못하거나, 아는 가게 위주로 모여 표본이 한쪽으로 치우친다.', likelihood: 'mid', impact: 'high', mitigation: '경로를 2개 이상 확보하고(T-05), 경로별 수락률을 기록해 치우침을 보고서에 밝힌다.', hypotheses: ['H-07'] },
   { id: 'X-08', statement: '학생 개인이 실제 유료 서비스를 운영할 때의 사업자 등록·약관·개인정보 책임을 아직 확인하지 않았다.', likelihood: 'mid', impact: 'high', mitigation: '이번 프로젝트는 출시가 아니라 기획과 검증까지로 한정한다(D-07). 출시를 검토하게 되면 먼저 확인한다.', hypotheses: ['H-06'] },
+  { id: 'X-09', statement: '숙박·음식점업은 디지털 도구를 쓰는 비율은 38.6%지만 대부분 매장관리와 주문·결제용이고, 도입하지 않은 사업장 중 앞으로 3년 안에 도입할 의향이 있는 곳은 11.3%에 그친다. 새 도구를 쓰게 만드는 일 자체가 어렵다.', likelihood: 'mid', impact: 'high', mitigation: '도구 도입을 요구하지 않고 이미 쓰는 메신저(카카오톡 등)로 시작한다(T-02 컨시어지). 알림을 가장 잘 보는 채널을 인터뷰에서 확인한다(A-03).', hypotheses: ['H-04'], evidence: ['E-16'] },
 ]

@@ -6,7 +6,7 @@ export const problems = [
     pain: '인스타그램·카카오 채널·스마트플레이스를 만들어 두고 방치한다. 무엇을 올릴지, 어떻게 쓸지 정하는 일이 영업 중에는 우선순위에서 밀린다.',
     currentAlternative: '무료 채널을 직접 운영하거나 방치, 대행사·체험단 이용, 종이 쿠폰',
     status: 'hypothesis',
-    evidence: ['E-03', 'E-01'],
+    evidence: ['E-03', 'E-01', 'E-17', 'E-16'],
   },
   {
     id: 'P-02',
