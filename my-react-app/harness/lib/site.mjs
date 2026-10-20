@@ -19,7 +19,15 @@ export const ready = (page) => page.waitForSelector('main#main *')
 export async function discoverCases(page, url) {
   await go(page, url, '/project')
   await page.waitForSelector('.pcard')
-  return page.$$eval('.pcard', (cards) => cards.map((c) => ({ route: c.getAttribute('href').slice(1), title: c.querySelector('h2').textContent })))
+  return page.$$eval('.pcard', (cards) => {
+    // 이름 옆 설명(.name-note)은 제목에서 뺀다
+    const titleOf = (h) => {
+      const copy = h.cloneNode(true)
+      copy.querySelector('.name-note')?.remove()
+      return copy.textContent.trim()
+    }
+    return cards.map((c) => ({ route: c.getAttribute('href').slice(1), title: titleOf(c.querySelector('h2')) }))
+  })
 }
 
 // 책상 위에서 누를 수 있는 물건들의 aria-label ('수상 열기' 같은 것)

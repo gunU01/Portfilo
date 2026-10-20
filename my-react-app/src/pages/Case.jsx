@@ -22,7 +22,10 @@ export default function Case({ data }) {
         <a className="back" href="#/project">
           ← 프로젝트 목록
         </a>
-        <h1 className="case__title">{data.title}</h1>
+        <h1 className="case__title">
+          {data.title}
+          {data.nameNote && <small className="name-note">{data.nameNote}</small>}
+        </h1>
         <p className="case__sub">{data.subtitle}</p>
         <p className="case__sum">{data.summary}</p>
         <div className="case__tags">

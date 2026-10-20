@@ -39,7 +39,10 @@ export default function Project() {
             <a className="pcard follow reveal is-in" key={c.slug} href={`#/work/${c.slug}`} data-accent={c.accent}>
               <CaseCover cover={c.cover} size="card" />
               <div className="pcard__text">
-                <h2 className="pcard__t">{c.title}</h2>
+                <h2 className="pcard__t">
+                  {c.title}
+                  {c.nameNote && <small className="name-note">{c.nameNote}</small>}
+                </h2>
                 <p className="pcard__sub">{c.subtitle}</p>
                 <p className="pcard__sum">{c.summary}</p>
                 <div className="pcard__tags">

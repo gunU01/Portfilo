@@ -13,7 +13,7 @@ const accentOf = (page) => page.evaluate(() => ({ attr: document.documentElement
 
 export default {
   name: 'accent',
-  about: '케이스별 포인트 색: 해미는 주황, 동네 사장님 5분 홍보는 연두, 나머지는 파랑이고, 목록 카드도 같은 색을 쓴다',
+  about: '케이스별 포인트 색: 해미는 주황, 오늘한입은 연두, 나머지는 파랑이고, 목록 카드도 같은 색을 쓴다',
   async run({ browser, url, t }) {
     const { page } = await openPage(browser)
 

@@ -2,11 +2,12 @@ import register from '../assets/sosang/register.webp'
 import today from '../assets/sosang/today.webp'
 import copy from '../assets/sosang/copy.webp'
 
-// 프로젝트 4 — 동네 사장님 5분 홍보(가칭), 개인 기획. 기획 하네스(planning/)의 모델에서 확인된 수치만 옮겼습니다.
+// 프로젝트 4 — 오늘한입(동네 사장님 5분 홍보), 개인 기획. 기획 하네스(planning/)의 모델에서 확인된 수치만 옮겼습니다.
 // 인터뷰·컨시어지·랜딩 검증은 아직 하지 않았으므로 모든 문제는 가설이며, 통계로 알 수 없는 부분은 본문에서 그렇게 밝힙니다.
 export const sosang = {
   slug: 'sosang',
-  title: '동네 사장님 5분 홍보',
+  title: '오늘한입',
+  nameNote: '동네 사장님 5분 홍보', // 이름 옆에 작게 붙는 설명
   subtitle: '숫자로 확인한 문제와 검증 설계 · 개인 기획',
   summary:
     '요식업 사장님의 홍보 문제를 공개 통계로 확인하고, 통계로 알 수 없는 부분을 가설과 합격선으로 설계했습니다.\n인터뷰와 실험은 아직 하지 않았습니다.',
@@ -21,9 +22,9 @@ export const sosang = {
     kind: 'screens',
     tone: 'lime',
     images: [
-      { src: register, alt: '동네 사장님 5분 홍보 설계안: 가게 등록 화면. 상호, 대표 메뉴, 특징 한 줄과 선택 항목인 연령대' },
-      { src: today, alt: '동네 사장님 5분 홍보 설계안: 오늘의 할 일 화면. 할 일 한 개와 완료, 건너뛰기 버튼' },
-      { src: copy, alt: '동네 사장님 5분 홍보 설계안: 홍보 문구 화면. 채널을 고르면 문구가 만들어지고 복사할 수 있음' },
+      { src: register, alt: '오늘한입 설계안: 가게 등록 화면. 상호, 대표 메뉴, 특징 한 줄과 선택 항목인 연령대' },
+      { src: today, alt: '오늘한입 설계안: 오늘의 할 일 화면. 할 일 한 개와 완료, 건너뛰기 버튼' },
+      { src: copy, alt: '오늘한입 설계안: 홍보 문구 화면. 채널을 고르면 문구가 만들어지고 복사할 수 있음' },
     ],
   },
 

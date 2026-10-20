@@ -14,7 +14,7 @@ const projects = cases.map((c) => ({ title: c.title, sub: c.subtitle, href: `#/w
 const planning = [
   { title: '얼마 기획 문서', sub: meta(eolma, '산출물'), href: '#/work/howmuch?s=role' },
   { title: '해미 기획 문서', sub: meta(haemi, '산출물'), href: haemi.links[0].href },
-  { title: '동네 사장님 5분 홍보 기획', sub: sosang.subtitle, href: `#/work/${sosang.slug}` },
+  { title: '오늘한입 기획', sub: `${sosang.nameNote} · ${sosang.subtitle}`, href: `#/work/${sosang.slug}` },
   { title: '토스 BM 분석', sub: '무료 송금 위에 쌓인 수익 구조와 성장의 구성', href: '#/work/value-chain' },
 ]
 

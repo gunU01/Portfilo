@@ -19,6 +19,15 @@
   letter-spacing: -0.035em;
   line-height: 1.15;
 }
+.name-note {
+  display: inline-block;
+  margin-left: 0.5em;
+  font-size: 0.36em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--accent-ink);
+  vertical-align: 0.28em;
+}
 .case__sub {
   margin-top: 10px;
   font-size: clamp(1.1rem, 2.2vw, 1.4rem);
