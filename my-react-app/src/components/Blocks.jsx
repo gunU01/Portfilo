@@ -1,6 +1,6 @@
 import Rich from './Rich.jsx'
 
-const WIDE_TYPES = new Set(['table', 'stats', 'chart', 'figure', 'gallery'])
+const WIDE_TYPES = new Set(['table', 'stats', 'chart', 'toggle', 'figure', 'gallery'])
 
 // 문장 목록. 각 항목에 **굵게** 표기를 허용합니다.
 function RichList({ items, className }) {
@@ -16,7 +16,7 @@ function RichList({ items, className }) {
 }
 
 function statsClass(block) {
-  if (block.columns === 2) return 'stats stats--2'
+  if (block.columns === 2) return block.compact ? 'stats stats--2 stats--compact' : 'stats stats--2'
   return block.items.length === 3 ? 'stats stats--3' : 'stats'
 }
 
@@ -166,6 +166,18 @@ function Block({ block }) {
             </div>
           ))}
         </div>
+      )
+
+    case 'toggle':
+      return (
+        <details className="tg">
+          <summary>{block.title}</summary>
+          <div className="tg__body">
+            {block.blocks.map((b, i) => (
+              <Block key={i} block={b} />
+            ))}
+          </div>
+        </details>
       )
 
     case 'chart':

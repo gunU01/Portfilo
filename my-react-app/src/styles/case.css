@@ -518,3 +518,103 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* 펼침: 긴 표를 접어 두는 토글 */
+.tg {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.tg[open] {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+}
+.tg summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.tg summary::-webkit-details-marker {
+  display: none;
+}
+.tg summary::after {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--accent-ink);
+  border-bottom: 2px solid var(--accent-ink);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.2s ease;
+}
+.tg[open] summary::after {
+  transform: rotate(-135deg) translateY(-2px);
+}
+.tg__body {
+  padding: 0 14px 14px;
+}
+.tg__body .tablewrap {
+  border: 0;
+}
+
+/* 좁은 화면: 숫자 카드와 막대를 촘촘하게 */
+@media (max-width: 680px) {
+  .stat {
+    padding: 14px;
+  }
+  .stat__v {
+    font-size: 1.35rem;
+  }
+  .stat__l {
+    font-size: 13px;
+  }
+  .stat__n {
+    font-size: 12px;
+  }
+  .chart {
+    padding: 16px 16px 12px;
+  }
+  .chart__groups {
+    gap: 20px;
+  }
+  .chart__t {
+    font-size: 13px;
+  }
+  .chart .bars__row {
+    grid-template-columns: 6.5em minmax(0, 1fr) 3.2em;
+    gap: 8px;
+  }
+  .chart .bars__l {
+    font-size: 12px;
+  }
+  .chart .bars__v {
+    font-size: 13px;
+  }
+}
+
+/* compact: 좁은 화면에서도 2열을 유지하고 보조 설명을 숨겨 높이를 줄입니다 */
+@media (max-width: 680px) {
+  .stats.stats--2.stats--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .stats--compact .stat {
+    padding: 12px;
+  }
+  .stats--compact .stat__v {
+    font-size: 1.2rem;
+  }
+  .stats--compact .stat__l {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .stats--compact .stat__n {
+    display: none;
+  }
+}
