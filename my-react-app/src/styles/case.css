@@ -618,3 +618,81 @@
     display: none;
   }
 }
+
+/* 읽는 법: 숫자가 말해 주는 것과 말해 주지 않는 것을 나란히 */
+.readout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 14px;
+}
+.readout__col {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+.readout__col--silent {
+  border-style: dashed;
+  background: transparent;
+}
+.readout__h {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--accent-ink);
+}
+.readout__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.readout__list li {
+  display: grid;
+  gap: 2px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.readout__list li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.readout__list li:last-child {
+  padding-bottom: 0;
+}
+.readout__v {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--accent-ink);
+}
+.readout__v--q {
+  color: var(--faint);
+}
+.readout__list b {
+  font-size: 15px;
+  line-height: 1.45;
+}
+.readout__list li > span:last-child {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--faint);
+}
+@media (max-width: 760px) {
+  .readout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .readout__col {
+    padding: 16px;
+  }
+  .readout__v {
+    font-size: 1.3rem;
+  }
+}
+
+.callout p {
+  word-break: keep-all;
+}

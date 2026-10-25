@@ -1,6 +1,6 @@
 import Rich from './Rich.jsx'
 
-const WIDE_TYPES = new Set(['table', 'stats', 'chart', 'toggle', 'figure', 'gallery'])
+const WIDE_TYPES = new Set(['table', 'stats', 'chart', 'toggle', 'readout', 'figure', 'gallery'])
 
 // 문장 목록. 각 항목에 **굵게** 표기를 허용합니다.
 function RichList({ items, className }) {
@@ -165,6 +165,38 @@ function Block({ block }) {
               {s.note && <span className="stat__n">{s.note}</span>}
             </div>
           ))}
+        </div>
+      )
+
+    case 'readout':
+      return (
+        <div className="readout">
+          <section className="readout__col">
+            <h4 className="readout__h">{block.says.title}</h4>
+            <ul className="readout__list">
+              {block.says.items.map((it) => (
+                <li key={it.title}>
+                  <span className="readout__v tnum">{it.value}</span>
+                  <b>{it.title}</b>
+                  <span>{it.text}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section className="readout__col readout__col--silent">
+            <h4 className="readout__h">{block.silent.title}</h4>
+            <ul className="readout__list">
+              {block.silent.items.map((it) => (
+                <li key={it.title}>
+                  <span className="readout__v readout__v--q" aria-hidden="true">
+                    ?
+                  </span>
+                  <b>{it.title}</b>
+                  <span>{it.text}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
       )
 
