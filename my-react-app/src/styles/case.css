@@ -696,3 +696,65 @@
 .callout p {
   word-break: keep-all;
 }
+
+/* 가설 한눈에: 세 묶음, 가설 한 줄과 합격선 */
+.goals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+.goals__col {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 16px 6px;
+}
+.goals__h {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-ink);
+}
+.goals__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.goals__list li {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.goals__id {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--faint);
+}
+.goals__list b {
+  font-size: 14.5px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+.goals__goal {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 6px;
+}
+.goals__big {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--accent-ink);
+}
+.goals__goal small {
+  font-size: 12.5px;
+  color: var(--faint);
+}
+@media (max-width: 860px) {
+  .goals {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
