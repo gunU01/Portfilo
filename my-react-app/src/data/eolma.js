@@ -13,7 +13,7 @@ export const eolma = {
     '영수증 한 장으로 정산 요청부터 입금 확인까지 이어지는 그룹 정산 앱입니다.',
   group: 'TEAM',
   tags: ['PM', 'FE', '팀장'],
-  period: '2026.05 – 12',
+  period: '2026.05 – 12 (예정)',
   status: '비공개 베타 완료(2026.10)',
 
   cover: {
