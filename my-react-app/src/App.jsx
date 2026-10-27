@@ -1,12 +1,8 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
 import BackToTop from './components/BackToTop.jsx'
 import Home from './pages/Home.jsx'
-import Project from './pages/Project.jsx'
-import About from './pages/About.jsx'
-import Case from './pages/Case.jsx'
-import Desk from './pages/Desk.jsx'
 import { cases } from './data/cases.js'
 import { profile } from './data/profile.js'
 import { useHashRoute } from './lib/useHashRoute.js'
@@ -15,6 +11,12 @@ import { useInkHover } from './lib/useInkHover.js'
 import { useFollow } from './lib/useFollow.js'
 import { useScrollProgress } from './lib/useScrollProgress.js'
 import { scrollToId } from './lib/dom.js'
+
+// 처음 화면(홈)만 먼저 받고, 나머지 페이지는 그 경로에 들어갈 때 받습니다.
+const Project = lazy(() => import('./pages/Project.jsx'))
+const About = lazy(() => import('./pages/About.jsx'))
+const Case = lazy(() => import('./pages/Case.jsx'))
+const Desk = lazy(() => import('./pages/Desk.jsx'))
 
 // 해시 경로 → 페이지. 목록에 없는 경로와 케이스(/work/<slug>)는 아래에서 따로 처리합니다.
 const PAGES = {
@@ -61,7 +63,7 @@ export default function App() {
       {page?.footer !== false && <div className="progress" aria-hidden="true" />}
       <Nav path={path} />
       <main id="main" key={pageKey} className="page-in">
-        {current ? <Case data={current} /> : <Page />}
+        <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{current ? <Case data={current} /> : <Page />}</Suspense>
       </main>
       {page?.footer !== false && <Footer />}
       {page?.footer !== false && <BackToTop />}

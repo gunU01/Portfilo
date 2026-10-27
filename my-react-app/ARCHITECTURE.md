@@ -38,7 +38,7 @@ main.jsx ─ App.jsx (라우팅)
 
 ## 라우팅
 
-해시 라우팅(`#/`, `#/project`, `#/about`, `#/desk`, `#/work/<slug>`, `?s=<섹션 id>`)이라 정적 호스팅에서 새로고침해도 깨지지 않습니다. `App.jsx` 의 `PAGES` 표가 경로 → 페이지, 제목, 푸터 표시 여부를 정하고, `/work/<slug>` 는 `cases` 에서 찾아 `Case` 로 그립니다. 알 수 없는 경로는 홈입니다.
+해시 라우팅(`#/`, `#/project`, `#/about`, `#/desk`, `#/work/<slug>`, `?s=<섹션 id>`)이라 정적 호스팅에서 새로고침해도 깨지지 않습니다. `App.jsx` 의 `PAGES` 표가 경로 → 페이지, 제목, 푸터 표시 여부를 정하고, `/work/<slug>` 는 `cases` 에서 찾아 `Case` 로 그립니다. 알 수 없는 경로는 홈입니다. 홈만 처음에 받고 나머지 페이지(Project, About, Case, Desk)는 `React.lazy` 로 그 경로에 들어갈 때 받으며, 받는 동안에는 빈 자리표시(`.page-wait`)가 푸터를 붙들어 둡니다. 모든 페이지가 쓰는 글꼴 파일은 `vite.config.js` 의 `preloadFont` 가 HTML 에 미리 받기(`preload`)로 넣습니다.
 
 ## 스타일
 
@@ -46,7 +46,7 @@ main.jsx ─ App.jsx (라우팅)
 - 색, 간격 같은 값은 `base.css` 의 `:root` 변수에 있습니다. 색 원칙: 글씨는 중립 회색(`--ink`, `--muted`, `--faint`), 파랑(`--accent`)은 링크, 버튼, 강조에만 씁니다. 새 색을 넣을 때는 흰색이나 `--surface` 위에서 대비 4.5 이상인지 `npm run e2e -- --only a11y` 로 확인하세요.
 - `font.css` 는 `scripts/subset-font.py` 가 만듭니다(직접 고치지 않음).
 - 호버 번짐: 요소에 `ink` 클래스를 붙이면 됩니다. 중심 위치는 `lib/useInkHover.js` 가, 모양은 `styles/ink.css` 가 맡습니다.
-- 사이트의 나머지 움직임은 `styles/effects.css` 한 파일에 모았고, 모션 줄이기 설정에서 그 파일 맨 아래가 한꺼번에 끕니다. 값을 정하는 일은 `lib/` 의 훅이 하고 CSS 는 값만 읽습니다: 마우스 위치 `--px/--py`(`usePointerVars`), 요소 안 마우스 위치 `--fx/--fy`(`useFollow`, `.follow` 요소: 카드 기울기, `.magnet` 버튼), 스크롤 `--scroll`(`useScrollProgress`), 활동 기록과 대회 참가의 진행선 `--fill`과 항목 상태 `is-passed`/`is-current`(`useTimelineProgress`). 스크롤에 맞춰 값을 갱신하는 훅은 `onScrollFrame` 으로 프레임당 한 번만 계산합니다. 케이스 페이지에는 막대 도식이 화면에 들어오면 차오르는 효과(`useGrow` 가 `.chart` 에 `is-in` 을 붙임), 접힌 항목(`details`)이 부드럽게 열리는 효과(CSS `::details-content`, 지원하지 않는 브라우저는 바로 열림), 맨 아래의 다음 프로젝트 카드(`CaseNext`), 어느 페이지에서나 내려가면 나타나는 맨 위로 버튼(`BackToTop`, 책상 제외)이 있고, 오늘한입의 표지는 로고(`cover.kind: 'logo'`, 체크가 그려지고 마우스를 올리면 한 입 더 베어 묾)입니다.
+- 사이트의 나머지 움직임은 `styles/effects.css` 한 파일에 모았고, 모션 줄이기 설정에서 그 파일 맨 아래가 한꺼번에 끕니다. 값을 정하는 일은 `lib/` 의 훅이 하고 CSS 는 값만 읽습니다: 마우스 위치 `--px/--py`(`usePointerVars`), 요소 안 마우스 위치 `--fx/--fy`(`useFollow`, `.follow` 요소: 카드 기울기, `.magnet` 버튼), 스크롤 `--scroll`(`useScrollProgress`, 문서 전체가 아니라 진행 막대 `.progress` 에만 씀), 활동 기록과 대회 참가의 진행선 `--fill`과 항목 상태 `is-passed`/`is-current`(`useTimelineProgress`). 스크롤에 맞춰 값을 갱신하는 훅은 `onScrollFrame` 으로 프레임당 한 번만 계산합니다. 케이스 페이지에는 막대 도식이 화면에 들어오면 차오르는 효과(`useGrow` 가 `.chart` 에 `is-in` 을 붙임), 접힌 항목(`details`)이 부드럽게 열리는 효과(CSS `::details-content`, 지원하지 않는 브라우저는 바로 열림), 맨 아래의 다음 프로젝트 카드(`CaseNext`), 어느 페이지에서나 내려가면 나타나는 맨 위로 버튼(`BackToTop`, 책상 제외)이 있고, 오늘한입의 표지는 로고(`cover.kind: 'logo'`, 체크가 그려지고 마우스를 올리면 한 입 더 베어 묾)입니다.
 - 케이스마다 포인트 색이 다릅니다(해미 주황, 오늘한입 연두, 나머지 파랑). 케이스 데이터의 `accent` 값을 `useAccent` 가 `<html data-accent>` 로 옮기고, `styles/base.css` 의 `[data-accent]` 규칙이 `--accent` 계열 변수를 덮어씁니다. 프로젝트 카드는 같은 속성을 자기 요소에 달아 카드 안에서만 그 색이 됩니다.
 
 ## 책상 장면

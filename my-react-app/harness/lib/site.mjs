@@ -12,8 +12,8 @@ export const siteTitle = () => readIndexHtml().match(/<title>([^<]*)<\/title>/)?
 
 export const go = (page, url, route) => page.goto(`${url}/#${route}`)
 
-// 라우트가 그려져서 main 안에 내용이 생길 때까지
-export const ready = (page) => page.waitForSelector('main#main *')
+// 라우트가 그려져서 main 안에 내용이 생길 때까지(페이지 코드를 받는 동안의 빈 자리표시는 내용으로 세지 않음)
+export const ready = (page) => page.waitForSelector('main#main > :not(.page-wait)')
 
 // 케이스 라우트는 프로젝트 목록의 카드에서 찾습니다. 새 케이스가 생겨도 검사 대상에 자동으로 들어옵니다.
 export async function discoverCases(page, url) {
