@@ -167,19 +167,34 @@
   .is-folded .is-extra {
     display: none;
   }
+  /* 접힌 행을 여는 버튼: 목록의 한 행처럼 가는 선 아래에 두고, 토글(.tg)과 같은 화살표를 씁니다 */
   .tmore {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    margin-top: 6px;
-    padding: 11px 14px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: var(--bg);
+    padding: 14px 0 4px;
+    border: 0;
+    border-top: 1px solid var(--line);
+    background: none;
     color: var(--accent-ink);
     font: inherit;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
+  }
+  .tmore::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    margin-right: 4px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.25s ease;
+  }
+  .tmore[aria-expanded='true']::after {
+    transform: rotate(-135deg) translateY(-2px);
   }
   .csec {
     padding-bottom: 36px;

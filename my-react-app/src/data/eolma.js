@@ -4,6 +4,7 @@ import scan from '../assets/eolma/scan.webp'
 import confirm from '../assets/eolma/confirm.webp'
 import list from '../assets/eolma/list.webp'
 import assistant from '../assets/eolma/assistant.webp'
+import mascot from '../assets/eolma/mascot.webp'
 
 export const eolma = {
   slug: 'howmuch',
@@ -16,13 +17,11 @@ export const eolma = {
   period: '2026.05 – 12 (예정)',
   status: '비공개 베타 완료(2026.10)',
 
+  // 표지는 파란 고양이 캐릭터 한 장입니다. 앱 화면은 본문의 화면 모음에 있습니다.
   cover: {
-    kind: 'screens',
-    images: [
-      { src: list, alt: '얼마 앱의 받을 정산 목록 화면' },
-      { src: confirm, alt: '스캔된 영수증 정보를 확인하는 화면' },
-      { src: assistant, alt: '얼마 앱의 AI 비서 대화 화면' },
-    ],
+    kind: 'image',
+    src: mascot,
+    alt: '파란색 3D 고양이 캐릭터가 눈을 크게 뜬 모습',
   },
 
   meta: [

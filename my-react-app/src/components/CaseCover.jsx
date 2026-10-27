@@ -77,7 +77,16 @@ function Logo({ cover, size }) {
   )
 }
 
-const COVERS = { screens: Screens, bars: Bars, shift: Shift, logo: Logo }
+// 이미지 한 장을 표지 전체에 채웁니다(가로가 긴 배너에서는 얼굴이 보이는 높이로 맞춰 잘림).
+function Photo({ cover, size }) {
+  return (
+    <div className={`cover cover--image cover--${size}`}>
+      <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" />
+    </div>
+  )
+}
+
+const COVERS = { screens: Screens, bars: Bars, shift: Shift, logo: Logo, image: Photo }
 
 export default function CaseCover({ cover, size = 'card' }) {
   const Cover = COVERS[cover?.kind]
