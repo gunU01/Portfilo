@@ -1,5 +1,5 @@
 import { profile } from '../data/profile.js'
-import { skillGroups } from '../data/skills.js'
+import { skillGroups, skillTools } from '../data/skills.js'
 import { awards } from '../data/awards.js'
 import { contests } from '../data/contests.js'
 import { useScrollSpy } from '../lib/useScrollSpy.js'
@@ -68,7 +68,7 @@ export default function About() {
         <h2 className="ab__h" id="sk-title">
           나의 기술들
         </h2>
-        <SkillMap groups={skillGroups} />
+        <SkillMap groups={skillGroups} tools={skillTools} />
       </section>
 
       <section className="wrap ab__sec" id="history" aria-labelledby="hi-title">

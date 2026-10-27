@@ -386,3 +386,11 @@
     font-size: 11.5px;
   }
 }
+
+/* 모바일 케이스 머리: .wrap 의 좁은 화면 여백(위아래 0)이 이 머리의 위쪽 여백을 지우므로, 메뉴와 '프로젝트 목록' 사이를 다시 띄웁니다 */
+@media (max-width: 680px) {
+  .wrap.case__head {
+    padding-top: 36px;
+    padding-bottom: 28px;
+  }
+}

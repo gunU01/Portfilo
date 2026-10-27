@@ -97,6 +97,14 @@ export default {
       await waitFor(async () => (await toc.locator('[aria-current="true"]').textContent()) !== (await toc.locator('button').first().textContent()), { message: '읽는 위치를 따라 칩 강조가 바뀌지 않았습니다' })
     })
 
+    await t('처음 여는 주소의 구간 이동(?s=)이 페이지 코드를 늦게 받아도 동작한다', async () => {
+      const fresh = await openPage(browser)
+      await go(fresh.page, url, '/about?s=awards')
+      // 부드럽게 스크롤하는 중에는 값이 계속 바뀌므로, 구간이 화면 위쪽에 자리 잡을 때까지 기다립니다
+      await waitFor(() => fresh.page.locator('#awards').evaluate((e) => e.getBoundingClientRect().top < 200), { timeout: 8000, message: '구간이 화면 위쪽으로 이동하지 않았습니다' })
+      await fresh.context.close()
+    })
+
     await t('책상에는 맨 위로 버튼이 없다', async () => {
       await go(page, url, '/desk')
       await page.waitForSelector('.hs')

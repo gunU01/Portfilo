@@ -1,17 +1,17 @@
 import assert from 'node:assert/strict'
-import { openPage, VIEWPORTS } from '../lib/browser.mjs'
+import { openPage, waitFor, VIEWPORTS } from '../lib/browser.mjs'
 import { go } from '../lib/site.mjs'
 
 export default {
   name: 'skills',
-  about: '소개 페이지의 기술 도식: 마디와 칩 선택, 방향키 이동, 모바일에서는 설명이 항상 펼쳐짐',
+  about: '소개 페이지의 기술 도식: 단계 선택과 방향키 이동, 단계 아래의 도구, 도구를 고르면 쓴 단계가 켜짐, 모바일에서는 고른 단계의 설명만 펼쳐짐',
   async run({ browser, url, t }) {
     const { page, context } = await openPage(browser)
     await go(page, url, '/about')
     await page.waitForSelector('.skflow__node')
     const selectedId = () => page.locator('.skflow__node[aria-selected="true"]').getAttribute('id')
 
-    await t('마디를 고르면 설명 제목이 선택한 마디와 같다', async () => {
+    await t('단계를 고르면 설명 제목이 선택한 단계와 같다', async () => {
       await page.locator('.skflow__node').nth(4).click()
       assert.equal(await page.locator('.skflow__panel b').textContent(), await page.locator('.skflow__node[aria-selected="true"] .skflow__name').textContent())
     })
@@ -25,22 +25,41 @@ export default {
       await page.keyboard.press('End')
       assert.equal(await selectedId(), `skflow-tab-${last}`)
     })
-    await t('도구 칩: 고르면 aria-selected 와 설명이 따라온다', async () => {
-      const chips = page.locator('.skstack').first().locator('.skstack__chip')
-      await chips.nth(1).click()
-      assert.equal(await chips.nth(1).getAttribute('aria-selected'), 'true')
-      assert.equal(await chips.nth(0).getAttribute('aria-selected'), 'false')
-      assert.ok((await page.locator('.skstack__desc').first().textContent()).length > 0)
+    await t('단계 아래에 그 단계에서 쓴 도구가 붙고, 도구를 쓰지 않은 단계에는 붙지 않는다', async () => {
+      const tagged = await page.$$eval('.skflow__step', (steps) => steps.map((s) => s.querySelectorAll('.skflow__tag').length))
+      assert.ok(tagged.some((n) => n > 0), '도구가 붙은 단계가 없습니다')
+      assert.ok(tagged.some((n) => n === 0), '모든 단계에 도구가 붙어 있습니다')
+    })
+    await t('도구를 고르면 aria-pressed 가 바뀌고, 그 도구를 쓴 단계만 켜지며, 다시 누르면 풀린다', async () => {
+      const chips = page.locator('.sktools__chip')
+      const notion = chips.filter({ hasText: 'Notion' })
+      await notion.click()
+      assert.equal(await notion.getAttribute('aria-pressed'), 'true')
+      const hit = await page.locator('.skflow__step.is-hit').count()
+      const dim = await page.locator('.skflow__step.is-dim').count()
+      const total = await page.locator('.skflow__step').count()
+      assert.ok(hit >= 1 && hit + dim === total, `켜진 단계 ${hit}, 흐린 단계 ${dim}, 전체 ${total}`)
+      assert.ok((await page.locator('.sktools__desc').textContent()).length > 0, '도구 설명이 나오지 않았습니다')
+      assert.equal(await page.locator('.skflow__node[aria-selected="true"]').evaluate((e) => e.closest('li').classList.contains('is-hit')), true, '설명이 켜진 단계로 옮겨 가지 않았습니다')
+      await notion.click()
+      assert.equal(await notion.getAttribute('aria-pressed'), 'false')
+      assert.equal(await page.locator('.skflow__step.is-dim').count(), 0)
+    })
+    await t('화면에 들어오면 단계가 켜진다(is-in)', async () => {
+      await waitFor(() => page.locator('.skmap').evaluate((e) => e.classList.contains('is-in')), { message: 'is-in 이 붙지 않았습니다' })
     })
     await context.close()
 
     const mobile = await openPage(browser, { viewport: VIEWPORTS.mobile })
     await go(mobile.page, url, '/about')
     await mobile.page.waitForSelector('.skflow__node')
-    await t('모바일: 모든 마디의 설명이 보이고, 고르는 패널은 숨겨진다', async () => {
-      const inline = await mobile.page.$$eval('.skflow__inline', (ps) => ps.map((p) => p.offsetParent !== null && p.textContent.length > 0))
-      assert.ok(inline.length > 0 && inline.every(Boolean), '설명이 보이지 않는 마디가 있습니다')
+    await t('모바일: 고른 단계의 설명만 보이고, 다른 단계를 누르면 옮겨 간다', async () => {
+      const visible = () => mobile.page.$$eval('.skflow__inline', (ps) => ps.filter((p) => p.offsetParent !== null).length)
+      assert.equal(await visible(), 1)
       assert.equal(await mobile.page.locator('.skflow__panel').isVisible(), false)
+      await mobile.page.locator('.skflow__node').nth(3).click()
+      assert.equal(await visible(), 1)
+      assert.equal(await mobile.page.locator('.skflow__step.is-on .skflow__node').getAttribute('id'), 'skflow-tab-3')
     })
     await mobile.context.close()
   },

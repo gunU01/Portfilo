@@ -1,4 +1,4 @@
-/* 소개 페이지의 '나의 기술들': 일하는 순서 도식(.skflow)과 도구 칩(.skstack) */
+/* 소개 페이지의 '나의 기술들': 일하는 순서 지도(.skflow)와 도구 칩(.sktools) */
 .skmap {
   /* 모양과 테두리에는 맑고 선명한 색(--c-*)을, 글자에는 같은 계열의 진한 색(--i-*)을 씁니다.
      글자는 흰색/옅은 배경 위에서 대비 4.5 이상이어야 해서, 선명한 색을 글자에 그대로 쓰지 않습니다. */
@@ -160,55 +160,73 @@
   }
 }
 
-/* ---------- 도구 ---------- */
-.skmap__stacks {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+/* ---------- 3번째 묶음(개발·배포) 색과 모양 ---------- */
+.skflow__phase--2 {
+  border-top-color: var(--c-fe);
+  color: var(--i-fe);
 }
-.skstack {
-  --tone: var(--c-tool);
-  --tone-ink: var(--i-tool);
-  padding: 22px 24px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--surface);
-}
-.skstack--fe {
+.skflow__step--2 {
   --tone: var(--c-fe);
   --tone-ink: var(--i-fe);
 }
-.skstack h3 {
+.skflow__step--2 .skflow__dot {
+  border-radius: 14px 14px 14px 4px;
+}
+.skflow__panel--2 {
+  --tone: var(--c-fe);
+  --tone-ink: var(--i-fe);
+}
+
+/* ---------- 단계 아래에 붙는 도구 ---------- */
+.skflow__tools {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin: 0;
-  font-size: 17px;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 0 2px;
 }
-/* 도구는 마름모, 프론트엔드는 삼각형 */
-.skstack__mark {
-  width: 12px;
-  height: 12px;
+.skflow__tag {
+  max-width: 100%;
+  padding: 2px 9px;
+  border: 1px solid color-mix(in srgb, var(--tone) 45%, #fff);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--tone-ink);
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  word-break: keep-all;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.skflow__tag.is-active {
   background: var(--tone);
-  transform: rotate(45deg);
-  border-radius: 2px;
+  border-color: var(--tone);
+  color: #fff;
 }
-.skstack--fe .skstack__mark {
-  transform: none;
-  border-radius: 0;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  width: 14px;
-  height: 13px;
+
+/* ---------- 도구 고르기 ---------- */
+.sktools {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--line);
 }
-.skstack__chips {
-  margin-top: 16px;
+.sktools__t {
+  margin: 0;
+  color: var(--faint);
+  font-size: 13px;
+  font-weight: 700;
+}
+.sktools__chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 12px;
 }
-.skstack__chip {
+.sktools__chip {
   padding: 7px 14px;
-  border: 1.5px solid color-mix(in srgb, var(--tone) 55%, #fff);
+  border: 1.5px solid var(--line);
   border-radius: 999px;
   background: #fff;
   color: var(--ink);
@@ -218,32 +236,62 @@
   cursor: pointer;
   transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
-.skstack .skstack__chip {
-  --paint: color-mix(in srgb, var(--tone) 16%, #fff);
+.sktools__chip[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
 }
-.skstack__chip[aria-selected='true'] {
-  border-color: var(--tone);
-  background: color-mix(in srgb, var(--tone) 22%, #fff);
-  color: var(--tone-ink);
-}
-.skstack__chip[aria-selected='true']::before {
+.sktools__chip[aria-pressed='true']::before {
   display: none;
 }
-.skstack__desc {
-  margin: 16px 0 0;
-  min-height: 5.2em;
+.sktools__desc {
+  min-height: 3.4em;
+  margin: 14px 0 0;
   font-size: 14.5px;
-  line-height: 1.75;
+  line-height: 1.7;
   color: var(--muted);
 }
+.sktools__desc b {
+  color: var(--ink);
+}
+.sktools__n {
+  color: var(--faint);
+  font-size: 13px;
+}
 
-@media (max-width: 900px) {
-  .skmap__stacks {
-    grid-template-columns: minmax(0, 1fr);
+/* ---------- 움직임: 단계가 차례로 켜지고, 도구를 고르면 나머지가 흐려짐 ---------- */
+.js .skflow__step {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.js .skmap.is-in .skflow__step {
+  opacity: 1;
+  transform: none;
+}
+.js .skmap.is-in .skflow__step.is-dim {
+  opacity: 0.3;
+  transition-delay: 0s;
+}
+.skflow__step.is-hit .skflow__dot {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--tone) 25%, transparent);
+}
+@media print {
+  .js .skflow__step {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .skflow__step,
+  .skflow__tag,
+  .sktools__chip {
+    transition: none;
   }
 }
 
-/* 좁은 화면: 세로로 이어 붙이고 설명을 항상 펼쳐 둡니다(고르는 동작 없이 그대로 읽힘) */
+/* 좁은 화면: 세로로 이어 붙이고, 고른 단계의 설명만 펼칩니다(단계를 누르면 옮겨 감) */
 @media (max-width: 720px) {
   .skflow {
     padding: 22px 18px;
@@ -257,7 +305,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .skflow__step {
-    padding-bottom: 18px;
+    padding-bottom: 16px;
   }
   .skflow__step:not(:last-child)::before {
     top: 44px;
@@ -270,7 +318,6 @@
     gap: 14px;
     padding: 0;
     text-align: left;
-    pointer-events: none;
   }
   .skflow__node .skflow__name,
   .skflow__node[aria-selected='false'] .skflow__name {
@@ -278,12 +325,15 @@
     font-size: 15px;
     font-weight: 700;
   }
-  .skflow__node[aria-selected='false'] .skflow__dot {
-    background: #fff;
+  .skflow__tools {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 8px 0 0 58px;
   }
-  .skflow__inline {
+  .skflow__step.is-on .skflow__inline {
     display: block;
-    margin: 6px 0 0 58px;
+    margin: 8px 0 0 58px;
     font-size: 14px;
     line-height: 1.65;
     color: var(--muted);

@@ -10,7 +10,7 @@ import { useAccent } from './lib/useAccent.js'
 import { useInkHover } from './lib/useInkHover.js'
 import { useFollow } from './lib/useFollow.js'
 import { useScrollProgress } from './lib/useScrollProgress.js'
-import { scrollToId } from './lib/dom.js'
+import { scrollToIdWhenReady } from './lib/dom.js'
 
 // 처음 화면(홈)만 먼저 받고, 나머지 페이지는 그 경로에 들어갈 때 받습니다.
 const Project = lazy(() => import('./pages/Project.jsx'))
@@ -47,8 +47,7 @@ export default function App() {
       window.scrollTo(0, 0)
       return undefined
     }
-    const id = requestAnimationFrame(() => scrollToId(section))
-    return () => cancelAnimationFrame(id)
+    return scrollToIdWhenReady(section)
   }, [path, section])
 
   const Page = page?.Page ?? Home

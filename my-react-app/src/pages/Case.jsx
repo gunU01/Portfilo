@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 import Blocks from '../components/Blocks.jsx'
 import CaseCover from '../components/CaseCover.jsx'
 import CaseNext from '../components/CaseNext.jsx'
+import Rich from '../components/Rich.jsx'
 import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { scrollToId } from '../lib/dom.js'
 import { useGrow } from '../lib/useGrow.js'
@@ -98,7 +99,9 @@ export default function Case({ data }) {
             <h2>근거 자료</h2>
             <ul>
               {data.sources.map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s}>
+                  <Rich text={s} />
+                </li>
               ))}
             </ul>
           </footer>

@@ -176,6 +176,9 @@ function Block({ block }) {
         </aside>
       )
 
+    case 'h3':
+      return <h3 className="csec__sub">{block.text}</h3>
+
     case 'stats':
       return (
         <div className={statsClass(block)}>
