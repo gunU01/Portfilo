@@ -15,7 +15,7 @@ npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도
 | 파일 | 내용 |
 | --- | --- |
 | `profile.js` | 이름, 히어로 문구, 소개·타임라인, 연락처(빈 값은 자동 숨김) |
-| `eolma.js` · `haemi.js` · `toss.js` | 케이스 스터디 본문. `sections[].blocks[]` 의 타입(`p`, `list`, `table`, `decisions`, `stats` …)을 조합 |
+| `eolma.js` · `haemi.js` · `sosang.js` · `toss.js` · `tossux.js` | 케이스 스터디 본문. `sections[].blocks[]` 의 타입(`p`, `list`, `table`, `decisions`, `stats` …)을 조합 |
 | `skills.js` | 기술·도구 (어디에 어떻게 썼는지). 묶음의 `view` 가 도식('process', 순서가 곧 항목 순서)인지 칩('stack')인지 정함 |
 | `awards.js` · `contests.js` | 수상 이력(항목을 넣으면 ‘수상’ 섹션이 나타남) · 대회 참가 기록 |
 | `cases.js` | 프로젝트 노출 순서 |

@@ -33,7 +33,7 @@ main.jsx ─ App.jsx (라우팅)
 
 - `profile.js`(이름, 소개, 연락처), `awards.js`, `contests.js` 는 홈, 소개 페이지, 푸터가 그대로 읽습니다.
 - `skills.js` 의 묶음은 `view` 로 보여 주는 방식을 정합니다. `'process'` 는 순서대로 이어 붙인 흐름도(항목 순서가 곧 순서), `'stack'` 은 도구 칩입니다. 그리는 쪽은 `components/SkillMap.jsx`.
-- `eolma.js`, `haemi.js`, `toss.js` 는 케이스 한 편씩이고, `cases.js` 가 노출 순서를 정합니다. 케이스 본문은 `sections[].blocks[]` 로 구성되고 `components/Blocks.jsx` 가 블록 타입별로 그립니다.
+- `eolma.js`, `haemi.js`, `sosang.js`, `toss.js`, `tossux.js` 는 케이스 한 편씩이고, `cases.js` 가 노출 순서를 정합니다. 케이스 본문은 `sections[].blocks[]` 로 구성되고 `components/Blocks.jsx` 가 블록 타입별로 그립니다.
 - `desk.js` 는 새 내용을 만들지 않고 위 데이터를 모아 책상의 물건 7개(`spots`)로 보여 줍니다. 물건의 이름표, 접근성 라벨, 패널 제목은 `spots[].title` 하나를 같이 씁니다.
 
 ## 라우팅

@@ -6,6 +6,7 @@ import { profile } from './profile.js'
 import { eolma } from './eolma.js'
 import { haemi } from './haemi.js'
 import { sosang } from './sosang.js'
+import { tossux } from './tossux.js'
 
 const meta = (c, key) => c.meta.find(([k]) => k === key)?.[1] ?? ''
 
@@ -16,6 +17,7 @@ const planning = [
   { title: '해미 기획 문서', sub: meta(haemi, '산출물'), href: haemi.links[0].href },
   { title: '오늘한입 기획', sub: `${sosang.nameNote} · ${sosang.subtitle}`, href: `#/work/${sosang.slug}` },
   { title: '토스 BM 분석', sub: '무료 송금 위에 쌓인 수익 구조와 성장의 구성', href: '#/work/value-chain' },
+  { title: tossux.title, sub: tossux.subtitle, href: `#/work/${tossux.slug}` },
 ]
 
 const awardItems = awards.map((a) => ({
