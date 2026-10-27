@@ -152,6 +152,15 @@ function Block({ block }) {
           <p>
             <Rich text={block.text} />
           </p>
+          {block.points && (
+            <ul className="callout__pts">
+              {block.points.map((pt) => (
+                <li key={pt}>
+                  <Rich text={pt} />
+                </li>
+              ))}
+            </ul>
+          )}
         </aside>
       )
 

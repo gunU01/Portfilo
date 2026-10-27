@@ -853,3 +853,27 @@
     display: none;
   }
 }
+
+/* 강조 상자 안의 짧은 항목들: 긴 문단 하나 대신 한 줄에 하나씩 */
+.callout__pts {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.callout__pts li {
+  position: relative;
+  padding-left: 16px;
+  word-break: keep-all;
+}
+.callout__pts li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.72em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
