@@ -12,8 +12,15 @@ export const siteTitle = () => readIndexHtml().match(/<title>([^<]*)<\/title>/)?
 
 export const go = (page, url, route) => page.goto(`${url}/#${route}`)
 
-// 라우트가 그려져서 main 안에 내용이 생길 때까지(페이지 코드를 받는 동안의 빈 자리표시는 내용으로 세지 않음)
-export const ready = (page) => page.waitForSelector('main#main > :not(.page-wait)')
+// 지금 주소의 라우트가 실제로 그려질 때까지. 경로가 바뀔 때는 다음 페이지가 준비될 때까지 이전 화면이 남아 있으므로
+// (startTransition), main 에 내용이 있다는 것만으로는 부족하고 main 의 data-path 가 주소의 경로와 같아야 합니다.
+// 페이지 코드를 받는 동안의 빈 자리표시(.page-wait)는 내용으로 세지 않습니다.
+export const ready = (page) =>
+  page.waitForFunction(() => {
+    const here = window.location.hash.replace(/^#/, '').split('?')[0].replace(/\/+$/, '') || '/'
+    const main = document.querySelector('main#main')
+    return main?.dataset.path === here && main.children.length > 0 && !main.querySelector(':scope > .page-wait')
+  })
 
 // 케이스 라우트는 프로젝트 목록의 카드에서 찾습니다. 새 케이스가 생겨도 검사 대상에 자동으로 들어옵니다.
 export async function discoverCases(page, url) {

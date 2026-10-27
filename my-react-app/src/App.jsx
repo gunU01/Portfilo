@@ -70,7 +70,7 @@ export default function App() {
       </a>
       {page?.footer !== false && <div className="progress" aria-hidden="true" />}
       <Nav path={path} />
-      <main id="main" key={pageKey} className="page-in">
+      <main id="main" key={pageKey} className="page-in" data-path={path}>
         <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{current ? <Case data={current} /> : <Page />}</Suspense>
       </main>
       {page?.footer !== false && <Footer />}
