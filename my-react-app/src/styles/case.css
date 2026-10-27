@@ -919,3 +919,157 @@
     line-height: 1;
   }
 }
+
+/* ---------- 좁은 화면 ---------- */
+/* 목차는 위에 붙는 가로 칩으로 바뀝니다 */
+@media (max-width: 900px) {
+  .toc {
+    position: sticky;
+    top: 61px;
+    z-index: 40;
+    display: flex;
+    gap: 8px;
+    margin: 0 -16px 8px;
+    padding: 10px 16px;
+    overflow-x: auto;
+    border-left: 0;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter: blur(8px);
+    scrollbar-width: none;
+  }
+  .toc::-webkit-scrollbar {
+    display: none;
+  }
+  .toc button {
+    flex: none;
+    width: auto;
+    margin: 0;
+    padding: 7px 13px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg);
+    font-size: 13.5px;
+    white-space: nowrap;
+  }
+  .toc button[aria-current='true'] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+}
+
+@media (min-width: 681px) {
+  .tmore {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  /* 표: 행마다 상자를 두르지 않고 가는 선으로만 나누며, 첫 칸을 제목으로, 나머지는 '이름 + 내용'을 한 줄에 둡니다 */
+  .tablewrap {
+    border: 0;
+    background: none;
+  }
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+  .table thead {
+    display: none;
+  }
+  .table tr {
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+  }
+  .table tr:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .table td,
+  .table tr:first-child td {
+    border: 0;
+    padding: 2px 0;
+  }
+  .table td:first-child {
+    padding-bottom: 4px;
+    font-size: 15.5px;
+  }
+  .table td:not(:first-child) {
+    display: grid;
+    grid-template-columns: 3.6em minmax(0, 1fr);
+    gap: 10px;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .table td:not(:first-child)::before {
+    content: attr(data-label);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--faint);
+    padding-top: 0.2em;
+    word-break: keep-all;
+  }
+  .table--2 td:not(:first-child) {
+    display: block;
+  }
+  .table--2 td:not(:first-child)::before {
+    display: none;
+  }
+  .is-folded .is-extra {
+    display: none;
+  }
+  /* 접힌 행을 여는 버튼: 목록의 한 행처럼 가는 선 아래에 두고, 토글(.tg)과 같은 화살표를 씁니다 */
+  .tmore {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 0 4px;
+    border: 0;
+    border-top: 1px solid var(--line);
+    background: none;
+    color: var(--accent-ink);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .tmore::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    margin-right: 4px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.25s ease;
+  }
+  .tmore[aria-expanded='true']::after {
+    transform: rotate(-135deg) translateY(-2px);
+  }
+  .csec {
+    padding-bottom: 36px;
+  }
+  .dec summary {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .dec__body {
+    margin: 0 16px 16px;
+  }
+  .dec__body > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
+
+/* 모바일 케이스 머리: .wrap 의 좁은 화면 여백(위아래 0)이 이 머리의 위쪽 여백을 지우므로, 메뉴와 '프로젝트 목록' 사이를 다시 띄웁니다 */
+@media (max-width: 680px) {
+  .wrap.case__head {
+    padding-top: 36px;
+    padding-bottom: 28px;
+  }
+}
