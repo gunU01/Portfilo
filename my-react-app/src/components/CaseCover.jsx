@@ -54,7 +54,30 @@ function Shift({ cover, size }) {
   )
 }
 
-const COVERS = { screens: Screens, bars: Bars, shift: Shift }
+// 서비스 로고. 한 입 베어 문 접시 안에 체크 표시(오늘 할 일 하나를 끝낸다)를 두었고, 마우스를 올리면 한 입 더 베어 뭅니다.
+function Logo({ cover, size }) {
+  const mask = `logo-bite-${size}`
+  return (
+    <div className={`cover cover--logo cover--${size}`} role="img" aria-label={cover.alt}>
+      <svg className="logo__mark" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
+        <defs>
+          <mask id={mask}>
+            <rect width="96" height="96" fill="#fff" />
+            <circle className="logo__bite" cx="76" cy="22" r="17" fill="#000" />
+          </mask>
+        </defs>
+        <circle className="logo__plate" cx="48" cy="50" r="38" mask={`url(#${mask})`} />
+        <path className="logo__check" d="M28 54 L41 67 L62 44" pathLength="1" />
+        <circle className="logo__crumb logo__crumb--1" cx="85" cy="40" r="2.6" />
+        <circle className="logo__crumb logo__crumb--2" cx="91" cy="31" r="2" />
+      </svg>
+      <p className="logo__name">{cover.name}</p>
+      <p className="logo__tag">{cover.tagline}</p>
+    </div>
+  )
+}
+
+const COVERS = { screens: Screens, bars: Bars, shift: Shift, logo: Logo }
 
 export default function CaseCover({ cover, size = 'card' }) {
   const Cover = COVERS[cover?.kind]

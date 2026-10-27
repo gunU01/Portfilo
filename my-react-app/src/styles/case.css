@@ -758,3 +758,98 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* 접힌 항목(토글, 결정 기록): 펼치고 접을 때 높이가 부드럽게 변함. 지원하지 않는 브라우저는 바로 열립니다. */
+:root {
+  interpolate-size: allow-keywords;
+}
+.tg::details-content,
+.dec::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition: block-size 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), content-visibility 0.35s allow-discrete;
+}
+.tg[open]::details-content,
+.dec[open]::details-content {
+  block-size: auto;
+}
+@media print {
+  .tg::details-content,
+  .dec::details-content {
+    block-size: auto;
+    transition: none;
+  }
+}
+
+/* 케이스 맨 아래: 다음 프로젝트 */
+.cnext {
+  margin: 56px 0 72px;
+}
+.cnext__a {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 26px 64px 26px 28px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.cnext__a:hover,
+.cnext__a:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.cnext__k {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent-ink);
+}
+.cnext__t {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.cnext__s {
+  max-width: 46em;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.cnext__go {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: 1.8rem;
+  color: var(--accent-ink);
+  transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.cnext__a:hover .cnext__go,
+.cnext__a:focus-visible .cnext__go {
+  transform: translateX(8px);
+}
+@media (max-width: 680px) {
+  .cnext {
+    margin: 40px 0 56px;
+  }
+  .cnext__a {
+    padding: 20px 52px 20px 20px;
+  }
+  .cnext__go {
+    right: 18px;
+  }
+}
+@media print {
+  .cnext {
+    display: none;
+  }
+}

@@ -1,13 +1,16 @@
 import { useEffect, useMemo } from 'react'
 import Blocks from '../components/Blocks.jsx'
 import CaseCover from '../components/CaseCover.jsx'
+import CaseNext from '../components/CaseNext.jsx'
 import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { scrollToId } from '../lib/dom.js'
+import { useGrow } from '../lib/useGrow.js'
 
 export default function Case({ data }) {
   const ids = useMemo(() => data.sections.map((s) => s.id), [data])
   // 읽는 위치에 따라 목차 강조
   const active = useScrollSpy(ids, { rootMargin: '-18% 0px -72% 0px' })
+  useGrow()
 
   // 인쇄(PDF 저장) 시 접힌 항목을 모두 펼침
   useEffect(() => {
@@ -92,6 +95,10 @@ export default function Case({ data }) {
             </ul>
           </footer>
         </div>
+      </div>
+
+      <div className="wrap">
+        <CaseNext slug={data.slug} />
       </div>
     </article>
   )

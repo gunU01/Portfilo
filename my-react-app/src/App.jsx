@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
+import BackToTop from './components/BackToTop.jsx'
 import Home from './pages/Home.jsx'
 import Project from './pages/Project.jsx'
 import About from './pages/About.jsx'
@@ -63,6 +64,7 @@ export default function App() {
         {current ? <Case data={current} /> : <Page />}
       </main>
       {page?.footer !== false && <Footer />}
+      {page?.footer !== false && <BackToTop />}
     </>
   )
 }

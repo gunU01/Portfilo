@@ -179,6 +179,100 @@
   color: #b42318;
 }
 
+/* ---------- 막대 도식: 화면에 들어오면 왼쪽부터 차오름 ---------- */
+.js .chart .bars__bar {
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.js .chart.is-in .bars__bar {
+  transform: none;
+}
+@media print {
+  .js .chart .bars__bar {
+    transform: none;
+  }
+}
+
+/* ---------- 오늘한입 로고: 체크가 그려지고, 마우스를 올리면 한 입 더 베어 묾 ---------- */
+.logo__mark {
+  overflow: visible;
+}
+.logo__check {
+  stroke-dasharray: 1;
+  animation: logo-check 0.7s 0.25s cubic-bezier(0.3, 0.7, 0.3, 1) backwards;
+}
+@keyframes logo-check {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+.logo__bite {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.logo__crumb {
+  transition: opacity 0.2s ease, transform 0.45s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.cover--logo:hover .logo__bite,
+.pcard:hover .logo__bite {
+  transform: scale(1.3);
+}
+.cover--logo:hover .logo__crumb,
+.pcard:hover .logo__crumb {
+  opacity: 0.9;
+}
+.cover--logo:hover .logo__crumb--1,
+.pcard:hover .logo__crumb--1 {
+  transform: translate(3px, 5px);
+}
+.cover--logo:hover .logo__crumb--2,
+.pcard:hover .logo__crumb--2 {
+  transform: translate(5px, 2px);
+}
+
+/* ---------- 맨 위로 버튼 ---------- */
+.totop {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 55;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgb(16 24 40 / 0.22);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+}
+.totop.is-on {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+.totop:hover {
+  transform: translateY(-3px);
+}
+.totop:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@media print {
+  .totop {
+    display: none;
+  }
+}
+
 /* ---------- 모션 줄이기 ---------- */
 @media (prefers-reduced-motion: reduce) {
   .page-in,
@@ -200,5 +294,21 @@
   }
   .magnet {
     translate: none;
+  }
+  .js .chart .bars__bar,
+  .logo__bite,
+  .logo__crumb,
+  .totop,
+  .cnext__a,
+  .cnext__go,
+  .tg::details-content,
+  .dec::details-content {
+    transition: none;
+  }
+  .logo__check {
+    animation: none;
+  }
+  .totop {
+    transform: none;
   }
 }

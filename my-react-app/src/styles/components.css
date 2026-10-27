@@ -219,6 +219,59 @@ h4 {
   color: var(--accent-ink);
 }
 
+/* 로고: 서비스 이름과 마크를 가운데에 */
+.cover--logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px;
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+  color: var(--accent-ink);
+  text-align: center;
+}
+.logo__mark {
+  width: clamp(64px, 9vw, 104px);
+  height: auto;
+  overflow: visible;
+}
+.cover--card .logo__mark {
+  width: clamp(56px, 22%, 84px);
+}
+.logo__plate {
+  fill: var(--accent);
+}
+.logo__check {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.logo__crumb {
+  fill: var(--accent);
+  opacity: 0;
+}
+.logo__name {
+  margin: 4px 0 0;
+  font-size: clamp(1.4rem, 3.2vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.cover--card .logo__name {
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+}
+.logo__tag {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
 /* 전환: 해미의 목표 재정의 */
 .cover--shift {
   display: flex;

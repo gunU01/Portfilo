@@ -59,8 +59,8 @@ function Chart({ groups, unit, source }) {
           <div className="chart__group" key={g.title}>
             <p className="chart__t">{g.title}</p>
             <div className="bars">
-              {g.items.map((b) => (
-                <div className="bars__row" key={b.label}>
+              {g.items.map((b, i) => (
+                <div className="bars__row" key={b.label} style={{ '--i': i }}>
                   <span className="bars__l">{b.label}</span>
                   <span className="bars__track">
                     <span className={b.hl ? 'bars__bar is-last' : 'bars__bar'} style={{ width: `${(b.value / (g.max ?? 100)) * 100}%` }} />
