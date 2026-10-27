@@ -233,12 +233,12 @@ h4 {
   text-align: center;
 }
 .logo__mark {
-  width: clamp(64px, 9vw, 104px);
+  width: clamp(96px, 14vw, 168px);
   height: auto;
   overflow: visible;
 }
 .cover--card .logo__mark {
-  width: clamp(56px, 22%, 84px);
+  width: clamp(80px, 32%, 124px);
 }
 .logo__plate {
   fill: var(--accent);
@@ -256,18 +256,18 @@ h4 {
 }
 .logo__name {
   margin: 4px 0 0;
-  font-size: clamp(1.4rem, 3.2vw, 2rem);
+  font-size: clamp(1.8rem, 4.2vw, 2.8rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--ink);
 }
 .cover--card .logo__name {
-  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
 }
 .logo__tag {
   margin: 0;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--accent-ink);
 }
