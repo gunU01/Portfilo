@@ -5,7 +5,7 @@ export const tossux = {
   title: '토스 UX 다이어트',
   subtitle: '이미 있는 설정을 확인하고, 없는 두 가지만 실험하는 제안',
   summary: '슈퍼앱이 무거워졌다는 처음 제안을 앱 화면으로 확인해 보니 상당 부분이 이미 있었습니다. 그래서 새로 실험할 것을 두 가지로 줄였습니다.',
-  group: 'PLAN',
+  group: 'ANALYSIS',
   tags: ['서비스 제안', '토스', 'PM'],
   period: '2026.10',
   status: '제안',
