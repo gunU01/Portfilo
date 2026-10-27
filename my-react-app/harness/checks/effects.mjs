@@ -57,7 +57,8 @@ export default {
       await ready(page)
       assert.equal(await page.$eval('.kw span', (e) => getComputedStyle(e).animationName), 'kw-in')
       const shift = (n) => page.$eval(`.kw span:nth-child(${n})`, (e) => new DOMMatrixReadOnly(getComputedStyle(e).transform).e)
-      await page.waitForTimeout(1300) // 처음 올라오는 효과가 끝나기를 기다립니다
+      // 처음 올라오는 효과가 끝나기를 기다립니다. 고정 시간(효과 길이 1.26초와 거의 같은 값)은 부하가 걸리면 어긋나서, 실제 애니메이션이 끝났는지 봅니다.
+      await page.waitForFunction(() => document.querySelector('.kw span')?.getAnimations().every((a) => a.playState === 'finished'), null, { timeout: 8000 })
       const box = await page.locator('.hero').boundingBox()
       await page.mouse.move(box.x + box.width - 10, box.y + 200)
       await waitFor(async () => (await shift(1)) > 5, { message: '첫 줄이 오른쪽으로 움직이지 않습니다' })
