@@ -1,7 +1,6 @@
 import Rich from '../Rich.jsx'
 import { RichList } from './text.jsx'
 
-
 export function Decisions({ items }) {
   return (
     <div className="decisions">

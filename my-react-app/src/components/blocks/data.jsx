@@ -62,7 +62,6 @@ export function Table({ head, rows, idColumn }) {
   )
 }
 
-
 export function Chart({ groups, unit, source }) {
   return (
     <figure className="chart">

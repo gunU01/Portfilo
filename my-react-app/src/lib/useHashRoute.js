@@ -2,8 +2,9 @@ import { startTransition, useEffect, useState } from 'react'
 
 function read() {
   const raw = window.location.hash.replace(/^#/, '') || '/'
-  const [path, query = ''] = raw.split('?')
-  return { path: path.replace(/\/+$/, '') || '/', section: new URLSearchParams(query).get('s') }
+  const [typed, query = ''] = raw.split('?')
+  // typed 는 주소창에 적힌 그대로의 경로(끝의 / 포함)입니다. 주소 정리(useCanonicalRoute)가 씁니다.
+  return { path: typed.replace(/\/+$/, '') || '/', typed, section: new URLSearchParams(query).get('s') }
 }
 
 // 해시 기반 라우팅: #/ 홈, #/work/<slug> 케이스, ?s=<id> 로 섹션 앵커.

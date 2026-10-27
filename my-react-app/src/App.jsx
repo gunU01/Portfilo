@@ -34,7 +34,7 @@ const PAGES = {
 }
 
 export default function App() {
-  const { path, section } = useHashRoute()
+  const { path, typed, section } = useHashRoute()
   useInkHover()
   useFollow()
   useScrollProgress()
@@ -54,7 +54,7 @@ export default function App() {
 
   // 주소 정리: 없는 경로는 가까운 곳으로 옮깁니다(케이스는 목록으로, 그 밖에는 홈으로)
   const known = path === '/' || Boolean(page) || Boolean(current)
-  useCanonicalRoute(known ? path : path.startsWith('/work/') ? '/project' : '/', known)
+  useCanonicalRoute(known ? path : path.startsWith('/work/') ? '/project' : '/', typed, known)
 
   // 한가할 때 가벼운 페이지를, 책상은 메뉴에 마우스를 올리면 미리 받습니다
   usePrefetch({ idle: [loaders.project, loaders.about, loaders.case], hover: { '/desk': loaders.desk } })

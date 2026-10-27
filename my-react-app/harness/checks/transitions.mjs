@@ -30,6 +30,17 @@ export default {
       await context.close()
     })
 
+    await t('같은 화면에서 주소에 /가 붙어도(#/about → #/about/) 정리된다', async () => {
+      const { page, context } = await openPage(browser)
+      await go(page, url, '/about')
+      await ready(page)
+      await page.evaluate(() => {
+        window.location.hash = '#/about/'
+      })
+      await waitFor(async () => hashOf(page) === '#/about', { message: `/ 가 지워지지 않았습니다(${hashOf(page)})` })
+      await context.close()
+    })
+
     await t('구간 주소(?s=)는 정리되면서도 그대로 남는다', async () => {
       const { page, context } = await openPage(browser)
       await go(page, url, '/about/?s=awards')
