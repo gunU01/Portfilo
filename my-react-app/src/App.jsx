@@ -21,6 +21,8 @@ const loaders = {
   case: () => import('./pages/Case.jsx'),
   desk: () => import('./pages/Desk.jsx'),
 }
+// 한가할 때 받을 가벼운 페이지들, 마우스를 올리면 받을 페이지(책상). 렌더마다 새로 만들지 않도록 모듈 상수로 둡니다.
+const PREFETCH = { idle: [loaders.project, loaders.about, loaders.case], hover: { '/desk': loaders.desk } }
 const Project = lazy(loaders.project)
 const About = lazy(loaders.about)
 const Case = lazy(loaders.case)
@@ -34,7 +36,7 @@ const PAGES = {
 }
 
 export default function App() {
-  const { path, typed, section } = useHashRoute()
+  const { path, typed, query, section } = useHashRoute()
   useInkHover()
   useFollow()
   useScrollProgress()
@@ -54,10 +56,10 @@ export default function App() {
 
   // 주소 정리: 없는 경로는 가까운 곳으로 옮깁니다(케이스는 목록으로, 그 밖에는 홈으로)
   const known = path === '/' || Boolean(page) || Boolean(current)
-  useCanonicalRoute(known ? path : path.startsWith('/work/') ? '/project' : '/', typed, known)
+  useCanonicalRoute(known ? path : path.startsWith('/work/') ? '/project' : '/', typed, known ? query : '')
 
   // 한가할 때 가벼운 페이지를, 책상은 메뉴에 마우스를 올리면 미리 받습니다
-  usePrefetch({ idle: [loaders.project, loaders.about, loaders.case], hover: { '/desk': loaders.desk } })
+  usePrefetch(PREFETCH)
 
   const Page = page?.Page ?? Home
   // 페이지가 바뀔 때마다 main 을 새로 만들어 들어오는 효과(page-in)가 다시 시작되게 합니다.

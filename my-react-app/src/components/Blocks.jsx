@@ -39,12 +39,15 @@ const TYPES = {
   },
 }
 
+// 표에 적힌 타입만 찾습니다(constructor 같은 객체 기본 키가 타입 이름으로 들어와도 멈추지 않게 함)
+const typeOf = (block) => (Object.hasOwn(TYPES, block.type) ? TYPES[block.type] : undefined)
+
 function Block({ block }) {
-  return TYPES[block.type]?.render(block) ?? null
+  return typeOf(block)?.render(block) ?? null
 }
 
 export default function Blocks({ blocks }) {
-  const wide = blocks.some((b) => TYPES[b.type]?.wide)
+  const wide = blocks.some((b) => typeOf(b)?.wide)
   return (
     <div className={wide ? 'blocks blocks--wide' : 'blocks'}>
       {blocks.map((block, i) => (

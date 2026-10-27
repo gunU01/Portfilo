@@ -1,10 +1,11 @@
 import { startTransition, useEffect, useState } from 'react'
 
+// 이 경로 읽기(# 뒤, ? 앞, 끝의 / 제거)는 harness/lib/site.mjs 의 ready() 가 같은 규칙으로 따라 읽습니다. 바꾸면 그쪽도 같이 고치세요.
 function read() {
   const raw = window.location.hash.replace(/^#/, '') || '/'
   const [typed, query = ''] = raw.split('?')
   // typed 는 주소창에 적힌 그대로의 경로(끝의 / 포함)입니다. 주소 정리(useCanonicalRoute)가 씁니다.
-  return { path: typed.replace(/\/+$/, '') || '/', typed, section: new URLSearchParams(query).get('s') }
+  return { path: typed.replace(/\/+$/, '') || '/', typed, query, section: new URLSearchParams(query).get('s') }
 }
 
 // 해시 기반 라우팅: #/ 홈, #/work/<slug> 케이스, ?s=<id> 로 섹션 앵커.

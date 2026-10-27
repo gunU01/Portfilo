@@ -15,18 +15,18 @@ export default {
       await page.evaluate(() => {
         window.location.hash = '#/nonsense'
       })
-      await waitFor(async () => hashOf(page) === '#/', { message: `홈으로 옮겨지지 않았습니다(${hashOf(page)})` })
+      await waitFor(async () => hashOf(page) === '#/', { message: '홈으로 옮겨지지 않았습니다' })
       await page.goBack()
-      await waitFor(async () => hashOf(page) === '#/about', { message: `뒤로 가기가 About 으로 돌아가지 않았습니다(${hashOf(page)})` })
+      await waitFor(async () => hashOf(page) === '#/about', { message: '뒤로 가기가 About 으로 돌아가지 않았습니다' })
       await context.close()
     })
 
     await t('없는 케이스는 프로젝트 목록으로, 끝의 / 는 지워진다', async () => {
       const { page, context } = await openPage(browser)
       await go(page, url, '/work/없는-케이스')
-      await waitFor(async () => hashOf(page) === '#/project', { message: `목록으로 옮겨지지 않았습니다(${hashOf(page)})` })
+      await waitFor(async () => hashOf(page) === '#/project', { message: '목록으로 옮겨지지 않았습니다' })
       await go(page, url, '/about/')
-      await waitFor(async () => hashOf(page) === '#/about', { message: `끝의 / 가 지워지지 않았습니다(${hashOf(page)})` })
+      await waitFor(async () => hashOf(page) === '#/about', { message: '끝의 / 가 지워지지 않았습니다' })
       await context.close()
     })
 
@@ -37,14 +37,14 @@ export default {
       await page.evaluate(() => {
         window.location.hash = '#/about/'
       })
-      await waitFor(async () => hashOf(page) === '#/about', { message: `/ 가 지워지지 않았습니다(${hashOf(page)})` })
+      await waitFor(async () => hashOf(page) === '#/about', { message: '/ 가 지워지지 않았습니다' })
       await context.close()
     })
 
     await t('구간 주소(?s=)는 정리되면서도 그대로 남는다', async () => {
       const { page, context } = await openPage(browser)
       await go(page, url, '/about/?s=awards')
-      await waitFor(async () => hashOf(page) === '#/about?s=awards', { message: `구간이 남지 않았습니다(${hashOf(page)})` })
+      await waitFor(async () => hashOf(page) === '#/about?s=awards', { message: '구간이 남지 않았습니다' })
       await context.close()
     })
 

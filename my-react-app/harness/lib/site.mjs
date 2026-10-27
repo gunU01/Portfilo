@@ -15,6 +15,7 @@ export const go = (page, url, route) => page.goto(`${url}/#${route}`)
 // 지금 주소의 라우트가 실제로 그려질 때까지. 경로가 바뀔 때는 다음 페이지가 준비될 때까지 이전 화면이 남아 있으므로
 // (startTransition), main 에 내용이 있다는 것만으로는 부족하고 main 의 data-path 가 주소의 경로와 같아야 합니다.
 // 페이지 코드를 받는 동안의 빈 자리표시(.page-wait)는 내용으로 세지 않습니다.
+// 아래의 경로 읽기(# 뒤, ? 앞, 끝의 / 제거)는 src/lib/useHashRoute.js 의 read() 와 같은 규칙이어야 합니다.
 export const ready = (page) =>
   page.waitForFunction(() => {
     const here = window.location.hash.replace(/^#/, '').split('?')[0].replace(/\/+$/, '') || '/'
