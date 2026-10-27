@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { openPage, waitFor } from '../lib/browser.mjs'
+import { openPage, waitFor, VIEWPORTS } from '../lib/browser.mjs'
 import { go, ready } from '../lib/site.mjs'
 
 export default {
@@ -63,6 +63,38 @@ export default {
       assert.equal(await btn.getAttribute('tabindex'), '0')
       await btn.click()
       await waitFor(() => page.evaluate(() => window.scrollY < 4), { message: '버튼을 눌렀는데 맨 위로 올라가지 않았습니다' })
+    })
+
+    await t('모바일 표: 행이 많으면 앞부분만 보이고, 버튼으로 펼치고 접으며, 데스크톱에서는 전부 보인다', async () => {
+      const { page: m } = await openPage(browser, { viewport: VIEWPORTS.mobile })
+      await go(m, url, '/work/haemi')
+      await ready(m)
+      const wrap = m.locator('.tablewrap').filter({ has: m.locator('.tmore') }).first()
+      assert.ok((await wrap.count()) > 0, '접히는 표가 없습니다')
+      const rows = () => wrap.locator('tbody tr').evaluateAll((trs) => trs.filter((tr) => getComputedStyle(tr).display !== 'none').length)
+      const total = await wrap.locator('tbody tr').count()
+      assert.equal(await rows(), 4, '처음에는 4행만 보여야 합니다')
+      await wrap.locator('.tmore').click()
+      assert.equal(await rows(), total)
+      assert.equal(await wrap.locator('.tmore').getAttribute('aria-expanded'), 'true')
+      await wrap.locator('.tmore').click()
+      assert.equal(await rows(), 4)
+      await go(page, url, '/work/haemi')
+      await ready(page)
+      const desktopWrap = page.locator('.tablewrap').filter({ has: page.locator('.tmore') }).first()
+      assert.equal(await desktopWrap.locator('.tmore').evaluate((e) => getComputedStyle(e).display), 'none')
+      assert.equal(await desktopWrap.locator('tbody tr').evaluateAll((trs) => trs.filter((tr) => getComputedStyle(tr).display !== 'none').length), await desktopWrap.locator('tbody tr').count())
+    })
+
+    await t('모바일 목차: 위에 붙는 가로 칩이고, 읽는 위치의 칩이 강조된다', async () => {
+      const { page: m } = await openPage(browser, { viewport: VIEWPORTS.mobile })
+      await go(m, url, '/work/sosang')
+      await ready(m)
+      const toc = m.locator('.toc')
+      assert.equal(await toc.evaluate((e) => getComputedStyle(e).position), 'sticky')
+      assert.equal(await toc.evaluate((e) => e.scrollWidth > e.clientWidth), true, '칩이 가로로 이어져야 합니다')
+      await m.evaluate(() => window.scrollTo({ top: document.getElementById('validation')?.offsetTop ?? 3000, behavior: 'instant' }))
+      await waitFor(async () => (await toc.locator('[aria-current="true"]').textContent()) !== (await toc.locator('button').first().textContent()), { message: '읽는 위치를 따라 칩 강조가 바뀌지 않았습니다' })
     })
 
     await t('책상에는 맨 위로 버튼이 없다', async () => {

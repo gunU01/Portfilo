@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Rich from './Rich.jsx'
 
 const WIDE_TYPES = new Set(['table', 'stats', 'chart', 'toggle', 'readout', 'goals', 'figure', 'gallery'])
@@ -21,10 +22,17 @@ function statsClass(block) {
 }
 
 // idColumn: 첫 열이 H-01 같은 짧은 ID 일 때 하이픈에서 줄이 꺾이지 않게 합니다.
+// 모바일에서는 행이 이 개수를 넘으면 앞부분만 보여 주고 나머지는 버튼으로 펼칩니다(데스크톱에서는 전부 보임).
+const TABLE_FOLD = 4
+
 function Table({ head, rows, idColumn }) {
+  const [open, setOpen] = useState(false)
+  const extra = rows.length - TABLE_FOLD
+  const fold = extra >= 2
+  const cls = ['table', idColumn && 'table--id', head.length === 2 && 'table--2'].filter(Boolean).join(' ')
   return (
-    <div className="tablewrap">
-      <table className={idColumn ? 'table table--id' : 'table'}>
+    <div className={fold && !open ? 'tablewrap is-folded' : 'tablewrap'}>
+      <table className={cls}>
         <thead>
           <tr>
             {head.map((h) => (
@@ -36,7 +44,7 @@ function Table({ head, rows, idColumn }) {
         </thead>
         <tbody>
           {rows.map((row, r) => (
-            <tr key={r}>
+            <tr key={r} className={fold && r >= TABLE_FOLD ? 'is-extra' : undefined}>
               {row.map((cell, c) => (
                 <td key={c} data-label={head[c]}>
                   <Rich text={cell} />
@@ -46,11 +54,15 @@ function Table({ head, rows, idColumn }) {
           ))}
         </tbody>
       </table>
+      {fold && (
+        <button type="button" className="tmore" aria-expanded={open} onClick={() => setOpen(!open)}>
+          {open ? '접기' : `나머지 ${extra}개 보기`}
+        </button>
+      )}
     </div>
   )
 }
 
-// 가로 막대 도식. groups 마다 제목과 막대 목록이 있고, hl 이 true 인 막대만 진하게 보여 줍니다.
 function Chart({ groups, unit, source }) {
   return (
     <figure className="chart">

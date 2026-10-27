@@ -12,6 +12,14 @@ export default function Case({ data }) {
   const active = useScrollSpy(ids, { rootMargin: '-18% 0px -72% 0px' })
   useGrow()
 
+  // 모바일 목차(가로 칩): 읽는 위치가 바뀌면 그 칩이 보이도록 목차 안에서만 옮깁니다
+  useEffect(() => {
+    if (!window.matchMedia('(max-width: 900px)').matches) return
+    const toc = document.querySelector('.toc')
+    const chip = toc?.querySelector('[aria-current="true"]')
+    if (chip) toc.scrollTo({ left: chip.offsetLeft - toc.clientWidth / 2 + chip.offsetWidth / 2, behavior: 'smooth' })
+  }, [active])
+
   // 인쇄(PDF 저장) 시 접힌 항목을 모두 펼침
   useEffect(() => {
     const openAll = () => document.querySelectorAll('details').forEach((d) => d.setAttribute('open', ''))
