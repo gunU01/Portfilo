@@ -10,13 +10,19 @@ import { useAccent } from './lib/useAccent.js'
 import { useInkHover } from './lib/useInkHover.js'
 import { useFollow } from './lib/useFollow.js'
 import { useScrollProgress } from './lib/useScrollProgress.js'
-import { scrollToIdWhenReady } from './lib/dom.js'
+import { useRouteScroll } from './lib/useRouteScroll.js'
 
 // 처음 화면(홈)만 먼저 받고, 나머지 페이지는 그 경로에 들어갈 때 받습니다.
-const Project = lazy(() => import('./pages/Project.jsx'))
-const About = lazy(() => import('./pages/About.jsx'))
-const Case = lazy(() => import('./pages/Case.jsx'))
-const Desk = lazy(() => import('./pages/Desk.jsx'))
+const loaders = {
+  project: () => import('./pages/Project.jsx'),
+  about: () => import('./pages/About.jsx'),
+  case: () => import('./pages/Case.jsx'),
+  desk: () => import('./pages/Desk.jsx'),
+}
+const Project = lazy(loaders.project)
+const About = lazy(loaders.about)
+const Case = lazy(loaders.case)
+const Desk = lazy(loaders.desk)
 
 // 해시 경로 → 페이지. 목록에 없는 경로와 케이스(/work/<slug>)는 아래에서 따로 처리합니다.
 const PAGES = {
@@ -41,14 +47,37 @@ export default function App() {
     document.title = title ? `${title} — ${base}` : base
   }, [title])
 
-  // 라우트가 바뀌면 맨 위로, 섹션 앵커(?s=)가 있으면 그 섹션으로
+  // 라우트가 바뀌면 맨 위(또는 ?s= 구간)에서 시작하고, 뒤로·앞으로 가기는 떠난 위치로 돌아갑니다
+  useRouteScroll(path, section)
+
+  // 주소 정리: 없는 경로는 가까운 곳으로 옮기고(케이스는 목록으로, 그 밖에는 홈으로), 끝의 / 같은 군더더기도 지웁니다.
+  // location.replace 라서 기록에 남지 않아, 뒤로 가기가 같은 자리로 되튕기지 않습니다.
+  const known = path === '/' || Boolean(page) || Boolean(current)
   useEffect(() => {
-    if (!section) {
-      window.scrollTo(0, 0)
-      return undefined
+    const want = known ? path : path.startsWith('/work/') ? '/project' : '/'
+    const [rawPath, ...rest] = window.location.hash.replace(/^#/, '').split('?')
+    if (rawPath === want) return
+    window.location.replace(`#${want}${known && rest.length ? `?${rest.join('?')}` : ''}`)
+  }, [known, path])
+
+  // 다음 페이지 코드를 미리 받아 둡니다: 한가할 때 가벼운 페이지들을, 책상은 메뉴에 마우스를 올리면
+  useEffect(() => {
+    const idle = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 1500))
+    const handle = idle(() => {
+      loaders.project()
+      loaders.about()
+      loaders.case()
+    })
+    const warmDesk = (e) => {
+      if (e.target.closest?.('a[href="#/desk"]')) loaders.desk()
     }
-    return scrollToIdWhenReady(section)
-  }, [path, section])
+    document.addEventListener('pointerover', warmDesk)
+    return () => {
+      if (window.cancelIdleCallback) window.cancelIdleCallback(handle)
+      else clearTimeout(handle)
+      document.removeEventListener('pointerover', warmDesk)
+    }
+  }, [])
 
   const Page = page?.Page ?? Home
   // 페이지가 바뀔 때마다 main 을 새로 만들어 들어오는 효과(page-in)가 다시 시작되게 합니다.

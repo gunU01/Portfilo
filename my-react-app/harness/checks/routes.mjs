@@ -18,7 +18,7 @@ export default {
         ['/about', `About — ${base}`, true],
         ['/desk', `책상 — ${base}`, false],
         ...cases.map(({ route, title }) => [route, `${title} — ${base}`, true]),
-        ['/work/없는-케이스', base, true], // 알 수 없는 경로는 홈으로
+        ['/work/없는-케이스', `Project — ${base}`, true], // 없는 케이스는 목록으로
       ]
 
       for (const [route, title, footer] of routes) {

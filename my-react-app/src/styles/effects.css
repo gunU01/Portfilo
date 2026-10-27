@@ -17,6 +17,10 @@
 .page-wait {
   min-height: 70vh;
 }
+/* 페이지가 오기 전에는 푸터를 숨겨 둡니다(자리는 유지). 페이지가 와서 푸터 위치가 바뀌어도 눈에 띄는 이동으로 잡히지 않게 하려는 것입니다 */
+main:has(> .page-wait) ~ .footer {
+  visibility: hidden;
+}
 
 /* ---------- 위쪽 스크롤 진행 막대 ---------- */
 .progress {
