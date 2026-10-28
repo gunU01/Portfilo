@@ -250,6 +250,23 @@ h4 {
   object-position: 50% 64%;
 }
 
+/* 로고 이미지: 흰 바탕 가운데에 */
+.cover--mark {
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.cover--mark img {
+  display: block;
+  width: 52%;
+  height: auto;
+}
+.cover--banner.cover--mark img {
+  width: auto;
+  height: 66%;
+}
+
 /* 표지를 비워 둔 케이스: 목록에서 자리만 잡는 색 면 */
 .cover--blank {
   background: color-mix(in srgb, var(--accent) 12%, var(--surface));

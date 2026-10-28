@@ -1016,7 +1016,7 @@
   }
   .table td:not(:first-child) {
     display: grid;
-    grid-template-columns: 3.6em minmax(0, 1fr);
+    grid-template-columns: var(--lab, 3.6em) minmax(0, 1fr);
     gap: 10px;
     font-size: 14.5px;
     line-height: 1.6;
@@ -1028,6 +1028,10 @@
     color: var(--faint);
     padding-top: 0.2em;
     word-break: keep-all;
+  }
+  .table--stack td:not(:first-child) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
   }
   .table--2 td:not(:first-child) {
     display: block;

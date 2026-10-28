@@ -86,7 +86,16 @@ function Photo({ cover, size }) {
   )
 }
 
-const COVERS = { screens: Screens, bars: Bars, shift: Shift, logo: Logo, image: Photo }
+// 서비스 로고 이미지를 가운데에 둡니다(정사각형, 배경은 투명).
+function Mark({ cover, size }) {
+  return (
+    <div className={`cover cover--mark cover--${size}`}>
+      <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" />
+    </div>
+  )
+}
+
+const COVERS = { screens: Screens, bars: Bars, shift: Shift, logo: Logo, image: Photo, mark: Mark }
 
 export default function CaseCover({ cover, size = 'card' }) {
   const Cover = COVERS[cover?.kind]

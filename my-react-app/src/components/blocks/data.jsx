@@ -28,10 +28,14 @@ export function Table({ head, rows, idColumn }) {
   const [open, setOpen] = useState(false)
   const extra = rows.length - TABLE_FOLD
   const fold = extra >= 2
-  const cls = ['table', idColumn && 'table--id', head.length === 2 && 'table--2'].filter(Boolean).join(' ')
+  // 모바일에서 '이름 + 내용'의 이름 칸 너비: 짧은 이름은 한 줄에 맞추고, 긴 이름(8자 초과)은 내용 위에 따로 둡니다.
+  const labels = head.slice(1)
+  const longest = Math.max(0, ...labels.map((l) => l.length))
+  const cls = ['table', idColumn && 'table--id', head.length === 2 && 'table--2', longest > 8 && 'table--stack'].filter(Boolean).join(' ')
+  const labelWidth = `${Math.max(3.6, longest * 0.95)}em`
   return (
     <div className={fold && !open ? 'tablewrap is-folded' : 'tablewrap'}>
-      <table className={cls}>
+      <table className={cls} style={{ '--lab': labelWidth }}>
         <thead>
           <tr>
             {head.map((h) => (
