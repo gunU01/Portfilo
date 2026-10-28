@@ -5,7 +5,7 @@
 ```bash
 npm install
 npm run dev      # 개발 서버
-npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도 동작)
+npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도 동작). SITE_URL=https://배포주소 를 주면 공유 미리보기(og:image, og:url)가 들어갑니다
 ```
 
 ## 내용 수정
@@ -54,6 +54,7 @@ scripts/        글꼴 쪼개기
 npm run verify        # lint + 아키텍처 검사 + 빌드 + 브라우저 검사를 한 번에
 npm run arch          # 계층 규칙만
 npm run e2e           # 브라우저 검사만 (먼저 npm run build)
+npm run og            # 공유 미리보기 그림(public/og.png)을 홈 첫 화면으로 다시 찍기 (먼저 npm run build)
 ```
 
 처음 한 번은 `npx playwright install chromium` 으로 브라우저를 받아야 합니다. 자세한 내용은 ARCHITECTURE.md 의 '검증 하네스'.

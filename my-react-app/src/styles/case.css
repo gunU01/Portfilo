@@ -10,8 +10,10 @@
   text-decoration: none;
   margin-bottom: 28px;
 }
-.back:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .back:hover {
+    color: var(--ink);
+  }
 }
 .case__title {
   margin-top: 14px;
@@ -94,8 +96,10 @@
   cursor: pointer;
   line-height: 1.45;
 }
-.toc button:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .toc button:hover {
+    color: var(--ink);
+  }
 }
 .toc button[aria-current='true'] {
   color: var(--accent-ink);
@@ -356,9 +360,13 @@
   border-radius: var(--radius);
   transition: border-color 0.18s ease;
 }
-.dec:hover,
 .dec[open] {
   border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+}
+@media (hover: hover) {
+  .dec:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  }
 }
 .dec summary {
   list-style: none;
@@ -797,10 +805,15 @@
   text-decoration: none;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.cnext__a:hover,
 .cnext__a:focus-visible {
   transform: translateY(-3px);
   box-shadow: var(--shadow);
+}
+@media (hover: hover) {
+  .cnext__a:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
 }
 .cnext__k {
   font-family: var(--mono);
@@ -833,9 +846,13 @@
   color: var(--accent-ink);
   transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
 }
-.cnext__a:hover .cnext__go,
 .cnext__a:focus-visible .cnext__go {
   transform: translateX(8px);
+}
+@media (hover: hover) {
+  .cnext__a:hover .cnext__go {
+    transform: translateX(8px);
+  }
 }
 @media (max-width: 680px) {
   .cnext {

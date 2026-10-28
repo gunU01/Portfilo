@@ -12,6 +12,7 @@
     "e2e": "node harness/run.mjs",
     "snap": "node harness/snap.mjs",
     "snap:diff": "node harness/compare.mjs",
+    "og": "node harness/og.mjs",
     "verify": "npm run lint && npm run arch && npm run build && npm run e2e",
     "plan:check": "node planning/harness/check.mjs",
     "plan:build": "node planning/harness/build.mjs",

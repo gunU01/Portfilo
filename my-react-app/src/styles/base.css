@@ -10,8 +10,8 @@
   --accent: #2563eb;
   --accent-ink: #1d4ed8;
   --accent-soft: #e8efff;
+  --shadow: 0 1px 2px rgb(16 24 40 / 0.05), 0 8px 24px rgb(16 24 40 / 0.08);
   --radius: 10px;
-  --shadow: 0 1px 2px rgb(16 24 40 / 0.05), 0 12px 30px rgb(37 99 235 / 0.1);
   --font: 'NanumSquareNeo', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
     'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
   --mono: var(--font); /* 라벨도 같은 글꼴로 */
@@ -26,21 +26,18 @@
   --accent: #ea580c;
   --accent-ink: #c2410c;
   --accent-soft: #fff1e6;
-  --shadow: 0 1px 2px rgb(16 24 40 / 0.05), 0 12px 30px rgb(234 88 12 / 0.1);
 }
 
 [data-accent='blue'] {
   --accent: #2563eb;
   --accent-ink: #1d4ed8;
   --accent-soft: #e8efff;
-  --shadow: 0 1px 2px rgb(16 24 40 / 0.05), 0 12px 30px rgb(37 99 235 / 0.1);
 }
 
 [data-accent='green'] {
   --accent: #65a30d;
   --accent-ink: #3f6212;
   --accent-soft: #eef8dc;
-  --shadow: 0 1px 2px rgb(16 24 40 / 0.05), 0 12px 30px rgb(101 163 13 / 0.1);
 }
 
 *,
@@ -102,8 +99,10 @@ a:not([class]) {
   text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
   transition: text-decoration-color 0.15s ease;
 }
-a:not([class]):hover {
-  text-decoration-color: var(--accent);
+@media (hover: hover) {
+  a:not([class]):hover {
+    text-decoration-color: var(--accent);
+  }
 }
 
 ul,

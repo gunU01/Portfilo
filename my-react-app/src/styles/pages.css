@@ -32,15 +32,19 @@
   text-decoration: none;
   transition: background 0.2s, border-color 0.2s, transform 0.2s;
 }
-.ov__card:hover {
-  border-color: var(--accent);
-  color: #fff;
-  transform: translateY(-3px);
+@media (hover: hover) {
+  .ov__card:hover {
+    border-color: var(--accent);
+    color: #fff;
+    transform: translateY(-3px);
+  }
 }
-.ov__card:hover p,
+@media (hover: hover) {
+  .ov__card:hover p,
 .ov__card:hover .ov__n,
 .ov__card:hover .ov__go {
-  color: #fff;
+    color: #fff;
+  }
 }
 .ov__n {
   font-family: var(--mono);
@@ -123,9 +127,11 @@
 .pcard .cover {
   transition: transform 0.25s, box-shadow 0.25s;
 }
-.pcard:hover .cover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
+@media (hover: hover) {
+  .pcard:hover .cover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+  }
 }
 .pcard__text {
   padding-top: 18px;
@@ -232,9 +238,8 @@
 .footer {
   margin-top: 0;
   padding: 72px 0 40px;
-  border-top: 4px solid transparent;
-  border-image: linear-gradient(90deg, #3b82f6, #14b8a6 55%, #8b5cf6) 1;
-  background: linear-gradient(180deg, #f6f7fa 0%, #e8efff 100%);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
   font-size: 14.5px;
 }
 .footer__in {
@@ -253,11 +258,7 @@
 .footer__role em {
   display: block;
   font-style: normal;
-  /* 큰 글씨라 대비 3 이상이면 됩니다(맑은 청록 중간색이 3.2). 더 밝은 색으로 바꾸면 기준에 못 미칩니다 */
-  background: linear-gradient(90deg, #2563eb, #0891b2 60%, #7c3aed);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--accent-ink);
 }
 .footer__rows li {
   border-top: 1px solid var(--line);
@@ -277,11 +278,15 @@
   text-decoration: none;
   transition: color 0.15s ease;
 }
-.footer__rows a:hover {
-  color: var(--accent-ink);
+@media (hover: hover) {
+  .footer__rows a:hover {
+    color: var(--accent-ink);
+  }
 }
-.footer__rows a:hover .footer__go {
-  transform: translate(2px, -2px);
+@media (hover: hover) {
+  .footer__rows a:hover .footer__go {
+    transform: translate(2px, -2px);
+  }
 }
 .footer__k {
   font-size: 12px;

@@ -17,9 +17,11 @@ h4 {
   background: var(--ink);
   color: var(--bg);
 }
-.btn--solid:hover {
-  border-color: var(--accent);
-  color: #fff;
+@media (hover: hover) {
+  .btn--solid:hover {
+    border-color: var(--accent);
+    color: #fff;
+  }
 }
 .btn--desk {
   border-color: var(--accent);
@@ -29,9 +31,11 @@ h4 {
 .btn--desk::after {
   content: '↗';
 }
-.btn--desk:hover {
-  border-color: var(--accent);
-  color: #fff;
+@media (hover: hover) {
+  .btn--desk:hover {
+    border-color: var(--accent);
+    color: #fff;
+  }
 }
 .nav__desk {
   flex: none;
@@ -43,8 +47,10 @@ h4 {
   text-decoration: none;
   color: var(--accent-ink);
 }
-.nav__desk:hover {
-  color: #fff;
+@media (hover: hover) {
+  .nav__desk:hover {
+    color: #fff;
+  }
 }
 .nav__in {
   gap: 12px;
@@ -115,11 +121,15 @@ h4 {
   --dy: 20%;
   --rot: 5deg;
 }
-.pcard:hover .cover--screens .phone--1 {
-  --rot: -7deg;
+@media (hover: hover) {
+  .pcard:hover .cover--screens .phone--1 {
+    --rot: -7deg;
+  }
 }
-.pcard:hover .cover--screens .phone--3 {
-  --rot: 7deg;
+@media (hover: hover) {
+  .pcard:hover .cover--screens .phone--3 {
+    --rot: 7deg;
+  }
 }
 .cover--banner.cover--screens .phone {
   width: 15%;
@@ -427,11 +437,15 @@ h4 {
   font-size: 0.85em;
   transition: transform 0.15s ease;
 }
-.xlink:hover {
-  border-color: var(--accent);
+@media (hover: hover) {
+  .xlink:hover {
+    border-color: var(--accent);
+  }
 }
-.xlink:hover span {
-  transform: translate(2px, -2px);
+@media (hover: hover) {
+  .xlink:hover span {
+    transform: translate(2px, -2px);
+  }
 }
 
 /* 아주 좁은 화면(320px 안팎): 메뉴가 화면 밖으로 밀리지 않게 간격을 줄입니다(.nav__desk 규칙보다 뒤에 있어야 합니다) */

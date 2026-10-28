@@ -42,8 +42,10 @@
   color: var(--muted);
   cursor: pointer;
 }
-.nav__links a:hover,
+@media (hover: hover) {
+  .nav__links a:hover,
 .nav__links button:hover {
-  color: var(--ink);
+    color: var(--ink);
+  }
 }
 

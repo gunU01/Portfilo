@@ -102,8 +102,10 @@
 .skflow__step--1 .skflow__dot {
   border-radius: 12px;
 }
-.skflow__node:hover .skflow__dot {
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .skflow__node:hover .skflow__dot {
+    transform: translateY(-2px);
+  }
 }
 .skflow__node[aria-selected='true'] .skflow__dot {
   background: color-mix(in srgb, var(--tone) 22%, #fff);

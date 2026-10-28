@@ -84,8 +84,10 @@
   font-size: 15px;
   transition: background 0.15s, color 0.15s;
 }
-.btn:hover {
-  background: var(--ink);
-  color: var(--bg);
+@media (hover: hover) {
+  .btn:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
 }
 
