@@ -2,14 +2,14 @@
 .skmap {
   /* 모양과 테두리에는 맑고 선명한 색(--c-*)을, 글자에는 같은 계열의 진한 색(--i-*)을 씁니다.
      글자는 흰색/옅은 배경 위에서 대비 4.5 이상이어야 해서, 선명한 색을 글자에 그대로 쓰지 않습니다. */
-  --c-plan: #3b82f6;
-  --i-plan: #1d4ed8;
-  --c-ops: #14b8a6;
-  --i-ops: #0f766e;
-  --c-tool: #8b5cf6;
-  --i-tool: #6d28d9;
-  --c-fe: #ec4899;
-  --i-fe: #be185d;
+  --c-plan: var(--accent);
+  --i-plan: var(--accent);
+  --c-ops: var(--accent);
+  --i-ops: var(--accent);
+  --c-tool: var(--accent);
+  --i-tool: var(--accent);
+  --c-fe: var(--accent);
+  --i-fe: var(--accent);
   margin-top: 36px;
   display: grid;
   gap: 20px;
@@ -68,7 +68,7 @@
   left: 50%;
   width: 100%;
   height: 2px;
-  background: color-mix(in srgb, var(--tone) 35%, var(--line));
+  background: var(--line);
 }
 .skflow__node {
   position: relative;
@@ -108,8 +108,8 @@
   }
 }
 .skflow__node[aria-selected='true'] .skflow__dot {
-  background: color-mix(in srgb, var(--tone) 22%, #fff);
-  box-shadow: inset 0 0 0 1.5px var(--tone);
+  background: var(--tone);
+  color: #fff;
 }
 .skflow__name {
   font-size: 13.5px;
@@ -191,7 +191,7 @@
 .skflow__tag {
   max-width: 100%;
   padding: 2px 9px;
-  border: 1px solid color-mix(in srgb, var(--tone) 45%, #fff);
+  border: 1px solid var(--tone);
   border-radius: 999px;
   background: #fff;
   color: var(--tone-ink);
@@ -277,7 +277,7 @@
   transition-delay: 0s;
 }
 .skflow__step.is-hit .skflow__dot {
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--tone) 25%, transparent);
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--tone);
 }
 @media print {
   .js .skflow__step {

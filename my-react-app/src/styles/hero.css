@@ -67,8 +67,7 @@
 .spec {
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: color-mix(in srgb, var(--bg) 78%, transparent);
-  backdrop-filter: blur(6px);
+  background: var(--bg);
   padding: 4px 18px 8px;
 }
 .spec__t {
@@ -120,8 +119,7 @@
   white-space: nowrap;
 }
 .chip--accent {
-  background: var(--accent-soft);
-  border-color: transparent;
+  border-color: var(--accent);
   color: var(--accent-ink);
   font-weight: 600;
 }

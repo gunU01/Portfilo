@@ -135,7 +135,6 @@
 }
 .blocks strong {
   font-weight: 700;
-  box-shadow: inset 0 -0.38em 0 var(--accent-soft);
 }
 
 .list li {
@@ -179,14 +178,13 @@
   border: 1px solid var(--line);
 }
 .callout--key {
-  background: var(--accent-soft);
-  border-color: transparent;
+  border-color: var(--accent);
 }
 .footnote {
   margin-top: -4px;
   font-size: 13px;
   line-height: 1.6;
-  color: color-mix(in srgb, var(--ink) 52%, var(--bg));
+  color: var(--ink);
 }
 .callout__t {
   font-size: 13px;
@@ -289,8 +287,7 @@
   background: var(--surface);
 }
 .ba__col--after {
-  background: var(--accent-soft);
-  border-color: transparent;
+  border-color: var(--accent);
 }
 .ba__col h4 {
   font-size: 15px;
@@ -302,7 +299,7 @@
 .ba__col li {
   font-size: 15px;
   padding: 7px 0;
-  border-top: 1px dashed color-mix(in srgb, var(--faint) 40%, transparent);
+  border-top: 1px dashed var(--line);
   line-height: 1.6;
 }
 .ba__col li:first-child {
@@ -361,11 +358,11 @@
   transition: border-color 0.18s ease;
 }
 .dec[open] {
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  border-color: var(--accent);
 }
 @media (hover: hover) {
   .dec:hover {
-    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+    border-color: var(--accent);
   }
 }
 .dec summary {
@@ -403,8 +400,8 @@
   height: 26px;
   padding: 0 8px;
   border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-ink);
+  background: var(--accent);
+  color: #fff;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -534,7 +531,7 @@
   border-radius: var(--radius);
 }
 .tg[open] {
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  border-color: var(--accent);
 }
 .tg summary {
   list-style: none;
@@ -798,9 +795,9 @@
   display: grid;
   gap: 6px;
   padding: 26px 64px 26px 28px;
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border: 1px solid var(--accent);
   border-radius: var(--radius);
-  background: var(--accent-soft);
+  background: var(--bg);
   color: var(--ink);
   text-decoration: none;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -971,7 +968,8 @@
   }
   .toc button[aria-current='true'] {
     border-color: var(--accent);
-    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 1px var(--accent);
+    color: var(--accent-ink);
   }
 }
 

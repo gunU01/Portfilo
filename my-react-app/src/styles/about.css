@@ -12,7 +12,7 @@
 .tl__item {
   position: relative;
   display: grid;
-  grid-template-columns: 108px 1fr;
+  grid-template-columns: 136px 1fr;
   gap: 16px;
   padding: 0 0 22px 22px;
   border-left: 2px solid var(--line);

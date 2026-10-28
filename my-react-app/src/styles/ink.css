@@ -6,7 +6,7 @@
     position: relative;
     overflow: hidden;
     isolation: isolate;
-    --paint: var(--accent-soft);
+    --paint: var(--accent);
   }
   .ink::before {
     content: '';
@@ -32,19 +32,20 @@
     display: none;
   }
 
-  /* 요소별 색 */
-  .nav__links .ink {
-    --paint: var(--sunken);
+  /* 번지는 색은 모두 파랑이라, 닿으면 글자는 흰색으로 바뀝니다. 물감 속도에 맞춰 바뀌어야 파란 바탕 위에서 글자가 흐려지지 않습니다.
+     걸을 때는 물감이 어느 정도 걷힌 뒤에, 들어올 때는 반쯤 퍼진 뒤에 바뀝니다. */
+  .ink:not([aria-pressed='true']):hover,
+  .ink:not([aria-pressed='true']):hover * {
+    color: #fff;
   }
-  .footer__rows .ink {
-    --paint: rgb(255 255 255 / 0.8);
+  .ink,
+  .ink * {
+    transition: color 0.3s ease 0.3s;
   }
-  .desk__list .ink {
-    --paint: #f2f2f2;
+  .ink:hover,
+  .ink:hover * {
+    transition: color 0.3s ease 0.22s;
   }
-
-  /* 파랗게 차오르는 요소: 글자색이 번지는 속도에 맞춰 바뀝니다.
-     걸을 때는 물감이 어느 정도 걷힌 뒤에, 들어올 때는 반쯤 퍼진 뒤에 바뀌어 파란 바탕 위에서 글자가 흐려지지 않습니다. */
   .btn--solid,
   .btn--desk,
   .nav__desk,
@@ -53,7 +54,6 @@
   .ov__card p,
   .ov__card .ov__n,
   .ov__card .ov__go {
-    --paint: var(--accent);
     transition: color 0.3s ease 0.3s, border-color 0.3s ease 0.25s, transform 0.2s, translate 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   .btn--solid:hover,

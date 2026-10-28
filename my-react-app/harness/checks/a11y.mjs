@@ -3,9 +3,7 @@ import { openPage } from '../lib/browser.mjs'
 import { discoverCases, go, ready } from '../lib/site.mjs'
 
 // 대비를 일부러 낮춘 곳(사용자가 정한 디자인). 여기에 적은 것만 검사에서 빠집니다. 늘릴 때는 이유를 적으세요.
-const EXEMPT = [
-  '.ab__text strong', // 소개 강조: 밝은 파랑을 쓰기로 정함(대비 3.2)
-]
+const EXEMPT = []
 
 // 브라우저 안에서 도는 코드: 보이는 글자마다 글자색과 배경색의 대비를 계산해 기준(일반 4.5, 큰 글씨 3)에 못 미치는 것을 모읍니다.
 function findLowContrast(exempt) {
