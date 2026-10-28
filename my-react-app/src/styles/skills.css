@@ -319,10 +319,7 @@
     transform: rotate(135deg);
   }
 }
-@media (max-width: 720px) {
-  .skflow {
-    padding: 16px 14px;
-  }
+@media (max-width: 860px) {
   .skflow__panel {
     display: none;
   }
@@ -332,5 +329,10 @@
     font-size: 14px;
     line-height: 1.65;
     color: var(--muted);
+  }
+}
+@media (max-width: 720px) {
+  .skflow {
+    padding: 16px 14px;
   }
 }

@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
-import BackToTop from './components/BackToTop.jsx'
 import Home from './pages/Home.jsx'
 import { cases } from './data/cases.js'
 import { profile } from './data/profile.js'
@@ -76,7 +75,6 @@ export default function App() {
         <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{current ? <Case data={current} /> : <Page />}</Suspense>
       </main>
       {page?.footer !== false && <Footer />}
-      {page?.footer !== false && <BackToTop />}
     </>
   )
 }

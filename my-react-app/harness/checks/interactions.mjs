@@ -4,7 +4,7 @@ import { go, ready } from '../lib/site.mjs'
 
 export default {
   name: 'interactions',
-  about: '케이스 페이지의 움직임: 막대가 차오름, 접힌 항목이 부드럽게 열림, 다음 프로젝트 카드, 맨 위로 버튼, 오늘한입 로고',
+  about: '케이스 페이지의 움직임: 막대가 차오름, 접힌 항목이 부드럽게 열림, 다음 프로젝트 카드, 오늘한입 로고',
   async run({ browser, url, t }) {
     const { page } = await openPage(browser)
 
@@ -52,19 +52,6 @@ export default {
       }
     })
 
-    await t('맨 위로 버튼: 맨 위에서는 숨고, 내려가면 나타나며, 누르면 맨 위로 올라간다', async () => {
-      await go(page, url, '/work/sosang')
-      await ready(page)
-      const btn = page.locator('.totop')
-      await waitFor(() => btn.evaluate((e) => getComputedStyle(e).visibility === 'hidden'), { message: '맨 위에서 버튼이 숨지 않았습니다' })
-      assert.equal(await btn.getAttribute('tabindex'), '-1')
-      await page.evaluate(() => window.scrollTo({ top: 1600, behavior: 'instant' }))
-      await waitFor(() => btn.evaluate((e) => e.classList.contains('is-on')), { message: '내려갔는데 버튼이 나타나지 않았습니다' })
-      assert.equal(await btn.getAttribute('tabindex'), '0')
-      await btn.click()
-      await waitFor(() => page.evaluate(() => window.scrollY < 4), { message: '버튼을 눌렀는데 맨 위로 올라가지 않았습니다' })
-    })
-
     await t('모바일 표: 행이 많으면 앞부분만 보이고, 버튼으로 펼치고 접으며, 데스크톱에서는 전부 보인다', async () => {
       const { page: m } = await openPage(browser, { viewport: VIEWPORTS.mobile })
       await go(m, url, '/work/haemi')
@@ -105,10 +92,5 @@ export default {
       await fresh.context.close()
     })
 
-    await t('책상에는 맨 위로 버튼이 없다', async () => {
-      await go(page, url, '/desk')
-      await page.waitForSelector('.hs')
-      assert.equal(await page.locator('.totop').count(), 0)
-    })
   },
 }
