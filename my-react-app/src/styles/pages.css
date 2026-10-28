@@ -477,11 +477,13 @@
     margin: 10px 0 0;
   }
   .pj .pcard .bars__row {
-    grid-template-columns: 4.8em minmax(0, 1fr) 2.8em;
+    grid-template-columns: 2.9em minmax(0, 1fr) 2.9em;
     gap: 6px;
   }
   .pj .pcard .bars__l {
     font-size: 11px;
+    line-height: 1.2;
+    white-space: normal;
   }
   .pj .pcard .bars__l small {
     display: none;

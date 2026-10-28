@@ -72,6 +72,11 @@ h4 {
 .cover--banner {
   height: clamp(230px, 31vw, 340px);
 }
+/* 막대 표지는 내용(출처 줄까지)이 다 보이도록 높이를 내용에 맞추고 최소 높이만 둡니다 */
+.cover--banner.cover--bars {
+  height: auto;
+  min-height: clamp(230px, 31vw, 340px);
+}
 .cover__cap {
   font-family: var(--mono);
   font-size: 12px;
@@ -409,8 +414,8 @@ h4 {
   }
   /* 휴대폰이 작아지는 만큼 테두리도 얇게, 그림자도 가볍게 */
   .phone {
-    border-width: 2.5px;
-    border-radius: 13px;
+    border-width: 1.5px;
+    border-radius: 8px;
     box-shadow: 0 10px 22px rgb(8 30 70 / 0.28);
   }
 }
