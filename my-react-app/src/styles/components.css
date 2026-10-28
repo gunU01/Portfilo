@@ -210,7 +210,7 @@ h4 {
   display: block;
   height: 100%;
   border-radius: 6px;
-  background: #bdb8a9;
+  background: #c4c4c4;
 }
 .bars__bar.is-last {
   background: var(--accent);

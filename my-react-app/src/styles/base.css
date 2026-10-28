@@ -1,18 +1,16 @@
-/* 기본은 검정, 흰색, 파랑입니다. 보조 글자와 면은 따뜻한 종이색 계열로 죽인 톤을 쓰고, 강조에는 케이스마다 다른 포인트 색과 형광펜 노랑을 씁니다.
-   푸른 기가 도는 회색과 그라데이션은 쓰지 않습니다. 라이트 모드만 지원합니다. */
+/* 기본은 검정, 흰색, 파랑입니다. 보조 글자와 면은 색기 없는 연회색으로 죽이고, 강조(굵은 글씨 밑칠, 핵심 상자)는 케이스마다 다른 포인트 색을 씁니다.
+   푸른 기가 도는 회색, 베이지, 그라데이션은 쓰지 않습니다. 라이트 모드만 지원합니다. */
 :root {
   --bg: #ffffff;
-  --surface: #f5f3ee;
-  --sunken: #ebe7dd;
+  --surface: #f5f5f5;
+  --sunken: #ececec;
   --ink: #0a0a0a;
-  --muted: #3b3a36;
-  --faint: #64625c;
-  --line: #d9d4c8;
+  --muted: #404040;
+  --faint: #666666;
+  --line: #dcdcdc;
   --accent: #0038ff;
   --accent-ink: #0038ff;
   --accent-soft: #e4eaff;
-  --mark: #ffe14d; /* 형광펜 노랑: 본문 강조, 핵심 상자 */
-  --mark-soft: #fff4c2;
   --shadow: 0 1px 2px rgb(10 10 10 / 0.05), 0 8px 24px rgb(10 10 10 / 0.08);
   --radius: 10px;
   --font: 'NanumSquareNeo', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',

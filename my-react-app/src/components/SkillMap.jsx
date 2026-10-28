@@ -41,52 +41,60 @@ export default function SkillMap({ groups, tools }) {
 
   return (
     <div className="skmap" ref={mapRef}>
-      <div className="skflow" style={{ '--n': steps.length }}>
-        <div className="skflow__phases" aria-hidden="true">
+      <div className="skflow">
+        {/* 묶음마다 카드 하나로 묶고, 카드 사이는 화살표로 이어 '일하는 순서'를 보여 줍니다 */}
+        <div className="skflow__phases" role="tablist" aria-label="일하는 순서" onKeyDown={onKeyDown}>
           {groups.map((g, phase) => (
-            <span key={g.title} className={`skflow__phase skflow__phase--${phase}`} style={{ gridColumn: `span ${g.items.length}` }}>
-              {g.title}
-            </span>
+            <section key={g.title} className={`skflow__phase skflow__phase--${phase}`} role="presentation">
+              <header className="skflow__head">
+                <span className="skflow__pn tnum">{phase + 1}</span>
+                <b>{g.title}</b>
+                <small>{g.items.length}단계</small>
+              </header>
+              <ol className="skflow__steps" role="presentation">
+                {steps
+                  .map((s, i) => ({ s, i }))
+                  .filter(({ s }) => s.phase === phase)
+                  .map(({ s, i }) => (
+                    <li
+                      key={s.name}
+                      role="presentation"
+                      className={`skflow__step skflow__step--${s.phase}${i === index ? ' is-on' : ''}${tool ? (uses(s) ? ' is-hit' : ' is-dim') : ''}`}
+                      style={{ '--i': i }}
+                    >
+                      <button
+                        type="button"
+                        className="skflow__node"
+                        ref={(el) => {
+                          nodeRefs.current[i] = el
+                        }}
+                        role="tab"
+                        id={`skflow-tab-${i}`}
+                        aria-selected={i === index}
+                        aria-controls="skflow-panel"
+                        tabIndex={i === index ? 0 : -1}
+                        onClick={() => setIndex(i)}
+                      >
+                        <span className="skflow__dot tnum">{i + 1}</span>
+                        <span className="skflow__name">{s.name}</span>
+                      </button>
+                      {s.tools && (
+                        <span className="skflow__tools" aria-label="쓴 도구">
+                          {s.tools.map((t) => (
+                            <span key={t} className={t === tool ? 'skflow__tag is-active' : 'skflow__tag'}>
+                              {t}
+                            </span>
+                          ))}
+                        </span>
+                      )}
+                      {/* 좁은 화면에서는 고른 단계의 설명만 그 아래에 펼칩니다 */}
+                      <p className="skflow__inline">{s.used}</p>
+                    </li>
+                  ))}
+              </ol>
+            </section>
           ))}
         </div>
-
-        <ol className="skflow__steps" role="tablist" aria-label="일하는 순서" onKeyDown={onKeyDown}>
-          {steps.map((s, i) => (
-            <li
-              key={s.name}
-              className={`skflow__step skflow__step--${s.phase}${i === index ? ' is-on' : ''}${tool ? (uses(s) ? ' is-hit' : ' is-dim') : ''}`}
-              style={{ '--i': i }}
-            >
-              <button
-                type="button"
-                className="skflow__node"
-                ref={(el) => {
-                  nodeRefs.current[i] = el
-                }}
-                role="tab"
-                id={`skflow-tab-${i}`}
-                aria-selected={i === index}
-                aria-controls="skflow-panel"
-                tabIndex={i === index ? 0 : -1}
-                onClick={() => setIndex(i)}
-              >
-                <span className="skflow__dot tnum">{i + 1}</span>
-                <span className="skflow__name">{s.name}</span>
-              </button>
-              {s.tools && (
-                <span className="skflow__tools" aria-label="쓴 도구">
-                  {s.tools.map((t) => (
-                    <span key={t} className={t === tool ? 'skflow__tag is-active' : 'skflow__tag'}>
-                      {t}
-                    </span>
-                  ))}
-                </span>
-              )}
-              {/* 좁은 화면에서는 세로로 이어 붙이고, 고른 단계의 설명만 그 아래에 펼칩니다 */}
-              <p className="skflow__inline">{s.used}</p>
-            </li>
-          ))}
-        </ol>
 
         <div key={index} className={`skflow__panel skflow__panel--${current.phase}`} role="tabpanel" id="skflow-panel" aria-labelledby={`skflow-tab-${index}`}>
           <small>
