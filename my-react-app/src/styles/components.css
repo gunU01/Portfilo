@@ -26,7 +26,7 @@ h4 {
 .btn--desk {
   border-color: var(--accent);
   color: var(--accent-ink);
-  background: var(--bg);
+  background: var(--accent-soft);
 }
 .btn--desk::after {
   content: '↗';
@@ -87,16 +87,16 @@ h4 {
   align-items: flex-end;
   gap: 4%;
   padding: 0 6%;
-  background: var(--bg);
-  border: 1px solid var(--line);
+  background: #a9d2ff;
 }
 .phone {
   margin: 0;
   flex: none;
   overflow: hidden;
   border-radius: 22px;
-  border: 5px solid var(--ink);
-  background: var(--ink);
+  border: 5px solid #14161c;
+  background: #14161c;
+  box-shadow: 0 18px 40px rgb(8 30 70 / 0.35);
 }
 .phone img {
   display: block;
@@ -140,6 +140,13 @@ h4 {
 .phone--flat {
   display: block;
   box-shadow: var(--shadow);
+}
+
+.cover--screens.cover--warm {
+  background: #ffc4a8;
+}
+.cover--warm .phone {
+  box-shadow: 0 18px 40px rgb(120 40 10 / 0.35);
 }
 
 /* 막대: 실제 공시 수치. 가로 막대로 라벨, 막대, 값을 한 줄에 둡니다. */
@@ -196,15 +203,14 @@ h4 {
 .bars__track {
   height: 22px;
   border-radius: 6px;
-  background: var(--bg);
-  box-shadow: inset 0 0 0 1px var(--line);
+  background: var(--sunken);
   overflow: hidden;
 }
 .bars__bar {
   display: block;
   height: 100%;
   border-radius: 6px;
-  background: var(--ink);
+  background: #bdb8a9;
 }
 .bars__bar.is-last {
   background: var(--accent);
@@ -223,7 +229,7 @@ h4 {
 
 /* 이미지: 한 장을 표지 전체에 채움 */
 .cover--image {
-  background: var(--bg);
+  background: #8fbcf8;
 }
 .cover--image img {
   display: block;
@@ -241,8 +247,8 @@ h4 {
 
 /* 표지를 비워 둔 케이스: 목록에서 자리만 잡는 색 면 */
 .cover--blank {
-  background: var(--bg);
-  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
 }
 
 /* 로고: 서비스 이름과 마크를 가운데에 */
@@ -253,8 +259,8 @@ h4 {
   justify-content: center;
   gap: 6px;
   padding: 18px;
-  background: var(--bg);
-  border: 1px solid var(--line);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
   color: var(--accent-ink);
   text-align: center;
 }
@@ -306,8 +312,7 @@ h4 {
   justify-content: center;
   gap: 4px;
   padding: 28px 8%;
-  background: var(--bg);
-  border: 1px solid var(--line);
+  background: var(--accent-soft);
   color: var(--ink);
 }
 .cover--shift .cover__cap {
@@ -351,7 +356,7 @@ h4 {
   border: 1px solid var(--line);
 }
 .fig--dark img {
-  border-color: var(--line);
+  border-color: #1e2a44;
 }
 .fig figcaption,
 .gallery figcaption {
@@ -406,6 +411,7 @@ h4 {
   .phone {
     border-width: 2.5px;
     border-radius: 13px;
+    box-shadow: 0 10px 22px rgb(8 30 70 / 0.28);
   }
 }
 

@@ -9,6 +9,7 @@ export const sosang = {
   summary:
     '가게 정보를 한 번만 받아 두고, 매일 5분 안에 끝나는 홍보 할 일 1개와 그에 맞는 문구를 만들어 주는 요식업 사장님용 서비스입니다.',
   group: 'PLAN',
+  accent: 'green', // 이 케이스의 포인트 색(연두)
   tags: ['개인 기획', 'PM'],
   period: '2026.10',
   status: '기획 단계',

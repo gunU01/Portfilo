@@ -44,10 +44,11 @@ main.jsx ─ App.jsx (라우팅)
 
 - `styles/index.css` 의 `@import` 순서가 곧 우선순위입니다. 뒤 파일이 앞 규칙을 덮어쓸 수 있으니 순서를 바꾸지 마세요(`base → nav → hero → about → case → responsive → print → desk → components → layout → pages → skills → effects → ink`).
 - 좁은 화면 규칙은 두 곳으로 나눕니다. 여러 페이지가 함께 쓰는 것(여백, 숫자 카드, 줄바꿈)은 `responsive.css`, 한 페이지에만 해당하는 것은 그 페이지 스타일 파일 맨 아래(케이스는 `case.css`, 프로젝트 목록은 `pages.css`)에 둡니다. 그래야 기본 규칙과 같은 파일에서 순서로 덮어쓸 수 있어 선택자를 억지로 길게 쓸 일이 없습니다.
-- 색, 간격 같은 값은 `base.css` 의 `:root` 변수에 있습니다. 색 원칙: 검정(`--ink`), 흰색(`--bg`), 파랑(`--accent`) 세 가지만 씁니다. 회색과 옅은 색 면은 없고, 구분은 1px 검정 선과 파랑(테두리, 채움)으로 합니다. `--muted`, `--faint`, `--surface`, `--sunken`, `--line`, `--accent-soft` 는 이름만 남은 별칭이라 값이 검정이나 흰색입니다. 새 색을 넣지 말고, 강조가 필요하면 파랑 테두리나 파랑 채움에 흰 글자를 쓰세요. 글자 대비는 `npm run e2e -- --only a11y` 가 검사합니다.
+- 색, 간격 같은 값은 `base.css` 의 `:root` 변수에 있습니다. 색 원칙: 기본은 검정(`--ink`), 흰색(`--bg`), 파랑(`--accent`)이고, 보조 글자와 면은 따뜻한 종이색 계열로 죽인 톤(`--muted`, `--faint`, `--surface`, `--sunken`, `--line`)을 씁니다. 포인트는 케이스마다 다른 색(아래 `data-accent`)과 형광펜 노랑(`--mark`, `--mark-soft`)입니다. 푸른 기가 도는 회색과 그라데이션은 쓰지 않습니다. 새 색을 넣을 때는 흰색이나 `--surface` 위에서 대비 4.5 이상인지 `npm run e2e -- --only a11y` 로 확인하세요.
 - `font.css` 는 `scripts/subset-font.py` 가 만듭니다(직접 고치지 않음).
 - 호버 번짐: 요소에 `ink` 클래스를 붙이면 됩니다. 중심 위치는 `lib/useInkHover.js` 가, 모양은 `styles/ink.css` 가 맡습니다.
 - 사이트의 나머지 움직임은 `styles/effects.css` 한 파일에 모았고, 모션 줄이기 설정에서 그 파일 맨 아래가 한꺼번에 끕니다. 값을 정하는 일은 `lib/` 의 훅이 하고 CSS 는 값만 읽습니다: 마우스 위치 `--px/--py`(`usePointerVars`), 요소 안 마우스 위치 `--fx/--fy`(`useFollow`, `.follow` 요소: 카드 기울기, `.magnet` 버튼), 스크롤 `--scroll`(`useScrollProgress`, 문서 전체가 아니라 진행 막대 `.progress` 에만 씀), 활동 기록과 대회 참가의 진행선 `--fill`과 항목 상태 `is-passed`/`is-current`(`useTimelineProgress`). 스크롤에 맞춰 값을 갱신하는 훅은 `onScrollFrame` 으로 프레임당 한 번만 계산합니다. 케이스 페이지에는 막대 도식이 화면에 들어오면 차오르는 효과(`useGrow` 가 `.chart` 에 `is-in` 을 붙임), 접힌 항목(`details`)이 부드럽게 열리는 효과(CSS `::details-content`, 지원하지 않는 브라우저는 바로 열림), 맨 아래의 다음 프로젝트 카드(`CaseNext`), 어느 페이지에서나 내려가면 나타나는 맨 위로 버튼(`BackToTop`, 책상 제외)이 있고, 오늘한입의 표지는 로고(`cover.kind: 'logo'`, 체크가 그려지고 마우스를 올리면 한 입 더 베어 묾)입니다.
+- 케이스마다 포인트 색이 다릅니다(해미 주황, 오늘한입 연두, 나머지 파랑). 케이스 데이터의 `accent` 값을 `useAccent` 가 `<html data-accent>` 로 옮기고, `styles/base.css` 의 `[data-accent]` 규칙이 `--accent` 계열 변수를 덮어씁니다. 프로젝트 카드는 같은 속성을 자기 요소에 달아 카드 안에서만 그 색이 됩니다.
 
 ## 책상 장면
 
@@ -88,7 +89,7 @@ main.jsx ─ App.jsx (라우팅)
 | `a11y` | 글자와 배경의 대비(일반 4.5, 큰 글씨 3), 이미지 대체 텍스트, 버튼 이름. 대비를 일부러 낮춘 곳은 `checks/a11y.mjs` 의 `EXEMPT` 에 이유와 함께 적음 |
 | `effects` | 페이지 전환, 스크롤 진행 막대, 메뉴 알약(글꼴 로드 뒤에도 맞음), 첫 화면 글자, 카드 기울기, 버튼 끌림, 모션 줄이기에서 꺼짐 |
 | `interactions` | 오늘한입 로고 표지, 막대 도식이 화면에 들어오면 차오름, 접힌 항목이 부드럽게 열림, 다음 프로젝트 카드(목록 순서, 마지막은 처음으로), 맨 위로 버튼(책상 제외) |
-| `timeline` | 활동 기록과 대회 참가 두 목록의 진행선이 읽는 위치를 따라 이어서 차오르고, 점과 항목 상태(지나감은 파랑 날짜, 아직 안 온 항목은 검정 날짜, 현재)가 선을 따라감 |
+| `timeline` | 활동 기록과 대회 참가 두 목록의 진행선이 읽는 위치를 따라 이어서 차오르고, 점과 항목 상태(지나감, 현재, 회색)가 선을 따라감 |
 | `footer` | 복사 아이콘이 이메일과 전화번호를 복사하고, 폭 320~390px 에서 값 글자나 화살표와 겹치지 않음 |
 | `seo` | `index.html` 의 제목, 설명, `og:*` 가 맞고 길이가 적당함, 외부 CDN 없음 |
 

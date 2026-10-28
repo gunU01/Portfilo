@@ -1,16 +1,19 @@
-/* 검정, 흰색, 파랑 세 가지만 씁니다. 회색과 옅은 색 면은 없고, 구분은 선과 파랑으로 합니다. 라이트 모드만 지원합니다. */
+/* 기본은 검정, 흰색, 파랑입니다. 보조 글자와 면은 따뜻한 종이색 계열로 죽인 톤을 쓰고, 강조에는 케이스마다 다른 포인트 색과 형광펜 노랑을 씁니다.
+   푸른 기가 도는 회색과 그라데이션은 쓰지 않습니다. 라이트 모드만 지원합니다. */
 :root {
   --bg: #ffffff;
-  --surface: #ffffff;
-  --sunken: #ffffff;
-  --ink: #000000;
-  --muted: #000000;
-  --faint: #000000;
-  --line: #000000;
+  --surface: #f5f3ee;
+  --sunken: #ebe7dd;
+  --ink: #0a0a0a;
+  --muted: #3b3a36;
+  --faint: #64625c;
+  --line: #d9d4c8;
   --accent: #0038ff;
   --accent-ink: #0038ff;
-  --accent-soft: #ffffff;
-  --shadow: none;
+  --accent-soft: #e4eaff;
+  --mark: #ffe14d; /* 형광펜 노랑: 본문 강조, 핵심 상자 */
+  --mark-soft: #fff4c2;
+  --shadow: 0 1px 2px rgb(10 10 10 / 0.05), 0 8px 24px rgb(10 10 10 / 0.08);
   --radius: 10px;
   --font: 'NanumSquareNeo', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
     'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
@@ -18,6 +21,26 @@
   --wrap: 1120px;
   --read: 720px;
   color-scheme: light;
+}
+
+/* 케이스마다 포인트 색이 다릅니다. data-accent 가 <html>(그 페이지 전체)이나 프로젝트 카드에 붙으면 --accent 계열이 바뀝니다.
+   글자색(--accent-ink)은 흰 바탕에서 4.5:1 이상을 지키는 어두운 톤입니다. */
+[data-accent='orange'] {
+  --accent: #ea580c;
+  --accent-ink: #c2410c;
+  --accent-soft: #fff1e6;
+}
+
+[data-accent='blue'] {
+  --accent: #0038ff;
+  --accent-ink: #0038ff;
+  --accent-soft: #e4eaff;
+}
+
+[data-accent='green'] {
+  --accent: #65a30d;
+  --accent-ink: #3f6212;
+  --accent-soft: #eef8dc;
 }
 
 *,

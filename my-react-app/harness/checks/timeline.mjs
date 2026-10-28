@@ -33,20 +33,20 @@ export default {
           current: items.filter((it) => it.classList.contains('is-current')).length,
           currentIndex: items.findIndex((it) => it.classList.contains('is-current')),
           dots: items.map((it) => it.getBoundingClientRect().top - lt + 12), // 점의 가운데(목록 맨 위 기준)
-          upcoming: items.map((it) => getComputedStyle(it.querySelector('.tl__when')).color === getComputedStyle(document.body).color), // 아직 안 온 항목은 날짜가 검정, 지나간 항목은 파랑
+          dimmed: items.map((it) => getComputedStyle(it.querySelector('.tl__text')).color !== getComputedStyle(document.body).color),
           total: items.length,
         }
       }, idx)
     const scrollTop = () => page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
 
     for (const [idx, name] of LISTS.entries()) {
-      await t(`${name}: 목록에 닿기 전에는 비어 있다(진행선 0, 지나간 항목 없음, 모든 날짜가 검정)`, async () => {
+      await t(`${name}: 목록에 닿기 전에는 비어 있다(진행선 0, 지나간 항목 없음, 모든 항목이 회색)`, async () => {
         await scrollTop()
         await waitFor(async () => (await state(idx)).fill === 0, { message: '진행선이 0 이 아닙니다' })
         const s = await state(idx)
         assert.equal(s.passed, 0)
         assert.equal(s.current, 0)
-        await waitFor(async () => (await state(idx)).upcoming.every(Boolean), { message: '아직 안 온 항목의 날짜가 검정이 아닙니다' })
+        await waitFor(async () => (await state(idx)).dimmed.every(Boolean), { message: '아직 안 온 항목이 회색이 되지 않았습니다' })
       })
 
       await t(`${name}: 내려가는 만큼 이어서 차오른다(선 끝이 지금 항목의 점과 다음 항목의 점 사이)`, async () => {
@@ -69,9 +69,9 @@ export default {
           }
           // 색은 0.4초에 걸쳐 바뀌므로 끝나기를 기다립니다.
           await waitFor(async () => {
-            const d = (await state(idx)).upcoming
+            const d = (await state(idx)).dimmed
             return d.slice(0, expected).every((x) => !x) && d.slice(expected).every(Boolean)
-          }, { message: `지나간 항목의 날짜는 파랑이고 아직 안 온 항목은 검정이어야 합니다 (offset ${offset})` })
+          }, { message: `지나간 항목은 본문색이고 아직 안 온 항목은 회색이어야 합니다 (offset ${offset})` })
         }
         assert.ok(seen.every((v, i) => i === 0 || v >= seen[i - 1]), `내릴수록 길어져야 합니다: ${seen}`)
         assert.ok(seen[seen.length - 1] > seen[0], '처음보다 끝이 길어야 합니다')

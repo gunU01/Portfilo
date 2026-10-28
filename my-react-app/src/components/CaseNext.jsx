@@ -6,7 +6,7 @@ export default function CaseNext({ slug }) {
   const next = cases[(i + 1) % cases.length]
   if (i < 0 || next.slug === slug) return null
   return (
-    <nav className="cnext" aria-label="다음 프로젝트">
+    <nav className="cnext" aria-label="다음 프로젝트" data-accent={next.accent ?? 'blue'}>
       <a className="cnext__a" href={`#/work/${next.slug}`}>
         <span className="cnext__k">다음 프로젝트</span>
         <span className="cnext__t">

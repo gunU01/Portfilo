@@ -6,6 +6,7 @@ import Home from './pages/Home.jsx'
 import { cases } from './data/cases.js'
 import { profile } from './data/profile.js'
 import { useHashRoute } from './lib/useHashRoute.js'
+import { useAccent } from './lib/useAccent.js'
 import { useInkHover } from './lib/useInkHover.js'
 import { useFollow } from './lib/useFollow.js'
 import { useScrollProgress } from './lib/useScrollProgress.js'
@@ -41,6 +42,7 @@ export default function App() {
   useScrollProgress()
   const slug = path.match(/^\/work\/([\w-]+)$/)?.[1]
   const current = cases.find((c) => c.slug === slug)
+  useAccent(current?.accent)
   const page = PAGES[path]
   const title = current?.title ?? page?.title
 

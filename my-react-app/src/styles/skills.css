@@ -2,14 +2,12 @@
 .skmap {
   /* 모양과 테두리에는 맑고 선명한 색(--c-*)을, 글자에는 같은 계열의 진한 색(--i-*)을 씁니다.
      글자는 흰색/옅은 배경 위에서 대비 4.5 이상이어야 해서, 선명한 색을 글자에 그대로 쓰지 않습니다. */
-  --c-plan: var(--accent);
-  --i-plan: var(--accent);
-  --c-ops: var(--accent);
-  --i-ops: var(--accent);
-  --c-tool: var(--accent);
-  --i-tool: var(--accent);
-  --c-fe: var(--accent);
-  --i-fe: var(--accent);
+  --c-plan: #0038ff;
+  --i-plan: #0038ff;
+  --c-ops: #ea580c;
+  --i-ops: #c2410c;
+  --c-fe: #65a30d;
+  --i-fe: #3f6212;
   margin-top: 36px;
   display: grid;
   gap: 20px;
@@ -68,7 +66,7 @@
   left: 50%;
   width: 100%;
   height: 2px;
-  background: var(--line);
+  background: color-mix(in srgb, var(--tone) 35%, var(--line));
 }
 .skflow__node {
   position: relative;
@@ -108,8 +106,8 @@
   }
 }
 .skflow__node[aria-selected='true'] .skflow__dot {
-  background: var(--tone);
-  color: #fff;
+  background: color-mix(in srgb, var(--tone) 22%, #fff);
+  box-shadow: inset 0 0 0 1.5px var(--tone);
 }
 .skflow__name {
   font-size: 13.5px;
@@ -191,7 +189,7 @@
 .skflow__tag {
   max-width: 100%;
   padding: 2px 9px;
-  border: 1px solid var(--tone);
+  border: 1px solid color-mix(in srgb, var(--tone) 45%, #fff);
   border-radius: 999px;
   background: #fff;
   color: var(--tone-ink);
@@ -277,7 +275,7 @@
   transition-delay: 0s;
 }
 .skflow__step.is-hit .skflow__dot {
-  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--tone);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--tone) 25%, transparent);
 }
 @media print {
   .js .skflow__step {

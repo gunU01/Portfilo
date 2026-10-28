@@ -3,8 +3,9 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--ink);
 }
 .nav__in {
   display: flex;
@@ -43,7 +44,7 @@
 }
 @media (hover: hover) {
   .nav__links a:hover,
-  .nav__links button:hover {
+.nav__links button:hover {
     color: var(--ink);
   }
 }
