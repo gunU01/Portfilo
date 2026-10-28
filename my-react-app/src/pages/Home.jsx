@@ -96,8 +96,10 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <div className="wrap hero__spec">
-        <Spec />
+      <div className="hero__spec">
+        <div className="wrap">
+          <Spec />
+        </div>
       </div>
       <Overview />
     </>

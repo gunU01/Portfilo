@@ -213,9 +213,11 @@
 .pin:not([data-step='0']) .pin__rail span {
   opacity: 0;
 }
+/* 고정 구간 바로 아래의 ABOUT ME: 첫 화면과 같은 회색 바탕 위에 놓아 한 덩어리로 이어지게 합니다 */
 .hero__spec {
-  padding-top: 56px;
-  padding-bottom: 8px;
+  padding-top: 8px;
+  padding-bottom: 64px;
+  background: var(--surface);
 }
 .hero__spec .spec {
   max-width: 420px;
