@@ -3,23 +3,25 @@ import { profile } from '../data/profile.js'
 import Spec from '../components/Spec.jsx'
 import { useReveal } from '../lib/useReveal.js'
 import { usePointerVars } from '../lib/usePointerVars.js'
+import { usePinScroll } from '../lib/usePinScroll.js'
 
 function Hero() {
   const { hero } = profile
-  const ref = usePointerVars() // 마우스를 따라 큰 글자가 줄마다 다르게 살짝 움직입니다
+  const pinRef = usePinScroll(hero.keywords.length) // 스크롤하는 동안 화면이 고정되고, 키워드와 문장이 차례로 켜집니다
+  const pointerRef = usePointerVars() // 마우스를 따라 큰 글자가 줄마다 다르게 살짝 움직입니다
   return (
-    <section className="hero" aria-labelledby="hero-title" ref={ref}>
-      <div className="wrap">
-        <p className="kw" aria-hidden="true">
-          {hero.keywords.map((k, i) => (
-            <span key={k} style={{ '--i': i }}>
-              {k}
-            </span>
-          ))}
-        </p>
+    <section className="hero pin" aria-labelledby="hero-title" ref={pinRef} data-step="0">
+      <div className="pin__stage" ref={pointerRef}>
+        <div className="wrap">
+          <p className="kw" aria-hidden="true">
+            {hero.keywords.map((k, i) => (
+              <span key={k} style={{ '--i': i }}>
+                {k}
+              </span>
+            ))}
+          </p>
 
-        <div className="hero__grid">
-          <div>
+          <div className="hero__body">
             <h1 id="hero-title">
               {hero.title.map((line, i) => (
                 <Fragment key={line}>
@@ -33,7 +35,14 @@ function Hero() {
                 </Fragment>
               ))}
             </h1>
-            <p className="hero__lead">{hero.lead}</p>
+            <p className="hero__lead">
+              <span className="hero__s">{hero.lead.intro}</span>{' '}
+              {hero.lead.steps.map((t) => (
+                <span className="hero__s" key={t}>
+                  {t}{' '}
+                </span>
+              ))}
+            </p>
             <div className="hero__cta">
               <a className="btn btn--solid ink follow magnet" href="#/project">
                 프로젝트 보기
@@ -42,11 +51,16 @@ function Hero() {
                 책상에서 둘러보기
               </a>
             </div>
+            <div className="pin__rail" aria-hidden="true">
+              {hero.keywords.map((k) => (
+                <i key={k} />
+              ))}
+              <span>스크롤해서 보기</span>
+            </div>
           </div>
-
-          <Spec />
         </div>
       </div>
+      <div className="pin__track" aria-hidden="true" />
     </section>
   )
 }
@@ -82,6 +96,9 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <div className="wrap hero__spec">
+        <Spec />
+      </div>
       <Overview />
     </>
   )

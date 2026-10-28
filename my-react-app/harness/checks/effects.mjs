@@ -67,6 +67,26 @@ export default {
       assert.ok((await shift(1)) >= 0, '첫 줄은 왼쪽(밖)으로 나가면 안 됩니다')
     })
 
+    await t('홈 첫 화면: 스크롤하는 동안 화면에 고정되고, 내려갈수록 단계가 0 → 1 → 2 로 켜진다', async () => {
+      await go(page, url, '/')
+      await page.waitForSelector('.pin__stage')
+      const read = () => page.evaluate(() => ({ step: document.querySelector('.pin').dataset.step, top: Math.round(document.querySelector('.pin__stage').getBoundingClientRect().top) }))
+      const at = async (y) => {
+        await page.evaluate((yy) => window.scrollTo({ top: yy, behavior: 'instant' }), y)
+        await page.waitForTimeout(300)
+        return read()
+      }
+      const h = page.viewportSize().height
+      const a = await at(0)
+      const b = await at(h * 0.9)
+      const c = await at(h * 1.7)
+      assert.equal(a.step, '0')
+      assert.equal(b.step, '1')
+      assert.equal(c.step, '2')
+      assert.ok(a.top === b.top && b.top === c.top, `무대가 고정되어 있지 않습니다: ${a.top}, ${b.top}, ${c.top}`)
+      await at(0)
+    })
+
     await t('프로젝트 카드: 마우스 쪽으로 기울고 나가면 돌아온다', async () => {
       await go(page, url, '/project')
       await page.waitForSelector('.pcard')

@@ -68,39 +68,3 @@
     transform: none;
   }
 }
-
-
-/* ---------- 홈: 화면 하나씩 멈추는 스크롤(큰 화면에서만) ----------
-   첫 화면(Hero), OVERVIEW, 푸터가 스크롤할 때 한 화면씩 자리 잡습니다. 터치 화면이나 낮은 화면에서는 일반 스크롤입니다. */
-@media (hover: hover) and (min-width: 900px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
-  html:has(main[data-path='/']) {
-    scroll-snap-type: y mandatory;
-    scroll-padding-top: 61px; /* 상단 메뉴 높이: 다음 화면이 메뉴 바로 아래에서 시작 */
-  }
-  main[data-path='/'] > .hero,
-  main[data-path='/'] > .ov {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: calc(100svh - 61px);
-    scroll-snap-align: start;
-  }
-  main[data-path='/'] > .hero > .wrap,
-  main[data-path='/'] > .ov > .wrap {
-    width: 100%;
-  }
-  /* 첫 화면이 한 화면에 들어오도록 큰 글자와 여백을 화면 높이에 맞춥니다 */
-  main[data-path='/'] > .hero {
-    padding: 24px 0;
-  }
-  main[data-path='/'] .kw {
-    margin-top: 12px;
-    font-size: clamp(2.3rem, min(7.6vw, 11vh), 6.4rem);
-  }
-  main[data-path='/'] .hero__grid {
-    margin-top: 28px;
-  }
-  html:has(main[data-path='/']) .footer {
-    scroll-snap-align: end;
-  }
-}

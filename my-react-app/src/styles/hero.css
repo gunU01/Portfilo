@@ -126,3 +126,110 @@
   font-weight: 600;
 }
 
+
+/* ---------- 첫 화면: 스크롤하는 동안 고정(.pin) ----------
+   무대(.pin__stage)가 메뉴 아래에 붙어 있고, 구간 끝(.pin__track)까지 스크롤하는 동안 키워드와 문장이 차례로 켜집니다(data-step 0~2). */
+.hero.pin {
+  padding: 0;
+}
+.pin__stage {
+  position: sticky;
+  top: 61px; /* 상단 메뉴 높이 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100svh - 61px);
+  padding: 24px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.pin__stage > .wrap {
+  width: 100%;
+}
+.pin__track {
+  height: 240svh;
+}
+.pin .kw {
+  margin-top: 0;
+  font-size: clamp(2.3rem, min(7.6vw, 11vh), 6.4rem);
+}
+.pin .hero__body {
+  margin-top: 28px;
+  max-width: 760px;
+}
+.pin {
+  --kw-off: #d9d9d9;
+}
+.pin .kw span {
+  color: var(--kw-off);
+  transition: color 0.5s ease;
+}
+.pin .kw span:nth-child(1),
+.pin[data-step='1'] .kw span:nth-child(2),
+.pin[data-step='2'] .kw span:nth-child(2),
+.pin[data-step='2'] .kw span:nth-child(3) {
+  color: var(--ink);
+}
+.pin[data-step='1'] .kw span:nth-child(2),
+.pin[data-step='2'] .kw span:nth-child(2) {
+  color: var(--accent);
+}
+/* 문장은 키워드와 같은 순서로 이어 붙으며 켜집니다(맨 앞 소개 문장은 처음부터) */
+.hero__s {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.hero__s:nth-child(-n + 2),
+.pin[data-step='1'] .hero__s:nth-child(-n + 3),
+.pin[data-step='2'] .hero__s {
+  opacity: 1;
+}
+/* 진행 표시: 단계마다 한 칸씩 차오르고, 처음에만 안내 문구가 보입니다 */
+.pin__rail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 28px;
+  color: var(--faint);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.pin__rail i {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  transition: background 0.4s ease;
+}
+.pin[data-step='0'] .pin__rail i:nth-child(1),
+.pin[data-step='1'] .pin__rail i:nth-child(-n + 2),
+.pin[data-step='2'] .pin__rail i {
+  background: var(--ink);
+}
+.pin__rail span {
+  margin-left: 8px;
+  transition: opacity 0.4s ease;
+}
+.pin:not([data-step='0']) .pin__rail span {
+  opacity: 0;
+}
+.hero__spec {
+  padding-top: 56px;
+  padding-bottom: 8px;
+}
+.hero__spec .spec {
+  max-width: 420px;
+}
+/* 모션 줄이기: 고정하지 않고 처음부터 모두 켜서 보여 줍니다 */
+@media (prefers-reduced-motion: reduce) {
+  .pin__stage {
+    position: static;
+  }
+  .pin__track,
+  .pin__rail {
+    display: none;
+  }
+  .hero__s {
+    opacity: 1;
+  }
+}
