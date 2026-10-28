@@ -204,37 +204,9 @@
   }
 }
 
-/* ---------- 단계 아래에 붙는 도구 ---------- */
-.skflow__tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 0 44px;
-}
-.skflow__tag {
-  max-width: 100%;
-  padding: 2px 9px;
-  border: 1px solid color-mix(in srgb, var(--tone) 45%, #fff);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--tone-ink);
-  font-size: 11.5px;
-  font-weight: 700;
-  line-height: 1.5;
-  word-break: keep-all;
-  transition: background 0.25s ease, color 0.25s ease;
-}
-.skflow__tag.is-active {
-  background: var(--tone-ink);
-  border-color: var(--tone-ink);
-  color: #fff;
-}
-
 /* ---------- 도구 고르기 ---------- */
 .sktools {
-  margin-top: 22px;
-  padding-top: 18px;
-  border-top: 1px dashed var(--line);
+  margin-top: 18px;
 }
 .sktools__t {
   margin: 0;
@@ -277,77 +249,29 @@
   font-size: 13px;
 }
 
-/* ---------- 도구 × 단계 표 ---------- */
-.skgrid {
-  margin-top: 12px;
-  display: grid;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: #fff;
-  overflow: hidden;
+/* ---------- 묶음 카드 아래의 '쓴 도구' ---------- */
+.skflow__phase {
+  display: flex;
+  flex-direction: column;
 }
-.skgrid__row {
-  display: grid;
-  grid-template-columns: minmax(112px, 170px) repeat(var(--n), minmax(0, 1fr));
-  align-items: center;
-  border-top: 1px solid var(--line);
-  transition: opacity 0.25s ease, background 0.25s ease;
+.skflow__stack {
+  margin: auto -18px 0;
+  padding: 12px 18px 14px;
+  border-top: 1px dashed var(--line);
+  border-radius: 0 0 11px 11px;
+  background: color-mix(in srgb, var(--tone) 8%, #fff);
 }
-.skgrid__row--head {
-  border-top: 0;
-  background: var(--surface);
-}
-.skgrid__row.is-off {
-  opacity: 0.35;
-}
-.skgrid__row.is-pick {
-  background: var(--accent-soft);
-}
-.skgrid__tool {
-  justify-self: start;
-  margin: 8px 10px;
-  text-align: left;
-  line-height: 1.35;
-}
-.skgrid__no,
-.skgrid__cell {
-  display: grid;
-  place-items: center;
-  align-self: stretch;
-  min-height: 34px;
-}
-.skgrid__no {
-  color: var(--faint);
-  font-size: 12.5px;
+.skflow__stack small {
+  display: block;
+  color: var(--tone-ink);
+  font-size: 12px;
   font-weight: 800;
 }
-.skgrid__no--0 { color: var(--i-plan); }
-.skgrid__no--1 { color: var(--i-ops); }
-.skgrid__no--2 { color: var(--i-fe); }
-.skgrid__cell + .skgrid__cell,
-.skgrid__no + .skgrid__no {
-  border-left: 1px dashed var(--line);
-}
-.skgrid__cell.is-cur,
-.skgrid__no.is-cur {
-  background: color-mix(in srgb, var(--ink) 5%, transparent);
-}
-.skgrid__no.is-cur {
-  color: var(--ink);
-}
-.skgrid__cell i {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--c-plan);
-}
-.skgrid__cell--1 i {
-  border-radius: 4px;
-  background: var(--c-ops);
-}
-.skgrid__cell--2 i {
-  border-radius: 6px 6px 6px 2px;
-  background: var(--c-fe);
+.skflow__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
 }
 
 /* ---------- 움직임: 단계가 차례로 켜지고, 도구를 고르면 나머지가 흐려짐 ---------- */
@@ -376,7 +300,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .js .skflow__step,
-  .skflow__tag,
   .sktools__chip {
     transition: none;
   }
@@ -397,19 +320,6 @@
   }
 }
 @media (max-width: 720px) {
-  .skgrid__row {
-    grid-template-columns: 112px repeat(var(--n), minmax(0, 1fr));
-  }
-  .skgrid__tool {
-    margin: 6px 6px;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12.5px;
-  }
-  .skgrid__cell i {
-    width: 11px;
-    height: 11px;
-  }
   .skflow {
     padding: 16px 14px;
   }

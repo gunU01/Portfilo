@@ -21,6 +21,8 @@ export default function SkillMap({ groups, tools }) {
   const current = steps[index]
   const uses = (s) => tool && (s.tools ?? []).includes(tool)
   const hits = tool ? steps.filter(uses).length : 0
+  // 묶음마다 그 묶음에서 쓴 도구(중복 없이, 도구 목록의 순서대로)
+  const phaseTools = groups.map((_, phase) => tools.filter((t) => steps.some((s) => s.phase === phase && (s.tools ?? []).includes(t.name))))
   const activeTool = tools.find((t) => t.name === tool)
 
   const onKeyDown = (e) => {
@@ -78,20 +80,23 @@ export default function SkillMap({ groups, tools }) {
                         <span className="skflow__dot tnum">{i + 1}</span>
                         <span className="skflow__name">{s.name}</span>
                       </button>
-                      {s.tools && (
-                        <span className="skflow__tools" aria-label="쓴 도구">
-                          {s.tools.map((t) => (
-                            <span key={t} className={t === tool ? 'skflow__tag is-active' : 'skflow__tag'}>
-                              {t}
-                            </span>
-                          ))}
-                        </span>
-                      )}
                       {/* 좁은 화면에서는 고른 단계의 설명만 그 아래에 펼칩니다 */}
                       <p className="skflow__inline">{s.used}</p>
                     </li>
                   ))}
               </ol>
+              {phaseTools[phase].length > 0 && (
+                <footer className="skflow__stack">
+                  <small>쓴 도구</small>
+                  <div className="skflow__chips" role="group" aria-label={`${g.title}에서 쓴 도구`}>
+                    {phaseTools[phase].map((t) => (
+                      <button key={t.name} type="button" className="sktools__chip ink" aria-pressed={t.name === tool} onClick={() => pickTool(t.name)}>
+                        {t.name}
+                      </button>
+                    ))}
+                  </div>
+                </footer>
+              )}
             </section>
           ))}
         </div>
@@ -106,29 +111,6 @@ export default function SkillMap({ groups, tools }) {
 
         <div className="sktools">
           <p className="sktools__t">도구를 누르면 쓴 단계가 켜집니다</p>
-          {/* 도구 × 단계 표: 점이 찍힌 칸이 그 도구를 쓴 단계입니다 */}
-          <div className="skgrid" role="group" aria-label="도구" style={{ '--n': steps.length }}>
-            <div className="skgrid__row skgrid__row--head" aria-hidden="true">
-              <span />
-              {steps.map((s, i) => (
-                <span key={s.name} className={`skgrid__no skgrid__no--${s.phase}${i === index ? ' is-cur' : ''} tnum`}>
-                  {i + 1}
-                </span>
-              ))}
-            </div>
-            {tools.map((t) => (
-              <div key={t.name} className={`skgrid__row${tool ? (t.name === tool ? ' is-pick' : ' is-off') : ''}`}>
-                <button type="button" className="sktools__chip skgrid__tool ink" aria-pressed={t.name === tool} onClick={() => pickTool(t.name)}>
-                  {t.name}
-                </button>
-                {steps.map((s, i) => (
-                  <span key={s.name} className={`skgrid__cell skgrid__cell--${s.phase}${i === index ? ' is-cur' : ''}`}>
-                    {(s.tools ?? []).includes(t.name) && <i />}
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
           <p className="sktools__desc" aria-live="polite">
             {activeTool ? (
               <>

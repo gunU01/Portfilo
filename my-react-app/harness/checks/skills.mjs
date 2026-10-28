@@ -4,7 +4,7 @@ import { go } from '../lib/site.mjs'
 
 export default {
   name: 'skills',
-  about: '소개 페이지의 기술 도식: 단계 선택과 방향키 이동, 단계 아래의 도구, 도구를 고르면 쓴 단계가 켜짐, 모바일에서는 고른 단계의 설명만 펼쳐짐',
+  about: '소개 페이지의 기술 도식: 단계 선택과 방향키 이동, 묶음 카드 아래의 도구, 도구를 고르면 쓴 단계가 켜짐, 모바일에서는 고른 단계의 설명만 펼쳐짐',
   async run({ browser, url, t }) {
     const { page, context } = await openPage(browser)
     await go(page, url, '/about')
@@ -25,14 +25,13 @@ export default {
       await page.keyboard.press('End')
       assert.equal(await selectedId(), `skflow-tab-${last}`)
     })
-    await t('단계 아래에 그 단계에서 쓴 도구가 붙고, 도구를 쓰지 않은 단계에는 붙지 않는다', async () => {
-      const tagged = await page.$$eval('.skflow__step', (steps) => steps.map((s) => s.querySelectorAll('.skflow__tag').length))
-      assert.ok(tagged.some((n) => n > 0), '도구가 붙은 단계가 없습니다')
-      assert.ok(tagged.some((n) => n === 0), '모든 단계에 도구가 붙어 있습니다')
+    await t('묶음 카드마다 그 묶음에서 쓴 도구가 붙고, 도구를 쓰지 않은 묶음에는 붙지 않는다', async () => {
+      const chips = await page.$$eval('.skflow__phase', (ps) => ps.map((p) => p.querySelectorAll('.sktools__chip').length))
+      assert.ok(chips.length >= 2 && chips.some((n) => n > 0), '도구가 붙은 묶음이 없습니다')
     })
     await t('도구를 고르면 aria-pressed 가 바뀌고, 그 도구를 쓴 단계만 켜지며, 다시 누르면 풀린다', async () => {
       const chips = page.locator('.sktools__chip')
-      const notion = chips.filter({ hasText: 'Notion' })
+      const notion = chips.filter({ hasText: 'Notion' }).first()
       await notion.click()
       assert.equal(await notion.getAttribute('aria-pressed'), 'true')
       const hit = await page.locator('.skflow__step.is-hit').count()
