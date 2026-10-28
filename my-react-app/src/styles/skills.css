@@ -242,14 +242,8 @@
   font-size: 13px;
   font-weight: 700;
 }
-.sktools__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
-}
 .sktools__chip {
-  padding: 7px 14px;
+  padding: 6px 12px;
   border: 1.5px solid var(--line);
   border-radius: 999px;
   background: #fff;
@@ -281,6 +275,79 @@
 .sktools__n {
   color: var(--faint);
   font-size: 13px;
+}
+
+/* ---------- 도구 × 단계 표 ---------- */
+.skgrid {
+  margin-top: 12px;
+  display: grid;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+.skgrid__row {
+  display: grid;
+  grid-template-columns: minmax(112px, 170px) repeat(var(--n), minmax(0, 1fr));
+  align-items: center;
+  border-top: 1px solid var(--line);
+  transition: opacity 0.25s ease, background 0.25s ease;
+}
+.skgrid__row--head {
+  border-top: 0;
+  background: var(--surface);
+}
+.skgrid__row.is-off {
+  opacity: 0.35;
+}
+.skgrid__row.is-pick {
+  background: var(--accent-soft);
+}
+.skgrid__tool {
+  justify-self: start;
+  margin: 8px 10px;
+  text-align: left;
+  line-height: 1.35;
+}
+.skgrid__no,
+.skgrid__cell {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  min-height: 34px;
+}
+.skgrid__no {
+  color: var(--faint);
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.skgrid__no--0 { color: var(--i-plan); }
+.skgrid__no--1 { color: var(--i-ops); }
+.skgrid__no--2 { color: var(--i-fe); }
+.skgrid__cell + .skgrid__cell,
+.skgrid__no + .skgrid__no {
+  border-left: 1px dashed var(--line);
+}
+.skgrid__cell.is-cur,
+.skgrid__no.is-cur {
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+}
+.skgrid__no.is-cur {
+  color: var(--ink);
+}
+.skgrid__cell i {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--c-plan);
+}
+.skgrid__cell--1 i {
+  border-radius: 4px;
+  background: var(--c-ops);
+}
+.skgrid__cell--2 i {
+  border-radius: 6px 6px 6px 2px;
+  background: var(--c-fe);
 }
 
 /* ---------- 움직임: 단계가 차례로 켜지고, 도구를 고르면 나머지가 흐려짐 ---------- */
@@ -330,6 +397,19 @@
   }
 }
 @media (max-width: 720px) {
+  .skgrid__row {
+    grid-template-columns: 112px repeat(var(--n), minmax(0, 1fr));
+  }
+  .skgrid__tool {
+    margin: 6px 6px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12.5px;
+  }
+  .skgrid__cell i {
+    width: 11px;
+    height: 11px;
+  }
   .skflow {
     padding: 16px 14px;
   }
