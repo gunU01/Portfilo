@@ -48,15 +48,11 @@
 }
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 84px;
+  scroll-padding-top: 84px; /* 부드러운 이동은 목차 버튼(scrollToId)에서만 코드로 지정합니다 */
   -webkit-text-size-adjust: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   * {
     transition: none !important;
     animation: none !important;

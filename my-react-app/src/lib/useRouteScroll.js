@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { jumpTo, scrollToIdWhenReady, scrollToYWhenReady } from './dom.js'
 
 // 화면을 옮길 때의 스크롤.
-// - 새 화면은 맨 위(또는 ?s=<구간>)에서 바로 시작합니다. 전체 스크롤이 부드럽게 설정되어 있어도 위로 훑어 올라가지 않도록 즉시 옮깁니다.
+// - 새 화면은 맨 위(또는 ?s=<구간>)에서 바로 시작합니다. 위로 훑어 올라가지 않도록 늘 즉시 옮깁니다(부드러운 이동은 목차 버튼만).
 // - 뒤로·앞으로 가기는 그 화면을 떠날 때의 스크롤 위치로 돌아갑니다(예: 목록 → 케이스 → 뒤로 가면 보던 자리).
 //   이동 방식은 Navigation API 로 알 수 있고, 지원하지 않는 브라우저에서는 늘 맨 위에서 시작합니다.
 export function useRouteScroll(path, section) {

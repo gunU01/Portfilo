@@ -1,4 +1,6 @@
-export const scrollToId = (id) => document.getElementById(id)?.scrollIntoView()
+// 목차 버튼처럼 사람이 눌러서 옮기는 이동만 부드럽게 합니다(모션 줄이기 설정에서는 바로). 화면을 옮길 때의 이동은 늘 바로 갑니다.
+export const scrollToId = (id) =>
+  document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
 
 // 페이지 코드를 늦게 받는 경로(?s=<섹션 id>)에서는 이동하려는 순간 대상이 아직 없을 수 있습니다.
 // 대상이 생길 때까지 프레임마다 확인하다가(최대 약 3초) 생기면 이동합니다. 돌려주는 함수를 부르면 멈춥니다.
@@ -25,11 +27,7 @@ export function scrollToYWhenReady(y, frames = 120) {
   return () => cancelAnimationFrame(raf)
 }
 
-// 전체 스크롤이 부드럽게 설정되어 있어도(CSS scroll-behavior) 애니메이션 없이 그 높이로 바로 이동합니다.
-// behavior: 'instant' 만으로는 진행 중이던 부드러운 스크롤이 끝까지 지워지지 않는 경우가 있어, 잠깐 auto 로 바꿔 이동합니다.
+// 애니메이션 없이 그 높이로 바로 이동합니다. 진행 중이던 부드러운 스크롤(목차 버튼)도 여기서 멈춥니다.
 export function jumpTo(top) {
-  const root = document.documentElement
-  root.style.scrollBehavior = 'auto'
-  window.scrollTo(0, top)
-  root.style.scrollBehavior = ''
+  window.scrollTo({ top, left: 0, behavior: 'instant' })
 }
