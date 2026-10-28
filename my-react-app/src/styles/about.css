@@ -43,10 +43,12 @@
   line-height: 1.65;
 }
 .tl__title {
+  display: block;
   font-weight: 700;
   font-size: 16px;
 }
 .tl__desc {
+  display: block;
   margin-top: 4px;
   color: var(--muted);
   font-size: 15px;
@@ -91,3 +93,169 @@
   }
 }
 
+
+/* ---------- 소개 흐름도 ---------- */
+.iflow {
+  margin-top: 24px;
+}
+.iflow__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+}
+.iflow__step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 16px 18px;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--ink);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.iflow__step.is-now {
+  border-top-color: var(--accent);
+  background: var(--accent-soft);
+}
+.iflow__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 24px;
+  right: -22px;
+  width: 12px;
+  height: 12px;
+  border-top: 3px solid var(--ink);
+  border-right: 3px solid var(--ink);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+.iflow__label {
+  color: var(--faint);
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.iflow__step.is-now .iflow__label {
+  color: var(--accent-ink);
+}
+.iflow__title {
+  font-size: 18px;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+.iflow__text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+.iflow__chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.iflow__chips li {
+  padding: 3px 9px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, #fff);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--accent-ink);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+.iflow__principle {
+  margin: 18px 0 0;
+  padding: 14px 18px;
+  border-left: 4px solid var(--accent);
+  border-radius: 4px 10px 10px 4px;
+  background: var(--accent-soft);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+@media (max-width: 720px) {
+  .iflow__steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+  }
+  .iflow__step:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -21px;
+    left: calc(50% - 6px);
+    transform: rotate(135deg);
+  }
+}
+
+/* ---------- 활동 기록: 기간 막대 ---------- */
+.tl__main {
+  min-width: 0;
+}
+.tl__range {
+  position: relative;
+  display: block;
+  height: 8px;
+  margin-top: 10px;
+  border-radius: 4px;
+  background: var(--sunken);
+}
+.tl__bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 6px;
+  border-radius: 4px;
+  background: var(--bar, var(--ink));
+  transition: opacity 0.4s ease;
+}
+.tl__bar[data-tone='blue'] {
+  --bar: #0038ff;
+}
+.tl__bar[data-tone='orange'] {
+  --bar: #ea580c;
+}
+.tl__bar[data-tone='green'] {
+  --bar: #65a30d;
+}
+/* 예정은 빗금으로 */
+.tl__bar.is-plan {
+  background: repeating-linear-gradient(135deg, var(--bar) 0 4px, color-mix(in srgb, var(--bar) 30%, #fff) 4px 8px);
+}
+.tl--live .tl__item:not(.is-passed) .tl__bar {
+  opacity: 0.35;
+}
+.tl__axis {
+  position: relative;
+  height: 16px;
+  margin: 24px 0 -16px 192px;
+  color: var(--faint);
+  font-size: 12px;
+  font-weight: 700;
+}
+.tl__axis span {
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .tl__axis {
+    margin-left: 28px;
+  }
+}
+
+/* 소개 영역의 파랑만 한 단계 연하게(글자 대비 4.5 이상은 유지) */
+.ab__intro {
+  --accent: #5b7fe6;
+  --accent-ink: #3b64d9;
+  --accent-soft: #eef2fd;
+}

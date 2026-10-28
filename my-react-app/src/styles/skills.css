@@ -4,10 +4,10 @@
      글자는 흰색/옅은 배경 위에서 대비 4.5 이상이어야 해서, 선명한 색을 글자에 그대로 쓰지 않습니다. */
   --c-plan: #0038ff;
   --i-plan: #0038ff;
-  --c-ops: #ea580c;
-  --i-ops: #c2410c;
-  --c-fe: #65a30d;
-  --i-fe: #3f6212;
+  --c-ops: #0038ff;
+  --i-ops: #0038ff;
+  --c-fe: #0038ff;
+  --i-fe: #0038ff;
   margin-top: 36px;
   display: grid;
   gap: 20px;
@@ -255,7 +255,7 @@
   flex-direction: column;
 }
 .skflow__stack {
-  margin: auto -18px 0;
+  margin: auto -18px -8px;
   padding: 12px 18px 14px;
   border-top: 1px dashed var(--line);
   border-radius: 0 0 11px 11px;

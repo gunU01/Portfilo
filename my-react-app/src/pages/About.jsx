@@ -8,7 +8,9 @@ import { useReveal } from '../lib/useReveal.js'
 import { scrollToId } from '../lib/dom.js'
 import Spec from '../components/Spec.jsx'
 import SkillMap from '../components/SkillMap.jsx'
-import Rich from '../components/Rich.jsx'
+import IntroFlow from '../components/IntroFlow.jsx'
+import { TimelineBar, TimelineAxis } from '../components/TimelineBar.jsx'
+import { boundsOf } from '../lib/months.js'
 
 const SECTIONS = [
   ['intro', '소개'],
@@ -37,6 +39,7 @@ export default function About() {
   const { about } = profile
   useReveal()
   // 읽는 위치에 맞춰 활동 기록과 대회 참가의 진행선이 차오릅니다(목록마다 따로)
+  const bounds = boundsOf(about.timeline)
   const historyRef = useTimelineProgress()
   const contestsRef = useTimelineProgress()
 
@@ -50,13 +53,7 @@ export default function About() {
             <h1 className="ab__h" id="ab-title">
               소개
             </h1>
-            <div className="ab__text">
-              {about.paragraphs.map((p) => (
-                <p key={p}>
-                  <Rich text={p} />
-                </p>
-              ))}
-            </div>
+            <IntroFlow flow={about.flow} />
           </div>
           <div className="ab__side">
             <Spec />
@@ -75,13 +72,27 @@ export default function About() {
         <h2 className="ab__h" id="hi-title">
           활동 기록
         </h2>
-        <ol className="tl tl--live" ref={historyRef}>
-          {about.timeline.map((t) => (
-            <li className="tl__item reveal" key={t.when}>
-              <span className="tl__when tnum">{t.when}</span>
-              <p className="tl__text">{t.text}</p>
-            </li>
-          ))}
+        <TimelineAxis bounds={bounds} />
+        <ol className="tl tl--live tl--range" ref={historyRef}>
+          {about.timeline.map((t) => {
+            const [title, ...desc] = t.text.split('\n')
+            return (
+              <li className="tl__item reveal" key={`${t.when}-${title}`}>
+                <span className="tl__when tnum">{t.when}</span>
+                <div className="tl__main">
+                  <p className="tl__text">
+                    <span className="tl__title">{title}</span>
+                    {desc.map((d) => (
+                      <span className="tl__desc" key={d}>
+                        {d}
+                      </span>
+                    ))}
+                  </p>
+                  <TimelineBar range={t.range} bounds={bounds} plan={t.plan} tone={t.tone} />
+                </div>
+              </li>
+            )
+          })}
         </ol>
       </section>
 
