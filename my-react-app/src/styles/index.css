@@ -5,6 +5,13 @@
 @import './hero.css';
 @import './about.css';
 @import './case.css';
+@import './blocks-text.css';
+@import './blocks-data.css';
+@import './blocks-record.css';
+@import './blocks-chart.css';
+@import './case-next.css';
+@import './blocks-extra.css';
+@import './case-narrow.css';
 @import './responsive.css';
 @import './print.css';
 @import './desk.css';

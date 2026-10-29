@@ -1,0 +1,129 @@
+/* ---------- 본문 블록: 결정 기록, 역할, 근거 자료 ---------- */
+.decisions {
+  display: grid;
+  gap: 10px;
+}
+.dec {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color 0.18s ease;
+}
+.dec[open] {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+}
+@media (hover: hover) {
+  .dec:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  }
+}
+.dec summary {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 22px;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.45;
+}
+.dec summary::-webkit-details-marker {
+  display: none;
+}
+.dec summary::after {
+  content: '';
+  width: 9px;
+  height: 9px;
+  margin-right: 4px;
+  border-right: 2px solid var(--accent-ink);
+  border-bottom: 2px solid var(--accent-ink);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.2s ease;
+}
+.dec[open] summary::after {
+  transform: rotate(-135deg) translateY(-2px);
+}
+.dec__n {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.dec__body {
+  margin: 0 22px 20px;
+  font-size: 15px;
+  line-height: 1.7;
+  border-top: 1px solid var(--line);
+}
+.dec__body > div {
+  display: grid;
+  grid-template-columns: 4.5em minmax(0, 1fr);
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.dec__body > div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.dec__body dt {
+  padding-top: 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-ink);
+}
+.dec__body dd {
+  margin: 0;
+}
+.dec__body > div:nth-child(2) dd {
+  font-weight: 600;
+}
+
+.roles {
+  display: grid;
+  gap: 12px;
+}
+.roles__card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+.roles__card h4 {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin-bottom: 10px;
+}
+.roles__role {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sources {
+  margin-top: 8px;
+  padding: 22px 0 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--muted);
+}
+.sources h2 {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 10px;
+}
+.sources li {
+  padding: 3px 0;
+}

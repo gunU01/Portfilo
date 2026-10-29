@@ -1,0 +1,145 @@
+/* ---------- 본문 블록: 숫자 카드, 표, 전/후, 흐름 ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+.stats--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stat__v {
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+}
+.stat__l {
+  font-size: 15px;
+  font-weight: 600;
+}
+.stat__n {
+  font-size: 13px;
+  color: var(--faint);
+  line-height: 1.5;
+}
+
+.tablewrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.table th {
+  text-align: left;
+  font-size: 13px;
+  color: var(--faint);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 12px 16px;
+  background: var(--sunken);
+  white-space: nowrap;
+}
+.table td {
+  padding: 14px 16px;
+  vertical-align: top;
+  border-top: 1px dashed var(--line);
+}
+.table tr:first-child td {
+  border-top: 0;
+}
+.table td:first-child {
+  font-weight: 600;
+}
+.table--id td:first-child {
+  white-space: nowrap;
+}
+
+.ba {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.ba__col {
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.ba__col--after {
+  background: var(--accent-soft);
+  border-color: transparent;
+}
+.ba__col h4 {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+.ba__col--after h4 {
+  color: var(--accent-ink);
+}
+.ba__col li {
+  font-size: 15px;
+  padding: 7px 0;
+  border-top: 1px dashed color-mix(in srgb, var(--faint) 40%, transparent);
+  line-height: 1.6;
+}
+.ba__col li:first-child {
+  border-top: 0;
+}
+
+.flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0;
+  counter-reset: step;
+}
+.flow li {
+  position: relative;
+  counter-increment: step;
+  padding: 16px 18px 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  margin-left: -1px;
+}
+.flow li:first-child {
+  border-radius: var(--radius) 0 0 var(--radius);
+  margin-left: 0;
+}
+.flow li:last-child {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.flow li::before {
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.flow b {
+  display: block;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.flow span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}

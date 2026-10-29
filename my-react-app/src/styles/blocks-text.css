@@ -1,0 +1,87 @@
+/* ---------- 본문 블록: 문단, 목록, 인용, 강조 상자 ---------- */
+.blocks {
+  margin-top: 28px;
+  display: grid;
+  gap: 24px;
+  max-width: var(--read);
+}
+.blocks--wide {
+  max-width: none;
+}
+.blocks > * {
+  min-width: 0;
+}
+.blocks p {
+  color: var(--ink);
+}
+.blocks strong {
+  font-weight: 700;
+  box-shadow: inset 0 -0.42em 0 color-mix(in srgb, var(--accent) 24%, #fff);
+}
+
+.list li {
+  position: relative;
+  padding-left: 20px;
+}
+.list li + li {
+  margin-top: 12px;
+}
+.list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.8em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.quote {
+  margin: 0;
+  padding: 6px 0 6px 22px;
+  border-left: 3px solid var(--accent);
+  font-size: 19px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+.quote cite {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-style: normal;
+  color: var(--faint);
+}
+
+.callout {
+  padding: 18px 22px;
+  border-radius: var(--radius);
+  background: var(--sunken);
+  border: 1px solid var(--line);
+}
+.callout--key {
+  background: var(--accent-soft);
+  border-color: transparent;
+}
+.footnote {
+  margin-top: -4px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--ink) 52%, var(--bg));
+}
+.callout__t {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+  color: var(--muted);
+}
+.callout--key .callout__t {
+  color: var(--accent-ink);
+}
+.callout p {
+  font-size: 16px;
+}
+.callout strong {
+  background: none;
+}
