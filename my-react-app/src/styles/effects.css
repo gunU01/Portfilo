@@ -162,6 +162,7 @@ main:has(> .page-wait) ~ .footer {
 }
 .footer__rows li > a {
   grid-column: 1;
+  margin-right: -8px; /* 링크의 바깥 여백(-12px)이 복사 버튼(오른쪽 28px)과 겹치지 않도록 4px 줄임: 버튼 쪽을 잘못 눌리지 않게 */
 }
 .footer__copy {
   grid-column: 2;

@@ -24,7 +24,7 @@
 .name-note {
   display: inline-block;
   margin-left: 0.5em;
-  font-size: 0.36em;
+  font-size: max(0.36em, 12px); /* 제목이 작은 모바일에서도 읽히게 하한을 둡니다 */
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--accent-ink);
