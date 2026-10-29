@@ -5,8 +5,10 @@
 ```bash
 npm install
 npm run dev      # 개발 서버
-npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도 동작). SITE_URL=https://배포주소 를 주면 공유 미리보기(og:image, og:url)가 들어갑니다
+npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도 동작). SITE_URL=https://배포주소 를 주면 공유 미리보기(og:image, og:url), canonical, sitemap.xml 이 들어갑니다
 ```
+
+검색과 속도: 빌드할 때 `src/data` 의 값으로 index.html 의 제목, 설명, 구조화 데이터(JSON-LD), 스크립트 없이 읽는 본문(`<noscript>`)과 robots.txt 가 채워집니다. `vercel.json` 은 해시가 붙은 파일(`/assets/*`)을 오래 캐시하게 합니다(Vercel 의 Root Directory 가 이 폴더일 때 적용).
 
 ## 내용 수정
 

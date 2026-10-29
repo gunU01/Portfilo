@@ -76,13 +76,13 @@ function Overview() {
           <a className="ov__card ink reveal" href="#/project">
             <span className="ov__n tnum">01</span>
             <h3>Project</h3>
-            <p>기획한 서비스와 분석 사례를 담았습니다.</p>
+            <p>{profile.site.pages.project}</p>
             <span className="ov__go">프로젝트 보기 →</span>
           </a>
           <a className="ov__card ink reveal" href="#/about">
             <span className="ov__n tnum">02</span>
             <h3>About</h3>
-            <p>소개와 기술, 활동, 대회와 수상 이력을 담았습니다.</p>
+            <p>{profile.site.pages.about}</p>
             <span className="ov__go">자기소개 보기 →</span>
           </a>
         </div>

@@ -1,10 +1,10 @@
 // 프로젝트 5 — 토스 UX 다이어트(서비스 개선 제안). 카카오페이를 쓰다 토스로 옮겨 온 경험에서 출발해, 저의 계정으로 토스를 사용하며 구성을 정리했습니다.
 // 앱에서 확인한 것만 현황으로 적었고, 광고·중개 매출은 공시에 없어 ‘토스 BM 분석’(value-chain)에서 확인한 대로 수치 없이 둡니다. 표지는 토스 로고입니다.
 import logo from '../assets/toss/logo.webp'
+import { caseMeta } from './case-meta.js'
 
 export const tossux = {
-  slug: 'toss-ux',
-  title: '토스 UX 다이어트',
+  ...caseMeta.tossux,
   subtitle: '카카오페이에서 토스로 옮겨 온 경험에서 출발한 서비스 개선 제안',
   summary: '용건 밖의 것까지 둘러보게 되는 부담에서 출발해, 앱을 직접 확인하고 개선안을 두 가지로 정리했습니다.',
   group: 'ANALYSIS',

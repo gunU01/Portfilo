@@ -2,15 +2,14 @@
 import elderHome from '../assets/haemi/elder-home.webp'
 import elderFeeling from '../assets/haemi/elder-feeling.webp'
 import report from '../assets/haemi/report.webp'
+import { caseMeta } from './case-meta.js'
 
 export const haemi = {
-  slug: 'haemi',
-  title: '해미',
+  ...caseMeta.haemi,
   subtitle: '기억을 매개로 가족이 매일 연결되는 회상 돌봄',
   summary:
     '치매 어르신과 멀리 사는 가족을 사진 및 음성 기반 회상 콘텐츠로 잇는 앱입니다.',
   group: 'TEAM',
-  accent: 'orange', // 이 케이스의 포인트 색(주황). 없으면 기본 파랑
   tags: ['기획 전담', 'FE', '우수상'],
   period: '2026.05 – 08',
   status: '2026 글로벌 피우다 프로젝트 동북권 우수상',

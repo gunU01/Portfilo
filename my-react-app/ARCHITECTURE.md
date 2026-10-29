@@ -59,7 +59,7 @@ main.jsx ─ App.jsx (라우팅)
 | 하고 싶은 일 | 고칠 곳 |
 | --- | --- |
 | 소개, 연락처, 타임라인 문구 | `data/profile.js` |
-| 새 케이스 추가 | `data/<slug>.js` 를 만들고 `data/cases.js` 에 등록. 책상의 기획물 목록에도 넣으려면 `data/desk.js` |
+| 새 케이스 추가 | `data/<slug>.js` 를 만들고 `data/cases.js` 에 등록하며, 주소와 이름, 포인트 색은 `data/case-meta.js`(홈이 바로 쓰는 가벼운 정보, 본문과 분리)에 적습니다. 책상의 기획물 목록에도 넣으려면 `data/desk.js` |
 | 새 페이지 | `pages/<Name>.jsx` 를 만들고 `App.jsx` 의 `PAGES` 에 추가 |
 | 책상에 물건 추가 | `data/desk.js` 의 `spots` + `desk/Tags.jsx` 의 `POSITIONS` + `desk/` 에 SVG 조각 + `DeskScene.jsx` 에 배치 |
 | 새 호버 번짐 대상 | 요소에 `ink` 클래스 (색은 `ink.css` 의 `--paint`) |

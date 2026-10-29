@@ -1,10 +1,10 @@
 // 프로젝트 3 — 토스 BM 분석. 근거는 비바리퍼블리카 「사업보고서(2025.12)」(전자공시시스템 DART, 2026.03.31 접수)에서
 // 직접 확인한 문장과 수치입니다. 보고서에 없는 것은 ‘공시 없음’으로 두고, 결론과 해석은 본문에서 그렇게 밝힙니다.
 import logo from '../assets/toss/logo.webp'
+import { caseMeta } from './case-meta.js'
 
 export const toss = {
-  slug: 'value-chain',
-  title: '토스 BM 분석',
+  ...caseMeta.toss,
   subtitle: '무료 송금 위에 쌓인 수익 구조와 성장의 구성',
   summary:
     '무료 송금 위에 쌓인 수익 구조와 성장의 구성, 그리고 그 안정성을\n사업보고서의 수치로 검증했습니다.',

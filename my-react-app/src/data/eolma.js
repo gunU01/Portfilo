@@ -5,10 +5,10 @@ import confirm from '../assets/eolma/confirm.webp'
 import list from '../assets/eolma/list.webp'
 import assistant from '../assets/eolma/assistant.webp'
 import mascot from '../assets/eolma/mascot.webp'
+import { caseMeta } from './case-meta.js'
 
 export const eolma = {
-  slug: 'howmuch',
-  title: '얼마',
+  ...caseMeta.eolma,
   subtitle: '가장 쉽고 빠른 그룹 정산',
   summary:
     '영수증 한 장으로 정산 요청부터 입금 확인까지 이어지는 그룹 정산 앱입니다.',

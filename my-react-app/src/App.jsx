@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
 import Home from './pages/Home.jsx'
-import { cases } from './data/cases.js'
+import { caseIndex } from './data/case-meta.js'
 import { profile } from './data/profile.js'
 import { useHashRoute } from './lib/useHashRoute.js'
 import { useAccent } from './lib/useAccent.js'
@@ -12,6 +12,7 @@ import { useScrollProgress } from './lib/useScrollProgress.js'
 import { useRouteScroll } from './lib/useRouteScroll.js'
 import { useCanonicalRoute } from './lib/useCanonicalRoute.js'
 import { usePrefetch } from './lib/usePrefetch.js'
+import { usePageMeta } from './lib/usePageMeta.js'
 
 // 처음 화면(홈)만 먼저 받고, 나머지 페이지는 그 경로에 들어갈 때 받습니다.
 const loaders = {
@@ -30,8 +31,8 @@ const Desk = lazy(loaders.desk)
 // 해시 경로 → 페이지. 목록에 없는 경로와 케이스(/work/<slug>)는 아래에서 따로 처리합니다.
 const PAGES = {
   '/desk': { title: '책상', Page: Desk, footer: false },
-  '/project': { title: 'Project', Page: Project },
-  '/about': { title: 'About', Page: About },
+  '/project': { title: 'Project', Page: Project, description: profile.site.pages.project },
+  '/about': { title: 'About', Page: About, description: profile.site.pages.about },
 }
 
 export default function App() {
@@ -40,15 +41,17 @@ export default function App() {
   useFollow()
   useScrollProgress()
   const slug = path.match(/^\/work\/([\w-]+)$/)?.[1]
-  const current = cases.find((c) => c.slug === slug)
+  const current = caseIndex.find((c) => c.slug === slug)
   useAccent(current?.accent)
   const page = PAGES[path]
   const title = current?.title ?? page?.title
 
   useEffect(() => {
-    const base = `${profile.name} 포트폴리오 사이트`
+    const base = profile.site.title
     document.title = title ? `${title} — ${base}` : base
   }, [title])
+
+  usePageMeta(page?.description)
 
   // 라우트가 바뀌면 맨 위(또는 ?s= 구간)에서 시작하고, 뒤로·앞으로 가기는 떠난 위치로 돌아갑니다
   useRouteScroll(path, section)
@@ -72,7 +75,7 @@ export default function App() {
       {page?.footer !== false && <div className="progress" aria-hidden="true" />}
       <Nav path={path} />
       <main id="main" key={pageKey} className="page-in" data-path={path}>
-        <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{current ? <Case data={current} /> : <Page />}</Suspense>
+        <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{current ? <Case slug={current.slug} /> : <Page />}</Suspense>
       </main>
       {page?.footer !== false && <Footer />}
     </>

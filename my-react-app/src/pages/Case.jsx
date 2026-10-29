@@ -7,8 +7,12 @@ import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { scrollToId } from '../lib/dom.js'
 import { useGrow } from '../lib/useGrow.js'
 import { useChipFollow } from '../lib/useChipFollow.js'
+import { cases } from '../data/cases.js'
+import { usePageMeta } from '../lib/usePageMeta.js'
 
-export default function Case({ data }) {
+export default function Case({ slug }) {
+  const data = cases.find((c) => c.slug === slug) // 본문 데이터는 이 페이지 코드와 함께 받습니다(홈에는 들어 있지 않음)
+  usePageMeta(`${data.subtitle}. ${data.summary.replace(/\*\*/g, '').replace(/\s*\n\s*/g, ' ')}`)
   const ids = useMemo(() => data.sections.map((s) => s.id), [data])
   // 읽는 위치에 따라 목차 강조
   const active = useScrollSpy(ids, { rootMargin: '-18% 0px -72% 0px' })

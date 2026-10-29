@@ -107,6 +107,7 @@ h4 {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 402 / 874; /* 앱 화면 캡처의 비율. 늦게 불러와도 자리가 먼저 잡혀 화면이 밀리지 않습니다 */
 }
 .cover--screens .phone {
   width: 26%;

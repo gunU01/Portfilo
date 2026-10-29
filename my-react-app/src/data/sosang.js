@@ -1,15 +1,15 @@
 
 // 프로젝트 4 — 오늘한입(동네 사장님 5분 홍보), 개인 기획. 기획 하네스(planning/)의 모델에서 확인된 수치만 옮겼습니다.
 // 인터뷰·컨시어지·랜딩 검증은 아직 하지 않았으므로 모든 문제는 가설이며, 통계로 알 수 없는 부분은 본문에서 그렇게 밝힙니다.
+import { caseMeta } from './case-meta.js'
+
 export const sosang = {
-  slug: 'sosang',
-  title: '오늘한입',
+  ...caseMeta.sosang,
   nameNote: '동네 사장님 5분 홍보', // 이름 옆에 작게 붙는 설명
   subtitle: '숫자로 확인한 문제와 검증 설계 · 개인 기획',
   summary:
     '가게 정보를 한 번만 받아 두고, 매일 5분 안에 끝나는 홍보 할 일 1개와 그에 맞는 문구를 만들어 주는 요식업 사장님용 서비스입니다.',
   group: 'PLAN',
-  accent: 'green', // 이 케이스의 포인트 색(연두)
   tags: ['개인 기획', 'PM'],
   period: '2026.10',
   status: '기획 단계',
