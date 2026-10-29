@@ -7,7 +7,7 @@ export const posts = [
     ...postMeta.tossAccount,
     summary: '퍼즐 미션은 계좌를 열기로 한 사람이 끝까지 가게 돕는 장치입니다. 계좌를 열 이유를 만드는 일은 다른 문제여서, 둘을 나누어 생각해 봤습니다.',
     date: '2026.10',
-    tags: ['PM', '토스', '전환율', '생각 정리'],
+    tags: ['PM', '토스', '전환율'],
     sections: [
       {
         id: 'view',
