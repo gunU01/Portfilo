@@ -17,6 +17,17 @@ export default {
       assert.equal(await page.locator('.nav__links a[aria-current="page"]').textContent(), 'Project')
     })
 
+    await t('블로그: 프로젝트 목록 아래의 글을 열면 Project 가 강조되고, 목록으로 돌아오면 블로그 구간에서 시작', async () => {
+      await go(page, url, '/project')
+      await page.waitForSelector('.blog__item')
+      await page.locator('.blog__item').first().click()
+      await page.waitForSelector('.post__title')
+      assert.equal(await page.locator('.nav__links a[aria-current="page"]').textContent(), 'Project')
+      await page.locator('.back').click()
+      await page.waitForSelector('#blog')
+      await waitFor(() => page.evaluate(() => Math.abs(document.querySelector('#blog').getBoundingClientRect().top) < 200), { timeout: 6000, message: '블로그 구간으로 이동하지 않았습니다' })
+    })
+
     await t('프로젝트 탭: 눌러서 거른 카드 수가 탭의 숫자와 같다', async () => {
       await go(page, url, '/project')
       await page.waitForSelector('.pcard')

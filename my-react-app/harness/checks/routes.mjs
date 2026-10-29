@@ -10,6 +10,9 @@ export default {
       const { page, context, errors } = await openPage(browser, { viewport })
       const cases = await discoverCases(page, url)
       assert.ok(cases.length > 0, '프로젝트 카드가 없습니다')
+      // 블로그 글도 프로젝트 목록 아래의 링크에서 찾습니다
+      const posts = await page.$$eval('.blog__item', (items) => items.map((a) => ({ route: a.getAttribute('href').slice(1), title: a.querySelector('.blog__name').textContent.trim() })))
+      assert.ok(posts.length > 0, '블로그 글이 없습니다')
 
       // [경로, 기대하는 제목, 푸터가 있어야 하는지]
       const routes = [
@@ -19,6 +22,8 @@ export default {
         ['/desk', `책상 — ${base}`, false],
         ...cases.map(({ route, title }) => [route, `${title} — ${base}`, true]),
         ['/work/없는-케이스', `Project — ${base}`, true], // 없는 케이스는 목록으로
+        ...posts.map(({ route, title }) => [route, `${title} — ${base}`, true]),
+        ['/blog/없는-글', `Project — ${base}`, true], // 없는 글도 목록으로
       ]
 
       for (const [route, title, footer] of routes) {

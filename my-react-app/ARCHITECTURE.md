@@ -38,7 +38,7 @@ main.jsx ─ App.jsx (라우팅)
 
 ## 라우팅
 
-해시 라우팅(`#/`, `#/project`, `#/about`, `#/desk`, `#/work/<slug>`, `?s=<섹션 id>`)이라 정적 호스팅에서 새로고침해도 깨지지 않습니다. `App.jsx` 의 `PAGES` 표가 경로 → 페이지, 제목, 푸터 표시 여부를 정하고, `/work/<slug>` 는 `cases` 에서 찾아 `Case` 로 그립니다. 알 수 없는 경로는 홈입니다. 홈만 처음에 받고 나머지 페이지(Project, About, Case, Desk)는 `React.lazy` 로 그 경로에 들어갈 때 받으며, 받는 동안에는 빈 자리표시(`.page-wait`)가 자리를 잡고 푸터는 숨겨 둡니다(푸터가 밀려 내려오는 이동을 막기 위해). 경로가 바뀔 때는 `startTransition`(`useHashRoute`)으로 알려서, 다음 페이지 코드를 받는 동안 지금 화면이 그대로 남습니다. 한가할 때 가벼운 페이지 코드를 미리 받고, 책상은 메뉴에 마우스를 올리면 받습니다. 주소는 정리됩니다: 끝의 `/` 는 지우고, 없는 경로는 홈으로(없는 케이스는 목록으로) `location.replace` 로 옮겨 기록을 남기지 않습니다. 화면을 옮기면 맨 위(또는 `?s=` 구간)에서 바로 시작하고 뒤로·앞으로 가기는 떠난 스크롤 위치로 돌아갑니다(`useRouteScroll`). 모든 페이지가 쓰는 글꼴 파일은 `vite.config.js` 의 `preloadFont` 가 HTML 에 미리 받기(`preload`)로 넣습니다.
+해시 라우팅(`#/`, `#/project`, `#/about`, `#/desk`, `#/work/<slug>`, `#/blog/<slug>`, `?s=<섹션 id>`)이라 정적 호스팅에서 새로고침해도 깨지지 않습니다. `App.jsx` 의 `PAGES` 표가 경로 → 페이지, 제목, 푸터 표시 여부를 정하고, `/work/<slug>` 는 `cases` 에서 찾아 `Case` 로, `/blog/<slug>` 는 `blog-meta.js` 의 `postIndex` 에서 찾아 `Post`(본문은 `data/blog.js`)로 그립니다. 블로그 목록은 Project 페이지 아래(`#blog`)에 있습니다. 알 수 없는 경로는 홈입니다. 홈만 처음에 받고 나머지 페이지(Project, About, Case, Post, Desk)는 `React.lazy` 로 그 경로에 들어갈 때 받으며, 받는 동안에는 빈 자리표시(`.page-wait`)가 자리를 잡고 푸터는 숨겨 둡니다(푸터가 밀려 내려오는 이동을 막기 위해). 경로가 바뀔 때는 `startTransition`(`useHashRoute`)으로 알려서, 다음 페이지 코드를 받는 동안 지금 화면이 그대로 남습니다. 한가할 때 가벼운 페이지 코드를 미리 받고, 책상은 메뉴에 마우스를 올리면 받습니다. 주소는 정리됩니다: 끝의 `/` 는 지우고, 없는 경로는 홈으로(없는 케이스는 목록으로) `location.replace` 로 옮겨 기록을 남기지 않습니다. 화면을 옮기면 맨 위(또는 `?s=` 구간)에서 바로 시작하고 뒤로·앞으로 가기는 떠난 스크롤 위치로 돌아갑니다(`useRouteScroll`). 모든 페이지가 쓰는 글꼴 파일은 `vite.config.js` 의 `preloadFont` 가 HTML 에 미리 받기(`preload`)로 넣습니다.
 
 ## 스타일
 

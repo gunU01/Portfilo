@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { cases } from '../data/cases.js'
+import { posts } from '../data/blog.js'
 import CaseCover from '../components/CaseCover.jsx'
 import { useReveal } from '../lib/useReveal.js'
 
@@ -60,6 +61,36 @@ export default function Project() {
             </a>
           ))}
         </div>
+
+        <section className="blog" id="blog" aria-labelledby="blog-t">
+          <h2 className="blog__t" id="blog-t">
+            MY BLOG
+          </h2>
+          <p className="blog__lead">프로젝트로 묶기 전의 생각과 분석을 글로 정리합니다.</p>
+          <ul className="blog__list">
+            {posts.map((p) => (
+              <li key={p.slug}>
+                <a className="blog__item ink" href={`#/blog/${p.slug}`}>
+                  <span className="blog__meta tnum">{p.date}</span>
+                  <span className="blog__body">
+                    <strong className="blog__name">{p.title}</strong>
+                    <span className="blog__sum">{p.summary}</span>
+                    <span className="blog__tags">
+                      {p.tags.map((tag) => (
+                        <span className="chip" key={tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </span>
+                  </span>
+                  <span className="blog__go" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
     </section>
   )

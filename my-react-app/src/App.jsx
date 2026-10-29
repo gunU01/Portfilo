@@ -3,6 +3,7 @@ import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
 import Home from './pages/Home.jsx'
 import { caseIndex } from './data/case-meta.js'
+import { postIndex } from './data/blog-meta.js'
 import { profile } from './data/profile.js'
 import { useHashRoute } from './lib/useHashRoute.js'
 import { useAccent } from './lib/useAccent.js'
@@ -19,6 +20,7 @@ const loaders = {
   project: () => import('./pages/Project.jsx'),
   about: () => import('./pages/About.jsx'),
   case: () => import('./pages/Case.jsx'),
+  post: () => import('./pages/Post.jsx'),
   desk: () => import('./pages/Desk.jsx'),
 }
 // 한가할 때 받을 가벼운 페이지들, 마우스를 올리면 받을 페이지(책상). 렌더마다 새로 만들지 않도록 모듈 상수로 둡니다.
@@ -26,6 +28,7 @@ const PREFETCH = { idle: [loaders.project, loaders.about, loaders.case], hover: 
 const Project = lazy(loaders.project)
 const About = lazy(loaders.about)
 const Case = lazy(loaders.case)
+const Post = lazy(loaders.post)
 const Desk = lazy(loaders.desk)
 
 // 해시 경로 → 페이지. 목록에 없는 경로와 케이스(/work/<slug>)는 아래에서 따로 처리합니다.
@@ -42,9 +45,10 @@ export default function App() {
   useScrollProgress()
   const slug = path.match(/^\/work\/([\w-]+)$/)?.[1]
   const current = caseIndex.find((c) => c.slug === slug)
+  const post = postIndex.find((p) => p.slug === path.match(/^\/blog\/([\w-]+)$/)?.[1])
   useAccent(current?.accent)
   const page = PAGES[path]
-  const title = current?.title ?? page?.title
+  const title = current?.title ?? post?.title ?? page?.title
 
   useEffect(() => {
     const base = profile.site.title
@@ -57,15 +61,15 @@ export default function App() {
   useRouteScroll(path, section)
 
   // 주소 정리: 없는 경로는 가까운 곳으로 옮깁니다(케이스는 목록으로, 그 밖에는 홈으로)
-  const known = path === '/' || Boolean(page) || Boolean(current)
-  useCanonicalRoute(known ? path : path.startsWith('/work/') ? '/project' : '/', typed, known ? query : '')
+  const known = path === '/' || Boolean(page) || Boolean(current) || Boolean(post)
+  useCanonicalRoute(known ? path : path.startsWith('/work/') || path.startsWith('/blog/') ? '/project' : '/', typed, known ? query : '')
 
   // 한가할 때 가벼운 페이지를, 책상은 메뉴에 마우스를 올리면 미리 받습니다
   usePrefetch(PREFETCH)
 
   const Page = page?.Page ?? Home
   // 페이지가 바뀔 때마다 main 을 새로 만들어 들어오는 효과(page-in)가 다시 시작되게 합니다.
-  const pageKey = current?.slug ?? path
+  const pageKey = current?.slug ?? post?.slug ?? path
 
   return (
     <>
@@ -75,7 +79,7 @@ export default function App() {
       {page?.footer !== false && <div className="progress" aria-hidden="true" />}
       <Nav path={path} />
       <main id="main" key={pageKey} className="page-in" data-path={path}>
-        <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{current ? <Case slug={current.slug} /> : <Page />}</Suspense>
+        <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{current ? <Case slug={current.slug} /> : post ? <Post slug={post.slug} /> : <Page />}</Suspense>
       </main>
       {page?.footer !== false && <Footer />}
     </>
