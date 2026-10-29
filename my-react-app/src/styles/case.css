@@ -1031,7 +1031,13 @@
   }
   .table--stack td:not(:first-child) {
     grid-template-columns: minmax(0, 1fr);
-    gap: 2px;
+    gap: 1px;
+  }
+  .table--stack td:not(:first-child) + td:not(:first-child) {
+    margin-top: 8px;
+  }
+  .table--stack td:not(:first-child)::before {
+    padding-top: 0;
   }
   .table--2 td:not(:first-child) {
     display: block;
