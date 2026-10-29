@@ -322,10 +322,6 @@
 }
 
 @media (max-width: 900px) {
-  .hero__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
-  }
   .ov__cards,
   .pj__grid {
     grid-template-columns: minmax(0, 1fr);

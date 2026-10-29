@@ -38,14 +38,19 @@ const PAGES = {
   '/about': { title: 'About', Page: About, description: profile.site.pages.about },
 }
 
+// /work/<slug>, /blog/<slug> 처럼 목록에서 찾는 경로: 주소의 slug 와 같은 항목(없으면 undefined)
+const findBySlug = (index, path, prefix) => {
+  const slug = path.match(new RegExp(`^/${prefix}/([\\w-]+)$`))?.[1]
+  return index.find((item) => item.slug === slug)
+}
+
 export default function App() {
   const { path, typed, query, section } = useHashRoute()
   useInkHover()
   useFollow()
   useScrollProgress()
-  const slug = path.match(/^\/work\/([\w-]+)$/)?.[1]
-  const current = caseIndex.find((c) => c.slug === slug)
-  const post = postIndex.find((p) => p.slug === path.match(/^\/blog\/([\w-]+)$/)?.[1])
+  const current = findBySlug(caseIndex, path, 'work')
+  const post = findBySlug(postIndex, path, 'blog')
   useAccent(current?.accent)
   const page = PAGES[path]
   const title = current?.title ?? post?.title ?? page?.title
@@ -60,14 +65,16 @@ export default function App() {
   // 라우트가 바뀌면 맨 위(또는 ?s= 구간)에서 시작하고, 뒤로·앞으로 가기는 떠난 위치로 돌아갑니다
   useRouteScroll(path, section)
 
-  // 주소 정리: 없는 경로는 가까운 곳으로 옮깁니다(케이스는 목록으로, 그 밖에는 홈으로)
+  // 주소 정리: 없는 경로는 가까운 곳으로 옮깁니다(케이스와 글은 목록으로, 그 밖에는 홈으로)
   const known = path === '/' || Boolean(page) || Boolean(current) || Boolean(post)
-  useCanonicalRoute(known ? path : path.startsWith('/work/') || path.startsWith('/blog/') ? '/project' : '/', typed, known ? query : '')
+  const nearest = /^\/(work|blog)\//.test(path) ? '/project' : '/'
+  useCanonicalRoute(known ? path : nearest, typed, known ? query : '')
 
   // 한가할 때 가벼운 페이지를, 책상은 메뉴에 마우스를 올리면 미리 받습니다
   usePrefetch(PREFETCH)
 
   const Page = page?.Page ?? Home
+  const body = current ? <Case slug={current.slug} /> : post ? <Post slug={post.slug} /> : <Page />
   // 페이지가 바뀔 때마다 main 을 새로 만들어 들어오는 효과(page-in)가 다시 시작되게 합니다.
   const pageKey = current?.slug ?? post?.slug ?? path
 
@@ -79,7 +86,7 @@ export default function App() {
       {page?.footer !== false && <div className="progress" aria-hidden="true" />}
       <Nav path={path} />
       <main id="main" key={pageKey} className="page-in" data-path={path}>
-        <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{current ? <Case slug={current.slug} /> : post ? <Post slug={post.slug} /> : <Page />}</Suspense>
+        <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{body}</Suspense>
       </main>
       {page?.footer !== false && <Footer />}
     </>

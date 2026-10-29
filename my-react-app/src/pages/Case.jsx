@@ -1,24 +1,16 @@
-import { useEffect, useMemo } from 'react'
-import Blocks from '../components/Blocks.jsx'
+import { useEffect } from 'react'
+import DocBody from '../components/DocBody.jsx'
 import CaseCover from '../components/CaseCover.jsx'
 import CaseNext from '../components/CaseNext.jsx'
 import Rich from '../components/Rich.jsx'
-import { useScrollSpy } from '../lib/useScrollSpy.js'
-import { scrollToId } from '../lib/dom.js'
 import { useGrow } from '../lib/useGrow.js'
-import { useChipFollow } from '../lib/useChipFollow.js'
 import { cases } from '../data/cases.js'
 import { usePageMeta } from '../lib/usePageMeta.js'
 
 export default function Case({ slug }) {
   const data = cases.find((c) => c.slug === slug) // 본문 데이터는 이 페이지 코드와 함께 받습니다(홈에는 들어 있지 않음)
   usePageMeta(`${data.subtitle}. ${data.summary.replace(/\*\*/g, '').replace(/\s*\n\s*/g, ' ')}`)
-  const ids = useMemo(() => data.sections.map((s) => s.id), [data])
-  // 읽는 위치에 따라 목차 강조
-  const active = useScrollSpy(ids, { rootMargin: '-18% 0px -72% 0px' })
   useGrow()
-
-  useChipFollow(active)
 
   // 인쇄(PDF 저장) 시 접힌 항목을 모두 펼침
   useEffect(() => {
@@ -75,37 +67,18 @@ export default function Case({ slug }) {
         </dl>
       </header>
 
-      <div className="wrap case__body">
-        <nav className="toc" aria-label="이 페이지의 목차">
-          {data.sections.map((s) => (
-            <button key={s.id} type="button" aria-current={active === s.id} onClick={() => scrollToId(s.id)}>
-              {s.title}
-            </button>
-          ))}
-        </nav>
-
-        <div>
-          {data.sections.map((s) => (
-            <section className="csec" id={s.id} key={s.id} aria-labelledby={`${s.id}-t`}>
-              <h2 className="csec__title" id={`${s.id}-t`}>
-                {s.title}
-              </h2>
-              <Blocks blocks={s.blocks} />
-            </section>
-          ))}
-
-          <footer className="sources">
-            <h2>근거 자료</h2>
-            <ul>
-              {data.sources.map((s) => (
-                <li key={s}>
-                  <Rich text={s} />
-                </li>
-              ))}
-            </ul>
-          </footer>
-        </div>
-      </div>
+      <DocBody sections={data.sections}>
+        <footer className="sources">
+          <h2>근거 자료</h2>
+          <ul>
+            {data.sources.map((s) => (
+              <li key={s}>
+                <Rich text={s} />
+              </li>
+            ))}
+          </ul>
+        </footer>
+      </DocBody>
 
       <div className="wrap">
         <CaseNext slug={data.slug} />

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { cases } from '../data/cases.js'
 import { posts } from '../data/blog.js'
-import CaseCover from '../components/CaseCover.jsx'
+import ProjectCard from '../components/ProjectCard.jsx'
+import BlogList from '../components/BlogList.jsx'
 import { useReveal } from '../lib/useReveal.js'
 
 const GROUPS = [
@@ -37,60 +38,11 @@ export default function Project() {
 
         <div className="pj__grid">
           {shown.map((c) => (
-            <a className="pcard follow reveal is-in" key={c.slug} href={`#/work/${c.slug}`} data-accent={c.accent}>
-              {c.cover ? <CaseCover cover={c.cover} size="card" /> : <div className="cover cover--card cover--blank" aria-hidden="true" />}
-              <div className="pcard__text">
-                <h2 className="pcard__t">
-                  {c.title}
-                  {c.nameNote && <small className="name-note">{c.nameNote}</small>}
-                </h2>
-                <p className="pcard__sub">{c.subtitle}</p>
-                <p className="pcard__sum">{c.summary}</p>
-                <div className="pcard__tags">
-                  {c.tags.map((tag) => (
-                    <span className="chip" key={tag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <p className="pcard__meta">
-                  <span className="tnum">{c.period}</span>
-                  {c.status && <span>{c.status}</span>}
-                </p>
-              </div>
-            </a>
+            <ProjectCard key={c.slug} c={c} />
           ))}
         </div>
 
-        <section className="blog" id="blog" aria-labelledby="blog-t">
-          <h2 className="blog__t" id="blog-t">
-            MY BLOG
-          </h2>
-          <p className="blog__lead">프로젝트로 묶기 전의 생각과 분석을 글로 정리합니다.</p>
-          <ul className="blog__list">
-            {posts.map((p) => (
-              <li key={p.slug}>
-                <a className="blog__item ink" href={`#/blog/${p.slug}`}>
-                  <span className="blog__meta tnum">{p.date}</span>
-                  <span className="blog__body">
-                    <strong className="blog__name">{p.title}</strong>
-                    <span className="blog__sum">{p.summary}</span>
-                    <span className="blog__tags">
-                      {p.tags.map((tag) => (
-                        <span className="chip" key={tag}>
-                          {tag}
-                        </span>
-                      ))}
-                    </span>
-                  </span>
-                  <span className="blog__go" aria-hidden="true">
-                    →
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <BlogList posts={posts} />
       </div>
     </section>
   )

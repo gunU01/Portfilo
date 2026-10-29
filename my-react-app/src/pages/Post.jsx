@@ -1,8 +1,4 @@
-import { useMemo } from 'react'
-import Blocks from '../components/Blocks.jsx'
-import { useScrollSpy } from '../lib/useScrollSpy.js'
-import { scrollToId } from '../lib/dom.js'
-import { useChipFollow } from '../lib/useChipFollow.js'
+import DocBody from '../components/DocBody.jsx'
 import { usePageMeta } from '../lib/usePageMeta.js'
 import { posts } from '../data/blog.js'
 
@@ -10,9 +6,6 @@ import { posts } from '../data/blog.js'
 export default function Post({ slug }) {
   const data = posts.find((p) => p.slug === slug)
   usePageMeta(data.summary)
-  const ids = useMemo(() => data.sections.map((s) => s.id), [data])
-  const active = useScrollSpy(ids, { rootMargin: '-18% 0px -72% 0px' })
-  useChipFollow(active)
 
   return (
     <article>
@@ -32,26 +25,7 @@ export default function Post({ slug }) {
         </div>
       </header>
 
-      <div className="wrap case__body">
-        <nav className="toc" aria-label="이 페이지의 목차">
-          {data.sections.map((s) => (
-            <button key={s.id} type="button" aria-current={active === s.id} onClick={() => scrollToId(s.id)}>
-              {s.title}
-            </button>
-          ))}
-        </nav>
-
-        <div>
-          {data.sections.map((s) => (
-            <section className="csec" id={s.id} key={s.id} aria-labelledby={`${s.id}-t`}>
-              <h2 className="csec__title" id={`${s.id}-t`}>
-                {s.title}
-              </h2>
-              <Blocks blocks={s.blocks} />
-            </section>
-          ))}
-        </div>
-      </div>
+      <DocBody sections={data.sections} />
     </article>
   )
 }
