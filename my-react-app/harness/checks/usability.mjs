@@ -10,6 +10,8 @@ const LIMITS = {
   overlapMin: 16, // 눌림 영역끼리 겹친 면적이 이보다 크면 잘못 누르기 쉬움(px²)
   fontMin: 11, // 이보다 작은 글자는 읽기 어려움(px)
   stickyMax: 0.25, // 위에 붙어 다니는 것들(메뉴, 탭)이 화면 높이에서 차지할 수 있는 비율
+  stickyAlphaMin: 0.95, // 위에 붙은 막대 배경의 불투명도. 이보다 투명하면 뒤로 지나가는 글이 비쳐 어지럽다
+  boldBlockMin: 60, // 이 글자 수 이상의 문단 전체가 굵으면(600 이상) 읽기 힘들다
   orphanMax: 2, // 여러 줄 글의 마지막 줄에 이 글자 수 이하만 남으면 어색한 줄바꿈
 }
 
@@ -70,10 +72,26 @@ const measureSticky = () => {
     if ((cs.position === 'fixed' || cs.position === 'sticky') && el.checkVisibility()) {
       const r = el.getBoundingClientRect()
       // 화면 위쪽에 붙은 것만(top 근처에서 시작)
-      if (r.height > 0 && r.top <= 90 && r.bottom > 0 && r.width > innerWidth * 0.5) found.push({ name: `${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]}`, bottom: r.bottom, height: r.height })
+      if (r.height > 0 && r.top <= 90 && r.bottom > 0 && r.width > innerWidth * 0.5) {
+        // 배경의 불투명도: rgba(r,g,b,a) 또는 color(... / a) 꼴에서 a 를 읽습니다(없으면 1)
+        const bg = cs.backgroundColor
+        const alpha = bg === 'transparent' ? 0 : Number((bg.match(/\/\s*([\d.]+)\s*\)/) ?? bg.match(/rgba\([^)]*,\s*([\d.]+)\)/))?.[1] ?? 1)
+        found.push({ name: `${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]}`, bottom: r.bottom, height: r.height, alpha })
+      }
     }
   }
   return found
+}
+
+// 긴 문단이 통째로 굵게 나오는지(굵은 글은 짧은 강조에만 씁니다)
+const measureHeavy = ({ boldBlockMin }) => {
+  const out = []
+  for (const el of document.querySelectorAll('p, li, dd, td')) {
+    if (!el.checkVisibility() || el.querySelector('p, li, td, table, ul')) continue
+    const text = el.textContent.replace(/\s+/g, ' ').trim()
+    if (text.length >= boldBlockMin && Number(getComputedStyle(el).fontWeight) >= 600) out.push(`${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]} "${text.slice(0, 16)}…" (${text.length}자, 굵기 ${getComputedStyle(el).fontWeight})`)
+  }
+  return out
 }
 
 // 글: 여러 줄 글의 마지막 줄에 한두 글자만 남는지
@@ -201,7 +219,7 @@ function sigSrc(el) {
 
 export default {
   name: 'usability',
-  about: 'UI 편의: 눌림 영역 크기와 겹침, 너무 작은 글자, 어색한 줄바꿈, 잘린 글, 위에 붙은 것이 가리는 정도, 키보드 이동과 포커스 표시',
+  about: 'UI 편의: 눌림 영역 크기와 겹침, 너무 작은 글자, 통째로 굵은 긴 문단, 어색한 줄바꿈, 잘린 글, 위에 붙은 것이 가리는 정도, 키보드 이동과 포커스 표시',
   async run({ browser, url, t }) {
     for (const [vpName, viewport] of Object.entries(VIEWPORTS)) {
       const { page, context } = await openPage(browser, { viewport, reducedMotion: 'reduce' })
@@ -223,6 +241,9 @@ export default {
       await t(`${vpName} 줄바꿈: 여러 줄 글의 마지막 줄에 ${LIMITS.orphanMax}글자 이하만 남지 않는다`, async () => {
         assert.deepEqual(await sweep(page, url, routes, measureOrphans, LIMITS), [])
       })
+      await t(`${vpName} 굵기: ${LIMITS.boldBlockMin}자 이상의 문단이 통째로 굵지 않다`, async () => {
+        assert.deepEqual(await sweep(page, url, routes, measureHeavy, LIMITS), [])
+      })
       await t(`${vpName} 잘림: 넘치는 글을 숨기고 있는 요소가 없다`, async () => {
         assert.deepEqual(await sweep(page, url, routes, measureClipped), [])
       })
@@ -233,6 +254,15 @@ export default {
           await ready(page)
           const total = (await page.evaluate(measureSticky)).reduce((sum, s) => sum + s.height, 0)
           if (total > viewport.height * LIMITS.stickyMax) bad.push(`${route} ${Math.round(total)}px / ${viewport.height}px`)
+        }
+        assert.deepEqual(bad, [])
+      })
+      await t(`${vpName} 고정 요소: 배경이 ${LIMITS.stickyAlphaMin * 100}% 이상 불투명해서 뒤의 글이 비치지 않는다`, async () => {
+        const bad = []
+        for (const route of routes) {
+          await go(page, url, route)
+          await ready(page)
+          for (const s of await page.evaluate(measureSticky)) if (s.alpha < LIMITS.stickyAlphaMin) bad.push(`${route} ${s.name} 불투명도 ${s.alpha}`)
         }
         assert.deepEqual(bad, [])
       })

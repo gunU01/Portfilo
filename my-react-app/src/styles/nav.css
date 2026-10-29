@@ -3,8 +3,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: saturate(1.4) blur(10px);
+  background: var(--bg); /* 뒤에 지나가는 글이 비쳐 보이지 않게 불투명하게(하네스 usability 가 지킴) */
   border-bottom: 1px solid var(--line);
 }
 .nav__in {

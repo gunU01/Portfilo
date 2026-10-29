@@ -84,9 +84,6 @@
 .dec__body dd {
   margin: 0;
 }
-.dec__body > div:nth-child(2) dd {
-  font-weight: 600;
-}
 
 .roles {
   display: grid;
