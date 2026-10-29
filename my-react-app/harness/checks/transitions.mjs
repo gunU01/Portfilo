@@ -72,7 +72,8 @@ export default {
       await ready(page)
       await page.evaluate(() => window.scrollTo({ top: 700, behavior: 'instant' }))
       await waitFor(() => page.evaluate(() => Math.abs(window.scrollY - 700) < 3), { message: '스크롤이 700 에 닿지 않았습니다' })
-      await page.locator('.pcard').nth(2).click()
+      // Playwright 의 click 은 대상이 화면 밖이면 먼저 스크롤해서 위치를 바꾸므로, 스크롤 위치를 지키려고 페이지 안에서 직접 누릅니다.
+      await page.locator('.pcard').nth(2).evaluate((e) => e.click())
       await waitFor(async () => hashOf(page).startsWith('#/work/'), { message: '케이스로 이동하지 않았습니다' })
       await ready(page)
       await waitFor(() => page.evaluate(() => window.scrollY === 0), { timeout: 3000, message: '새 화면이 맨 위에서 시작하지 않았습니다' })
