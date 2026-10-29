@@ -49,6 +49,20 @@ export default {
       await waitFor(async () => (await page.locator('.sidx button[aria-current="true"]').textContent()).replace(/^\d+/, '') === label, { timeout: 6000, message: '목차 강조가 따라오지 않았습니다' })
     })
 
+    await t('이름(왼쪽 위)과 지금 보는 메뉴를 누르면 맨 위로 올라가고, 다른 화면에서 이름을 누르면 홈으로 간다', async () => {
+      await go(page, url, '/project')
+      await page.waitForSelector('.pcard')
+      await page.evaluate(() => window.scrollTo({ top: 600, behavior: 'instant' }))
+      await page.locator('.nav__links a', { hasText: 'Project' }).click()
+      await waitFor(() => page.evaluate(() => window.scrollY === 0), { timeout: 4000, message: '지금 보는 메뉴를 눌렀는데 맨 위로 올라가지 않았습니다' })
+      await page.locator('.nav__brand').click()
+      await waitFor(() => page.evaluate(() => window.location.hash === '#/'), { message: '이름을 눌렀는데 홈으로 가지 않았습니다' })
+      await page.waitForSelector('.pin__stage')
+      await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }))
+      await page.locator('.nav__brand').click()
+      await waitFor(() => page.evaluate(() => window.scrollY === 0), { timeout: 4000, message: '홈에서 이름을 눌렀는데 맨 위로 올라가지 않았습니다' })
+    })
+
     await context.close()
   },
 }

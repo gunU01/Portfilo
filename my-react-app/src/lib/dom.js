@@ -8,6 +8,13 @@ export function scrollToId(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })
 }
 
+// 지금 보고 있는 화면의 메뉴(이름, Home 등)를 다시 누르면 같은 주소라 화면이 안 바뀌므로, 직접 맨 위로 부드럽게 올라갑니다.
+export function scrollToTop() {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (!reduce) smoothUntil = performance.now() + 1500
+  window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+}
+
 // 페이지 코드를 늦게 받는 경로(?s=<섹션 id>)에서는 이동하려는 순간 대상이 아직 없을 수 있습니다.
 // 대상이 생길 때까지 프레임마다 확인하다가(최대 약 3초) 생기면 이동합니다. 돌려주는 함수를 부르면 멈춥니다.
 export function scrollToIdWhenReady(id, frames = 180) {
