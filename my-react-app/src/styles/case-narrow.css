@@ -79,7 +79,7 @@
     grid-template-columns: var(--lab, 3.6em) minmax(0, 1fr);
     gap: 10px;
     font-size: 14.5px;
-    line-height: 1.6;
+    line-height: 1.5;
   }
   .table td:not(:first-child)::before {
     content: attr(data-label);

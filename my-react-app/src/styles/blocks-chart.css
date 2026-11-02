@@ -215,7 +215,7 @@
 }
 .readout__list li > span:last-child {
   font-size: 13.5px;
-  line-height: 1.6;
+  line-height: 1.5;
   color: var(--faint);
 }
 @media (max-width: 760px) {

@@ -3,12 +3,15 @@
   padding: 56px 24px 40px;
 }
 .back {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   width: fit-content;
+  min-height: 32px; /* 글자가 작아도 누르기 편하도록(하네스 usability 의 눌림 영역 기준) */
   font-size: 14px;
   color: var(--faint);
   text-decoration: none;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
 }
 @media (hover: hover) {
   .back:hover {

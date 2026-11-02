@@ -64,7 +64,7 @@
 .dec__body {
   margin: 0 22px 20px;
   font-size: 15px;
-  line-height: 1.7;
+  line-height: 1.58;
   border-top: 1px solid var(--line);
 }
 .dec__body > div {

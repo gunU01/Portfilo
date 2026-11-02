@@ -44,7 +44,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 .table th {
   text-align: left;
@@ -97,7 +97,7 @@
   font-size: 15px;
   padding: 7px 0;
   border-top: 1px dashed color-mix(in srgb, var(--faint) 40%, transparent);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 .ba__col li:first-child {
   border-top: 0;

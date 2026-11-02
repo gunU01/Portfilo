@@ -67,7 +67,7 @@ body {
   color: var(--ink);
   font-family: var(--font);
   font-size: 17px;
-  line-height: 1.75;
+  line-height: 1.62;
   word-break: keep-all;
   overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
