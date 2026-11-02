@@ -85,14 +85,17 @@ main:has(> .page-wait) ~ .footer {
   }
 }
 
-/* ---------- 프로젝트 카드: 마우스 쪽으로 살짝 기울어짐 ---------- */
+/* ---------- 프로젝트 카드: 마우스 쪽으로 아주 살짝 기울며 눌리는 느낌 ---------- */
 @media (hover: hover) {
   .pcard.follow:hover .cover {
-    transform: perspective(900px) translateY(-4px) rotateX(calc(var(--fy, 0) * -4deg)) rotateY(calc(var(--fx, 0) * 5deg));
+    transform: perspective(900px) scale(0.985) rotateX(calc(var(--fy, 0) * -1.5deg)) rotateY(calc(var(--fx, 0) * 2deg));
+  }
+  .pcard.follow:active .cover {
+    transform: perspective(900px) scale(0.97) rotateX(calc(var(--fy, 0) * -1.5deg)) rotateY(calc(var(--fx, 0) * 2deg));
   }
 }
 .pcard.follow .cover {
-  transition: transform 0.2s ease-out, box-shadow 0.25s ease;
+  transition: transform 0.15s ease-out;
 }
 
 /* ---------- 버튼: 마우스 쪽으로 살짝 끌려옴 ---------- */
@@ -273,7 +276,7 @@ main:has(> .page-wait) ~ .footer {
   }
   @media (hover: hover) {
   .pcard.follow:hover .cover {
-    transform: translateY(-4px);
+    transform: scale(0.985);
   }
 }
   .magnet {

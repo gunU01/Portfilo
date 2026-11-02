@@ -125,12 +125,15 @@
   min-width: 0;
 }
 .pcard .cover {
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition: transform 0.15s ease-out;
 }
+/* 호버: 떠오르며 그림자가 생기는 대신, 살짝 눌리는 느낌(작아짐). 누르는 동안은 조금 더 */
 @media (hover: hover) {
   .pcard:hover .cover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow);
+    transform: scale(0.985);
+  }
+  .pcard:active .cover {
+    transform: scale(0.97);
   }
 }
 .pcard__text {
