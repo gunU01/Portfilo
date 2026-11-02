@@ -302,9 +302,7 @@
 .footer__rows li {
   border-top: 1px solid var(--line);
 }
-.footer__rows li:last-child {
-  border-bottom: 1px solid var(--line);
-}
+/* 마지막 줄의 아래 선은 두지 않습니다: 바로 아래 하단 막대(.footer__bar::before)의 선과 겹쳐 선이 두 개로 보였습니다. */
 .footer__rows a {
   display: grid;
   grid-template-columns: 6.5em minmax(0, 1fr) auto;
@@ -339,12 +337,24 @@
   font-weight: 600;
   overflow-wrap: anywhere;
 }
+/* 좁은 화면: 이름 칸과 간격을 줄여 이메일 같은 긴 값이 글자 중간에서 끊기지 않고 한 줄에 들어가게 합니다 */
+@media (max-width: 680px) {
+  .footer__rows a {
+    grid-template-columns: 5.4em minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+}
+@media (max-width: 380px) {
+  .footer__v {
+    font-size: 15px;
+  }
+}
 .footer__go {
   color: var(--accent-ink);
   transition: transform 0.15s ease;
 }
 .footer__bar {
-  margin-top: 36px;
+  margin-top: 16px;
   display: flex;
   justify-content: space-between;
   gap: 8px 24px;
