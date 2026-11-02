@@ -10,7 +10,7 @@ function preloadFont() {
     transformIndexHtml: {
       order: 'post',
       handler(html, ctx) {
-        const file = Object.keys(ctx.bundle ?? {}).find((f) => /Pretendard-a-.*\.woff2$/.test(f))
+        const file = Object.keys(ctx.bundle ?? {}).find((f) => /NanumSquareNeo-a-.*\.woff2$/.test(f))
         if (!file) return html
         return [{ tag: 'link', attrs: { rel: 'preload', as: 'font', type: 'font/woff2', crossorigin: '', href: `./${file}` }, injectTo: 'head-prepend' }]
       },

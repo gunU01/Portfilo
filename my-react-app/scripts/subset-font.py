@@ -1,13 +1,12 @@
-"""Pretendard(가변 woff2)를 웹용으로 둘로 쪼갭니다. 사이트 문구를 바꾼 뒤 다시 돌리세요.
+"""나눔스퀘어 네오(가변 woff2)를 웹용으로 둘로 쪼갭니다. 사이트 문구를 바꾼 뒤 다시 돌리세요.
 
   pip install fonttools brotli
-  npm pack pretendard@1.3.9   # 압축을 풀면 package/dist/web/variable/woff2/PretendardVariable.woff2
-  python3 scripts/subset-font.py <원본 PretendardVariable.woff2>
+  python3 scripts/subset-font.py <원본 NanumSquareNeo-Variable.woff2>
 
-- Pretendard-a.woff2: 지금 사이트(src, index.html)에서 쓰는 글자 + 영문/숫자. 항상 받습니다.
-- Pretendard-b.woff2: 완성형 한글 2,350자 + KS X 1001 기호. 문구를 새로 쓰다 a 에 없는 글자가 나올 때만 받습니다.
+- NanumSquareNeo-a.woff2: 지금 사이트(src, index.html)에서 쓰는 글자 + 영문/숫자. 항상 받습니다.
+- NanumSquareNeo-b.woff2: 완성형 한글 2,350자 + KS X 1001 기호. 문구를 새로 쓰다 a 에 없는 글자가 나올 때만 받습니다.
 - src/styles/font.css: 위 두 파일의 @font-face (a 의 unicode-range 는 여기서 새로 씁니다).
-글꼴 라이선스: SIL Open Font License 1.1 (Copyright (c) 2021, Kil Hyung-jin, https://github.com/orioncactus/pretendard). 원본의 LICENSE.txt 를 이 저장소의 public/licenses/Pretendard-OFL.txt 에 둡니다.
+글꼴 라이선스: SIL Open Font License 1.1 (NAVER Corp.)
 """
 import glob
 import os
@@ -70,22 +69,22 @@ def main(src):
     a = {c for c in a if ord(c) in font_chars and c not in '\n\r\t'}
 
     os.makedirs(OUT, exist_ok=True)
-    write_subset(src, a, os.path.join(OUT, 'Pretendard-a.woff2'))
-    write_subset(src, b, os.path.join(OUT, 'Pretendard-b.woff2'))
+    write_subset(src, a, os.path.join(OUT, 'NanumSquareNeo-a.woff2'))
+    write_subset(src, b, os.path.join(OUT, 'NanumSquareNeo-b.woff2'))
 
     css = f"""/* scripts/subset-font.py 가 만든 파일입니다. 직접 고치지 마세요. */
 /* b(전체 완성형 한글)를 먼저 선언하고, 지금 쓰는 글자만 담은 a 를 나중에 선언해 a 가 우선하게 합니다. */
 @font-face {{
-  font-family: 'Pretendard';
-  src: url('../assets/fonts/Pretendard-b.woff2') format('woff2');
-  font-weight: 45 920;
+  font-family: 'NanumSquareNeo';
+  src: url('../assets/fonts/NanumSquareNeo-b.woff2') format('woff2');
+  font-weight: 100 900;
   font-display: swap;
   unicode-range: U+AC00-D7A3, U+2000-206F, U+2190-21FF, U+2200-22FF, U+2460-24FF, U+25A0-25FF, U+3000-303F, U+3130-318F, U+FF00-FFEF;
 }}
 @font-face {{
-  font-family: 'Pretendard';
-  src: url('../assets/fonts/Pretendard-a.woff2') format('woff2');
-  font-weight: 45 920;
+  font-family: 'NanumSquareNeo';
+  src: url('../assets/fonts/NanumSquareNeo-a.woff2') format('woff2');
+  font-weight: 100 900;
   font-display: swap;
   unicode-range: {ranges({ord(c) for c in a})};
 }}
