@@ -36,7 +36,7 @@ export default {
           assert.equal(await page.locator('footer.footer').count(), footer ? 1 : 0, '푸터 표시 여부')
           const [sw, cw] = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth])
           assert.ok(sw <= cw, `가로로 넘칩니다 (${sw} > ${cw})`)
-          assert.ok(await page.evaluate(() => document.fonts.check('16px NanumSquareNeo')), '나눔스퀘어 네오가 로드되지 않았습니다')
+          assert.ok(await page.evaluate(() => document.fonts.check('16px Pretendard')), 'Pretendard 가 로드되지 않았습니다')
           assert.deepEqual(errors.slice(before), [], '브라우저 오류')
         })
       }
