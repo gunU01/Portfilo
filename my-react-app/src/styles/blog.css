@@ -1,0 +1,88 @@
+/* Project 아래의 블로그 목록 */
+.blog {
+  margin-top: 88px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
+}
+.blog__t {
+  font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.blog__lead {
+  margin-top: 12px;
+  color: var(--muted);
+}
+.blog__list {
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.blog__list li {
+  border-bottom: 1px solid var(--line);
+}
+.blog__item {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: start;
+  /* 호버 바탕을 글자보다 좌우로 넓혀서, 글자와 화살표가 바탕 가장자리에 붙거나 삐져나오지 않게 합니다(푸터 줄과 같은 방식) */
+  margin: 0 -16px;
+  padding: 22px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.blog__meta {
+  padding-top: 4px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--faint);
+}
+.blog__body {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.blog__name {
+  font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+.blog__sum {
+  color: var(--muted);
+  font-size: 15.5px;
+}
+.blog__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.blog__go {
+  padding-top: 2px;
+  color: var(--faint);
+  transition: transform 0.2s, color 0.2s;
+}
+@media (hover: hover) {
+  .blog__item:hover .blog__go {
+    color: var(--accent-ink);
+    transform: translateX(4px);
+  }
+}
+@media (max-width: 680px) {
+  .blog {
+    margin-top: 56px;
+    padding-top: 28px;
+  }
+  .blog__item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 12px;
+    margin: 0 -12px;
+    padding: 18px 12px;
+  }
+  .blog__meta {
+    grid-column: 1 / -1;
+    padding-top: 0;
+  }
+}

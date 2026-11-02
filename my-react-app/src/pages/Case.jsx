@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import DocBody from '../components/DocBody.jsx'
 import CaseCover from '../components/CaseCover.jsx'
-import CaseNext from '../components/CaseNext.jsx'
+import CaseNav from '../components/CaseNav.jsx'
 import Rich from '../components/Rich.jsx'
 import Arrow from '../components/Arrow.jsx'
 import { useGrow } from '../lib/useGrow.js'
@@ -82,7 +82,7 @@ export default function Case({ slug }) {
       </DocBody>
 
       <div className="wrap">
-        <CaseNext slug={data.slug} />
+        <CaseNav slug={data.slug} />
       </div>
     </article>
   )

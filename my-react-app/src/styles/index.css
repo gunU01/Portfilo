@@ -9,7 +9,7 @@
 @import './blocks-data.css';
 @import './blocks-record.css';
 @import './blocks-chart.css';
-@import './case-next.css';
+@import './case-nav.css';
 @import './blocks-extra.css';
 @import './case-narrow.css';
 @import './responsive.css';
@@ -17,7 +17,13 @@
 @import './desk.css';
 @import './components.css';
 @import './layout.css';
-@import './pages.css';
+@import './overview.css';
+@import './project.css';
+@import './about-sections.css';
+@import './footer.css';
+@import './pages-shared.css';
+@import './project-mobile.css';
+@import './blog.css';
 @import './skills.css';
 @import './effects.css';
 @import './ink.css';

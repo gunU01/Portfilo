@@ -1,0 +1,67 @@
+/* ---------- 소개 페이지의 구성: 소개 영역, 구역 제목, 활동 기록 ---------- */
+.ab {
+  padding-bottom: 96px;
+}
+.ab__intro {
+  padding-top: 64px;
+  padding-bottom: 24px;
+}
+.ab__introgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 40px 64px;
+  align-items: start;
+}
+.ab__text {
+  margin-top: 24px;
+  display: grid;
+  gap: 18px;
+  max-width: 640px;
+  font-size: 18px;
+  line-height: 1.68;
+}
+.ab__text strong {
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+.ab__side {
+  display: grid;
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .ab__introgrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+}
+.ab__sec {
+  padding-top: 56px;
+  padding-bottom: 8px;
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+}
+.ab__sec.wrap {
+  border-top: 0;
+}
+.ab__sec::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: var(--ink);
+  margin-bottom: 36px;
+}
+.ab__h {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: -0.04em;
+}
+.ab .tl {
+  margin-top: 28px;
+}
+.tl--wide .tl__item {
+  grid-template-columns: 200px 1fr;
+}
+@media (max-width: 720px) {
+  .tl--wide .tl__item {
+    grid-template-columns: 1fr;
+  }
+}

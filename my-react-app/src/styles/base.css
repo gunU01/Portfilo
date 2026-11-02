@@ -159,16 +159,25 @@ button {
   font-variant-numeric: tabular-nums;
 }
 
-/* 화살표(<Arrow />): 글자 대신 한 가지 모양을 마스크로 그립니다 */
+/* 화살표(<Arrow />): 글자 대신 한 가지 모양을 마스크로 그립니다. 마스크 선언은 여기 한 곳에만 있고,
+   CSS 가상 요소로 그리는 화살표(접기 표시, 단계 연결선, 버튼 등)도 이 목록에 넣어 크기와 방향만 각자 정합니다. */
+.arw,
+.btn--desk::after,
+.dec summary::after,
+.tg summary::after,
+.tmore::after,
+.skflow__phase:not(:last-child)::after,
+.ba__col--after::before {
+  background: currentColor;
+  -webkit-mask: var(--arw) center / contain no-repeat;
+  mask: var(--arw) center / contain no-repeat;
+}
 .arw {
   display: inline-block;
   flex: none;
   width: 1.1em;
   height: 1em;
   vertical-align: -0.14em;
-  background: currentColor;
-  -webkit-mask: var(--arw) center / contain no-repeat;
-  mask: var(--arw) center / contain no-repeat;
 }
 .arw--right {
   rotate: 180deg;

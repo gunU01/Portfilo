@@ -285,8 +285,8 @@ main:has(> .page-wait) ~ .footer {
   .js .chart .bars__bar,
   .logo__bite,
   .logo__crumb,
-  .cnext__a,
-  .cnext__go,
+  .cnav__a,
+  .cnav__go,
   .tg::details-content,
   .dec::details-content {
     transition: none;

@@ -1,0 +1,96 @@
+/* ---------- 푸터: 연락처 줄과 하단 막대 ---------- */
+.footer {
+  margin-top: 0;
+  padding: 72px 0 40px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 14.5px;
+}
+.footer__in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 40px 64px;
+  align-items: end;
+}
+.footer__role {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.footer__role em {
+  display: block;
+  font-style: normal;
+  color: var(--accent-ink);
+}
+.footer__rows li {
+  border-top: 1px solid var(--line);
+}
+/* 마지막 줄의 아래 선은 두지 않습니다: 바로 아래 하단 막대(.footer__bar::before)의 선과 겹쳐 선이 두 개로 보였습니다. */
+.footer__rows a {
+  display: grid;
+  grid-template-columns: 6.5em minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin: 0 -12px;
+  padding: 16px 12px;
+  border-radius: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+@media (hover: hover) {
+  .footer__rows a:hover {
+    color: var(--accent-ink);
+  }
+}
+@media (hover: hover) {
+  .footer__rows a:hover .footer__go {
+    transform: translate(2px, -2px);
+  }
+}
+.footer__k {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+.footer__v {
+  font-size: 16px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+/* 좁은 화면: 이름 칸과 간격을 줄여 이메일 같은 긴 값이 글자 중간에서 끊기지 않고 한 줄에 들어가게 합니다 */
+@media (max-width: 680px) {
+  .footer__rows a {
+    grid-template-columns: 5.4em minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+}
+@media (max-width: 380px) {
+  .footer__v {
+    font-size: 15px;
+  }
+}
+.footer__go {
+  color: var(--accent-ink);
+  transition: transform 0.15s ease;
+}
+.footer__bar {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px 24px;
+  flex-wrap: wrap;
+  color: var(--faint);
+  font-size: 13.5px;
+}
+.footer__bar::before {
+  content: '';
+  flex-basis: 100%;
+  height: 1px;
+  background: var(--line);
+  margin-bottom: 14px;
+}

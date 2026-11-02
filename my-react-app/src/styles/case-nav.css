@@ -1,13 +1,13 @@
 /* ---------- 케이스 맨 아래: 다음 프로젝트 ---------- */
 /* 이전과 다음, 두 장의 카드. 흰 바탕에 얇은 선, 포인트 색은 글자와 화살표에만(색은 각 카드가 가리키는 프로젝트의 색).
    호버하면 프로젝트 카드처럼 살짝 눌리며 안쪽이 파입니다. */
-.cnext {
+.cnav {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   margin: 56px 0 72px;
 }
-.cnext__a {
+.cnav__a {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -21,15 +21,15 @@
   text-decoration: none;
   transition: scale 0.14s ease-out, background 0.14s ease-out, border-color 0.14s ease-out, box-shadow 0.14s ease-out;
 }
-.cnext__a--prev {
+.cnav__a--prev {
   grid-template-columns: auto minmax(0, 1fr);
 }
-.cnext__body {
+.cnav__body {
   display: grid;
   gap: 8px;
   min-width: 0;
 }
-.cnext__k {
+.cnav__k {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -38,7 +38,7 @@
   letter-spacing: 0.02em;
   color: var(--accent-ink);
 }
-.cnext__n {
+.cnav__n {
   padding: 1px 8px;
   border-radius: 999px;
   background: var(--accent-soft);
@@ -46,7 +46,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
 }
-.cnext__t {
+.cnav__t {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -57,7 +57,7 @@
   letter-spacing: -0.03em;
   line-height: 1.2;
 }
-.cnext__s {
+.cnav__s {
   display: -webkit-box;
   overflow: hidden;
   font-size: 14.5px;
@@ -67,7 +67,7 @@
   -webkit-box-orient: vertical;
 }
 /* 화살표: 둥근 버튼. 호버하면 포인트 색으로 채워지고 화살표가 오른쪽으로 살짝 밀립니다 */
-.cnext__go {
+.cnav__go {
   display: grid;
   place-items: center;
   width: 48px;
@@ -78,63 +78,63 @@
   font-size: 1.35rem;
   transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
 }
-.cnext__go .arw {
+.cnav__go .arw {
   transition: translate 0.25s cubic-bezier(0.3, 1.4, 0.5, 1);
 }
-.cnext__a:focus-visible {
+.cnav__a:focus-visible {
   border-color: var(--accent);
 }
-.cnext__a:focus-visible .cnext__go {
+.cnav__a:focus-visible .cnav__go {
   border-color: var(--accent);
   background: var(--accent);
   color: #fff;
 }
 @media (hover: hover) {
-  .cnext__a:hover {
+  .cnav__a:hover {
     scale: 0.99;
     border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
     background: var(--surface);
     box-shadow: inset 3px 3px 9px rgb(20 24 48 / 0.07), inset -3px -3px 9px rgb(255 255 255 / 0.9);
   }
-  .cnext__a:active {
+  .cnav__a:active {
     scale: 0.975;
     box-shadow: inset 5px 5px 13px rgb(20 24 48 / 0.12), inset -4px -4px 11px rgb(255 255 255 / 1);
   }
-  .cnext__a:hover .cnext__go {
+  .cnav__a:hover .cnav__go {
     border-color: var(--accent);
     background: var(--accent);
     color: #fff;
   }
-  .cnext__a--next:hover .cnext__go .arw {
+  .cnav__a--next:hover .cnav__go .arw {
     translate: 3px 0;
   }
-  .cnext__a--prev:hover .cnext__go .arw {
+  .cnav__a--prev:hover .cnav__go .arw {
     translate: -3px 0;
   }
 }
 /* 좁은 화면: 한 줄에 한 장씩. 더 자주 누르는 '다음'을 위에 둡니다 */
 @media (max-width: 680px) {
-  .cnext {
+  .cnav {
     grid-template-columns: minmax(0, 1fr);
     gap: 12px;
     margin: 40px 0 56px;
   }
-  .cnext__a--next {
+  .cnav__a--next {
     order: -1;
   }
-  .cnext__a {
+  .cnav__a {
     gap: 14px;
     padding: 20px 18px;
     border-radius: 16px;
   }
-  .cnext__go {
+  .cnav__go {
     width: 44px;
     height: 44px;
     font-size: 1.15rem;
   }
 }
 @media print {
-  .cnext {
+  .cnav {
     display: none;
   }
 }

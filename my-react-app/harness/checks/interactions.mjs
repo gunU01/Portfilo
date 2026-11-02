@@ -48,8 +48,8 @@ export default {
         await go(page, url, hrefs[i].slice(1))
         await ready(page)
         const n = hrefs.length
-        assert.equal(await page.locator('.cnext__a--next').getAttribute('href'), hrefs[(i + 1) % n], `${hrefs[i]} 의 다음 카드가 목록 순서와 다릅니다`)
-        assert.equal(await page.locator('.cnext__a--prev').getAttribute('href'), hrefs[(i - 1 + n) % n], `${hrefs[i]} 의 이전 카드가 목록 순서와 다릅니다`)
+        assert.equal(await page.locator('.cnav__a--next').getAttribute('href'), hrefs[(i + 1) % n], `${hrefs[i]} 의 다음 카드가 목록 순서와 다릅니다`)
+        assert.equal(await page.locator('.cnav__a--prev').getAttribute('href'), hrefs[(i - 1 + n) % n], `${hrefs[i]} 의 이전 카드가 목록 순서와 다릅니다`)
       }
     })
 

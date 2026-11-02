@@ -62,8 +62,5 @@
     margin: -22px auto 8px;
     color: var(--accent-ink);
     rotate: -90deg;
-    background: currentColor;
-    -webkit-mask: var(--arw) center / contain no-repeat;
-    mask: var(--arw) center / contain no-repeat;
   }
 }

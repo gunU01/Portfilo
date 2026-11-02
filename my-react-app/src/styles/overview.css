@@ -1,0 +1,67 @@
+/* ---------- 홈: 메뉴 강조와 개요 카드(Project, About) ---------- */
+.nav__links a[aria-current='page'] {
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+/* Overview */
+.ov {
+  padding: 72px 0 96px;
+  border-top: 1px solid var(--line);
+}
+.ov__t {
+  font-size: clamp(2.6rem, 8vw, 6rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.ov__cards {
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.ov__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 260px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+@media (hover: hover) {
+  .ov__card:hover {
+    border-color: var(--accent);
+    color: #fff;
+    transform: translateY(-3px);
+  }
+}
+@media (hover: hover) {
+  .ov__card:hover p,
+.ov__card:hover .ov__n,
+.ov__card:hover .ov__go {
+    color: #fff;
+  }
+}
+.ov__n {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-ink);
+}
+.ov__card h3 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.04em;
+}
+.ov__card p {
+  color: var(--muted);
+  max-width: 420px;
+}
+.ov__go {
+  margin-top: auto;
+  font-weight: 700;
+  color: var(--accent-ink);
+}

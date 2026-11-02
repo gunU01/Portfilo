@@ -131,9 +131,6 @@
     margin-right: 2px;
     rotate: -90deg;
     transition: rotate 0.25s ease;
-    background: currentColor;
-    -webkit-mask: var(--arw) center / contain no-repeat;
-    mask: var(--arw) center / contain no-repeat;
   }
   .tmore[aria-expanded='true']::after {
     rotate: 90deg;
