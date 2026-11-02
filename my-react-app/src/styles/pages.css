@@ -124,16 +124,49 @@
   text-decoration: none;
   min-width: 0;
 }
-.pcard .cover {
-  transition: transform 0.15s ease-out;
+.pcard {
+  transition: scale 0.14s ease-out;
 }
-/* 호버: 떠오르며 그림자가 생기는 대신, 살짝 눌리는 느낌(작아짐). 누르는 동안은 조금 더 */
+/* 등장 효과(.js .reveal)의 transition 이 위 설정을 덮어쓰므로, 눌림(scale)을 그 목록에 함께 둡니다 */
+.js .pcard.reveal {
+  transition: opacity 0.6s ease, transform 0.6s ease, scale 0.14s ease-out;
+}
+.pcard .cover {
+  transition: transform 0.14s ease-out, filter 0.14s ease-out;
+}
+/* 눌린 질감: 표지 위에 가장자리 안쪽으로만 부드러운 그림자(위쪽 왼쪽은 어둡게, 아래쪽 오른쪽은 밝게)를 깔아 '안으로 파인' 느낌을 줍니다.
+   바깥으로 번지는 그림자는 쓰지 않고, 평소에는 아무것도 없습니다(평평한 디자인 유지). */
+.pcard .cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 rgb(20 24 48 / 0), inset 0 0 0 rgb(255 255 255 / 0);
+  transition: box-shadow 0.14s ease-out;
+}
+/* 호버: 카드 전체가 작아지고(scale 은 등장 효과의 transform 과 따로 움직임) 표지가 안쪽으로 파입니다. 누르는 동안은 한 단계 더 깊게. */
 @media (hover: hover) {
+  .pcard:hover {
+    scale: 0.985;
+  }
   .pcard:hover .cover {
-    transform: scale(0.985);
+    transform: scale(0.975);
+    filter: brightness(0.98);
+  }
+  .pcard:hover .cover::after {
+    box-shadow: inset 4px 4px 10px rgb(20 24 48 / 0.16), inset -4px -4px 10px rgb(255 255 255 / 0.6);
+  }
+  .pcard:active {
+    scale: 0.965;
   }
   .pcard:active .cover {
-    transform: scale(0.97);
+    transform: scale(0.955);
+    filter: brightness(0.96);
+  }
+  .pcard:active .cover::after {
+    box-shadow: inset 7px 7px 16px rgb(20 24 48 / 0.26), inset -6px -6px 14px rgb(255 255 255 / 0.7);
   }
 }
 .pcard__text {
