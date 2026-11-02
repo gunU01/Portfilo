@@ -1,4 +1,5 @@
 import { Fragment } from 'react'
+import Arrow from '../components/Arrow.jsx'
 import { profile } from '../data/profile.js'
 import Spec from '../components/Spec.jsx'
 import { useReveal } from '../lib/useReveal.js'
@@ -77,13 +78,17 @@ function Overview() {
             <span className="ov__n tnum">01</span>
             <h3>Project</h3>
             <p>{profile.site.pages.project}</p>
-            <span className="ov__go">프로젝트 보기 →</span>
+            <span className="ov__go">
+              프로젝트 보기 <Arrow />
+            </span>
           </a>
           <a className="ov__card ink reveal" href="#/about">
             <span className="ov__n tnum">02</span>
             <h3>About</h3>
             <p>{profile.site.pages.about}</p>
-            <span className="ov__go">자기소개 보기 →</span>
+            <span className="ov__go">
+              자기소개 보기 <Arrow />
+            </span>
           </a>
         </div>
       </div>

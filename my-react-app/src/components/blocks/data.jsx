@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import Rich from '../Rich.jsx'
 
-function statsClass({ columns, compact, items }) {
+// row: 짧은 숫자 3개를 좁은 화면에서도 한 줄에 나란히 둡니다(긴 값이 들어가는 묶음에는 쓰지 않습니다)
+function statsClass({ columns, compact, row, items }) {
+  if (row) return 'stats stats--3 stats--row'
   if (columns === 2) return compact ? 'stats stats--2 stats--compact' : 'stats stats--2'
   return items.length === 3 ? 'stats stats--3' : 'stats'
 }
 
-export function Stats({ columns, compact, items }) {
+export function Stats({ columns, compact, row, items }) {
   return (
-    <div className={statsClass({ columns, compact, items })}>
+    <div className={statsClass({ columns, compact, row, items })}>
       {items.map((s) => (
         <div className="stat" key={s.label}>
           <span className="stat__v">{s.value}</span>

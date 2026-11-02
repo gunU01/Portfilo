@@ -16,7 +16,7 @@ const TYPES = {
   beforeAfter: { render: (b) => <BeforeAfter before={b.before} after={b.after} /> },
   decisions: { render: (b) => <Decisions items={b.items} /> },
   roles: { render: (b) => <Roles role={b.role} responsibilities={b.responsibilities} results={b.results} /> },
-  stats: { wide: true, render: (b) => <Stats columns={b.columns} compact={b.compact} items={b.items} /> },
+  stats: { wide: true, render: (b) => <Stats columns={b.columns} compact={b.compact} row={b.row} items={b.items} /> },
   goals: { wide: true, render: (b) => <Goals groups={b.groups} /> },
   readout: { wide: true, render: (b) => <Readout says={b.says} silent={b.silent} /> },
   chart: { wide: true, render: (b) => <Chart groups={b.groups} unit={b.unit} source={b.source} /> },

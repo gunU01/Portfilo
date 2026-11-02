@@ -72,15 +72,17 @@
 .tg summary::after {
   content: '';
   flex: none;
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid var(--accent-ink);
-  border-bottom: 2px solid var(--accent-ink);
-  transform: rotate(45deg) translateY(-2px);
-  transition: transform 0.2s ease;
+  width: 15px;
+  height: 14px;
+  color: var(--accent-ink);
+  rotate: -90deg;
+  transition: rotate 0.2s ease;
+  background: currentColor;
+  -webkit-mask: var(--arw) center / contain no-repeat;
+  mask: var(--arw) center / contain no-repeat;
 }
 .tg[open] summary::after {
-  transform: rotate(-135deg) translateY(-2px);
+  rotate: 90deg;
 }
 .tg__body {
   padding: 0 14px 14px;

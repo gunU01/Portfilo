@@ -1,4 +1,5 @@
 import CaseCover from './CaseCover.jsx'
+import Arrow from './Arrow.jsx'
 
 // 프로젝트 목록의 카드 한 장. 카드 전체가 케이스로 가는 링크이고, 케이스의 포인트 색(accent)을 따릅니다.
 export default function ProjectCard({ c }) {
@@ -22,6 +23,9 @@ export default function ProjectCard({ c }) {
         <p className="pcard__meta">
           <span className="tnum">{c.period}</span>
           {c.status && <span>{c.status}</span>}
+          <span className="pcard__go">
+            <Arrow />
+          </span>
         </p>
       </div>
     </a>

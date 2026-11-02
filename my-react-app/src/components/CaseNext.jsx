@@ -1,4 +1,5 @@
 import { cases } from '../data/cases.js'
+import Arrow from './Arrow.jsx'
 
 // 케이스 맨 아래: 다음 프로젝트로 이어 주는 카드. 마지막 케이스에서는 처음으로 돌아갑니다.
 export default function CaseNext({ slug }) {
@@ -14,8 +15,8 @@ export default function CaseNext({ slug }) {
           {next.nameNote && <small className="name-note">{next.nameNote}</small>}
         </span>
         <span className="cnext__s">{next.summary}</span>
-        <span className="cnext__go" aria-hidden="true">
-          →
+        <span className="cnext__go">
+          <Arrow />
         </span>
       </a>
     </nav>

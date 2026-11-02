@@ -1,4 +1,5 @@
 import DocBody from '../components/DocBody.jsx'
+import Arrow from '../components/Arrow.jsx'
 import { usePageMeta } from '../lib/usePageMeta.js'
 import { posts } from '../data/blog.js'
 
@@ -11,7 +12,7 @@ export default function Post({ slug }) {
     <article>
       <header className="wrap case__head">
         <a className="back" href="#/project?s=blog">
-          ← 블로그 목록
+          <Arrow dir="left" /> 블로그 목록
         </a>
         <h1 className="case__title post__title">{data.title}</h1>
         <p className="case__sum">{data.summary}</p>

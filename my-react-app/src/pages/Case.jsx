@@ -3,6 +3,7 @@ import DocBody from '../components/DocBody.jsx'
 import CaseCover from '../components/CaseCover.jsx'
 import CaseNext from '../components/CaseNext.jsx'
 import Rich from '../components/Rich.jsx'
+import Arrow from '../components/Arrow.jsx'
 import { useGrow } from '../lib/useGrow.js'
 import { cases } from '../data/cases.js'
 import { usePageMeta } from '../lib/usePageMeta.js'
@@ -23,7 +24,7 @@ export default function Case({ slug }) {
     <article>
       <header className="wrap case__head">
         <a className="back" href="#/project">
-          ← 프로젝트 목록
+          <Arrow dir="left" /> 프로젝트 목록
         </a>
         <h1 className="case__title">
           {data.title}
@@ -59,7 +60,7 @@ export default function Case({ slug }) {
               <dd>
                 <a className="xlink ink" href={l.href} target="_blank" rel="noreferrer">
                   {l.label}
-                  <span aria-hidden="true">↗</span>
+                  <Arrow dir="up-right" />
                 </a>
               </dd>
             </div>

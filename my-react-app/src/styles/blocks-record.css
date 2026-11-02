@@ -34,16 +34,19 @@
 }
 .dec summary::after {
   content: '';
-  width: 9px;
-  height: 9px;
-  margin-right: 4px;
-  border-right: 2px solid var(--accent-ink);
-  border-bottom: 2px solid var(--accent-ink);
-  transform: rotate(45deg) translateY(-2px);
-  transition: transform 0.2s ease;
+  flex: none;
+  width: 15px;
+  height: 14px;
+  margin-right: 2px;
+  color: var(--accent-ink);
+  rotate: -90deg;
+  transition: rotate 0.2s ease;
+  background: currentColor;
+  -webkit-mask: var(--arw) center / contain no-repeat;
+  mask: var(--arw) center / contain no-repeat;
 }
 .dec[open] summary::after {
-  transform: rotate(-135deg) translateY(-2px);
+  rotate: 90deg;
 }
 .dec__n {
   display: inline-grid;

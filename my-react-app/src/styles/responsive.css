@@ -9,6 +9,24 @@
   .stats--3 .stat:last-child {
     grid-column: 1 / -1;
   }
+  /* 짧은 숫자 3개(row)는 한 줄에 나란히 */
+  .stats--row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .stats--row .stat:last-child {
+    grid-column: auto;
+  }
+  .stats--row .stat {
+    padding: 12px 10px;
+  }
+  .stats--row .stat__v {
+    font-size: 1.25rem;
+  }
+  .stats--row .stat__l {
+    font-size: 12px;
+    line-height: 1.4;
+  }
 }
 
 @media (max-width: 900px) {

@@ -1,5 +1,6 @@
 // 케이스의 대표 비주얼. 데이터의 cover.kind 에 따라 실제 화면, 실제 수치, 핵심 전환 중 하나를 보여 줍니다.
 // 모든 값은 케이스 데이터에서 가져오며, 이 파일은 모양만 정합니다.
+import Arrow from './Arrow.jsx'
 
 function Screens({ cover, size }) {
   return (
@@ -46,8 +47,8 @@ function Shift({ cover, size }) {
     <div className={`cover cover--shift cover--${size}`} role="img" aria-label={cover.alt}>
       <p className="cover__cap">{cover.caption}</p>
       <p className="shift__from">{cover.from}</p>
-      <p className="shift__arrow" aria-hidden="true">
-        ↓
+      <p className="shift__arrow">
+        <Arrow dir="down" />
       </p>
       <p className="shift__to">{cover.to}</p>
     </div>

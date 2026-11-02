@@ -157,6 +157,9 @@
   flex-wrap: wrap;
   gap: 6px;
 }
+.pcard__go {
+  display: none; /* 모바일 목록(작은 카드)에서만 보입니다 */
+}
 .pcard__meta {
   margin-top: 14px;
   display: flex;
@@ -438,8 +441,7 @@
     padding-top: 12px;
     font-size: 12px;
   }
-  .pj .pcard__meta::after {
-    content: '→';
+  .pj .pcard__go {
     display: grid;
     place-items: center;
     width: 28px;
@@ -449,6 +451,11 @@
     background: var(--bg);
     color: var(--accent-ink);
     font-size: 15px;
+  }
+  .pj .pcard__go .arw {
+    width: 1em;
+    height: 0.9em;
+    vertical-align: 0;
   }
 
   /* 작은 카드에 맞춰 표지를 정사각형으로 하고, 표지 안의 글자와 여백을 줄입니다 */

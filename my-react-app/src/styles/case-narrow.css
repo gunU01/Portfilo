@@ -126,16 +126,17 @@
   }
   .tmore::after {
     content: '';
-    width: 8px;
-    height: 8px;
-    margin-right: 4px;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    transform: rotate(45deg) translateY(-2px);
-    transition: transform 0.25s ease;
+    width: 15px;
+    height: 14px;
+    margin-right: 2px;
+    rotate: -90deg;
+    transition: rotate 0.25s ease;
+    background: currentColor;
+    -webkit-mask: var(--arw) center / contain no-repeat;
+    mask: var(--arw) center / contain no-repeat;
   }
   .tmore[aria-expanded='true']::after {
-    transform: rotate(-135deg) translateY(-2px);
+    rotate: 90deg;
   }
   .csec {
     padding-bottom: 36px;

@@ -83,6 +83,18 @@ export function check() {
     graph.set(file, deps)
   }
 
+  // 화살표: 화면 코드(components, pages)와 CSS 에는 화살표 글자(← → ↗ ↓ ↑ 등)를 쓰지 않습니다. 모양이 제각각이 되므로 <Arrow /> 나 --arw 를 씁니다.
+  // data 는 글 속의 '→'(문장 부호) 라서 대상이 아닙니다. 주석은 건너뜁니다.
+  const ARROWS = /[←→↑↓↗↘↙↖⟶⟵➜➔]/
+  const stripComments = (t, isCss) => (isCss ? t.replace(/\/\*[\s\S]*?\*\//g, '') : t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1'))
+  for (const file of code) {
+    const r = rel(file)
+    if (!(r.startsWith('components/') || r.startsWith('pages/') || r.startsWith('styles/'))) continue
+    const text = stripComments(fs.readFileSync(file, 'utf8'), file.endsWith('.css'))
+    const hit = text.split('\n').findIndex((l) => ARROWS.test(l))
+    if (hit >= 0) errors.push(`${r}: 화살표 글자가 있습니다(<Arrow /> 나 CSS 의 --arw 마스크를 쓰세요): ${text.split('\n')[hit].trim().slice(0, 60)}`)
+  }
+
   // 순환 의존
   const state = new Map()
   const stack = []

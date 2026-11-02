@@ -1,3 +1,5 @@
+import Arrow from './Arrow.jsx'
+
 // 프로젝트 목록 아래의 블로그: 글마다 날짜, 제목, 요약, 태그를 한 줄로 보여 주고 글 페이지(#/blog/<slug>)로 잇습니다.
 export default function BlogList({ posts }) {
   return (
@@ -22,8 +24,8 @@ export default function BlogList({ posts }) {
                   ))}
                 </span>
               </span>
-              <span className="blog__go" aria-hidden="true">
-                →
+              <span className="blog__go">
+                <Arrow />
               </span>
             </a>
           </li>

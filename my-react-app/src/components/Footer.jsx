@@ -1,4 +1,5 @@
 import { profile } from '../data/profile.js'
+import Arrow from './Arrow.jsx'
 import { githubId, formatPhone } from '../lib/format.js'
 import { useCopy } from '../lib/useCopy.js'
 
@@ -28,8 +29,8 @@ export default function Footer() {
               <a className="ink" href={href} target="_blank" rel="noreferrer">
                 <span className="footer__k">{label}</span>
                 <span className="footer__v">{value}</span>
-                <span className="footer__go" aria-hidden="true">
-                  ↗
+                <span className="footer__go">
+                  <Arrow dir="up-right" />
                 </span>
               </a>
               {copyText && (
