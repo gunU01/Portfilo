@@ -4,7 +4,7 @@ import { go, ready } from '../lib/site.mjs'
 
 export default {
   name: 'interactions',
-  about: '케이스 페이지의 움직임: 막대가 차오름, 접힌 항목이 부드럽게 열림, 다음 프로젝트 카드, 오늘한입 로고',
+  about: '케이스 페이지의 움직임: 막대가 차오름, 접힌 항목이 부드럽게 열림, 이전·다음 프로젝트 카드, 오늘한입 로고',
   async run({ browser, url, t }) {
     const { page } = await openPage(browser)
 
@@ -38,7 +38,7 @@ export default {
       await waitFor(async () => Math.abs((await tg.evaluate((e) => e.getBoundingClientRect().height)) - closed) < 2, { message: '접었는데 원래 높이로 돌아오지 않았습니다' })
     })
 
-    await t('다음 프로젝트 카드: 목록의 다음 케이스를 가리키고, 마지막 케이스에서는 처음으로 돌아간다', async () => {
+    await t('이전, 다음 프로젝트 카드: 목록의 앞뒤 케이스를 가리키고, 처음의 이전은 마지막, 마지막의 다음은 처음으로 돌아간다', async () => {
       const hrefs = await (async () => {
         await go(page, url, '/project')
         await page.waitForSelector('.pcard')
@@ -47,8 +47,9 @@ export default {
       for (let i = 0; i < hrefs.length; i++) {
         await go(page, url, hrefs[i].slice(1))
         await ready(page)
-        const next = page.locator('.cnext__a')
-        assert.equal(await next.getAttribute('href'), hrefs[(i + 1) % hrefs.length], `${hrefs[i]} 의 다음 카드가 목록 순서와 다릅니다`)
+        const n = hrefs.length
+        assert.equal(await page.locator('.cnext__a--next').getAttribute('href'), hrefs[(i + 1) % n], `${hrefs[i]} 의 다음 카드가 목록 순서와 다릅니다`)
+        assert.equal(await page.locator('.cnext__a--prev').getAttribute('href'), hrefs[(i - 1 + n) % n], `${hrefs[i]} 의 이전 카드가 목록 순서와 다릅니다`)
       }
     })
 

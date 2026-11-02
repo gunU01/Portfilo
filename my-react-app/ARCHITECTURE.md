@@ -48,7 +48,7 @@ main.jsx ─ App.jsx (라우팅)
 - `font.css` 는 `scripts/subset-font.py` 가 만듭니다(직접 고치지 않음).
 - 화살표(←, →, ↗, ↓, ↑)는 한 가지 모양(`styles/base.css` 의 `--arw`, 왼쪽을 가리키는 화살표)을 `rotate` 로 돌려 씁니다. 화면 코드에서는 `components/Arrow.jsx`(`<Arrow dir="right" />`)를, CSS 가상 요소에서는 `--arw` 마스크를 쓰고, 접기(펼침) 표시도 같은 화살표를 아래/위로 돌립니다. `components`, `pages`, `styles` 에 화살표 글자를 쓰면 `npm run arch` 가 막습니다(글 속의 '→' 는 `data` 라서 대상이 아님).
 - 호버 번짐: 요소에 `ink` 클래스를 붙이면 됩니다. 중심 위치는 `lib/useInkHover.js` 가, 모양은 `styles/ink.css` 가 맡습니다.
-- 사이트의 나머지 움직임은 `styles/effects.css` 한 파일에 모았고, 모션 줄이기 설정에서 그 파일 맨 아래가 한꺼번에 끕니다. 값을 정하는 일은 `lib/` 의 훅이 하고 CSS 는 값만 읽습니다: 마우스 위치 `--px/--py`(`usePointerVars`), 요소 안 마우스 위치 `--fx/--fy`(`useFollow`, `.follow` 요소: 카드 기울기, `.magnet` 버튼), 스크롤 `--scroll`(`useScrollProgress`, 문서 전체가 아니라 진행 막대 `.progress` 에만 씀), 활동 기록과 대회 참가의 진행선 `--fill`과 항목 상태 `is-passed`/`is-current`(`useTimelineProgress`). 스크롤에 맞춰 값을 갱신하는 훅은 `onScrollFrame` 으로 프레임당 한 번만 계산합니다. 케이스 페이지에는 막대 도식이 화면에 들어오면 차오르는 효과(`useGrow` 가 `.chart` 에 `is-in` 을 붙임), 접힌 항목(`details`)이 부드럽게 열리는 효과(CSS `::details-content`, 지원하지 않는 브라우저는 바로 열림), 맨 아래의 다음 프로젝트 카드(`CaseNext`)가 있고, 오늘한입의 표지는 로고(`cover.kind: 'logo'`, 체크가 그려지고 마우스를 올리면 한 입 더 베어 묾)입니다.
+- 사이트의 나머지 움직임은 `styles/effects.css` 한 파일에 모았고, 모션 줄이기 설정에서 그 파일 맨 아래가 한꺼번에 끕니다. 값을 정하는 일은 `lib/` 의 훅이 하고 CSS 는 값만 읽습니다: 마우스 위치 `--px/--py`(`usePointerVars`), 요소 안 마우스 위치 `--fx/--fy`(`useFollow`, `.follow` 요소: 카드 기울기, `.magnet` 버튼), 스크롤 `--scroll`(`useScrollProgress`, 문서 전체가 아니라 진행 막대 `.progress` 에만 씀), 활동 기록과 대회 참가의 진행선 `--fill`과 항목 상태 `is-passed`/`is-current`(`useTimelineProgress`). 스크롤에 맞춰 값을 갱신하는 훅은 `onScrollFrame` 으로 프레임당 한 번만 계산합니다. 케이스 페이지에는 막대 도식이 화면에 들어오면 차오르는 효과(`useGrow` 가 `.chart` 에 `is-in` 을 붙임), 접힌 항목(`details`)이 부드럽게 열리는 효과(CSS `::details-content`, 지원하지 않는 브라우저는 바로 열림), 맨 아래의 이전·다음 프로젝트 카드(`CaseNext`)가 있고, 오늘한입의 표지는 로고(`cover.kind: 'logo'`, 체크가 그려지고 마우스를 올리면 한 입 더 베어 묾)입니다.
 - 케이스마다 포인트 색이 다릅니다(해미 주황, 오늘한입 연두, 나머지 파랑). 케이스 데이터의 `accent` 값을 `useAccent` 가 `<html data-accent>` 로 옮기고, `styles/base.css` 의 `[data-accent]` 규칙이 `--accent` 계열 변수를 덮어씁니다. 프로젝트 카드는 같은 속성을 자기 요소에 달아 카드 안에서만 그 색이 됩니다.
 
 ## 책상 장면
@@ -90,7 +90,7 @@ main.jsx ─ App.jsx (라우팅)
 | `a11y` | 글자와 배경의 대비(일반 4.5, 큰 글씨 3), 이미지 대체 텍스트, 버튼 이름. 대비를 일부러 낮춘 곳은 `checks/a11y.mjs` 의 `EXEMPT` 에 이유와 함께 적음 |
 | `usability` | UI 편의(모든 라우트, 데스크톱과 모바일). 눌림 영역 크기(모바일, 짧은 변 24px)와 겹침, 11px 미만 글자, 여러 줄 글의 마지막 줄에 1~2글자만 남는 줄바꿈, 넘치는 글을 숨긴 요소, 긴 문단이 통째로 굵지 않음, 위에 붙은 것이 화면의 25% 이내이고 배경이 불투명(뒤의 글이 비치지 않음), Tab 이동 중 포커스 표시와 메뉴 밑에 가려짐, 목차로 이동한 제목이 가려지지 않음, 모바일 문서에서 표나 숫자 카드로 바로 시작하는 섹션이 없고(요지 문장 먼저) 한 섹션이 2.5화면을 넘지 않음. 기준 값은 `checks/usability.mjs` 맨 위 `LIMITS` 에 있음 |
 | `effects` | 페이지 전환, 스크롤 진행 막대, 메뉴 알약(글꼴 로드 뒤에도 맞음), 첫 화면 글자, 카드 기울기, 버튼 끌림, 모션 줄이기에서 꺼짐 |
-| `interactions` | 오늘한입 로고 표지, 막대 도식이 화면에 들어오면 차오름, 접힌 항목이 부드럽게 열림, 다음 프로젝트 카드(목록 순서, 마지막은 처음으로), 맨 위로 버튼(책상 제외) |
+| `interactions` | 오늘한입 로고 표지, 막대 도식이 화면에 들어오면 차오름, 접힌 항목이 부드럽게 열림, 이전·다음 프로젝트 카드(목록 순서, 처음의 이전은 마지막, 마지막의 다음은 처음으로), 맨 위로 버튼(책상 제외) |
 | `timeline` | 활동 기록과 대회 참가 두 목록의 진행선이 읽는 위치를 따라 이어서 차오르고, 점과 항목 상태(지나감, 현재, 회색)가 선을 따라감 |
 | `footer` | 복사 아이콘이 이메일과 전화번호를 복사하고, 폭 320~390px 에서 값 글자나 화살표와 겹치지 않음 |
 | `seo` | `index.html` 의 제목, 설명, `og:*` 가 맞고 길이가 적당함, 외부 CDN 없음 |
