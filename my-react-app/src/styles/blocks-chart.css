@@ -124,21 +124,30 @@
   }
 }
 
-/* compact: 좁은 화면에서도 2열을 유지하고 보조 설명을 숨겨 높이를 줄입니다 */
+/* 숫자 카드가 2열인 묶음(stats--2)은 좁은 화면에서도 2열(2x2)을 유지합니다. 보조 설명(출처)은 작게 그대로 두고,
+   compact 는 설명을 숨겨 높이를 더 줄입니다. */
 @media (max-width: 680px) {
-  .stats.stats--2.stats--compact {
+  .stats.stats--2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }
-  .stats--compact .stat {
+  .stats--2 .stat {
     padding: 12px;
+    gap: 3px;
   }
-  .stats--compact .stat__v {
+  .stats--2 .stat__v {
     font-size: 1.2rem;
+  }
+  .stats--2 .stat__l {
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+  .stats--2 .stat__n {
+    font-size: 11.5px;
+    line-height: 1.45;
   }
   .stats--compact .stat__l {
     font-size: 12px;
-    line-height: 1.4;
   }
   .stats--compact .stat__n {
     display: none;
