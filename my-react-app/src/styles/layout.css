@@ -1,6 +1,6 @@
 /* ---------- 구성: 큰 섹션 제목 · 우측 목차 · 등장 효과 ---------- */
 .section {
-  border-top: 1px solid var(--ink);
+  border-top: 1px solid var(--line);
 }
 
 /* 우측 섹션 목차 */

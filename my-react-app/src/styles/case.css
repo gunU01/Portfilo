@@ -54,7 +54,7 @@
 }
 .meta {
   margin: 36px 0 0;
-  border-top: 1px solid var(--ink);
+  border-top: 1px solid var(--line);
   display: grid;
 }
 .meta div {
