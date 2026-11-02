@@ -1,67 +1,108 @@
 /* ---------- 케이스 맨 아래: 다음 프로젝트 ---------- */
-/* 케이스 맨 아래: 다음 프로젝트 */
+/* 흰 바탕에 얇은 선, 포인트 색은 글자와 화살표에만. 호버하면 프로젝트 카드처럼 살짝 눌리며 안쪽이 파입니다. */
 .cnext {
   margin: 56px 0 72px;
 }
 .cnext__a {
   position: relative;
   display: grid;
-  gap: 6px;
-  padding: 26px 64px 26px 28px;
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
-  border-radius: var(--radius);
-  background: var(--accent-soft);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: 30px 32px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--bg);
   color: var(--ink);
   text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: scale 0.14s ease-out, background 0.14s ease-out, border-color 0.14s ease-out, box-shadow 0.14s ease-out;
 }
-.cnext__a:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
-}
-@media (hover: hover) {
-  .cnext__a:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
-  }
+.cnext__body {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
 }
 .cnext__k {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   color: var(--accent-ink);
+}
+.cnext__n {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 .cnext__t {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 4px 12px;
-  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  margin-top: 2px;
+  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
 }
 .cnext__s {
-  max-width: 46em;
-  font-size: 14.5px;
-  line-height: 1.5;
+  max-width: 44em;
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--muted);
 }
+.cnext__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+/* 화살표: 둥근 버튼. 호버하면 포인트 색으로 채워지고 화살표가 오른쪽으로 살짝 밀립니다 */
 .cnext__go {
-  position: absolute;
-  right: 28px;
-  top: 50%;
-  translate: 0 -50%;
-  font-size: 1.8rem;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
   color: var(--accent-ink);
-  transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
+  font-size: 1.35rem;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.cnext__go .arw {
+  transition: translate 0.25s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.cnext__a:focus-visible {
+  border-color: var(--accent);
 }
 .cnext__a:focus-visible .cnext__go {
-  transform: translateX(8px);
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
 }
 @media (hover: hover) {
+  .cnext__a:hover {
+    scale: 0.99;
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    background: var(--surface);
+    box-shadow: inset 3px 3px 9px rgb(20 24 48 / 0.07), inset -3px -3px 9px rgb(255 255 255 / 0.9);
+  }
+  .cnext__a:active {
+    scale: 0.975;
+    box-shadow: inset 5px 5px 13px rgb(20 24 48 / 0.12), inset -4px -4px 11px rgb(255 255 255 / 1);
+  }
   .cnext__a:hover .cnext__go {
-    transform: translateX(8px);
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+  }
+  .cnext__a:hover .cnext__go .arw {
+    translate: 3px 0;
   }
 }
 @media (max-width: 680px) {
@@ -69,10 +110,14 @@
     margin: 40px 0 56px;
   }
   .cnext__a {
-    padding: 20px 52px 20px 20px;
+    gap: 14px;
+    padding: 22px 18px;
+    border-radius: 16px;
   }
   .cnext__go {
-    right: 18px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.15rem;
   }
 }
 @media print {
