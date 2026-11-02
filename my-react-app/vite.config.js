@@ -18,11 +18,10 @@ function preloadFont() {
   }
 }
 
-// 배포 주소: 빌드할 때 SITE_URL 환경 변수 > profile.site.url > Vercel 이 빌드에 넣어 주는 운영 주소(VERCEL_PROJECT_PRODUCTION_URL) 순으로 찾습니다.
-// 어느 것도 없으면 주소가 필요한 태그(og:url, og:image, canonical, sitemap.xml)는 넣지 않습니다. 공유 미리보기는 메신저가 읽으려면 절대 주소여야 합니다.
+// 배포 주소: 빌드할 때 SITE_URL 환경 변수 > profile.site.url 순으로 찾습니다.
+// 둘 다 비어 있으면 주소가 필요한 태그(og:url, og:image, canonical, sitemap.xml)는 넣지 않습니다. 공유 미리보기는 메신저가 읽으려면 절대 주소여야 합니다.
 function siteBase(profile) {
-  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : ''
-  return (process.env.SITE_URL || profile.site.url || vercel).replace(/\/+$/, '')
+  return (process.env.SITE_URL || profile.site.url || '').replace(/\/+$/, '')
 }
 
 // 검색 엔진 등록(Google Search Console, 네이버 서치어드바이저, Bing 웹마스터)의 소유권 확인 태그. 값은 환경 변수 > profile.site.verification 순입니다.

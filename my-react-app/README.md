@@ -5,7 +5,7 @@
 ```bash
 npm install
 npm run dev      # 개발 서버
-npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도 동작). 배포 주소를 알면(SITE_URL 환경 변수, 없으면 `profile.site.url`, 없으면 Vercel 의 운영 주소 `VERCEL_PROJECT_PRODUCTION_URL`) 공유 미리보기(og:image, og:url), canonical, sitemap.xml 이 들어갑니다
+npm run build    # dist/ 생성 (base './' 라 어떤 하위 경로에 올려도 동작). 배포 주소를 알면(`SITE_URL` 환경 변수, 없으면 `profile.site.url`) 공유 미리보기(og:image, og:url), canonical, sitemap.xml 이 들어갑니다
 ```
 
 검색과 속도: 빌드할 때 `src/data` 의 값으로 index.html 의 제목, 설명, 구조화 데이터(JSON-LD), 스크립트 없이 읽는 본문(`<noscript>`)과 robots.txt 가 채워집니다. `vercel.json` 은 해시가 붙은 파일(`/assets/*`)을 오래 캐시하게 합니다(Vercel 의 Root Directory 가 이 폴더일 때 적용).
@@ -73,7 +73,7 @@ python3 scripts/subset-font.py <NanumSquareNeo-Variable.woff2>
 
 ## 검색 등록 순서
 
-1. 배포 주소가 정해지면 `src/data/profile.js` 의 `site.url` 에 적거나(Vercel 이면 비워 둬도 운영 주소를 자동으로 씁니다) 빌드 환경 변수 `SITE_URL` 로 줍니다.
+1. 배포 주소가 정해지면 `src/data/profile.js` 의 `site.url` 에 적거나 빌드 환경 변수 `SITE_URL` 로 줍니다.
 2. Google Search Console, 네이버 서치어드바이저, Bing 웹마스터 도구에서 사이트를 등록하고, 소유권 확인 방식으로 'HTML 태그'를 고릅니다.
-3. 각 서비스가 주는 meta 태그의 `content` 값을 `profile.site.verification` 의 `google`, `naver`, `bing` 에 넣거나, 환경 변수 `GOOGLE_SITE_VERIFICATION`, `NAVER_SITE_VERIFICATION`, `BING_SITE_VERIFICATION` 으로 줍니다. 배포한 뒤 각 서비스에서 '소유권 확인'을 누릅니다.
+3. 구글은 'HTML 파일' 방식이면 받은 `google….html` 을 `public/` 에 그대로 두면 됩니다(이미 넣어 둠). 그 밖의 서비스는 각 서비스가 주는 meta 태그의 `content` 값을 `profile.site.verification` 의 `google`, `naver`, `bing` 에 넣거나, 환경 변수 `GOOGLE_SITE_VERIFICATION`, `NAVER_SITE_VERIFICATION`, `BING_SITE_VERIFICATION` 으로 줍니다. 배포한 뒤 각 서비스에서 '소유권 확인'을 누릅니다.
 4. 확인되면 사이트맵 `https://배포주소/sitemap.xml` 을 제출하고, 첫 화면(`/`)을 'URL 검사'(구글)와 '웹 페이지 수집'(네이버)으로 색인 요청합니다.

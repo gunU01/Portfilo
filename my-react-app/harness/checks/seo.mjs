@@ -45,10 +45,10 @@ export default {
     // 주소와 소유권 확인 코드를 주고 따로 빌드해서(임시 폴더), 주소가 필요한 태그와 사이트맵이 실제로 만들어지는지 봅니다.
     const buildWith = (env) => {
       const out = fs.mkdtempSync(path.join(os.tmpdir(), 'seo-build-'))
-      execFileSync('npx', ['vite', 'build', '--outDir', out, '--emptyOutDir'], { cwd: ROOT, env: { ...process.env, SITE_URL: '', VERCEL_PROJECT_PRODUCTION_URL: '', ...env }, stdio: 'ignore' })
+      execFileSync('npx', ['vite', 'build', '--outDir', out, '--emptyOutDir'], { cwd: ROOT, env: { ...process.env, ...env }, stdio: 'ignore' })
       return { out, html: fs.readFileSync(path.join(out, 'index.html'), 'utf8') }
     }
-    await t('배포 주소(SITE_URL)를 주면 canonical, og:url, og:image, 사이트맵과 robots 의 Sitemap 줄이 생긴다', async () => {
+    await t('배포 주소(SITE_URL, 없으면 profile.site.url)로 canonical, og:url, og:image, 사이트맵과 robots 의 Sitemap 줄이 생긴다', async () => {
       const { out, html: built } = buildWith({ SITE_URL: 'https://example.test/' })
       assert.match(built, /<link[^>]+rel="canonical"[^>]+href="https:\/\/example\.test\/"/)
       assert.match(built, /property="og:image"[^>]+content="https:\/\/example\.test\/og\.png"/)
@@ -56,16 +56,16 @@ export default {
       assert.match(fs.readFileSync(path.join(out, 'sitemap.xml'), 'utf8'), /<loc>https:\/\/example\.test\/<\/loc>/)
       assert.match(fs.readFileSync(path.join(out, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/example\.test\/sitemap\.xml/)
     })
-    await t('주소를 안 줘도 Vercel 이 주는 운영 주소(VERCEL_PROJECT_PRODUCTION_URL)를 쓴다', async () => {
-      const { out } = buildWith({ VERCEL_PROJECT_PRODUCTION_URL: 'portfolio.example.test' })
-      assert.match(fs.readFileSync(path.join(out, 'sitemap.xml'), 'utf8'), /<loc>https:\/\/portfolio\.example\.test\/<\/loc>/)
-    })
     await t('구글, 네이버, Bing 소유권 확인 코드를 주면 meta 태그가 들어가고, 안 주면 없다', async () => {
       assert.doesNotMatch(html, /google-site-verification|naver-site-verification|msvalidate\.01/)
       const { html: built } = buildWith({ GOOGLE_SITE_VERIFICATION: 'g-code', NAVER_SITE_VERIFICATION: 'n-code', BING_SITE_VERIFICATION: 'b-code' })
       assert.match(built, /name="google-site-verification"[^>]+content="g-code"/)
       assert.match(built, /name="naver-site-verification"[^>]+content="n-code"/)
       assert.match(built, /name="msvalidate\.01"[^>]+content="b-code"/)
+    })
+    await t('소유권 확인 파일(public 의 google*.html)이 배포 폴더 맨 위에 그대로 있고, 내용이 파일 이름과 맞다', async () => {
+      const files = fs.readdirSync(DIST).filter((f) => /^google[0-9a-f]+\.html$/.test(f))
+      for (const f of files) assert.equal(fs.readFileSync(path.join(DIST, f), 'utf8').trim(), `google-site-verification: ${f}`, `${f} 의 내용이 맞지 않습니다`)
     })
     await t('스크립트 없이 읽히는 본문(<noscript>)에 블로그 글 제목이 있다', async () => {
       const body = html.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1] ?? ''
