@@ -10,7 +10,7 @@ export const profile = {
     title: '문채원 포트폴리오 | PM · 프론트엔드',
     description: '프론트엔드 개발자로 시작한 기획자 문채원의 프로젝트와 활동 기록입니다.',
     // 배포 주소(예: 'https://example.com'). 비워 두면 빌드할 때 SITE_URL 환경 변수나 Vercel 의 운영 주소를 씁니다. canonical, 사이트맵, 공유 미리보기에 필요합니다.
-    url: '',
+    url: 'https://gunu01.vercel.app',
     // 검색 엔진 등록 때 받는 소유권 확인 코드(meta 태그의 content 값만). 비어 있으면 태그를 넣지 않습니다.
     verification: { google: '', naver: '', bing: '' },
     // 페이지마다 검색 결과와 미리보기에 쓰이는 설명(홈의 OVERVIEW 카드와 같은 문장)
