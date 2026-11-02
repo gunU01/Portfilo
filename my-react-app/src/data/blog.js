@@ -107,8 +107,8 @@ export const posts = [
         ],
       },
       {
-        id: 'pm',
-        title: 'PM 관점에서 한 단계 더',
+        id: 'deeper',
+        title: '한 단계 더 생각해 보기',
         blocks: [
           {
             type: 'p',

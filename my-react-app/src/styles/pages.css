@@ -575,7 +575,10 @@
   grid-template-columns: 76px minmax(0, 1fr) auto;
   gap: 20px;
   align-items: start;
-  padding: 22px 0;
+  /* 호버 바탕을 글자보다 좌우로 넓혀서, 글자와 화살표가 바탕 가장자리에 붙거나 삐져나오지 않게 합니다(푸터 줄과 같은 방식) */
+  margin: 0 -16px;
+  padding: 22px 16px;
+  border-radius: 10px;
   text-decoration: none;
   color: var(--ink);
 }
@@ -623,7 +626,8 @@
   .blog__item {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 6px 12px;
-    padding: 18px 0;
+    margin: 0 -12px;
+    padding: 18px 12px;
   }
   .blog__meta {
     grid-column: 1 / -1;
