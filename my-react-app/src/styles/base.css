@@ -26,8 +26,8 @@
 /* 케이스마다 포인트 색이 다릅니다. data-accent 가 <html>(그 페이지 전체)이나 프로젝트 카드에 붙으면 --accent 계열이 바뀝니다.
    글자색(--accent-ink)은 흰 바탕에서 4.5:1 이상을 지키는 어두운 톤입니다. */
 [data-accent='orange'] {
-  --accent: #ea580c;
-  --accent-ink: #c2410c;
+  --accent: #f55a00; /* 선, 막대, 테두리 같은 면의 색: 쨍한 주황 */
+  --accent-ink: #c74200; /* 글자색: 흰 바탕과 연한 바탕 모두에서 4.5:1 을 지키는 한도에서 가장 쨍한 주황 */
   --accent-soft: #fff1e6;
 }
 

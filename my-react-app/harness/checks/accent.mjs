@@ -4,7 +4,7 @@ import { go, ready } from '../lib/site.mjs'
 
 // 케이스 데이터의 accent 값에 따라 페이지 전체의 포인트 색이 바뀌고, 다른 페이지로 가면 파랑으로 돌아오는지 확인합니다.
 const CASES = [
-  ['/work/haemi', 'orange', '#ea580c'],
+  ['/work/haemi', 'orange', '#f55a00'],
   ['/work/sosang', 'green', '#65a30d'],
   ['/work/howmuch', null, '#0038ff'],
 ]
@@ -46,7 +46,7 @@ export default {
         els.map((el) => ({ href: el.getAttribute('href'), accent: el.dataset.accent ?? null, value: getComputedStyle(el).getPropertyValue('--accent').trim().toLowerCase() })),
       )
       const by = Object.fromEntries(cards.map((c) => [c.href, c]))
-      assert.equal(by['#/work/haemi'].value, '#ea580c')
+      assert.equal(by['#/work/haemi'].value, '#f55a00')
       assert.equal(by['#/work/sosang'].value, '#65a30d')
       assert.equal(by['#/work/howmuch'].value, '#0038ff')
     })
