@@ -12,6 +12,7 @@ const LIMITS = {
   stickyMax: 0.25, // 위에 붙어 다니는 것들(메뉴, 탭)이 화면 높이에서 차지할 수 있는 비율
   stickyAlphaMin: 0.95, // 위에 붙은 막대 배경의 불투명도. 이보다 투명하면 뒤로 지나가는 글이 비쳐 어지럽다
   boldBlockMin: 60, // 이 글자 수 이상의 문단 전체가 굵으면(600 이상) 읽기 힘들다
+  sectionScreensMax: 2.5, // 모바일에서 한 섹션이 이 화면 수(화면 높이 기준)를 넘으면 쪼개거나 접어야 함
   orphanMax: 2, // 여러 줄 글의 마지막 줄에 이 글자 수 이하만 남으면 어색한 줄바꿈
 }
 
@@ -90,6 +91,23 @@ const measureHeavy = ({ boldBlockMin }) => {
     if (!el.checkVisibility() || el.querySelector('p, li, td, table, ul')) continue
     const text = el.textContent.replace(/\s+/g, ' ').trim()
     if (text.length >= boldBlockMin && Number(getComputedStyle(el).fontWeight) >= 600) out.push(`${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]} "${text.slice(0, 16)}…" (${text.length}자, 굵기 ${getComputedStyle(el).fontWeight})`)
+  }
+  return out
+}
+
+// 문서(케이스, 블로그 글) 구조: 표나 숫자 카드로 바로 시작하지 않고 요지 문장으로 시작하는지, 한 섹션이 너무 길지 않은지
+const measureSections = ({ sectionScreensMax }) => {
+  const out = []
+  const dataSel = '.tablewrap, .stats, .tl, .ba, .readout, .goals, .chart, .gallery, .flow'
+  for (const sec of document.querySelectorAll('.csec')) {
+    const title = sec.querySelector('h2')?.textContent.trim().slice(0, 18)
+    const first = sec.querySelector('.blocks')?.firstElementChild
+    // 판단 기록(decisions)과 역할(roles)은 항목 하나하나가 설명이라 요지 문장 없이 시작해도 됩니다
+    const hasData = sec.querySelector(dataSel)
+    const startsWithText = first && (first.tagName === 'P' || first.tagName === 'UL' || /\b(callout|quote|csec__sub|list)\b/.test(first.className))
+    if (hasData && !startsWithText) out.push(`"${title}" 섹션이 요지 문장 없이 ${first?.className.split(' ')[0] || first?.tagName.toLowerCase()} 로 바로 시작`)
+    const screens = sec.getBoundingClientRect().height / innerHeight
+    if (screens > sectionScreensMax) out.push(`"${title}" 섹션이 ${screens.toFixed(1)}화면(최대 ${sectionScreensMax})`)
   }
   return out
 }
@@ -244,6 +262,11 @@ export default {
       await t(`${vpName} 굵기: ${LIMITS.boldBlockMin}자 이상의 문단이 통째로 굵지 않다`, async () => {
         assert.deepEqual(await sweep(page, url, routes, measureHeavy, LIMITS), [])
       })
+      if (vpName === 'mobile') {
+        await t(`${vpName} 문서: 섹션이 요지 문장으로 시작하고 ${LIMITS.sectionScreensMax}화면을 넘지 않는다`, async () => {
+          assert.deepEqual(await sweep(page, url, routes.filter((r) => r.startsWith('/work/') || r.startsWith('/blog/')), measureSections, LIMITS), [])
+        })
+      }
       await t(`${vpName} 잘림: 넘치는 글을 숨기고 있는 요소가 없다`, async () => {
         assert.deepEqual(await sweep(page, url, routes, measureClipped), [])
       })

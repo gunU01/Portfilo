@@ -56,6 +56,10 @@ export const sosang = {
       title: '시장 데이터',
       blocks: [
         {
+          type: 'p',
+          text: '숙박·음식점업 사업장 약 4곳 중 3곳은 판로 개척이나 브랜드 마케팅 활동이 없고, 디지털·스마트 기술을 쓰는 곳은 38.6%였습니다.',
+        },
+        {
           type: 'stats',
           columns: 2,
           compact: true,
@@ -149,6 +153,10 @@ export const sosang = {
       title: '계산으로 얻은 규모',
       blocks: [
         {
+          type: 'p',
+          text: '통계 수치를 곱하고 빼서 규모를 가늠했습니다. 문제는 넓지만(운영 활동이 없는 곳 약 59.2만 개), 새 서비스를 설치할 의향이 있는 곳은 약 5.5만 개로 좁습니다.',
+        },
+        {
           type: 'table',
           head: ['항목', '값', '계산'],
           rows: [
@@ -171,6 +179,10 @@ export const sosang = {
       id: 'reading',
       title: '숫자가 말해 주는 것과 말해 주지 않는 것',
       blocks: [
+        {
+          type: 'p',
+          text: '통계가 말해 주는 것과 말해 주지 않는 것을 나눠 보았고, 통계로 알 수 없는 두 가지는 가설로 두었습니다.',
+        },
         {
           type: 'readout',
           says: {
@@ -218,6 +230,10 @@ export const sosang = {
       id: 'validation',
       title: '검증 설계',
       blocks: [
+        {
+          type: 'p',
+          text: '가설 7개를 세 묶음(문제가 있는가, 해결안이 쓰이는가, 돈과 시간을 내는가)으로 나누고, 각각 합격선을 정해 두었습니다.',
+        },
         {
           type: 'goals',
           groups: [
@@ -273,6 +289,10 @@ export const sosang = {
       title: '수익성 민감도',
       blocks: [
         {
+          type: 'p',
+          text: '월 해지율에 따라 이용자 한 곳이 내는 누적 매출이 얼마나 달라지는지 계산했습니다. 해지율 5%와 15%는 3.0배 차이 납니다.',
+        },
+        {
           type: 'table',
           head: ['월 해지율', '평균 이용 기간', '이용자 1곳당 누적 매출(월 19,000원 가정)'],
           rows: [
@@ -296,6 +316,10 @@ export const sosang = {
       id: 'competitors',
       title: '경쟁 서비스 요금',
       blocks: [
+        {
+          type: 'p',
+          text: '공식 페이지에서 확인되는 것만 적었습니다. 요금이 숫자로 적힌 곳은 이 표에서 Predis.ai(월 19달러)뿐입니다.',
+        },
         {
           type: 'table',
           head: ['서비스', '공식 페이지에서 확인한 내용'],

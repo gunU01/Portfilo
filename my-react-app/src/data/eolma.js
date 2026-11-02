@@ -68,6 +68,12 @@ export const eolma = {
       title: '이 문제는 실제로 있는가',
       blocks: [
         {
+          type: 'callout',
+          tone: 'key',
+          title: '결론',
+          text: '사용자는 이미 더치페이에 익숙합니다. 어려운 부분은 **정산하는 과정**입니다. 한 사람이 먼저 결제한 뒤 참여자를 확인하고, 금액을 계산해 요청하고, 입금까지 확인하는 단계가 이어지기 때문입니다.',
+        },
+        {
           type: 'stats',
           columns: 2,
           items: [
@@ -76,12 +82,6 @@ export const eolma = {
             { value: '60.0%', label: '‘한 명이 결제하고 나중에 정산’이 최다', note: '대학생 및 직장인 1,652명, 동아일보 2017.10.31 보도 인용' },
             { value: '1,300만+', label: '카카오뱅크 모임통장 이용자', note: '2026년 2분기 말, 잔액 약 11.7조 원' },
           ],
-        },
-        {
-          type: 'callout',
-          tone: 'key',
-          title: '결론',
-          text: '사용자는 이미 더치페이에 익숙합니다. 어려운 부분은 **정산하는 과정**입니다. 한 사람이 먼저 결제한 뒤 참여자를 확인하고, 금액을 계산해 요청하고, 입금까지 확인하는 단계가 이어지기 때문입니다.',
         },
         {
           type: 'callout',
@@ -96,6 +96,10 @@ export const eolma = {
       id: 'definition',
       title: '문제 정의가 바뀐 과정',
       blocks: [
+        {
+          type: 'p',
+          text: '처음에는 금융 자산 관리 전반을 풀려고 했다가, 1차 평가 이후 ‘정산 과정이 복잡하다’ 하나로 범위를 좁혔습니다.',
+        },
         {
           type: 'timeline',
           items: [
@@ -123,6 +127,10 @@ export const eolma = {
       id: 'flow',
       title: '정산 플로우를 행동 순서에 맞추기',
       blocks: [
+        {
+          type: 'p',
+          text: '기존 정산은 선택할 것이 먼저 보였습니다. 개선안은 계좌, 금액, 함께 나눌 사람, 내 정산 금액 확인, 링크 공유 순으로 사용자의 행동 순서를 따라가게 바꿨습니다.',
+        },
         {
           type: 'beforeAfter',
           before: {
@@ -223,6 +231,10 @@ export const eolma = {
       id: 'feedback',
       title: '심사 피드백 반영',
       blocks: [
+        {
+          type: 'p',
+          text: '심사에서 받은 피드백 네 가지(기존 서비스와의 차별점, AI 비서 보강, 수익 모델, 재미 요소)에 각각 어떻게 반영했는지 정리했습니다.',
+        },
         {
           type: 'table',
           head: ['피드백', '반영'],
