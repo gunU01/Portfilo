@@ -85,3 +85,114 @@
 .callout strong {
   background: none;
 }
+
+/* 체크리스트: 해야 할 일을 체크 표시가 붙은 항목으로 */
+.cklist {
+  padding: 22px 22px 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.cklist__t {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent-ink);
+}
+.cklist__g {
+  margin-top: 16px;
+}
+.cklist__g + .cklist__g {
+  padding-top: 16px;
+  border-top: 1px dashed var(--line);
+}
+.cklist__h {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 0 0 10px;
+}
+.cklist__l {
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.cklist__note {
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-ink);
+}
+.cklist__items {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cklist__items--grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.cklist__items li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.cklist__ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+}
+.cklist__ic::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  -webkit-mask: var(--chk) center / contain no-repeat;
+  mask: var(--chk) center / contain no-repeat;
+}
+.cklist__f {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.cklist__fl {
+  font-weight: 800;
+  color: var(--ink);
+}
+@media (max-width: 680px) {
+  .cklist {
+    padding: 18px 14px 16px;
+  }
+  .cklist__items--grid {
+    gap: 6px;
+  }
+  .cklist__items li {
+    gap: 8px;
+    padding: 8px 10px;
+    font-size: 13.5px;
+  }
+}

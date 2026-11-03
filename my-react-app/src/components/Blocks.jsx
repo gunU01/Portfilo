@@ -1,4 +1,4 @@
-import { Callout, List, Paragraph, Quote, Subheading } from './blocks/text.jsx'
+import { Callout, Checklist, List, Paragraph, Quote, Subheading } from './blocks/text.jsx'
 import { Chart, Flow, Goals, Readout, Stats, Table, Timeline } from './blocks/data.jsx'
 import { BeforeAfter, Decisions, Roles } from './blocks/compare.jsx'
 import { Figure, Gallery } from './blocks/media.jsx'
@@ -8,6 +8,7 @@ import { Figure, Gallery } from './blocks/media.jsx'
 const TYPES = {
   p: { render: (b) => <Paragraph text={b.text} /> },
   list: { render: (b) => <List items={b.items} /> },
+  checklist: { render: (b) => <Checklist title={b.title} groups={b.groups} footer={b.footer} /> },
   quote: { render: (b) => <Quote text={b.text} cite={b.cite} /> },
   callout: { render: (b) => <Callout tone={b.tone} title={b.title} text={b.text} points={b.points} /> },
   h3: { render: (b) => <Subheading text={b.text} /> },
