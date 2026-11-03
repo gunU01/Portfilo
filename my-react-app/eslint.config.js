@@ -29,7 +29,8 @@ export default defineConfig([
   // 검증 하네스와 설정 파일은 브라우저가 아니라 Node 에서 돌아갑니다. page.evaluate 안의 코드만 브라우저에서 돕니다.
   {
     files: ['harness/**/*.mjs', 'planning/**/*.mjs', 'vite.config.js'],
+    extends: [js.configs.recommended], // 쓰지 않는 변수와 같은 흔한 실수를 하네스 코드에서도 잡습니다
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
-    rules: { 'no-empty': ['error', { allowEmptyCatch: true }] },
+    rules: { 'no-empty': ['error', { allowEmptyCatch: true }], 'no-unused-vars': ['error', { caughtErrors: 'none' }] },
   },
 ])

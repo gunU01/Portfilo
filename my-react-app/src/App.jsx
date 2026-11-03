@@ -14,6 +14,7 @@ import { useRouteScroll } from './lib/useRouteScroll.js'
 import { useCanonicalRoute } from './lib/useCanonicalRoute.js'
 import { usePrefetch } from './lib/usePrefetch.js'
 import { usePageMeta } from './lib/usePageMeta.js'
+import { nearestPath, slugOf } from './lib/routes.js'
 
 // 처음 화면(홈)만 먼저 받고, 나머지 페이지는 그 경로에 들어갈 때 받습니다.
 const loaders = {
@@ -38,9 +39,9 @@ const PAGES = {
   '/about': { title: 'About', Page: About, description: profile.site.pages.about },
 }
 
-// /work/<slug>, /blog/<slug> 처럼 목록에서 찾는 경로: 주소의 slug 와 같은 항목(없으면 undefined)
-const findBySlug = (index, path, prefix) => {
-  const slug = path.match(new RegExp(`^/${prefix}/([\\w-]+)$`))?.[1]
+// 목록(caseIndex, postIndex)에서 주소의 slug 와 같은 항목을 찾습니다(없으면 undefined)
+const findBySlug = (index, path, kind) => {
+  const slug = slugOf(path, kind)
   return index.find((item) => item.slug === slug)
 }
 
@@ -49,8 +50,8 @@ export default function App() {
   useInkHover()
   useFollow()
   useScrollProgress()
-  const current = findBySlug(caseIndex, path, 'work')
-  const post = findBySlug(postIndex, path, 'blog')
+  const current = findBySlug(caseIndex, path, 'case')
+  const post = findBySlug(postIndex, path, 'post')
   useAccent(current?.accent)
   const page = PAGES[path]
   const title = current?.title ?? post?.title ?? page?.title
@@ -67,8 +68,7 @@ export default function App() {
 
   // 주소 정리: 없는 경로는 가까운 곳으로 옮깁니다(케이스와 글은 목록으로, 그 밖에는 홈으로)
   const known = path === '/' || Boolean(page) || Boolean(current) || Boolean(post)
-  const nearest = /^\/(work|blog)\//.test(path) ? '/project' : '/'
-  useCanonicalRoute(known ? path : nearest, typed, known ? query : '')
+  useCanonicalRoute(known ? path : nearestPath(path), typed, known ? query : '')
 
   // 한가할 때 가벼운 페이지를, 책상은 메뉴에 마우스를 올리면 미리 받습니다
   usePrefetch(PREFETCH)

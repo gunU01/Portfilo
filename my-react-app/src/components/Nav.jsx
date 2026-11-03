@@ -1,6 +1,7 @@
 import { profile } from '../data/profile.js'
 import { useActivePill } from '../lib/useActivePill.js'
 import { scrollToTop } from '../lib/dom.js'
+import { menuPath } from '../lib/routes.js'
 
 const LINKS = [
   ['/', 'Home'],
@@ -9,7 +10,7 @@ const LINKS = [
 ]
 
 export default function Nav({ path }) {
-  const current = path.startsWith('/work/') || path.startsWith('/blog/') ? '/project' : path
+  const current = menuPath(path)
   const { linksRef, pillRef } = useActivePill(current) // 현재 메뉴 뒤의 알약이 메뉴를 옮겨 다닙니다
   // 이미 그 화면이면 주소가 안 바뀌어 아무 일도 없으므로, 맨 위로 올라가게 합니다
   const topIfHere = (to) => (e) => {

@@ -195,10 +195,6 @@ async function tabSweep(page, limit) {
     window.scrollTo(0, 0)
     document.activeElement?.blur()
   })
-  const sig = (el) => {
-    const cs = getComputedStyle(el)
-    return [cs.outlineStyle, cs.outlineWidth, cs.boxShadow, cs.backgroundColor, cs.color, cs.borderTopColor, cs.textDecorationLine, cs.opacity, cs.transform].join('|')
-  }
   for (let i = 0; i < limit; i++) {
     await page.keyboard.press('Tab')
     await page.waitForTimeout(40)

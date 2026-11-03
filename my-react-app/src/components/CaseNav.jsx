@@ -1,12 +1,13 @@
 import { cases } from '../data/cases.js'
 import Arrow from './Arrow.jsx'
+import { caseHref } from '../lib/routes.js'
 
 // 케이스 맨 아래: 이전과 다음 프로젝트로 이어 주는 두 장의 카드. 목록 순서를 따르고, 처음의 이전은 마지막, 마지막의 다음은 처음으로 돌아갑니다.
 // 이름은 CaseNav 지만 이전 카드도 여기서 그립니다. 각 카드는 자기가 가리키는 프로젝트의 포인트 색을 씁니다.
 function NavCard({ project, dir, order }) {
   const prev = dir === 'prev'
   return (
-    <a className={`cnav__a cnav__a--${dir}`} href={`#/work/${project.slug}`} data-accent={project.accent ?? 'blue'} aria-label={`${prev ? '이전' : '다음'} 프로젝트: ${project.title}`}>
+    <a className={`cnav__a cnav__a--${dir}`} href={caseHref(project.slug)} data-accent={project.accent ?? 'blue'} aria-label={`${prev ? '이전' : '다음'} 프로젝트: ${project.title}`}>
       {prev && (
         <span className="cnav__go">
           <Arrow dir="left" />

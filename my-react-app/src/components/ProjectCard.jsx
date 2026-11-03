@@ -1,10 +1,11 @@
 import CaseCover from './CaseCover.jsx'
 import Arrow from './Arrow.jsx'
+import { caseHref } from '../lib/routes.js'
 
 // 프로젝트 목록의 카드 한 장. 카드 전체가 케이스로 가는 링크이고, 케이스의 포인트 색(accent)을 따릅니다.
 export default function ProjectCard({ c }) {
   return (
-    <a className="pcard follow reveal is-in" href={`#/work/${c.slug}`} data-accent={c.accent}>
+    <a className="pcard follow reveal is-in" href={caseHref(c.slug)} data-accent={c.accent}>
       {c.cover ? <CaseCover cover={c.cover} size="card" /> : <div className="cover cover--card cover--blank" aria-hidden="true" />}
       <div className="pcard__text">
         <h2 className="pcard__t">
