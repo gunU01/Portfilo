@@ -15,14 +15,14 @@ const POSITIONS = {
 
 // 가리키는 물건 위에 뜨는 검은 말풍선
 export default function Tags() {
-  const { active } = useContext(DeskContext)
+  const { active, showAll } = useContext(DeskContext)
   return (
     <g className="desk__tags" pointerEvents="none">
       {Object.entries(POSITIONS).map(([id, [x, y]]) => {
         const label = titles[id]
         const w = label.length * 24 + 40
         return (
-          <g key={id} className={active === id ? 'tag is-on' : 'tag'} transform={`translate(${x} ${y})`}>
+          <g key={id} className={active === id || showAll ? 'tag is-on' : 'tag'} transform={`translate(${x} ${y})`}>
             <rect x={-w / 2} y="-24" width={w} height="42" rx="21" fill="#2b2118" />
             <text x="0" y="5" textAnchor="middle" className="desk__tagtext">
               {label}

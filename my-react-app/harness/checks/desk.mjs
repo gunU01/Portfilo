@@ -1,15 +1,46 @@
 import assert from 'node:assert/strict'
 import { openPage, VIEWPORTS, waitFor } from '../lib/browser.mjs'
-import { deskLabels } from '../lib/site.mjs'
+import { deskLabels, go } from '../lib/site.mjs'
 
 export default {
   name: 'desk',
-  about: '책상의 물건 7개를 키보드와 마우스로 열고 닫을 수 있고, 모바일에서는 가운데가 먼저 보인다',
+  about: '책상의 물건 7개를 키보드와 마우스로 열고 닫을 수 있고, 눌러 볼 수 있다는 표시와 모두 보기 버튼이 있고, 모바일에서는 가운데가 먼저 보인다',
   async run({ browser, url, t }) {
     const { page, context, errors } = await openPage(browser)
     const labels = await deskLabels(page, url)
 
     await t('핫스팟 7개', async () => assert.equal(labels.length, 7))
+
+    await t('평소에도 눌러 볼 수 있다는 표시가 물건마다 보이고, 이름표는 꺼져 있다', async () => {
+      await go(page, url, '/desk')
+      await page.waitForSelector('.hs__ping')
+      assert.equal(await page.locator('.hs__ping').count(), 7, '표시가 7개여야 합니다')
+      const opacities = await page.$$eval('.hs__ping', (els) => els.map((e) => Number(getComputedStyle(e).opacity)))
+      assert.ok(opacities.every((o) => o > 0.9), `표시가 보이지 않습니다: ${opacities}`)
+      assert.equal(await page.locator('.tag.is-on').count(), 0)
+    })
+
+    await t('모두 보기 버튼: 누르면 이름표가 7개 모두 켜지고, 다시 누르면 꺼진다(aria-pressed 가 따라감)', async () => {
+      const btn = page.locator('.desk__hint')
+      assert.equal(await btn.getAttribute('aria-pressed'), 'false')
+      await btn.click()
+      assert.equal(await btn.getAttribute('aria-pressed'), 'true')
+      await waitFor(async () => (await page.locator('.tag.is-on').count()) === 7, { message: '이름표 7개가 켜지지 않았습니다' })
+      await btn.click()
+      await waitFor(async () => (await page.locator('.tag.is-on').count()) === 0, { message: '이름표가 꺼지지 않았습니다' })
+    })
+
+    await t('패널이 열리면 표시와 모두 보기 버튼이 사라진다', async () => {
+      await page.click(`[aria-label="${labels[0]}"]`, { force: true })
+      await page.waitForSelector('.desk__panel')
+      try {
+        assert.equal(await page.locator('.desk__hint').isVisible(), false)
+        // 표시는 0.2초에 걸쳐 사라지므로 다 사라질 때까지 기다립니다
+        await waitFor(() => page.$$eval('.hs__ping', (els) => els.every((e) => Number(getComputedStyle(e).opacity) === 0)), { message: '표시가 사라지지 않았습니다' })
+      } finally {
+        await page.keyboard.press('Escape') // 실패해도 패널을 닫아 다음 검사에 영향을 주지 않게 합니다
+      }
+    })
 
     for (const label of labels) {
       const name = label.replace(/ 열기$/, '')

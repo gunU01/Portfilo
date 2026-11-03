@@ -11,9 +11,9 @@ import { Rug, Chair, FloorPlant } from './desk/Foreground.jsx'
 // 눌러 볼 수 있는 물건(핫스팟)은 desk/ 아래에서 <Hotspot>으로 감싸며, 호버나 포커스 때 살짝 떠오르고 이름표가 뜹니다.
 // 층(back/mid/front)마다 마우스에 다르게 반응합니다(CSS 변수 --px/--py, 스타일은 desk.css).
 
-export default function DeskScene({ active, setActive, onOpen }) {
+export default function DeskScene({ active, setActive, onOpen, showAll }) {
   return (
-    <DeskContext value={{ active, setActive, onOpen }}>
+    <DeskContext value={{ active, setActive, onOpen, showAll }}>
       <svg className="desk__svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" role="group" aria-label="책상 위의 물건들. 물건을 눌러 내용을 엽니다">
         <Defs />
 

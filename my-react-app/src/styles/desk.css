@@ -402,6 +402,73 @@
     max-height: 68%;
   }
 }
+/* 눌러 볼 수 있다는 표시: 물건 위의 깜빡이는 동그라미. 가리키거나 패널이 열리면 사라집니다. (모션 줄이기에서는 아래 맨 끝 규칙이 깜빡임을 끄고 점만 남깁니다) */
+.hs__dot {
+  fill: #fff;
+  stroke: #e8761d;
+  stroke-width: 5;
+}
+.hs__ring {
+  fill: none;
+  stroke: #e8761d;
+  stroke-width: 4;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hs-ping 2.4s ease-out infinite;
+}
+@keyframes hs-ping {
+  from {
+    opacity: 0.7;
+    transform: scale(0.45);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+.hs__ping {
+  transition: opacity 0.2s ease;
+}
+.hs.is-on .hs__ping,
+.desk--open .hs__ping {
+  opacity: 0;
+}
+/* 이름표 모두 보기 버튼 */
+.desk__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  z-index: 3;
+  translate: -50% 0;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: #2b2118;
+  color: #fff;
+  font: 700 14px var(--font);
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgb(60 40 10 / 0.3);
+  transition: background 0.2s ease, scale 0.14s ease-out;
+}
+.desk__hint[aria-pressed='true'] {
+  background: #e8761d;
+}
+.desk__hint:active {
+  scale: 0.96;
+}
+.desk__hint:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+.desk--open .desk__hint {
+  display: none;
+}
+@media print {
+  .desk__hint {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .desk__panel,
   .desk__svg * {
