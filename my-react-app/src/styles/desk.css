@@ -64,11 +64,14 @@
   outline: none;
 }
 .hs__body {
-  transition: transform 0.28s cubic-bezier(0.3, 1.5, 0.5, 1), filter 0.2s ease;
+  /* 꺼질 때: 튕기지 않고 부드럽게 내려앉음 */
+  transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.3, 1), filter 0.3s ease;
   transform-box: fill-box;
   transform-origin: 50% 100%;
 }
 .hs.is-on .hs__body {
+  /* 켜질 때: 살짝 튕기며 떠오름 */
+  transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1), filter 0.25s ease;
   transform: translateY(-7px) scale(1.025);
   filter: drop-shadow(8px 8px 0 #0038ff);
 }
@@ -86,6 +89,7 @@
 }
 .desk__blink,
 .cat__blink {
+  transition: opacity 0.25s ease;
   transform-box: fill-box;
   transform-origin: 50% 50%;
   animation: blink 5.5s infinite;
@@ -113,10 +117,11 @@
 /* 책 더미 위 고양이: 호버하면 눈을 감고 웃으며 파란 마름모를 날립니다 */
 .desk__happy {
   opacity: 0;
-  transition: opacity 0.15s;
+  transition: opacity 0.25s ease;
 }
 .desk__hearts {
   opacity: 0;
+  transition: opacity 0.3s ease;
 }
 .desk__heart {
   transform-box: fill-box;
@@ -304,10 +309,11 @@
 }
 .tag {
   opacity: 0;
-  transition: opacity 0.18s ease;
+  transition: opacity 0.3s ease;
 }
 .tag.is-on {
   opacity: 1;
+  transition-duration: 0.2s;
 }
 
 /* ---- 설명 패널: 각진 흰 상자에 검은 테두리와 딱딱한 그림자 ---- */

@@ -1,7 +1,10 @@
-import { useContext, useLayoutEffect, useRef } from 'react'
+import { useContext, useEffect, useLayoutEffect, useRef } from 'react'
 import { DeskContext } from './deskContext.js'
 import { titles } from '../../data/desk.js'
 import { PINGS } from './pings.js'
+
+const ON_DELAY = 70 // 마우스가 올라온 뒤 이만큼(ms) 머물러야 켜집니다
+const OFF_DELAY = 140 // 마우스가 나간 뒤 이만큼(ms) 지나야 꺼집니다(그 사이 다시 들어오면 그대로 유지)
 
 // 눌러 볼 수 있는 물건. 호버나 포커스 때 살짝 떠오르고(.is-on), 클릭이나 Enter/Space 로 열립니다.
 // 떠오르면 물건이 커서 밑에서 빠져나가 호버가 풀렸다 다시 걸리며 떨리므로, 떠오르지 않는 '가만히 있는 감지 영역'(.hs__hit)을
@@ -19,16 +22,26 @@ export default function Hotspot({ id, children }) {
     hit.current.setAttribute('height', b.height + 8)
   }, [])
   const { active, setActive, onOpen } = useContext(DeskContext)
-  const off = () => setActive((v) => (v === id ? null : v))
+  // 마우스를 아주 잠깐 스치거나 가장자리에서 흔들려도 번쩍이지 않도록, 켜질 때와 꺼질 때에 짧은 유예를 둡니다.
+  // (키보드 포커스는 바로 켜고 끕니다)
+  const timer = useRef(0)
+  const set = (on, wait) => {
+    clearTimeout(timer.current)
+    const apply = () => setActive((v) => (on ? id : v === id ? null : v))
+    if (wait > 0) timer.current = setTimeout(apply, wait)
+    else apply()
+  }
+  useEffect(() => () => clearTimeout(timer.current), [])
+  const off = () => set(false, 0)
   return (
     <g
       className={active === id ? 'hs is-on' : 'hs'}
       role="button"
       tabIndex={0}
       aria-label={`${titles[id]} 열기`}
-      onPointerEnter={() => setActive(id)}
-      onPointerLeave={off}
-      onFocus={() => setActive(id)}
+      onPointerEnter={() => set(true, ON_DELAY)}
+      onPointerLeave={() => set(false, OFF_DELAY)}
+      onFocus={() => set(true, 0)}
       onBlur={off}
       onClick={() => onOpen(id)}
       onKeyDown={(e) => {

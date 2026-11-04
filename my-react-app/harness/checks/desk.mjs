@@ -51,6 +51,35 @@ export default {
       await page.waitForTimeout(400)
     })
 
+    await t('마우스를 아주 잠깐 스치면 번쩍이지 않고, 머물면 켜졌다가 나가면 부드럽게 꺼진다', async () => {
+      await go(page, url, '/desk')
+      await page.waitForSelector('.hs__hit')
+      const box = await page.locator('.hs__hit').first().boundingBox()
+      const cx = box.x + box.width / 2
+      const cy = box.y + box.height / 2
+      await page.mouse.move(5, 5)
+      // 스침: 들어갔다가 바로(약 30ms) 나옴 -> 한 번도 켜지면 안 됨
+      let flashed = false
+      await page.evaluate(() => {
+        window.__on = false
+        new MutationObserver(() => {
+          if (document.querySelector('.hs.is-on')) window.__on = true
+        }).observe(document.querySelector('.desk__svg'), { subtree: true, attributes: true, attributeFilter: ['class'] })
+      })
+      await page.mouse.move(cx, cy)
+      await page.waitForTimeout(25)
+      await page.mouse.move(5, 5)
+      await page.waitForTimeout(400)
+      flashed = await page.evaluate(() => window.__on)
+      assert.equal(flashed, false, '아주 잠깐 스쳤는데 켜졌다 꺼졌습니다(번쩍임)')
+      // 머묾: 켜져야 함
+      await page.mouse.move(cx, cy)
+      await waitFor(async () => (await page.locator('.hs.is-on').count()) === 1, { message: '머물렀는데 켜지지 않았습니다' })
+      await page.mouse.move(5, 5)
+      await waitFor(async () => (await page.locator('.hs.is-on').count()) === 0, { message: '나갔는데 꺼지지 않았습니다' })
+      await page.waitForTimeout(500)
+    })
+
     await t('음표는 뒤의 서랍 클릭을 통과시키고, 고양이 몸은 클릭을 받아 서랍이 열리지 않는다(고양이를 만질 수 있음)', async () => {
       await go(page, url, '/desk')
       await page.waitForSelector('.hs')
@@ -59,7 +88,8 @@ export default {
           const r = el.getBoundingClientRect()
           return document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)
         }
-        const note = [...document.querySelectorAll('.desk__note')].map((n) => at(n)?.closest('.hs') !== null)
+        // 음표는 움직이는 중이라 자리가 매번 달라서, 마우스를 받지 않는 요소인지(pointer-events: none)로 확인합니다
+        const note = [...document.querySelectorAll('.desk__note')].map((n) => getComputedStyle(n).pointerEvents === 'none')
         const cat = at(document.querySelector('.cat--touch path[fill="#0a0a0a"]'))
         return { note, catBlocks: Boolean(cat?.closest('.cat--touch')) && cat.closest('.hs') === null }
       })
@@ -146,8 +176,8 @@ export default {
       await waitFor(async () => (await pupil()) !== left, { message: '눈동자가 마우스를 따라가지 않습니다' })
       await page.hover('[aria-label="기획물 열기"]', { force: true })
       await waitFor(() => page.$eval('.desk__happy', (e) => Number(getComputedStyle(e).opacity) > 0.9), { message: '웃는 눈이 나타나지 않습니다' })
-      assert.ok(await page.$eval('.desk__blink', (e) => Number(getComputedStyle(e).opacity) < 0.1), '평소 눈은 숨겨져야 합니다')
-      assert.ok(await page.$eval('.desk__hearts', (e) => Number(getComputedStyle(e).opacity) > 0.9), '하트가 나타나야 합니다')
+      await waitFor(() => page.$eval('.desk__blink', (e) => Number(getComputedStyle(e).opacity) < 0.1), { message: '평소 눈은 숨겨져야 합니다' })
+      await waitFor(() => page.$eval('.desk__hearts', (e) => Number(getComputedStyle(e).opacity) > 0.9), { message: '하트가 나타나야 합니다' })
     })
     await t('호버 반응: 서랍이 열리고, 노트북 화면의 카드와 액자가 움직인다', async () => {
       await page.hover('[aria-label="대회 참가 열기"]', { force: true })
