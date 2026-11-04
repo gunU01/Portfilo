@@ -7,15 +7,6 @@ import { useReveal } from '../lib/useReveal.js'
 import Spec from '../components/Spec.jsx'
 import SkillMap from '../components/SkillMap.jsx'
 import Rich from '../components/Rich.jsx'
-import SectionDial from '../components/SectionDial.jsx'
-
-const SECTIONS = [
-  ['intro', '소개'],
-  ['skills', '기술'],
-  ['history', '활동'],
-  ['contests', '대회'],
-  ...(awards.length ? [['awards', '수상']] : []),
-]
 
 export default function About() {
   const { about } = profile
@@ -26,8 +17,6 @@ export default function About() {
 
   return (
     <div className="ab">
-      <SectionDial sections={SECTIONS} />
-
       <section className="wrap ab__intro" id="intro" aria-labelledby="ab-title">
         <div className="ab__introgrid">
           <div>
