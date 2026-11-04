@@ -36,7 +36,7 @@ export function Window() {
       <rect x="84" y="244" width="292" height="12" className="d-w d-o3" />
       <rect x="84" y="114" width="292" height="282" fill="none" className="d-o" />
       <rect x="40" y="420" width="380" height="26" className="d-w d-o" />
-      <CatWindow x={150} y={420} />
+      <CatWindow x={180} y={420} />
     </g>
   )
 }
@@ -50,16 +50,17 @@ const FRAMES = [
 
 function Frame({ x, y, w, h, medal, i }) {
   const cx = x + w / 2
-  const cy = y + h / 2
   const r = Math.min(w, h) * 0.22
+  const cy = y + h / 2 - (h < 130 ? 8 : 0) // 낮은 액자는 리본이 아래 테두리에 닿지 않게 조금 올림
   return (
     <g className="desk__frame" style={{ '--i': i }}>
       <rect x={x + 9} y={y + 9} width={w} height={h} fill="#0a0a0a" />
       <rect x={x} y={y} width={w} height={h} className="d-w d-o" />
       <rect x={x + 12} y={y + 12} width={w - 24} height={h - 24} className="d-p d-o3" />
       <polygon points={pts([[cx - r * 0.7, cy + r * 0.3], [cx - r * 0.95, cy + r * 1.7], [cx, cy + r * 1.2], [cx + r * 0.95, cy + r * 1.7], [cx + r * 0.7, cy + r * 0.3]])} className="d-w d-o3" />
+      {medal === 'g' && <polygon points={hex(cx, cy, r)} className="d-w" />}
       <polygon points={hex(cx, cy, r)} className={`d-o3 ${medal === 'k' ? 'd-k' : medal === 'g' ? 'd-g' : 'd-w'}`} />
-      <polygon points={hex(cx, cy, r * 0.5)} className={medal === 'k' ? 'd-w' : 'd-k'} />
+      <polygon points={hex(cx, cy, r * 0.5)} className={medal === 'w' ? 'd-k' : 'd-w'} />
     </g>
   )
 }

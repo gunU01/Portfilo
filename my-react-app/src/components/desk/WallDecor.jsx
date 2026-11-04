@@ -1,11 +1,10 @@
-import { profile } from '../../data/profile.js'
 import { hex, pts } from './shapes.js'
 
 // 눌리지 않는 벽 장식: 글자 타일(이름 옆 직무), 선반(책, 화분), 포스트잇.
 
-// 직무(PM / FE)의 글자를 한 글자씩 타일로 붙입니다.
+// 이름 'MOON' 을 한 글자씩 타일로 붙입니다.
 export function Letters() {
-  const letters = profile.roleLine.replace(/[^A-Za-z]/g, '').split('')
+  const letters = 'MOON'.split('')
   const tilt = [-3, 2, -2, 3]
   return (
     <g>

@@ -1,4 +1,3 @@
-import { spikes } from './shapes.js'
 
 // 고양이들: 검은 실루엣에 흰 동그라미 눈. 몸은 둥글고 부드러운 곡선으로 그립니다(주변 물건은 각진 도형). 좌표는 모두 '앉은 자리 가운데 아래'를 (0, 0)으로 한 값이고, 위쪽이 음수입니다.
 // 눈동자(.desk__look)는 모든 고양이가 마우스를 따라가고, 눈 깜빡임(.cat__blink)도 모두 합니다.
@@ -88,12 +87,20 @@ export function PeekPaws({ x, y }) {
   )
 }
 
-// C. 창턱에 앉아 바깥을 보는 뒷모습 고양이
+// C. 창턱에 앉아 바깥을 보는 뒷모습 고양이: 통통한 종 모양 몸에 둥근 머리, 쫑긋한 두 귀, 옆으로 길게 늘어뜨린 꼬리
 export function CatWindow({ x, y }) {
   return (
     <g transform={`translate(${x} ${y})`}>
-      <Tail d="M-34 -8 C-78 -8 -90 -48 -68 -66" width={14} origin="100% 100%" />
-      <path d="M-38 0 C-48 -40 -36 -82 -22 -98 C-24 -108 -24 -118 -20 -128 C-10 -122 -2 -114 0 -106 C2 -114 10 -122 20 -128 C24 -118 24 -108 22 -98 C36 -82 48 -40 38 0 Z" fill={INK} />
+      <Tail d="M-50 -8 C-100 -4 -122 -26 -112 -52" width={18} origin="100% 100%" />
+      <path d="M-62 0 C-80 -32 -64 -78 -28 -96 C-10 -101 10 -101 28 -96 C64 -78 80 -32 62 0 C30 7 -30 7 -62 0 Z" fill={INK} />
+      <path
+        d="M-46 -112 C-50 -132 -46 -150 -41 -168 C-29 -160 -19 -152 -12 -146 C-4 -148 4 -148 12 -146 C19 -152 29 -160 41 -168 C46 -150 50 -132 46 -112 C44 -92 22 -82 0 -82 C-22 -82 -44 -92 -46 -112 Z"
+        fill={INK}
+      />
+      <g stroke={INK} strokeWidth="3.5" strokeLinecap="round" fill="none">
+        <path d="M-47 -122 C-56 -123 -62 -121 -68 -119 M-47 -112 C-56 -112 -64 -109 -70 -106" />
+        <path d="M47 -122 C56 -123 62 -121 68 -119 M47 -112 C56 -112 64 -109 70 -106" />
+      </g>
     </g>
   )
 }
@@ -122,27 +129,30 @@ export function CatHeadphones({ x, y }) {
   )
 }
 
-// E. 책상 밑에서 올려다보는 검댕이 고양이: 둥근 털 뭉치(뾰족한 끝을 둥글게 눌러 부드럽게)
-export function CatSoot({ x, y }) {
-  return (
-    <g transform={`translate(${x} ${y})`}>
-      <polygon points={spikes(0, 0, 50, 38, 14)} fill={INK} stroke={INK} strokeWidth="8" strokeLinejoin="round" />
-      <Eyes y={-2} gap={19} r={12} delay={3.6} />
-    </g>
-  )
-}
-
-// F. 뒷발로 서서 책상 가장자리에 앞발을 올리는 고양이. 몸을 길게 세우고 팔은 짧게 해서, 책상 윗면(바닥에서 약 296)에 앞발이 닿게 합니다.
+// F. 뒷발로 서서 앞발을 번쩍 든 고양이. 몸을 키 크게 세워 어깨를 높이고, 앞발은 짧고 통통하게 몸 바깥쪽으로 들어 올립니다(손을 흔드는 모습).
 export function CatReach({ x, y }) {
   return (
     <g transform={`translate(${x} ${y})`}>
       <Tail d="M30 -12 C80 -10 96 -46 82 -78" />
-      <path d={body(38, 200)} fill={INK} />
-      <path d="M22 -176 C40 -206 42 -250 40 -292" fill="none" stroke={INK} strokeWidth="22" strokeLinecap="round" />
-      <circle cx="40" cy="-304" r="16" fill={INK} />
-      <path d="M27 -328 V-346 M40 -332 V-352 M53 -328 V-346" stroke={INK} strokeWidth="5" strokeLinecap="round" fill="none" />
-      <path d={HEAD} transform={headAt(0.84, 128)} fill={INK} />
-      <Eyes y={-216} gap={22} r={13} delay={0.6} />
+      <path d={body(40, 250)} fill={INK} />
+      <path d="M-22 -196 C-72 -206 -94 -246 -88 -292" fill="none" stroke={INK} strokeWidth="26" strokeLinecap="round" />
+      <path transform="translate(-142 0)" d="M54 -300 m-17 -4 a16 15 0 0 1 12 -14 a12 12 0 0 1 20 0 a16 15 0 0 1 12 14 C70 -284 38 -284 37 -304 Z" fill={INK} />
+      <path d={HEAD} transform={headAt(0.84, 178)} fill={INK} />
+      <Eyes y={-266} gap={22} r={13} delay={0.6} />
+    </g>
+  )
+}
+
+// G. 바닥에 납작하게 엎드려 앞발을 쭉 뻗은 고양이
+export function CatLying({ x, y }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <Tail d="M118 -10 C152 -8 164 -30 154 -54" />
+      <path d="M-70 0 C-70 -52 -30 -66 30 -64 C90 -62 126 -44 126 0 Z" fill={INK} />
+      <ellipse cx="-122" cy="-7" rx="26" ry="9" fill={INK} />
+      <path d="M-126 -34 C-126 -58 -108 -66 -88 -66 C-68 -66 -50 -58 -50 -34 C-50 -10 -68 0 -88 0 C-108 0 -126 -10 -126 -34 Z" fill={INK} />
+      <path d="M-116 -56 L-112 -84 L-92 -64 Z M-84 -64 L-64 -82 L-60 -56 Z" fill={INK} stroke={INK} strokeWidth="6" strokeLinejoin="round" />
+      <Eyes x={-88} y={-34} gap={17} r={8} delay={1.8} />
     </g>
   )
 }

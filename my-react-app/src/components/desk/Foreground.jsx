@@ -1,7 +1,7 @@
-import { CatHeadphones, CatReach } from './Cats.jsx'
+import { CatHeadphones, CatLying, CatReach } from './Cats.jsx'
 import { pts } from './shapes.js'
 
-// 앞쪽: 러그와 그 위의 헤드폰 고양이, 의자 등받이, 바닥 화분, 책상 모서리로 앞발을 뻗는 고양이. 마우스에 가장 크게 반응하는 층입니다.
+// 앞쪽: 러그와 그 위의 헤드폰 고양이와 엎드린 고양이, 의자 등받이, 바닥 화분, 앞발을 든 고양이. 마우스에 가장 크게 반응하는 층입니다.
 
 export function Rug() {
   return (
@@ -10,6 +10,9 @@ export function Rug() {
       <polygon points={pts([[366, 880], [1234, 880], [1196, 836], [404, 836]])} fill="none" className="d-o3" />
       <polygon points={pts([[420, 864], [1180, 864], [1160, 850], [440, 850]])} className="d-g" />
       <CatHeadphones x={500} y={872} />
+      <g transform="translate(1085 882) scale(0.8)">
+        <CatLying x={0} y={0} />
+      </g>
     </g>
   )
 }
@@ -38,5 +41,5 @@ export function FloorPlant() {
 }
 
 export function CatLeft() {
-  return <CatReach x={104} y={892} />
+  return <CatReach x={150} y={892} />
 }

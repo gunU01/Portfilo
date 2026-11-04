@@ -1,6 +1,4 @@
-import { CatSoot } from './Cats.jsx'
-
-// 바닥과 책상 밑. 바닥은 옅은 종이색에 빗금, 책상 밑은 망점으로 어둡게 하고 검댕이 고양이가 올려다봅니다.
+// 바닥과 책상 밑. 바닥은 옅은 종이색에 빗금, 책상 밑은 망점으로 어둡게 합니다.
 export function Floor() {
   return (
     <g>
@@ -17,7 +15,6 @@ export function UnderDesk() {
       <rect x="250" y="790" width="1100" height="110" className="d-w" />
       <rect x="250" y="790" width="1100" height="110" className="d-g" />
       <rect x="250" y="790" width="1100" height="10" className="d-k" />
-      <CatSoot x={1296} y={866} />
     </g>
   )
 }

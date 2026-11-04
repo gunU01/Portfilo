@@ -10,13 +10,3 @@ export const hex = (cx, cy, r) =>
       return [Math.round(cx + r * Math.cos(a)), Math.round(cy + r * Math.sin(a))]
     }),
   )
-
-// 가시 모양 별(검댕이 고양이의 털). 바깥 반지름 r1, 안쪽 반지름 r2, 뾰족한 곳 n 개.
-export const spikes = (cx, cy, r1, r2, n) =>
-  pts(
-    Array.from({ length: n * 2 }, (_, i) => {
-      const r = i % 2 === 0 ? r1 : r2
-      const a = (Math.PI / n) * i - Math.PI / 2
-      return [Math.round(cx + r * Math.cos(a)), Math.round(cy + r * Math.sin(a))]
-    }),
-  )
