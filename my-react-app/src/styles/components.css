@@ -294,7 +294,7 @@ h4 {
   text-align: center;
 }
 .logo__mark {
-  width: clamp(96px, 14vw, 168px);
+  width: clamp(110px, 17vw, 210px);
   height: auto;
   overflow: visible;
 }
@@ -302,18 +302,29 @@ h4 {
   width: clamp(80px, 32%, 124px);
 }
 .logo__plate {
+  fill: #fff;
+  stroke: var(--accent);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.logo__chip {
   fill: var(--accent);
+  stroke: none;
 }
 .logo__check {
   fill: none;
-  stroke: #fff;
-  stroke-width: 7;
+  stroke: var(--accent);
+  stroke-width: 6.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 .logo__crumb {
-  fill: var(--accent);
-  opacity: 0;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .logo__name {
   margin: 4px 0 0;

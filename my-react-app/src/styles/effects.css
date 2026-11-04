@@ -212,7 +212,7 @@ main:has(> .page-wait) ~ .footer {
   }
 }
 
-/* ---------- 오늘한입 로고: 체크가 그려지고, 마우스를 올리면 한 입 더 베어 묾 ---------- */
+/* ---------- 오늘한입 로고: 체크가 그려지고, 마우스를 올리면 접시가 기울고 부스러기가 튐 ---------- */
 .logo__mark {
   overflow: visible;
 }
@@ -225,36 +225,32 @@ main:has(> .page-wait) ~ .footer {
     stroke-dashoffset: 1;
   }
 }
-.logo__bite {
+.logo__plate {
   transform-box: fill-box;
-  transform-origin: 50% 50%;
-  transition: transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1);
+  transform-origin: 50% 60%;
+  transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.5, 1);
 }
 .logo__crumb {
-  transition: opacity 0.2s ease, transform 0.45s cubic-bezier(0.3, 1.4, 0.5, 1);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform 0.45s cubic-bezier(0.3, 1.4, 0.5, 1);
 }
 @media (hover: hover) {
-  .cover--logo:hover .logo__bite,
-.pcard:hover .logo__bite {
-    transform: scale(1.3);
+  .cover--logo:hover .logo__plate,
+  .pcard:hover .logo__plate {
+    transform: rotate(-5deg);
   }
-}
-@media (hover: hover) {
-  .cover--logo:hover .logo__crumb,
-.pcard:hover .logo__crumb {
-    opacity: 0.9;
-  }
-}
-@media (hover: hover) {
   .cover--logo:hover .logo__crumb--1,
-.pcard:hover .logo__crumb--1 {
-    transform: translate(3px, 5px);
+  .pcard:hover .logo__crumb--1 {
+    transform: translate(4px, -4px) rotate(30deg);
   }
-}
-@media (hover: hover) {
   .cover--logo:hover .logo__crumb--2,
-.pcard:hover .logo__crumb--2 {
-    transform: translate(5px, 2px);
+  .pcard:hover .logo__crumb--2 {
+    transform: translate(5px, 3px) rotate(-20deg);
+  }
+  .cover--logo:hover .logo__crumb--3,
+  .pcard:hover .logo__crumb--3 {
+    transform: translate(2px, -5px);
   }
 }
 
