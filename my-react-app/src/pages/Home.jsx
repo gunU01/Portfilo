@@ -52,12 +52,6 @@ function Hero() {
                 책상에서 둘러보기
               </a>
             </div>
-            <div className="pin__rail" aria-hidden="true">
-              {hero.keywords.map((k) => (
-                <i key={k} />
-              ))}
-              <span>스크롤해서 보기</span>
-            </div>
           </div>
         </div>
       </div>

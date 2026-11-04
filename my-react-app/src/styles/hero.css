@@ -177,53 +177,6 @@
 .pin[data-step='2'] .hero__s {
   opacity: 1;
 }
-/* 진행 표시: 단계마다 한 칸씩 차오르고, 처음에만 안내 문구가 보입니다 */
-.pin__rail {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 18px;
-  color: var(--faint);
-  font-size: 12.5px;
-  font-weight: 700;
-}
-.pin__rail i {
-  width: 36px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--line);
-  transition: background 0.4s ease;
-}
-.pin[data-step='0'] .pin__rail i:nth-child(1),
-.pin[data-step='1'] .pin__rail i:nth-child(-n + 2),
-.pin[data-step='2'] .pin__rail i {
-  background: var(--ink);
-}
-/* 데스크톱: 칸을 길게 펼쳐 전체 폭의 절반쯤을 쓰고, 안내 문구는 오른쪽 끝에 둡니다 */
-@media (min-width: 900px) {
-  .pin__rail {
-    gap: 10px;
-    max-width: min(100%, 640px);
-    margin-top: 28px;
-  }
-  .pin__rail i {
-    flex: 1 1 0;
-    width: auto;
-    height: 5px;
-    border-radius: 3px;
-  }
-  .pin__rail span {
-    flex: none;
-    font-size: 14px;
-  }
-}
-.pin__rail span {
-  margin-left: 8px;
-  transition: opacity 0.4s ease;
-}
-.pin:not([data-step='0']) .pin__rail span {
-  opacity: 0;
-}
 /* 고정 구간 바로 아래의 ABOUT ME: 첫 화면과 같은 회색 바탕 위에 놓아 한 덩어리로 이어지게 합니다 */
 .hero__spec {
   padding-top: 8px;
@@ -238,8 +191,7 @@
   .pin__stage {
     position: static;
   }
-  .pin__track,
-  .pin__rail {
+  .pin__track {
     display: none;
   }
   .hero__s {
@@ -252,8 +204,7 @@
     position: static;
     min-height: 0;
   }
-  .pin__track,
-  .pin__rail {
+  .pin__track {
     display: none;
   }
   .pin .kw span:nth-child(1),
