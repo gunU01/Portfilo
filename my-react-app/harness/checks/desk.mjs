@@ -51,12 +51,12 @@ export default {
       await page.waitForTimeout(400)
     })
 
-    await t('고양이는 여섯 마리이고, 앞모습 다섯 마리(창턱 고양이는 뒷모습)가 모두 눈 깜빡임과 눈동자를 가진다', async () => {
+    await t('고양이는 다섯 마리이고, 앞모습 네 마리(창턱 고양이는 뒷모습)가 모두 눈 깜빡임과 눈동자를 가진다', async () => {
       await go(page, url, '/desk')
       await page.waitForSelector('.hs')
-      assert.equal(await page.locator('.desk__blink, .cat__blink').count(), 5, '눈이 보이는 고양이가 5마리여야 합니다')
-      assert.equal(await page.locator('.desk__svg .desk__look').count(), 10, '눈동자가 10개(고양이 5 x 2)여야 합니다')
-      assert.equal(await page.locator('.desk__svg .desk__tail').count(), 5, '꼬리를 흔드는 고양이가 5마리여야 합니다(책 더미, 창턱, 헤드폰, 앞발 뻗는 고양이, 엎드린 고양이)')
+      assert.equal(await page.locator('.desk__blink, .cat__blink').count(), 4, '눈이 보이는 고양이가 4마리여야 합니다')
+      assert.equal(await page.locator('.desk__svg .desk__look').count(), 8, '눈동자가 8개(고양이 4 x 2)여야 합니다')
+      assert.equal(await page.locator('.desk__svg .desk__tail').count(), 4, '꼬리를 흔드는 고양이가 4마리여야 합니다(책 더미, 창턱, 헤드폰, 엎드린 고양이)')
     })
 
     await t('평소에도 눌러 볼 수 있다는 표시가 물건마다 보이고, 이름표는 꺼져 있다', async () => {

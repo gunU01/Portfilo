@@ -15,6 +15,9 @@ const HEAD =
 // 머리 크기를 s 배로(아래쪽 가운데 (0, -50)는 그대로) 그리고, dy 만큼 위로 올립니다.
 const headAt = (s = 1, dy = 0) => `translate(0 ${-dy - 50 + 50 * s}) scale(${s})`
 
+// 하트(가운데 아래 끝이 (0, 0)): 호버 때 솟아오르는 모양
+const HEART = 'M0 12 C-22 -2 -12 -20 0 -9 C12 -20 22 -2 0 12 Z'
+
 // 눈 한 쌍: 흰 동그라미 테두리 + 안쪽의 흰 눈동자. main 이면 호버용 클래스 이름을 씁니다.
 function Eyes({ x = 0, y, gap, r, main = false, delay = 0 }) {
   const blink = main ? 'desk__blink' : 'cat__blink'
@@ -54,7 +57,9 @@ export function CatBooks({ x, y }) {
       <Eyes y={-94} gap={29} r={17} main />
       <g className="desk__hearts" fill="#0038ff">
         {[[-62, -170, 'a'], [0, -192, 'b'], [62, -170, 'c']].map(([hx, hy, k]) => (
-          <circle key={k} className={`desk__heart desk__heart--${k}`} cx={hx} cy={hy} r="9" />
+          <g key={k} transform={`translate(${hx} ${hy})`}>
+            <path className={`desk__heart desk__heart--${k}`} d={HEART} />
+          </g>
         ))}
       </g>
     </g>
@@ -119,31 +124,20 @@ export function CatHeadphones({ x, y }) {
       {[-64, 64].map((dx) => (
         <rect key={dx} x={dx - 12} y="-108" width="24" height="38" rx="10" fill="#fff" stroke={INK} strokeWidth="4" />
       ))}
-      <g fill={INK} stroke={INK} strokeWidth="4" strokeLinecap="round">
-        <circle cx="94" cy="-148" r="7" />
-        <path d="M100 -150 V-190" fill="none" />
-        <circle cx="118" cy="-166" r="6" />
-        <path d="M123 -168 V-204" fill="none" />
-      </g>
+      {/* 헤드폰 오른쪽 위로 음표가 솟아올랐다 사라지길 반복합니다(동작은 desk.css 의 .desk__note) */}
+      {[[84, -128, 0], [104, -150, 0.9], [92, -176, 1.8]].map(([nx, ny, delay], i) => (
+        <g key={i} transform={`translate(${nx} ${ny})`}>
+          <g className="desk__note" style={{ animationDelay: `${delay}s` }} fill={INK} stroke={INK} strokeWidth="4" strokeLinecap="round">
+            <ellipse cx="0" cy="0" rx="7" ry="5.5" stroke="none" />
+            <path d="M6 -1 V-26 C12 -22 16 -20 16 -12" fill="none" />
+          </g>
+        </g>
+      ))}
     </g>
   )
 }
 
-// F. 뒷발로 서서 앞발을 번쩍 든 고양이. 몸을 키 크게 세워 어깨를 높이고, 앞발은 짧고 통통하게 몸 바깥쪽으로 들어 올립니다(손을 흔드는 모습).
-export function CatReach({ x, y }) {
-  return (
-    <g transform={`translate(${x} ${y})`}>
-      <Tail d="M30 -12 C80 -10 96 -46 82 -78" />
-      <path d={body(40, 250)} fill={INK} />
-      <path d="M-22 -196 C-72 -206 -94 -246 -88 -292" fill="none" stroke={INK} strokeWidth="26" strokeLinecap="round" />
-      <path transform="translate(-142 0)" d="M54 -300 m-17 -4 a16 15 0 0 1 12 -14 a12 12 0 0 1 20 0 a16 15 0 0 1 12 14 C70 -284 38 -284 37 -304 Z" fill={INK} />
-      <path d={HEAD} transform={headAt(0.84, 178)} fill={INK} />
-      <Eyes y={-266} gap={22} r={13} delay={0.6} />
-    </g>
-  )
-}
-
-// G. 바닥에 납작하게 엎드려 앞발을 쭉 뻗은 고양이
+// F. 바닥에 납작하게 엎드려 앞발을 쭉 뻗은 고양이
 export function CatLying({ x, y }) {
   return (
     <g transform={`translate(${x} ${y})`}>

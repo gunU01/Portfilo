@@ -122,6 +122,29 @@
   transform-box: fill-box;
   transform-origin: 50% 100%;
 }
+/* 헤드폰 고양이의 음표: 솟아오르며 살짝 흔들리고 사라짐 */
+.desk__note {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: note 2.7s ease-out infinite;
+  opacity: 0;
+}
+@keyframes note {
+  0% {
+    opacity: 0;
+    transform: translate(0, 8px) rotate(-8deg) scale(0.7);
+  }
+  20% {
+    opacity: 1;
+  }
+  60% {
+    transform: translate(5px, -10px) rotate(8deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-2px, -26px) rotate(-6deg) scale(1);
+  }
+}
 .hs.is-on .desk__blink {
   opacity: 0;
 }
