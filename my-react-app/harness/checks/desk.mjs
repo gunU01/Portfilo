@@ -34,6 +34,23 @@ export default {
       assert.deepEqual(bad, [])
     })
 
+    await t('물건의 가장자리에 마우스를 둬도 호버가 떨리지 않는다(떠오른 뒤에도 감지 영역이 그대로)', async () => {
+      await go(page, url, '/desk')
+      await page.waitForSelector('.hs')
+      const box = await page.locator('.hs__hit').first().boundingBox()
+      assert.ok(box && box.width > 20 && box.height > 20, '감지 영역이 물건 크기만큼 잡히지 않았습니다')
+      // 첫 물건의 아래쪽 가장자리 바로 안쪽에 마우스를 두고, 호버 표시가 켜진 채 유지되는지 여러 번 확인합니다
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height - 6)
+      await waitFor(async () => (await page.locator('.hs.is-on').count()) === 1, { message: '호버가 켜지지 않았습니다' })
+      for (let i = 0; i < 8; i++) {
+        await page.waitForTimeout(80)
+        assert.equal(await page.locator('.hs.is-on').count(), 1, '떠오른 뒤 호버가 풀렸습니다(떨림)')
+      }
+      await page.mouse.move(5, 5)
+      await waitFor(async () => (await page.locator('.hs.is-on').count()) === 0, { message: '마우스를 치웠는데 호버가 남았습니다' })
+      await page.waitForTimeout(400)
+    })
+
     await t('고양이는 여섯 마리이고, 앞모습 다섯 마리(창턱 고양이는 뒷모습)가 모두 눈 깜빡임과 눈동자를 가진다', async () => {
       await go(page, url, '/desk')
       await page.waitForSelector('.hs')
