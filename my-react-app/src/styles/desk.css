@@ -454,29 +454,39 @@
   }
 }
 
-/* ---- 눌러 볼 수 있다는 표시: 물건 위의 깜빡이는 파란 마름모. 가리키거나 패널이 열리면 사라집니다. (모션 줄이기에서는 아래 맨 끝 규칙이 깜빡임을 끄고 마름모만 남깁니다) ---- */
-.hs__dot {
-  fill: #fff;
-  stroke: #0038ff;
-  stroke-width: 5;
-}
-.hs__ring {
-  fill: none;
-  stroke: #0038ff;
-  stroke-width: 4;
+/* ---- 눌러 볼 수 있다는 표시: 물건 위의 작은 유리 구슬 + 천천히 숨 쉬는 파란 빛. 가리키거나 패널이 열리면 사라집니다. (모션 줄이기에서는 아래 맨 끝 규칙이 숨 쉬기를 끄고 구슬만 남깁니다) ---- */
+.hs__glow {
   transform-box: fill-box;
   transform-origin: center;
-  animation: hs-ping 2.4s ease-out infinite;
+  animation: hs-breathe 3.6s ease-in-out infinite;
 }
-@keyframes hs-ping {
+@keyframes hs-breathe {
   from {
-    opacity: 0.8;
-    transform: scale(0.45);
+    opacity: 0.45;
+    transform: scale(0.7);
   }
   to {
-    opacity: 0;
-    transform: scale(1.5);
+    opacity: 1;
+    transform: scale(1.1);
   }
+}
+.hs__bead {
+  filter: drop-shadow(0 2px 5px rgba(0, 56, 255, 0.35));
+}
+.hs__glass {
+  fill: rgba(255, 255, 255, 0.62);
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 2;
+}
+.hs__dot {
+  fill: #0038ff;
+  opacity: 0.85;
+}
+.hs__shine {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 .hs__ping {
   transition: opacity 0.2s ease;

@@ -42,12 +42,14 @@ export default function Hotspot({ id, children }) {
       <g className="hs__body" ref={body}>
         {children}
       </g>
-      {/* 눌러 볼 수 있다는 표시(마름모): 평소에만 보이고, 가리키거나 패널이 열리면 사라집니다(스타일은 desk.css) */}
+      {/* 눌러 볼 수 있다는 표시(작은 유리 구슬과 은은한 숨 쉬는 빛): 평소에만 보이고, 가리키거나 패널이 열리면 사라집니다(스타일은 desk.css) */}
       {ping && (
         <g className="hs__ping" transform={`translate(${ping[0]} ${ping[1]})`} pointerEvents="none" aria-hidden="true">
-          <g transform="rotate(45)">
-            <rect className="hs__ring" x="-24" y="-24" width="48" height="48" />
-            <rect className="hs__dot" x="-10" y="-10" width="20" height="20" />
+          <circle className="hs__glow" r="34" fill="url(#d-glow)" />
+          <g className="hs__bead">
+            <circle className="hs__glass" r="12" />
+            <circle className="hs__dot" r="4.2" />
+            <path className="hs__shine" d="M-7.5 -3.5 A8.5 8.5 0 0 1 -2.5 -8" />
           </g>
         </g>
       )}
