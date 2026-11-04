@@ -107,9 +107,13 @@
 .desk__tail {
   transform-box: fill-box;
   transform-origin: 0% 100%;
-  animation: tail 3.6s ease-in-out infinite;
+  animation: tail 3.2s ease-in-out infinite; /* 호버와 상관없이 늘 살랑입니다 */
 }
 @keyframes tail {
+  0%,
+  100% {
+    transform: rotate(5deg);
+  }
   50% {
     transform: rotate(-9deg);
   }
@@ -126,10 +130,6 @@
 .desk__heart {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-}
-/* 만질 수 있는 고양이(뒤의 물건을 가려 누르지 못하게 함): 마우스를 올리면 꼬리를 빨리 흔듭니다 */
-.cat--touch:hover .desk__tail {
-  animation-duration: 0.6s;
 }
 /* 헤드폰 고양이의 음표: 솟아오르며 살짝 흔들리고 사라짐 */
 .desk__note {
@@ -160,9 +160,6 @@
 .hs.is-on .desk__happy,
 .hs.is-on .desk__hearts {
   opacity: 1;
-}
-.hs.is-on .desk__tail {
-  animation-duration: 0.7s;
 }
 .hs.is-on .desk__heart {
   animation: heart 1.4s ease-out infinite;

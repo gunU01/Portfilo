@@ -42,12 +42,12 @@ function Eyes({ x = 0, y, gap, r, main = false, delay = 0 }) {
   )
 }
 
-// 굵고 둥근 꼬리(선 하나). 호버하면 흔들립니다.
+// 굵고 둥근 꼬리(선 하나). 늘 살랑입니다.
 function Tail({ d, width = 16, origin }) {
   return <path className="desk__tail" d={d} fill="none" stroke={INK} strokeWidth={width} strokeLinecap="round" style={origin ? { transformOrigin: origin } : undefined} />
 }
 
-// A. 책 더미 위에 앉은 고양이(정면). 호버하면 웃는 눈과 하트, 꼬리를 빨리 흔듭니다.
+// A. 책 더미 위에 앉은 고양이(정면). 호버하면 웃는 눈과 하트가 나옵니다(꼬리는 호버와 상관없이 늘 살랑입니다).
 export function CatBooks({ x, y }) {
   return (
     <g transform={`translate(${x} ${y})`}>
