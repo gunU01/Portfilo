@@ -51,20 +51,20 @@ export default {
       await page.waitForTimeout(400)
     })
 
-    await t('앞쪽 장식(헤드폰 고양이와 음표)이 뒤의 서랍 클릭을 가로막지 않는다', async () => {
+    await t('음표는 뒤의 서랍 클릭을 통과시키고, 고양이 몸은 클릭을 받아 서랍이 열리지 않는다(고양이를 만질 수 있음)', async () => {
       await go(page, url, '/desk')
       await page.waitForSelector('.hs')
-      // 음표와 고양이가 그려진 자리 위에서, 마우스를 받는 요소가 서랍(핫스팟)인지 확인합니다
-      const blocked = await page.evaluate(() => {
-        const out = []
-        for (const el of document.querySelectorAll('.desk__note, .desk__svg [pointer-events="none"] ellipse')) {
+      const hits = await page.evaluate(() => {
+        const at = (el) => {
           const r = el.getBoundingClientRect()
-          const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)
-          if (hit && hit.closest('.desk__layer--front') && !hit.closest('.hs')) out.push(hit.tagName)
+          return document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)
         }
-        return out
+        const note = [...document.querySelectorAll('.desk__note')].map((n) => at(n)?.closest('.hs') !== null)
+        const cat = at(document.querySelector('.cat--touch path[fill="#0a0a0a"]'))
+        return { note, catBlocks: Boolean(cat?.closest('.cat--touch')) && cat.closest('.hs') === null }
       })
-      assert.deepEqual(blocked, [], '앞쪽 장식이 마우스를 받고 있습니다')
+      assert.ok(hits.note.every(Boolean), '음표 자리에서 뒤의 서랍이 눌려야 합니다')
+      assert.equal(hits.catBlocks, true, '고양이 몸 위에서는 고양이가 클릭을 받아야 합니다')
     })
 
     await t('고양이는 다섯 마리이고, 앞모습 네 마리(창턱 고양이는 뒷모습)가 모두 눈 깜빡임과 눈동자를 가진다', async () => {

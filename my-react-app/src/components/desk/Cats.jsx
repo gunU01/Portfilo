@@ -110,11 +110,11 @@ export function CatWindow({ x, y }) {
   )
 }
 
-// D. 헤드폰을 끼고(앞쪽 장식이라 마우스를 받지 않습니다: 뒤의 서랍이 눌려야 하므로) 음악을 듣는 고양이(러그 위)
+// D. 헤드폰을 끼고(고양이는 마우스를 받아서, 만지려고 눌러도 뒤의 서랍이 열리지 않습니다. 음표는 받지 않아 그 뒤의 서랍이 눌립니다) 음악을 듣는 고양이(러그 위)
 export function CatHeadphones({ x, y }) {
   const band = 'M-64 -92 C-64 -146 64 -146 64 -92'
   return (
-    <g transform={`translate(${x} ${y})`} pointerEvents="none">
+    <g className="cat--touch" transform={`translate(${x} ${y})`}>
       <Tail d="M42 -8 C88 -4 110 -36 96 -74" />
       <path d={body(46, 74)} fill={INK} />
       <path d={HEAD} transform={headAt(0.92)} fill={INK} />
@@ -126,7 +126,7 @@ export function CatHeadphones({ x, y }) {
       ))}
       {/* 헤드폰 오른쪽 위로 음표가 솟아올랐다 사라지길 반복합니다(동작은 desk.css 의 .desk__note) */}
       {[[84, -128, 0], [104, -150, 0.9], [92, -176, 1.8]].map(([nx, ny, delay], i) => (
-        <g key={i} transform={`translate(${nx} ${ny})`}>
+        <g key={i} transform={`translate(${nx} ${ny})`} pointerEvents="none">
           <g className="desk__note" style={{ animationDelay: `${delay}s` }} fill={INK} stroke={INK} strokeWidth="4" strokeLinecap="round">
             <ellipse cx="0" cy="0" rx="7" ry="5.5" stroke="none" />
             <path d="M6 -1 V-26 C12 -22 16 -20 16 -12" fill="none" />
@@ -140,7 +140,7 @@ export function CatHeadphones({ x, y }) {
 // F. 바닥에 납작하게 엎드려 앞발을 쭉 뻗은 고양이
 export function CatLying({ x, y }) {
   return (
-    <g transform={`translate(${x} ${y})`}>
+    <g className="cat--touch" transform={`translate(${x} ${y})`}>
       <Tail d="M118 -10 C152 -8 164 -30 154 -54" />
       <path d="M-70 0 C-70 -52 -30 -66 30 -64 C90 -62 126 -44 126 0 Z" fill={INK} />
       <ellipse cx="-122" cy="-7" rx="26" ry="9" fill={INK} />

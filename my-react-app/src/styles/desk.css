@@ -122,6 +122,10 @@
   transform-box: fill-box;
   transform-origin: 50% 100%;
 }
+/* 만질 수 있는 고양이(뒤의 물건을 가려 누르지 못하게 함): 마우스를 올리면 꼬리를 빨리 흔듭니다 */
+.cat--touch:hover .desk__tail {
+  animation-duration: 0.6s;
+}
 /* 헤드폰 고양이의 음표: 솟아오르며 살짝 흔들리고 사라짐 */
 .desk__note {
   transform-box: fill-box;
