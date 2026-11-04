@@ -454,42 +454,41 @@
   }
 }
 
-/* ---- 눌러 볼 수 있다는 표시: 물건 위의 작은 유리 구슬 + 천천히 숨 쉬는 파란 빛. 가리키거나 패널이 열리면 사라집니다. (모션 줄이기에서는 아래 맨 끝 규칙이 숨 쉬기를 끄고 구슬만 남깁니다) ---- */
-.hs__glow {
+/* ---- 눌러 볼 수 있다는 표시: 만화의 반짝임 효과처럼 물건 위에서 깜빡이는 각진 흰 별(검은 테두리와 딱딱한 그림자). 가리키거나 패널이 열리면 사라집니다. (모션 줄이기에서는 아래 맨 끝 규칙이 깜빡임을 끄고 별만 남깁니다) ---- */
+.hs__star {
+  fill: #fff;
+  stroke: #0a0a0a;
+  stroke-width: 3;
+  stroke-linejoin: miter;
+}
+.hs__star-shadow {
+  fill: #0a0a0a;
+}
+.hs__spark {
   transform-box: fill-box;
   transform-origin: center;
-  animation: hs-breathe 3.6s ease-in-out infinite;
+  animation: hs-twinkle 2.6s ease-in-out infinite;
 }
-@keyframes hs-breathe {
-  from {
-    opacity: 0.45;
-    transform: scale(0.7);
+@keyframes hs-twinkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
   }
-  to {
-    opacity: 1;
-    transform: scale(1.1);
+  45% {
+    transform: scale(0.72) rotate(14deg);
   }
-}
-.hs__bead {
-  filter: drop-shadow(0 2px 5px rgba(0, 56, 255, 0.35));
-}
-.hs__glass {
-  fill: rgba(255, 255, 255, 0.62);
-  stroke: rgba(255, 255, 255, 0.95);
-  stroke-width: 2;
-}
-.hs__dot {
-  fill: #0038ff;
-  opacity: 0.85;
-}
-.hs__shine {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2;
-  stroke-linecap: round;
+  60% {
+    transform: scale(1.08) rotate(-4deg);
+  }
 }
 .hs__ping {
   transition: opacity 0.2s ease;
+}
+.hs:nth-child(2n) .hs__spark {
+  animation-delay: -0.9s;
+}
+.hs:nth-child(3n) .hs__spark {
+  animation-delay: -1.7s;
 }
 .hs.is-on .hs__ping,
 .desk--open .hs__ping {

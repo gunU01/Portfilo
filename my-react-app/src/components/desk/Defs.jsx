@@ -12,11 +12,6 @@ export default function Defs() {
         <rect width="16" height="16" fill="#f4f3ea" />
         <rect width="4" height="16" fill="#0a0a0a" />
       </pattern>
-      <radialGradient id="d-glow">
-        <stop offset="0" stopColor="#0038ff" stopOpacity="0.32" />
-        <stop offset="0.55" stopColor="#0038ff" stopOpacity="0.12" />
-        <stop offset="1" stopColor="#0038ff" stopOpacity="0" />
-      </radialGradient>
       <clipPath id="d-view">
         <rect x="84" y="114" width="292" height="282" />
       </clipPath>

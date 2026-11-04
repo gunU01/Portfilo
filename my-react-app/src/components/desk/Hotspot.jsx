@@ -42,14 +42,13 @@ export default function Hotspot({ id, children }) {
       <g className="hs__body" ref={body}>
         {children}
       </g>
-      {/* 눌러 볼 수 있다는 표시(작은 유리 구슬과 은은한 숨 쉬는 빛): 평소에만 보이고, 가리키거나 패널이 열리면 사라집니다(스타일은 desk.css) */}
+      {/* 눌러 볼 수 있다는 표시(만화에서 반짝임을 나타내는 각진 별. 흑백으로 그려 장면의 톤과 맞춥니다): 평소에만 보이고, 가리키거나 패널이 열리면 사라집니다(스타일은 desk.css) */}
       {ping && (
         <g className="hs__ping" transform={`translate(${ping[0]} ${ping[1]})`} pointerEvents="none" aria-hidden="true">
-          <circle className="hs__glow" r="34" fill="url(#d-glow)" />
-          <g className="hs__bead">
-            <circle className="hs__glass" r="12" />
-            <circle className="hs__dot" r="4.2" />
-            <path className="hs__shine" d="M-7.5 -3.5 A8.5 8.5 0 0 1 -2.5 -8" />
+          <g className="hs__spark">
+            <polygon className="hs__star-shadow" points="2,-14 6,-2 18,2 6,6 2,18 -2,6 -14,2 -2,-2" />
+            <polygon className="hs__star" points="0,-16 4,-4 16,0 4,4 0,16 -4,4 -16,0 -4,-4" />
+            <polygon className="hs__star hs__star--s" points="15,-14 17,-9 22,-7 17,-5 15,0 13,-5 8,-7 13,-9" />
           </g>
         </g>
       )}
