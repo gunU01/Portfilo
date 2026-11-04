@@ -25,7 +25,7 @@
   margin: 28px 0 0;
   display: grid;
   gap: 2px;
-  font-size: clamp(2.3rem, 7.6vw, 6.4rem);
+  font-size: clamp(2.3rem, min(7.6vw, calc((var(--wrap) - 48px) * 0.098)), 7.4rem);
   font-weight: 800;
   line-height: 1.04;
   letter-spacing: -0.04em;
@@ -144,7 +144,7 @@
 }
 .pin .kw {
   margin-top: 0;
-  font-size: clamp(2.3rem, min(7.6vw, 10vh), 6.4rem);
+  font-size: clamp(2.3rem, min(7.6vw, 10vh, calc((var(--wrap) - 48px) * 0.098)), 7.4rem);
 }
 .pin .hero__body {
   margin-top: 20px;

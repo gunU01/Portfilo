@@ -20,7 +20,7 @@
   --font: 'NanumSquareNeo', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
     'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
   --mono: var(--font); /* 라벨도 같은 글꼴로 */
-  --wrap: 1120px;
+  --wrap: clamp(1120px, 70vw, 1520px); /* 넓은 화면에서는 같이 넓어짐(1600px 이하에서는 1120px 그대로) */
   --read: 720px;
   color-scheme: light;
 }
