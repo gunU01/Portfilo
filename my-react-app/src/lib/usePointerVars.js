@@ -7,18 +7,31 @@ const matches = (q) => window.matchMedia(q).matches
 export function trackPointer(box) {
   if (!box || matches('(pointer: coarse)') || matches('(prefers-reduced-motion: reduce)')) return () => {}
   let raf = 0
+  let r = null // 상자 위치와 크기: 마우스가 들어올 때(와 창 크기가 바뀔 때) 한 번만 읽습니다
+  const measure = () => {
+    r = box.getBoundingClientRect()
+  }
   const onMove = (e) => {
     cancelAnimationFrame(raf)
     raf = requestAnimationFrame(() => {
-      const r = box.getBoundingClientRect()
+      if (!r) measure()
       box.style.setProperty('--px', String(((e.clientX - r.left) / r.width - 0.5) * 2))
       box.style.setProperty('--py', String(((e.clientY - r.top) / r.height - 0.5) * 2))
     })
   }
-  box.addEventListener('pointermove', onMove)
+  const forget = () => {
+    r = null
+  }
+  box.addEventListener('pointerenter', measure)
+  box.addEventListener('pointermove', onMove, { passive: true })
+  window.addEventListener('resize', forget)
+  window.addEventListener('scroll', forget, { passive: true })
   return () => {
     cancelAnimationFrame(raf)
+    box.removeEventListener('pointerenter', measure)
     box.removeEventListener('pointermove', onMove)
+    window.removeEventListener('resize', forget)
+    window.removeEventListener('scroll', forget)
   }
 }
 

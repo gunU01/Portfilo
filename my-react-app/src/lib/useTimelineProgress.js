@@ -13,18 +13,22 @@ export function useTimelineProgress(itemSelector = '.tl__item') {
   useEffect(() => {
     const list = ref.current
     if (!list) return undefined
+    const items = [...list.querySelectorAll(itemSelector)]
     return onScrollFrame(() => {
       const line = window.innerHeight * READ_LINE
+      // 읽기를 모두 끝낸 뒤에 쓰기: 항목마다 읽고 쓰면 화면 배치를 항목 수만큼 다시 계산합니다.
       const box = list.getBoundingClientRect()
+      const tops = items.map((el) => el.getBoundingClientRect().top)
       list.style.setProperty('--fill', `${Math.max(0, Math.min(box.height, line - box.top))}px`)
-      let current = null
-      list.querySelectorAll(itemSelector).forEach((el) => {
-        const passed = el.getBoundingClientRect().top + 12 < line // 12px: 점의 가운데
-        el.classList.toggle('is-passed', passed)
-        el.classList.remove('is-current')
-        if (passed) current = el
+      let current = -1
+      items.forEach((el, i) => {
+        const passed = tops[i] + 12 < line // 12px: 점의 가운데
+        if (passed) current = i
+        if (el.classList.contains('is-passed') !== passed) el.classList.toggle('is-passed', passed)
       })
-      current?.classList.add('is-current')
+      items.forEach((el, i) => {
+        if (el.classList.contains('is-current') !== (i === current)) el.classList.toggle('is-current', i === current)
+      })
     })
   }, [itemSelector])
   return ref

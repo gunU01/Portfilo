@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from 'react'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 import Home from './pages/Home.jsx'
 import { caseIndex } from './data/case-meta.js'
 import { postIndex } from './data/blog-meta.js'
@@ -15,14 +16,15 @@ import { useCanonicalRoute } from './lib/useCanonicalRoute.js'
 import { usePrefetch } from './lib/usePrefetch.js'
 import { usePageMeta } from './lib/usePageMeta.js'
 import { nearestPath, slugOf } from './lib/routes.js'
+import { lazyRetry } from './lib/lazyRetry.js'
 
 // 처음 화면(홈)만 먼저 받고, 나머지 페이지는 그 경로에 들어갈 때 받습니다.
 const loaders = {
-  project: () => import('./pages/Project.jsx'),
-  about: () => import('./pages/About.jsx'),
-  case: () => import('./pages/Case.jsx'),
-  post: () => import('./pages/Post.jsx'),
-  desk: () => import('./pages/Desk.jsx'),
+  project: lazyRetry(() => import('./pages/Project.jsx')),
+  about: lazyRetry(() => import('./pages/About.jsx')),
+  case: lazyRetry(() => import('./pages/Case.jsx')),
+  post: lazyRetry(() => import('./pages/Post.jsx')),
+  desk: lazyRetry(() => import('./pages/Desk.jsx')),
 }
 // 한가할 때 받을 가벼운 페이지들, 마우스를 올리면 받을 페이지(책상). 렌더마다 새로 만들지 않도록 모듈 상수로 둡니다.
 const PREFETCH = { idle: [loaders.project, loaders.about, loaders.case], hover: { '/desk': loaders.desk } }
@@ -86,7 +88,9 @@ export default function App() {
       {page?.footer !== false && <div className="progress" aria-hidden="true" />}
       <Nav path={path} />
       <main id="main" key={pageKey} className="page-in" data-path={path}>
-        <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{body}</Suspense>
+        <ErrorBoundary resetKey={pageKey}>
+          <Suspense fallback={<div className="page-wait" aria-hidden="true" />}>{body}</Suspense>
+        </ErrorBoundary>
       </main>
       {page?.footer !== false && <Footer />}
     </>

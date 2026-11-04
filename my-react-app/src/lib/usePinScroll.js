@@ -21,8 +21,11 @@ export function usePinScroll(steps) {
     return onScrollFrame(() => {
       const travel = el.offsetHeight - stage.offsetHeight
       const p = travel > 0 ? Math.max(0, Math.min(1, (top - el.getBoundingClientRect().top) / travel)) : 0
-      el.style.setProperty('--p', p.toFixed(3))
-      el.dataset.step = String(Math.min(steps - 1, Math.floor(p * steps)))
+      const pv = p.toFixed(3)
+      const step = String(Math.min(steps - 1, Math.floor(p * steps)))
+      // 값이 그대로면 쓰지 않습니다(쓰면 그때마다 스타일을 다시 계산)
+      if (el.style.getPropertyValue('--p') !== pv) el.style.setProperty('--p', pv)
+      if (el.dataset.step !== step) el.dataset.step = step
     })
   }, [steps])
   return ref
