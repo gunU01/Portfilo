@@ -199,6 +199,24 @@
 .pin[data-step='2'] .pin__rail i {
   background: var(--ink);
 }
+/* 데스크톱: 칸을 길게 펼쳐 전체 폭의 절반쯤을 쓰고, 안내 문구는 오른쪽 끝에 둡니다 */
+@media (min-width: 900px) {
+  .pin__rail {
+    gap: 10px;
+    max-width: min(100%, 640px);
+    margin-top: 28px;
+  }
+  .pin__rail i {
+    flex: 1 1 0;
+    width: auto;
+    height: 5px;
+    border-radius: 3px;
+  }
+  .pin__rail span {
+    flex: none;
+    font-size: 14px;
+  }
+}
 .pin__rail span {
   margin-left: 8px;
   transition: opacity 0.4s ease;
