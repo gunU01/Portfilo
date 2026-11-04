@@ -140,7 +140,7 @@
   width: 100%;
 }
 .pin__track {
-  height: 240svh;
+  height: 400svh; /* 스크롤 길이: 길수록 키워드가 천천히 바뀜 */
 }
 .pin .kw {
   margin-top: 0;

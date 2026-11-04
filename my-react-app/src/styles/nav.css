@@ -3,8 +3,11 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--bg); /* 뒤에 지나가는 글이 비쳐 보이지 않게 불투명하게(하네스 usability 가 지킴) */
-  border-bottom: 1px solid var(--line);
+  /* 반투명 유리: 뒤로 지나가는 글은 흐리게 뭉개져서 비칩니다(하네스 usability 가 흐림과 최소 불투명도를 지킴) */
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  backdrop-filter: blur(18px) saturate(1.6);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
 }
 .nav__in {
   display: flex;

@@ -78,8 +78,8 @@ export default {
       }
       const h = page.viewportSize().height
       const a = await at(0)
-      const b = await at(h * 0.9)
-      const c = await at(h * 1.7)
+      const b = await at(h * 1.7)
+      const c = await at(h * 3.2)
       assert.equal(a.step, '0')
       assert.equal(b.step, '1')
       assert.equal(c.step, '2')

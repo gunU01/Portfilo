@@ -10,6 +10,7 @@ const LIMITS = {
   overlapMin: 16, // 눌림 영역끼리 겹친 면적이 이보다 크면 잘못 누르기 쉬움(px²)
   fontMin: 11, // 이보다 작은 글자는 읽기 어려움(px)
   stickyMax: 0.25, // 위에 붙어 다니는 것들(메뉴, 탭)이 화면 높이에서 차지할 수 있는 비율
+  stickyGlassAlphaMin: 0.6, // 유리 재질(뒤를 흐리게 하는) 막대의 최소 불투명도
   stickyAlphaMin: 0.95, // 위에 붙은 막대 배경의 불투명도. 이보다 투명하면 뒤로 지나가는 글이 비쳐 어지럽다
   boldBlockMin: 60, // 이 글자 수 이상의 문단 전체가 굵으면(600 이상) 읽기 힘들다
   sectionScreensMax: 2.5, // 모바일에서 한 섹션이 이 화면 수(화면 높이 기준)를 넘으면 쪼개거나 접어야 함
@@ -77,7 +78,9 @@ const measureSticky = () => {
         // 배경의 불투명도: rgba(r,g,b,a) 또는 color(... / a) 꼴에서 a 를 읽습니다(없으면 1)
         const bg = cs.backgroundColor
         const alpha = bg === 'transparent' ? 0 : Number((bg.match(/\/\s*([\d.]+)\s*\)/) ?? bg.match(/rgba\([^)]*,\s*([\d.]+)\)/))?.[1] ?? 1)
-        found.push({ name: `${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]}`, bottom: r.bottom, height: r.height, alpha })
+        // 뒤를 흐리게 뭉개는 유리 재질(blur 10px 이상)이면 어느 정도 투명해도 됩니다
+        const blur = Number((`${cs.backdropFilter} ${cs.webkitBackdropFilter}`.match(/blur\(([\d.]+)px\)/) ?? [])[1] ?? 0)
+        found.push({ name: `${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]}`, bottom: r.bottom, height: r.height, alpha, glass: blur >= 10 })
       }
     }
   }
@@ -276,12 +279,12 @@ export default {
         }
         assert.deepEqual(bad, [])
       })
-      await t(`${vpName} 고정 요소: 배경이 ${LIMITS.stickyAlphaMin * 100}% 이상 불투명해서 뒤의 글이 비치지 않는다`, async () => {
+      await t(`${vpName} 고정 요소: 배경이 불투명하거나(${LIMITS.stickyAlphaMin * 100}% 이상), 뒤를 흐리게 하는 유리 재질(blur 10px 이상, ${LIMITS.stickyGlassAlphaMin * 100}% 이상)이라 뒤의 글이 또렷이 비치지 않는다`, async () => {
         const bad = []
         for (const route of routes) {
           await go(page, url, route)
           await ready(page)
-          for (const s of await page.evaluate(measureSticky)) if (s.alpha < LIMITS.stickyAlphaMin) bad.push(`${route} ${s.name} 불투명도 ${s.alpha}`)
+          for (const s of await page.evaluate(measureSticky)) if (s.alpha < (s.glass ? LIMITS.stickyGlassAlphaMin : LIMITS.stickyAlphaMin)) bad.push(`${route} ${s.name} 불투명도 ${s.alpha}`)
         }
         assert.deepEqual(bad, [])
       })
