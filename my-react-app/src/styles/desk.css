@@ -267,7 +267,13 @@
 }
 .desk__tagtext {
   font: 700 22px var(--font);
+  fill: #0a0a0a;
+}
+.desk__tagbox {
   fill: #fff;
+  stroke: #0a0a0a;
+  stroke-width: 5;
+  stroke-linejoin: miter;
 }
 .tag {
   opacity: 0;
