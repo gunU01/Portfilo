@@ -11,6 +11,29 @@ export default {
 
     await t('핫스팟 7개', async () => assert.equal(labels.length, 7))
 
+    await t('이름표가 화면 비율과 상관없이 장면의 보이는 영역 안에 머문다(가로로 넓고 낮은 화면 포함)', async () => {
+      const bad = []
+      for (const [w, h] of [[1440, 900], [1920, 700], [1280, 600], [2400, 800]]) {
+        await page.setViewportSize({ width: w, height: h })
+        await go(page, url, '/desk')
+        await page.waitForSelector('.hs')
+        if ((await page.locator('.desk__hint').getAttribute('aria-pressed')) !== 'true') await page.click('.desk__hint')
+        await waitFor(async () => (await page.locator('.tag.is-on').count()) === 7, { message: '이름표 7개가 켜지지 않았습니다' })
+        await page.waitForTimeout(300)
+        const out = await page.$$eval('.tag', (tags) => {
+          const view = document.querySelector('.desk').getBoundingClientRect()
+          return tags
+            .map((el) => ({ name: el.querySelector('.desk__tagtext').textContent, r: el.getBoundingClientRect() }))
+            .filter(({ r }) => r.top < view.top - 1 || r.bottom > view.bottom + 1 || r.left < view.left - 1 || r.right > view.right + 1)
+            .map(({ name, r }) => `${name}(${Math.round(r.left)},${Math.round(r.top)} ~ ${Math.round(r.right)},${Math.round(r.bottom)})`)
+        })
+        if (out.length) bad.push(`${w}x${h}: ${out.join(' ')}`)
+      }
+      await page.click('.desk__hint')
+      await page.setViewportSize({ width: 1440, height: 900 })
+      assert.deepEqual(bad, [])
+    })
+
     await t('고양이는 여섯 마리이고, 앞모습 다섯 마리(창턱 고양이는 뒷모습)가 모두 눈 깜빡임과 눈동자를 가진다', async () => {
       await go(page, url, '/desk')
       await page.waitForSelector('.hs')

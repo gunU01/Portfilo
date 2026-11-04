@@ -132,17 +132,17 @@ export function CatSoot({ x, y }) {
   )
 }
 
-// F. 책상 가장자리를 향해 앞발을 뻗는 고양이(서 있음)
+// F. 뒷발로 서서 책상 가장자리에 앞발을 올리는 고양이. 몸을 길게 세우고 팔은 짧게 해서, 책상 윗면(바닥에서 약 296)에 앞발이 닿게 합니다.
 export function CatReach({ x, y }) {
   return (
     <g transform={`translate(${x} ${y})`}>
-      <Tail d="M28 -10 C78 -8 94 -44 80 -76" />
-      <path d={body(36, 130)} fill={INK} />
-      <path d="M20 -112 C46 -150 38 -240 40 -300" fill="none" stroke={INK} strokeWidth="26" strokeLinecap="round" />
-      <circle cx="40" cy="-312" r="17" fill={INK} />
-      <path d="M26 -338 V-358 M40 -342 V-364 M54 -338 V-358" stroke={INK} strokeWidth="5" strokeLinecap="round" fill="none" />
-      <path d={HEAD} transform={headAt(0.84, 72)} fill={INK} />
-      <Eyes y={-158} gap={22} r={13} delay={0.6} />
+      <Tail d="M30 -12 C80 -10 96 -46 82 -78" />
+      <path d={body(38, 200)} fill={INK} />
+      <path d="M22 -176 C40 -206 42 -250 40 -292" fill="none" stroke={INK} strokeWidth="22" strokeLinecap="round" />
+      <circle cx="40" cy="-304" r="16" fill={INK} />
+      <path d="M27 -328 V-346 M40 -332 V-352 M53 -328 V-346" stroke={INK} strokeWidth="5" strokeLinecap="round" fill="none" />
+      <path d={HEAD} transform={headAt(0.84, 128)} fill={INK} />
+      <Eyes y={-216} gap={22} r={13} delay={0.6} />
     </g>
   )
 }
