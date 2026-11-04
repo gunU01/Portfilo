@@ -4,9 +4,9 @@
   top: 0;
   z-index: 50;
   /* 반투명 유리: 뒤로 지나가는 글은 흐리게 뭉개져서 비칩니다(하네스 usability 가 흐림과 최소 불투명도를 지킴) */
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
-  backdrop-filter: blur(18px) saturate(1.6);
+  background: color-mix(in srgb, var(--bg) 48%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
   border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
 }
 .nav__in {

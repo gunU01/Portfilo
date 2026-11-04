@@ -10,7 +10,7 @@ const LIMITS = {
   overlapMin: 16, // 눌림 영역끼리 겹친 면적이 이보다 크면 잘못 누르기 쉬움(px²)
   fontMin: 11, // 이보다 작은 글자는 읽기 어려움(px)
   stickyMax: 0.25, // 위에 붙어 다니는 것들(메뉴, 탭)이 화면 높이에서 차지할 수 있는 비율
-  stickyGlassAlphaMin: 0.6, // 유리 재질(뒤를 흐리게 하는) 막대의 최소 불투명도
+  stickyGlassAlphaMin: 0.4, // 유리 재질(뒤를 흐리게 하는) 막대의 최소 불투명도
   stickyAlphaMin: 0.95, // 위에 붙은 막대 배경의 불투명도. 이보다 투명하면 뒤로 지나가는 글이 비쳐 어지럽다
   boldBlockMin: 60, // 이 글자 수 이상의 문단 전체가 굵으면(600 이상) 읽기 힘들다
   sectionScreensMax: 2.5, // 모바일에서 한 섹션이 이 화면 수(화면 높이 기준)를 넘으면 쪼개거나 접어야 함
