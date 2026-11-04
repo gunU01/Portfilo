@@ -1,19 +1,20 @@
 import { useContext } from 'react'
 import { DeskContext } from './deskContext.js'
 import { titles } from '../../data/desk.js'
+import { pts } from './shapes.js'
 
-// 이름표 위치(장면 좌표)
+// 이름표 위치(장면 좌표): 가리키는 물건 위
 const POSITIONS = {
-  frames: [740, 62],
-  drawerL: [515, 664],
-  drawerR: [1085, 664],
-  calendar: [1455, 112],
-  laptop: [712, 438],
-  books: [420, 414],
-  notebook: [1070, 584],
+  frames: [685, 62],
+  drawerL: [515, 640],
+  drawerR: [1085, 640],
+  calendar: [1430, 62],
+  laptop: [800, 300],
+  books: [372, 322],
+  notebook: [1175, 488],
 }
 
-// 가리키는 물건 위에 뜨는 검은 말풍선
+// 가리키는 물건 위에 뜨는 검은 각진 말풍선
 export default function Tags() {
   const { active, showAll } = useContext(DeskContext)
   return (
@@ -23,11 +24,10 @@ export default function Tags() {
         const w = label.length * 24 + 40
         return (
           <g key={id} className={active === id || showAll ? 'tag is-on' : 'tag'} transform={`translate(${x} ${y})`}>
-            <rect x={-w / 2} y="-24" width={w} height="42" rx="21" fill="#2b2118" />
+            <polygon points={pts([[-w / 2, -24], [w / 2, -24], [w / 2, 18], [9, 18], [0, 30], [-9, 18], [-w / 2, 18]])} fill="#0a0a0a" />
             <text x="0" y="5" textAnchor="middle" className="desk__tagtext">
               {label}
             </text>
-            <path d="M-8 18 L0 28 L8 18Z" fill="#2b2118" />
           </g>
         )
       })}

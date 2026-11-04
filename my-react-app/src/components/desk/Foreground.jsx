@@ -1,46 +1,42 @@
-// 앞쪽 바닥 층: 러그, 의자, 바닥 화분
-import Fern from './Fern.jsx'
-import { OUT } from './outline.js'
+import { CatHeadphones, CatReach } from './Cats.jsx'
+import { pts } from './shapes.js'
 
-// 바닥의 동그란 러그
+// 앞쪽: 러그와 그 위의 헤드폰 고양이, 의자 등받이, 바닥 화분, 책상 모서리로 앞발을 뻗는 고양이. 마우스에 가장 크게 반응하는 층입니다.
+
 export function Rug() {
   return (
     <g>
-      <ellipse cx="810" cy="862" rx="380" ry="40" fill="#ee9c78" stroke="#c9704c" strokeWidth="2.4" />
-      <ellipse cx="810" cy="862" rx="336" ry="34" fill="#fdf0d6" />
-      <ellipse cx="810" cy="862" rx="292" ry="28" fill="#7fc9a6" />
-      <ellipse cx="810" cy="862" rx="248" ry="22" fill="#fdf0d6" />
-      <ellipse cx="810" cy="862" rx="204" ry="15" fill="#ffd27a" />
-      {/* 러그 가장자리의 술 무늬: 점선 고리 */}
-      <ellipse cx="810" cy="862" rx="358" ry="37" fill="none" stroke="#fff4e3" strokeWidth="3" strokeDasharray="2 12" strokeLinecap="round" />
+      <polygon points={pts([[330, 896], [1270, 896], [1216, 822], [384, 822]])} className="d-p d-o" />
+      <polygon points={pts([[366, 880], [1234, 880], [1196, 836], [404, 836]])} fill="none" className="d-o3" />
+      <polygon points={pts([[420, 864], [1180, 864], [1160, 850], [440, 850]])} className="d-g" />
+      <CatHeadphones x={500} y={872} />
     </g>
   )
 }
 
 export function Chair() {
   return (
-    <>
-      <path d="M806 900 C792 812 820 774 892 764 L1118 746 C1170 744 1196 786 1180 900Z" fill="#7a583a" stroke="#5e4029" strokeWidth="3" strokeLinejoin="round" />
-      {Array.from({ length: 15 }).map((_, i) => {
-        const x = 826 + i * 23.5
-        const top = 770 - Math.sin(((x - 810) / 380) * Math.PI) * 18
-        return <line key={i} x1={x} y1={top + 4} x2={x + (x - 995) * 0.03} y2="900" stroke="#dba96c" strokeWidth="7" strokeLinecap="round" />
-      })}
-      <path d="M806 896 C792 812 820 774 892 764 L1118 746 C1170 744 1196 786 1180 896" fill="none" stroke="#9a6a45" strokeWidth="21" strokeLinecap="round" />
-      <path d="M806 896 C792 812 820 774 892 764 L1118 746 C1170 744 1196 786 1180 896" fill="none" stroke="#ecc794" strokeWidth="16" strokeLinecap="round" />
-      <path d="M806 836 C830 820 860 812 892 806 M1180 836 C1160 820 1140 812 1110 806" fill="none" stroke="#9a6a45" strokeWidth="15" strokeLinecap="round" />
-      <path d="M806 836 C830 820 860 812 892 806 M1180 836 C1160 820 1140 812 1110 806" fill="none" stroke="#ecc794" strokeWidth="10" strokeLinecap="round" />
-    </>
+    <g>
+      <polygon points={pts([[660, 906], [670, 780], [930, 780], [940, 906]])} className="d-w d-o" />
+      {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+        <rect key={i} x={700 + i * 32} y="796" width="14" height="96" fill="#0a0a0a" />
+      ))}
+      <rect x="660" y="772" width="280" height="16" className="d-k" />
+    </g>
   )
 }
 
 export function FloorPlant() {
   return (
-      <g>
-        <Fern x={78} y={730} scale={0.95} fronds={11} spread={150} len={170} />
-        <path d="M34 726 H124 L116 842 H42Z" fill="#f6ecd6" {...OUT} />
-        <rect x="28" y="716" width="102" height="16" rx="6" fill="#fcf6e8" {...OUT} />
-        <ellipse cx="78" cy="846" rx="52" ry="8" fill="#5a3b24" opacity="0.4" />
-      </g>
+    <g>
+      <polygon fill="#0a0a0a" points={pts([[1496, 826], [1440, 740], [1460, 690], [1500, 760], [1510, 662], [1536, 760], [1580, 706], [1560, 800]])} />
+      <path d="M1496 820 L1460 700 M1500 820 L1510 672 M1504 820 L1570 716" stroke="#fff" strokeWidth="3" fill="none" />
+      <polygon points={pts([[1446, 896], [1558, 896], [1546, 822], [1458, 822]])} className="d-w d-o" />
+      <rect x="1458" y="822" width="88" height="14" className="d-k" />
+    </g>
   )
+}
+
+export function CatLeft() {
+  return <CatReach x={104} y={892} />
 }

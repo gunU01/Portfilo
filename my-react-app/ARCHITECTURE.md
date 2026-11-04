@@ -53,6 +53,8 @@ main.jsx ─ App.jsx (라우팅)
 
 ## 책상 장면
 
+그림체는 흑백 만화 톤의 각진 일러스트입니다. 색은 검정, 흰색, 종이색과 망점(`Defs.jsx` 의 무늬)뿐이고, 포인트 파랑(`#0038ff`)은 눌러 볼 수 있다는 표시와 호버 그림자에만 씁니다. 공통 도형 도구는 `desk/shapes.js`, 그림 스타일 클래스(`d-k`, `d-w`, `d-p`, `d-g`, `d-o`)는 `styles/desk.css` 에 있습니다. 고양이는 `desk/Cats.jsx` 에 여섯 마리가 있고(책 더미, 노트북 위, 창턱, 헤드폰, 책상 밑, 책상으로 앞발을 뻗는 고양이), 모두 눈동자가 마우스를 따라가며 책 더미의 고양이만 호버하면 웃는 눈을 합니다. 물건을 옮기면 `desk/pings.js`(눌러 볼 수 있다는 표시)와 `desk/Tags.jsx`(이름표)의 위치도 함께 맞춥니다.
+
 `pages/Desk.jsx` 가 상태(`active`, `openId`)를 갖고, `DeskScene` 이 조각들을 레이어(`back`, `mid`, `front`) 순서로 조립합니다. 조각 안의 핫스팟(`Hotspot`)은 context(`deskContext.js`)로 `active`, `setActive`, `onOpen` 을 받으므로 props 를 내려보낼 필요가 없습니다. 마우스를 따라 층이 움직이는 효과는 `lib/useParallax.js` 입니다. 물건마다의 반응(서랍이 열림, 연필이 움직임, 고양이가 웃으며 하트를 날림 등)은 JS 없이 `desk.css` 가 `.hs.is-on`(호버나 포커스) 상태를 보고 처리하고, 고양이 눈동자는 `useParallax` 가 정하는 `--px`/`--py` 를 그대로 씁니다. 모든 장면 애니메이션은 모션 줄이기 설정에서 멈춥니다. 그림체는 `desk/outline.js` 의 갈색 윤곽선으로 통일합니다.
 
 ## 자주 하는 변경
