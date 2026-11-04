@@ -110,11 +110,11 @@ export function CatWindow({ x, y }) {
   )
 }
 
-// D. 헤드폰을 끼고 음악을 듣는 고양이(러그 위)
+// D. 헤드폰을 끼고(앞쪽 장식이라 마우스를 받지 않습니다: 뒤의 서랍이 눌려야 하므로) 음악을 듣는 고양이(러그 위)
 export function CatHeadphones({ x, y }) {
   const band = 'M-64 -92 C-64 -146 64 -146 64 -92'
   return (
-    <g transform={`translate(${x} ${y})`}>
+    <g transform={`translate(${x} ${y})`} pointerEvents="none">
       <Tail d="M42 -8 C88 -4 110 -36 96 -74" />
       <path d={body(46, 74)} fill={INK} />
       <path d={HEAD} transform={headAt(0.92)} fill={INK} />
