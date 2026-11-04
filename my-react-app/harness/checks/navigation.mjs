@@ -60,6 +60,33 @@ export default {
       await waitFor(async () => (await page.locator('.sidx button[aria-current="true"]').textContent()).replace(/^\d+/, '') === label, { timeout: 6000, message: '목차 강조가 따라오지 않았습니다' })
     })
 
+    await t('소개 페이지 호 목차: 큰 화면에서 스크롤해도 화면 가운데 오른쪽에 계속 보이고, 끌면 스크롤된다', async () => {
+      await page.setViewportSize({ width: 1600, height: 900 })
+      await go(page, url, '/about')
+      await page.waitForSelector('.sidx button')
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+      await page.waitForTimeout(300)
+      const inView = () =>
+        page.$eval('.sidx', (e) => {
+          const r = e.getBoundingClientRect()
+          return r.top >= 0 && r.bottom <= window.innerHeight && r.right <= window.innerWidth + 1 && Math.abs((r.top + r.bottom) / 2 - window.innerHeight / 2) < 8
+        })
+      assert.equal(await inView(), true, '맨 위에서 목차가 화면 가운데에 보이지 않습니다')
+      await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight * 0.55, behavior: 'instant' }))
+      await page.waitForTimeout(300)
+      assert.equal(await inView(), true, '스크롤한 뒤에 목차가 화면 가운데에 보이지 않습니다')
+      const visible = await page.$$eval('.sidx button', (bs) => bs.filter((b) => Number(getComputedStyle(b).opacity) > 0.3).length)
+      assert.ok(visible >= 3, '가운데 주변의 항목이 보이지 않습니다')
+      const before = await page.evaluate(() => window.scrollY)
+      const box = await page.locator('.sidx__handle').boundingBox()
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+      await page.mouse.down()
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 - 160, { steps: 8 })
+      await page.mouse.up()
+      assert.ok((await page.evaluate(() => window.scrollY)) > before + 100, '목차를 끌었는데 페이지가 스크롤되지 않았습니다')
+      await page.setViewportSize({ width: 1440, height: 900 })
+    })
+
     await t('이름(왼쪽 위)과 지금 보는 메뉴를 누르면 맨 위로 올라가고, 다른 화면에서 이름을 누르면 홈으로 간다', async () => {
       await go(page, url, '/project')
       await page.waitForSelector('.pcard')

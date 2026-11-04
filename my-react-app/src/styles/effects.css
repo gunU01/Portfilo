@@ -4,7 +4,7 @@
 
 /* ---------- 페이지가 바뀔 때 ---------- */
 .page-in {
-  animation: page-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: page-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; /* both 로 두면 끝난 뒤에도 transform 이 남아, 안쪽의 position: fixed 가 화면이 아니라 페이지 전체 기준이 됨 */
 }
 @keyframes page-in {
   from {

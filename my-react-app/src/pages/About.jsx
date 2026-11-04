@@ -2,13 +2,12 @@ import { profile } from '../data/profile.js'
 import { skillGroups, skillTools } from '../data/skills.js'
 import { awards } from '../data/awards.js'
 import { contests } from '../data/contests.js'
-import { useScrollSpy } from '../lib/useScrollSpy.js'
 import { useTimelineProgress } from '../lib/useTimelineProgress.js'
 import { useReveal } from '../lib/useReveal.js'
-import { scrollToId } from '../lib/dom.js'
 import Spec from '../components/Spec.jsx'
 import SkillMap from '../components/SkillMap.jsx'
 import Rich from '../components/Rich.jsx'
+import SectionDial from '../components/SectionDial.jsx'
 
 const SECTIONS = [
   ['intro', '소개'],
@@ -17,21 +16,6 @@ const SECTIONS = [
   ['contests', '대회'],
   ...(awards.length ? [['awards', '수상']] : []),
 ]
-const SECTION_IDS = SECTIONS.map(([id]) => id)
-
-function SectionIndex() {
-  const active = useScrollSpy(SECTION_IDS, { lastAtBottom: true })
-  return (
-    <nav className="sidx" aria-label="섹션 이동">
-      {SECTIONS.map(([id, label], i) => (
-        <button key={id} type="button" aria-current={active === id} onClick={() => scrollToId(id)}>
-          <span className="tnum">{String(i + 1).padStart(2, '0')}</span>
-          {label}
-        </button>
-      ))}
-    </nav>
-  )
-}
 
 export default function About() {
   const { about } = profile
@@ -42,7 +26,7 @@ export default function About() {
 
   return (
     <div className="ab">
-      <SectionIndex />
+      <SectionDial sections={SECTIONS} />
 
       <section className="wrap ab__intro" id="intro" aria-labelledby="ab-title">
         <div className="ab__introgrid">

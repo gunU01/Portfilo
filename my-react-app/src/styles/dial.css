@@ -1,0 +1,117 @@
+/* ---------- 우측 호 모양 섹션 목차(큰 화면): 스크롤을 따라 돌아가고, 끌면 스크롤됩니다 ---------- */
+.sidx {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  z-index: 40;
+  display: none;
+  width: 220px;
+  height: 480px;
+  margin-top: -240px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.sidx:active {
+  cursor: grabbing;
+}
+.sidx__arc {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  overflow: visible;
+  pointer-events: none;
+}
+.sidx__arc path {
+  stroke: var(--line);
+  stroke-width: 1.5;
+}
+/* 손잡이: 호의 가운데(지금 위치)에 고정 */
+.sidx__handle {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  width: 34px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 999px;
+  background: var(--ink);
+  opacity: 0.86;
+}
+.sidx__list {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* 가운데에서 멀수록 연해지는 효과는 글자색이 아니라 가림막으로 줍니다(글자 대비는 그대로 유지) */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 2%, #000 30%, #000 70%, transparent 98%);
+  mask-image: linear-gradient(to bottom, transparent 2%, #000 30%, #000 70%, transparent 98%);
+}
+/* 항목: 라벨은 왼쪽, 번호 동그라미는 호 위에 놓입니다. 가운데에서 멀수록 가림막으로 연해집니다. */
+.sidx button {
+  position: absolute;
+  right: 76px;
+  top: 50%;
+  display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+  margin-top: -18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  pointer-events: auto;
+  transform-origin: 100% 50%;
+  will-change: transform;
+}
+.sidx__n {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.sidx__l {
+  padding: 5px 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+@media (hover: hover) {
+  .sidx button:hover .sidx__l {
+    color: var(--ink);
+  }
+}
+.sidx button[aria-current='true'] {
+  color: var(--ink);
+  font-weight: 700;
+}
+.sidx button[aria-current='true'] .sidx__n {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.sidx button[aria-current='true'] .sidx__l {
+  background: var(--bg);
+  border-color: var(--line);
+}
+@media (min-width: 1200px) {
+  .sidx {
+    display: block;
+  }
+}
+@media print {
+  .sidx {
+    display: none;
+  }
+}
