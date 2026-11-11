@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "arch": "node harness/architecture.mjs",
+    "prose": "node harness/prose.mjs",
     "e2e": "node harness/run.mjs",
     "snap": "node harness/snap.mjs",
     "snap:diff": "node harness/compare.mjs",
