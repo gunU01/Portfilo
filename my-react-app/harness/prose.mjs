@@ -194,6 +194,35 @@ export function applyThresholds(fileResult) {
   })
 }
 
+// ---- 읽기 쉬움: 긴 문장 목록 ----
+// 한국어에는 검증된 권장 문장 길이가 없어서(국립국어원도 글자 수 기준을 두지 않습니다) 절대 기준을 두지 않고,
+// 사이트 안에서 두드러지게 긴 문장을 길이순으로 보여 줍니다. 괄호 안 글자는 따로 세어 함께 적습니다.
+export function sentenceMetrics(s) {
+  const noParen = s.replace(/\([^)]*\)/g, '')
+  return {
+    len: s.length,
+    plain: noParen.length,
+    commas: (s.replace(/(\d),(?=\d)/g, '$1').match(/,/g) || []).length,
+    clauses: (noParen.match(/(?:고|며|으며|지만|는데|면서|아서|어서|므로|라서|해서|인데|여)[ ,]/g) || []).length,
+  }
+}
+
+export function longSentences(min) {
+  const rows = []
+  for (const file of walk(SRC)) {
+    const seen = new Set()
+    for (const t of extractTexts(fs.readFileSync(file, 'utf8'))) {
+      for (const s of sentences(t.text)) {
+        if (seen.has(s)) continue
+        seen.add(s)
+        const m = sentenceMetrics(s)
+        if (m.len >= min) rows.push({ file: path.relative(ROOT, file), line: t.line, sentence: s, ...m })
+      }
+    }
+  }
+  return rows.sort((a, b) => b.len - a.len)
+}
+
 // ---- 자체 테스트: 나쁜 문장은 잡고 좋은 문장은 그대로 둔다 ----
 function selftest() {
   const bad = {
@@ -231,6 +260,11 @@ function selftest() {
       fail++
     }
   }
+  const mt = sentenceMetrics('앱을 열고 정산을 만들며 링크를 보냅니다(설명은 괄호 안에 둡니다).')
+  if (!(mt.plain < mt.len) || mt.clauses < 2) {
+    console.log(`FAIL 문장 측정: ${JSON.stringify(mt)}`)
+    fail++
+  }
   const ext = extractTexts("// 주석 한글\nconst a = '화면 문구입니다'\nconst b = <p>본문 글자</p>\nconst c = `템플릿 ${x} 문구`")
   const got = ext.map((e) => e.text).join('|')
   for (const need of ['화면 문구입니다', '본문 글자', '템플릿  문구']) {
@@ -251,6 +285,13 @@ function selftest() {
 function main() {
   const args = process.argv.slice(2)
   if (args.includes('--selftest')) process.exit(selftest() ? 1 : 0)
+  if (args.includes('--long')) {
+    const min = Number(args[args.indexOf('--long') + 1]) || 90
+    const rows = longSentences(min)
+    console.log(`길이 ${min}자 이상 문장 ${rows.length}개 (길이순, 괄호 뺀 길이, 쉼표, 절 연결)\n`)
+    for (const r of rows) console.log(`${r.len}/${r.plain} c${r.commas} k${r.clauses}  ${r.file}:${r.line}  ${r.sentence}`)
+    return
+  }
   const only = args.includes('--only') ? args[args.indexOf('--only') + 1] : ''
   const jsonOut = args.includes('--json') ? args[args.indexOf('--json') + 1] : ''
   const strict = args.includes('--strict')

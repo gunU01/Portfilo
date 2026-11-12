@@ -39,5 +39,5 @@ export const skillTools = [
   { name: 'Vercel', used: 'Vercel로 웹 서비스를 배포할 수 있습니다.' },
   { name: 'Jira', used: 'Jira를 사용해 본 경험이 있습니다.' },
   { name: 'React', used: '컴포넌트를 나눠 화면을 구성하고, TanStack Query로 서버 상태를 관리할 수 있습니다.' },
-  { name: 'React Native · Expo', used: 'React Native와 Expo로 앱 화면을 만들 수 있으며, Zustand, TanStack Query, React Hook Form, Zod를 함께 사용합니다.' },
+  { name: 'React Native · Expo', used: 'React Native와 Expo로 앱 화면을 만들 수 있습니다. 함께 쓰는 도구는 Zustand, TanStack Query, React Hook Form, Zod입니다.' },
 ]
